@@ -1,18 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acerca de - <%= appName %></title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
-        h1 { color: #333; }
-        p { color: #666; }
-    </style>
-</head>
-<body>
-    <h1>Acerca de <%= appName %></h1>
-    <p>Esta es una aplicación de ejemplo para demostrar la renderización de vistas con EJS.</p>
-    <p><a href="/">Volver a Inicio</a></p>
-</body>
-</html>
+<div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-4">Acerca de <%= appName %></h1>
+    <p class="text-lg mb-4">Esta es una aplicación de ejemplo para demostrar la renderización de vistas con EJS y el patrón MVC.</p>
+    <p class="text-lg">Es parte de la plataforma de gestión de IT.</p>
+    <p class="mt-8">
+        <a href="/" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-200">Volver a Inicio</a>
+    </p>
+</div>

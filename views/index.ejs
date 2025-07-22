@@ -1,18 +1,11 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
-        h1 { color: #333; }
-        p { color: #666; }
-    </style>
-</head>
-<body>
-    <h1><%= title %></h1>
-    <p><%= message %></p>
-    <p><a href="/about">Ir a Acerca de</a></p>
-</body>
-</html>
+<div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-4"><%= message %></h1>
+    <p class="text-lg">Esta es la página de inicio de tu Sistema IT.</p>
+    <p class="mt-4">
+        <% if (!user) { %>
+            <a href="/auth/login" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-200">Iniciar Sesión</a>
+        <% } else { %>
+            <a href="/dashboard" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-200">Ir al Dashboard</a>
+        <% } %>
+    </p>
+</div>

@@ -1,0 +1,208 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // Puedes cambiar a "mysql", "sqlite", etc.
+  url      = env("DATABASE_URL")
+}
+
+// =========================================================================
+// Modelos de Autenticación y Usuarios
+// =========================================================================
+
+enum UserRole {
+  USER        // Rol base para usuarios generales (e.g., técnicos)
+  ADMIN       // Puede gestionar equipos, mantenimientos, etc., dentro de su empresa/sucursal
+  MODERATOR   // Puede tener permisos intermedios, quizás sobre ciertos módulos o datos
+  SUPER_ADMIN // Acceso total al sistema, gestión de empresas, usuarios, configuración global
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  role      UserRole @default(USER)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relación con Equipos (si un usuario es el "asignado" a un equipo)
+  assignedEquipments Equipment[]
+
+  // Relación con Mantenimientos (si un usuario es el "técnico asignado")
+  assignedMaintenances Maintenance[]
+
+  // Relación con la Empresa a la que pertenece el usuario
+  companyId String?
+  company   Company? @relation(fields: [companyId], references: [id])
+}
+
+// =========================================================================
+// Modelos de Empresas / Sucursales
+// =========================================================================
+
+model Company {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  address   String?
+  phone     String?
+  email     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  equipments  Equipment[]
+  users       User[]
+  documents   Document[]
+  licenses    License[]
+  maintenances Maintenance[]
+}
+
+// =========================================================================
+// Modelos de Inventario de Equipos
+// =========================================================================
+
+enum EquipmentStatus {
+  ACTIVE
+  IN_MAINTENANCE
+  DISPOSED
+  DAMAGED
+  ASSIGNED
+  STORAGE
+}
+
+model Equipment {
+  id           String          @id @default(uuid())
+  type         String          // e.g., Laptop, Desktop, Printer, Server
+  brand        String
+  model        String
+  serialNumber String          @unique
+  plateNumber  String?         @unique // Número de placa, opcional y único
+  location     String?         // e.g., Oficina 101, Sala de Servidores
+  status       EquipmentStatus @default(ACTIVE)
+  acquisitionDate DateTime?
+  warrantyDetails String?      // Campo adicional para garantía detallada
+  qrCode         String?       // URL o identificador del QR (opcional)
+
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  // Relación con la Empresa a la que pertenece el equipo
+  companyId    String
+  company      Company         @relation(fields: [companyId], references: [id])
+
+  // Relación con el Usuario asignado (opcional)
+  assignedToUserId String?
+  assignedToUser   User?         @relation(fields: [assignedToUserId], references: [id])
+
+  // Relación con Mantenimientos
+  maintenances Maintenance[]
+
+  // Relación con Documentos
+  documents    Document[]
+}
+
+// =========================================================================
+// Modelos de Mantenimiento
+// =========================================================================
+
+enum MaintenanceType {
+  PREVENTIVE
+  CORRECTIVE
+}
+
+enum MaintenanceStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELED
+}
+
+model Maintenance {
+  id            String            @id @default(uuid())
+  title         String
+  description   String?
+  type          MaintenanceType
+  status        MaintenanceStatus @default(SCHEDULED)
+  scheduledDate DateTime
+  completionDate DateTime?
+  cost          Decimal?          @default(0.00) // Opcional, para registrar el costo del mantenimiento
+
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  // Relación con el Equipo al que se le realiza el mantenimiento
+  equipmentId   String
+  equipment     Equipment         @relation(fields: [equipmentId], references: [id])
+
+  // Relación con el Técnico asignado al mantenimiento (opcional)
+  assignedToUserId String?
+  assignedToUser   User?           @relation(fields: [assignedToUserId], references: [id])
+
+  // Relación con la Empresa (para filtros y reportes)
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id])
+}
+
+// =========================================================================
+// Modelos de Documentos y Facturas
+// =========================================================================
+
+model Document {
+  id        String   @id @default(uuid())
+  title     String
+  description String?
+  fileUrl   String   // URL del archivo almacenado (e.g., S3, Google Cloud Storage)
+  fileType  String?  // e.g., application/pdf, image/jpeg
+  category  String?  // e.g., Factura, Manual, Contrato
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relación con la Empresa a la que pertenece el documento
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id])
+
+  // Relación con el Equipo al que está asociado el documento (opcional)
+  equipmentId String?
+  equipment   Equipment? @relation(fields: [equipmentId], references: [id])
+}
+
+// =========================================================================
+// Modelos de Licencias de Software
+// =========================================================================
+
+model License {
+  id            String   @id @default(uuid())
+  softwareName  String
+  licenseKey    String   @unique
+  provider      String?
+  activationDate DateTime
+  expirationDate DateTime?
+  notes         String?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relación con la Empresa a la que pertenece la licencia
+  companyId     String
+  company       Company  @relation(fields: [companyId], references: [id])
+}
+
+// =========================================================================
+// Modelos de Configuración General (Opcional, si hay configuraciones a nivel de sistema)
+// =========================================================================
+
+model SystemConfig {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String
+  description String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
