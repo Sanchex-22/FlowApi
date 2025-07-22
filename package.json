@@ -3,28 +3,36 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "engines": {
     "node": "22.x"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --watch \"src/**/*.ts\" --exec \"node --loader ts-node/esm src/server.ts\"",
+    "dev": "nodemon --watch src --exec \"node --loader ts-node/esm src/server.ts\"",
     "build": "tsc",
     "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
   "devDependencies": {
+    "@types/connect-flash": "^0.0.40",
+    "@types/dotenv": "^6.1.1",
     "@types/ejs": "^3.1.5",
     "@types/express": "^5.0.3",
+    "@types/express-ejs-layouts": "^2.5.4",
+    "@types/express-session": "^1.18.2",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "connect-flash": "^0.1.1",
+    "dotenv": "^17.2.0",
     "ejs": "^3.1.10",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.18.2"
   }
 }

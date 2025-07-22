@@ -10,6 +10,9 @@
     "strict": true,
     "skipLibCheck": true,
     "allowJs": true,
-    "checkJs": false
-  }
+    "checkJs": false,
+    "outDir": "./dist",
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }
