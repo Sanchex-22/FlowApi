@@ -8,8 +8,8 @@ const authService = new AuthService();
 const authController = new AuthController(authService);
 const AuthRouter = Router();
 
-AuthRouter.post('/login', authController.postLogin);
-// AuthRouter.post('/logout', isAuthenticated, authController.postLogout);
+AuthRouter.post('/login', authController.postLogin.bind(authController));
+AuthRouter.post('/logout', authController.postLogout.bind(authController));
 
 
 export default AuthRouter;

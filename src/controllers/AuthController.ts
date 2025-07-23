@@ -1,65 +1,68 @@
 // src/auth/auth.controller.ts
 import { Request, Response } from 'express';
-
-import { UserRole } from '@prisma/client';
 import { AuthService } from '../services/AuthServices.js';
+import jwt from 'jsonwebtoken';
+
+const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_key_for_jwt';
 
 export class AuthController {
   constructor(private authService: AuthService) {}
-
-  // Renderiza la página de login (ya manejado en server.ts, pero podrías tener un método aquí si quisieras)
-  // getLoginPage(req: Request, res: Response) {
-  //   res.render('login', { title: 'Iniciar Sesión' });
-  // }
 
   async postLogin(req: Request, res: Response) {
     const { email, password } = req.body;
     try {
       const user = await this.authService.login(email, password);
 
-      // Almacenar información del usuario en la sesión
-      req.session.user = {
-        userId: user.id,
-        role: user.role,
-        companyId: user.companyId || undefined, // Asegurarse de que sea undefined si es null
-        username: user.username // Para mostrar en la UI
-      };
+      // Crear token JWT
+      const token = jwt.sign(
+        {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          roles: user?.role ?? 'user'
+        },
+        JWT_SECRET,
+        { expiresIn: '30d' }
+      );
 
-      req.flash('success_msg', '¡Has iniciado sesión correctamente!');
-
-      // Redirigir al dashboard o a la página anterior
-      res.redirect('/dashboard');
+      // Responder con el token y la información del usuario
+      return res.json({
+        message: '¡Has iniciado sesión correctamente!',
+        token,
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          role: user.role
+        }
+      });
     } catch (error: any) {
-      req.flash('error_msg', error.message);
-      res.redirect('/login'); // Redirigir de nuevo al login con el mensaje de error
+      return res.status(401).json({
+        message: error.message || 'Credenciales inválidas'
+      });
     }
   }
 
   async postLogout(req: Request, res: Response) {
-    req.session.destroy((err) => {
-      if (err) {
-        console.error('Error al cerrar sesión:', err);
-        req.flash('error_msg', 'Error al cerrar sesión.');
-        return res.redirect('/dashboard'); // O a una página de error
-      }
-      res.clearCookie('connect.sid'); // Limpiar la cookie de sesión
-      req.flash('success_msg', 'Has cerrado sesión.');
-      res.redirect('/login');
+    // Con JWT no existe "logout" en el servidor, el cliente solo elimina el token.
+    // Pero podemos implementar lista negra (blacklist) si es necesario.
+    return res.json({
+      message: 'Has cerrado sesión. El token debe ser eliminado en el cliente.'
     });
   }
 
-  // Puedes tener un método para registrar usuarios si lo permites desde una vista
   async postRegister(req: Request, res: Response) {
     const { username, email, password, role, companyId } = req.body;
     try {
-      // Lógica para determinar el rol (ej: por defecto USER, o SUPER_ADMIN si es el primero)
-      // Asegúrate de validar que solo roles autorizados puedan crear usuarios con ciertos roles
-      const newUser = await this.authService.register(username, email, password, role as UserRole, companyId);
-      req.flash('success_msg', `Usuario ${newUser.username} registrado exitosamente.`);
-      res.redirect('/login');
+      const newUser = await this.authService.register(username, email, password, role, companyId);
+      return res.status(201).json({
+        message: `Usuario ${newUser.username} registrado exitosamente.`,
+        user: newUser
+      });
     } catch (error: any) {
-      req.flash('error_msg', error.message);
-      res.redirect('/register'); // O de nuevo al formulario de registro
+      return res.status(400).json({
+        message: error.message || 'Error al registrar usuario'
+      });
     }
   }
 }

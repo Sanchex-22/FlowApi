@@ -1,14 +1,17 @@
 // src/server.ts
 import express from 'express';
 import session from 'express-session';
-import flash from 'connect-flash';
 import dotenv from 'dotenv';
 import path from 'path';
 import AuthRouter from './routes/AuthRoutes.js';
 import expressLayouts from 'express-ejs-layouts';
+import flash from 'connect-flash';
+import bodyParser from 'body-parser';
 dotenv.config({ path: '.env' });
 
 const app = express();
+app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }))
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
 app.use(expressLayouts);
@@ -27,11 +30,7 @@ app.use(session({
     // secure: process.env.NODE_ENV === 'production'
   }
 }));
-
-// Configuración de connect-flash (para mensajes temporales)
 app.use(flash());
-
-// Middleware para pasar mensajes flash y user de sesión a las vistas
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
@@ -39,24 +38,15 @@ app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
   next();
 });
+// app.use(corsMiddleware)
+app.use(express.json());
+app.use(bodyParser.json({ limit: '10mb' }))
 
-const homeController = {
-    getIndex: (req: express.Request, res: express.Response) => {
-        res.render('index', { title: 'Mi Aplicación MVC', message: '¡Bienvenido a la página de inicio!' });
-    },
-    getAbout: (req: express.Request, res: express.Response) => {
-        res.render('about', { appName: 'FlowApi MVC' });
-    }
-};
-const loginController = {
-    getLogin: (req: express.Request, res: express.Response) => {
-        res.render('login', { title: 'Iniciar Sesión' });
-    }
-}
+app.get('/', (req, res) => {
+  res.send('Welcome to IT System')
+})
 
-app.get('/', homeController.getIndex);
-app.get('/about', homeController.getAbout);
-app.get('/auth', loginController.getLogin);
+app.use('/api/user/auth', AuthRouter);
 
 // Descomentar y usar cuando los módulos estén listos
 // app.use('/api/users', isAuthenticated, authorizeRolesMiddleware([UserRole.ADMIN, UserRole.SUPER_ADMIN]), userRoutes);
@@ -67,15 +57,15 @@ app.get('/auth', loginController.getLogin);
 
 
 // Manejo de errores 404 (Debe ir después de todas tus rutas definidas)
-app.use((req, res, next) => {
-  res.status(404).render('404', { title: 'Página no encontrada' });
-});
+// app.use((req, res, next) => {
+//   res.status(404).render('404', { title: 'Página no encontrada' });
+// });
 
 // Manejador de errores general (middleware de 4 argumentos, siempre al final)
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.error(err.stack); // Registra el stack trace del error
-  res.status(500).render('error', { title: 'Error del servidor', error: err.message });
-});
+// app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+//   console.error(err.stack); // Registra el stack trace del error
+//   res.status(500).render('error', { title: 'Error del servidor', error: err.message });
+// });
 
 app.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);

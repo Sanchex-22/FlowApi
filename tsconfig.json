@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "eS2020",
-    "module": "eS2020",
+    "module": "es2022",
+    "target": "es2022",
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "noEmit": true,
@@ -13,6 +13,6 @@
     "checkJs": false,
     "outDir": "./dist",
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts","prisma/**/*"],
   "exclude": ["node_modules"]
 }

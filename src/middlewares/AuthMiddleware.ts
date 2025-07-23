@@ -1,6 +1,8 @@
 // src/middlewares/auth.middleware.ts
-import { Request, Response, NextFunction } from 'express';
-import { UserRole } from '@prisma/client';
+
+import { UserRole } from "@prisma/client";
+import { NextFunction, Request as ExpressRequest, Response as ExpressResponse } from "express";
+import session from "express-session";
 
 declare module 'express-session' {
   interface SessionData {
@@ -12,6 +14,12 @@ declare module 'express-session' {
     };
   }
 }
+
+// Extend Express Request to include session
+interface Request extends ExpressRequest {
+  session: session.Session & Partial<session.SessionData>;
+}
+type Response = ExpressResponse;
 
 export const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   if (req.session && req.session.user) {
