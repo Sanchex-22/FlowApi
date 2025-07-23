@@ -7,6 +7,7 @@ import AuthRouter from './routes/AuthRoutes.js';
 import expressLayouts from 'express-ejs-layouts';
 import flash from 'connect-flash';
 import bodyParser from 'body-parser';
+import { corsMiddleware } from './middlewares/CorsMiddleware.js';
 dotenv.config({ path: '.env' });
 
 const app = express();
@@ -18,9 +19,7 @@ app.use(expressLayouts);
 app.set('layout', 'layout');
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
+app.use(corsMiddleware)
 app.use(session({
   secret: process.env.SESSION_SECRET || 'super_secret_key_for_session',
   resave: false,
@@ -38,14 +37,13 @@ app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
   next();
 });
-// app.use(corsMiddleware)
+
 app.use(express.json());
 app.use(bodyParser.json({ limit: '10mb' }))
 
 app.get('/', (req, res) => {
   res.send('Welcome to IT System')
 })
-
 app.use('/api/user/auth', AuthRouter);
 
 // Descomentar y usar cuando los módulos estén listos
