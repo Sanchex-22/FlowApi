@@ -10,8 +10,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --watch src --exec \"node --loader ts-node/esm src/server.ts\"",
-    "build": "tsc",
+    "build": "prisma generate && tsc", 
     "start": "node dist/server.js",
+    "postinstall": "prisma generate",
     "seed": "node --loader ts-node/esm prisma/seed.ts"
   },
   "prisma": {
