@@ -24,18 +24,8 @@ export class AuthController {
         JWT_SECRET,
         { expiresIn: '30d' }
       );
+      return res.json({ token });
 
-      // Responder con el token y la información del usuario
-      return res.json({
-        message: '¡Has iniciado sesión correctamente!',
-        token,
-        user: {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          role: user.role
-        }
-      });
     } catch (error: any) {
       return res.status(401).json({
         message: error.message || 'Credenciales inválidas'
@@ -44,8 +34,6 @@ export class AuthController {
   }
 
   async postLogout(req: Request, res: Response) {
-    // Con JWT no existe "logout" en el servidor, el cliente solo elimina el token.
-    // Pero podemos implementar lista negra (blacklist) si es necesario.
     return res.json({
       message: 'Has cerrado sesión. El token debe ser eliminado en el cliente.'
     });
