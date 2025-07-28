@@ -16,7 +16,7 @@
     "seed": "node --loader ts-node/esm prisma/seed.ts"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "node --loader ts-node/esm prisma/seed.ts"
   },
   "keywords": [],
   "author": "",

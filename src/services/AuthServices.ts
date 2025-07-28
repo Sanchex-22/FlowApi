@@ -81,8 +81,4 @@ export class AuthService {
     }
   }
 
-  // Puedes añadir más métodos relacionados con la autenticación aquí, por ejemplo:
-  // - resetPassword(email: string, newPassword_plain: string): Promise<void>
-  // - requestPasswordReset(email: string): Promise<string> (para enviar un token de recuperación)
-  // - verifyEmail(token: string): Promise<void>
 }

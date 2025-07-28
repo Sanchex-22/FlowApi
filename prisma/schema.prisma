@@ -21,15 +21,20 @@ enum UserRole {
   SUPER_ADMIN // Acceso total al sistema, gestión de empresas, usuarios, configuración global
 }
 
+enum PersonStatus {
+  Activo
+  Inactivo
+}
+
 model User {
-  id        String   @id @default(uuid())
-  username  String   @unique
-  email     String   @unique
-  password  String
-  role      UserRole @default(USER)
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                String          @id @default(uuid())
+  username          String          @unique
+  email             String          @unique
+  password          String
+  role              UserRole        @default(USER)
+  isActive          Boolean         @default(true)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
 
   // Relación con Equipos (si un usuario es el "asignado" a un equipo)
   assignedEquipments Equipment[]
@@ -38,8 +43,32 @@ model User {
   assignedMaintenances Maintenance[]
 
   // Relación con la Empresa a la que pertenece el usuario
-  companyId String?
-  company   Company? @relation(fields: [companyId], references: [id])
+  companyId         String?
+  company           Company?        @relation(fields: [companyId], references: [id])
+
+  // Relación uno a uno con el modelo Person
+  // El lado 'User' ahora no tiene el '?', lo que indica que una Persona *siempre* tendrá un Usuario asociado.
+  // Sin embargo, para crear un User sin info de Persona inicial, el campo 'person' aquí debe ser opcional
+  // para permitir la creación del usuario primero. La obligatoriedad se manejará en la lógica de creación.
+  person            Person? // Permitimos que sea opcional para que un User pueda existir sin Person al inicio
+}
+
+model Person {
+  id           String       @id @default(uuid())
+  userId       String       @unique // foreign key to User
+  user         User         @relation(fields: [userId], references: [id]) // Relación obligatoria: una Persona siempre está asociada a un User
+  firstName    String?      // Ahora opcional
+  lastName     String?      // Ahora opcional
+  fullName     String?      @unique // Ahora opcional, ya que puede estar vacío al inicio
+  contactEmail String?      @unique // Ahora opcional
+  phoneNumber  String?
+  department   String?
+  position     String?
+  status       PersonStatus @default(Activo) // "Activo" or "Inactivo" from the image
+  userCode     String?      @unique // e.g., USR001
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // =========================================================================

@@ -8,6 +8,7 @@ import expressLayouts from 'express-ejs-layouts';
 import flash from 'connect-flash';
 import bodyParser from 'body-parser';
 import { corsMiddleware } from './middlewares/CorsMiddleware.js';
+import UserRouter from './routes/UserRoutes.js';
 dotenv.config({ path: '.env' });
 
 const app = express();
@@ -45,7 +46,7 @@ app.get('/', (req, res) => {
   res.send('Welcome to IT System')
 })
 app.use('/api/user/auth', AuthRouter);
-
+app.use('/api/users', UserRouter);
 // Descomentar y usar cuando los módulos estén listos
 // app.use('/api/users', isAuthenticated, authorizeRolesMiddleware([UserRole.ADMIN, UserRole.SUPER_ADMIN]), userRoutes);
 // app.use('/api/equipments', isAuthenticated, authorizeCompanyAccessMiddleware, equipmentRoutes);
