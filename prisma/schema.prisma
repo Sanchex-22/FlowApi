@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "postgresql" // Puedes cambiar a "mysql", "sqlite", etc.
-  url      = env("DATABASE_URL")
+  url        = env("DATABASE_URL")
 }
 
 // =========================================================================
@@ -27,45 +27,48 @@ enum PersonStatus {
 }
 
 model User {
-  id                String          @id @default(uuid())
-  username          String          @unique
-  email             String          @unique
-  password          String
-  role              UserRole        @default(USER)
-  isActive          Boolean         @default(true)
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
+  id                    String            @id @default(uuid())
+  username              String            @unique
+  email                 String            @unique
+  password              String
+  role                  UserRole          @default(USER)
+  isActive              Boolean           @default(true)
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
 
   // Relación con Equipos (si un usuario es el "asignado" a un equipo)
-  assignedEquipments Equipment[]
+  assignedEquipments    Equipment[]
 
   // Relación con Mantenimientos (si un usuario es el "técnico asignado")
-  assignedMaintenances Maintenance[]
+  assignedMaintenances  Maintenance[]
 
   // Relación con la Empresa a la que pertenece el usuario
-  companyId         String?
-  company           Company?        @relation(fields: [companyId], references: [id])
+  companyId             String?
+  company               Company?          @relation("CompanyUsers", fields: [companyId], references: [id])
 
   // Relación uno a uno con el modelo Person
-  // El lado 'User' ahora no tiene el '?', lo que indica que una Persona *siempre* tendrá un Usuario asociado.
-  // Sin embargo, para crear un User sin info de Persona inicial, el campo 'person' aquí debe ser opcional
-  // para permitir la creación del usuario primero. La obligatoriedad se manejará en la lógica de creación.
-  person            Person? // Permitimos que sea opcional para que un User pueda existir sin Person al inicio
+  person                Person?
+
+  // Relación para las compañías creadas por este usuario
+  createdCompanies      Company[]         @relation("CompanyCreatedBy")
+
+  // NEW: Relación con los dispositivos de red asignados a este usuario
+  assignedNetworks      Network[]
 }
 
 model Person {
-  id           String       @id @default(uuid())
-  userId       String       @unique // foreign key to User
-  user         User         @relation(fields: [userId], references: [id]) // Relación obligatoria: una Persona siempre está asociada a un User
-  firstName    String?      // Ahora opcional
-  lastName     String?      // Ahora opcional
-  fullName     String?      @unique // Ahora opcional, ya que puede estar vacío al inicio
-  contactEmail String?      @unique // Ahora opcional
-  phoneNumber  String?
-  department   String?
-  position     String?
-  status       PersonStatus @default(Activo) // "Activo" or "Inactivo" from the image
-  userCode     String?      @unique // e.g., USR001
+  id            String       @id @default(uuid())
+  userId        String       @unique // foreign key to User
+  user          User         @relation(fields: [userId], references: [id])
+  firstName     String?
+  lastName      String?
+  fullName      String?      @unique
+  contactEmail  String?      @unique
+  phoneNumber   String?
+  department    String?
+  position      String?
+  status        PersonStatus @default(Activo)
+  userCode      String?      @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -76,20 +79,28 @@ model Person {
 // =========================================================================
 
 model Company {
-  id        String   @id @default(uuid())
-  name      String   @unique
-  address   String?
-  phone     String?
-  email     String?
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String        @id @default(uuid())
+  code            String        @unique @default("CO001")
+  name            String        @unique
+  address         String?
+  phone           String?
+  email           String?
+  isActive        Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 
-  equipments  Equipment[]
-  users       User[]
-  documents   Document[]
-  licenses    License[]
-  maintenances Maintenance[]
+  // Explicitly name the relation for the user who created the company
+  createdByUserId String?
+  createdBy       User?         @relation("CompanyCreatedBy", fields: [createdByUserId], references: [id])
+
+  equipments      Equipment[]
+  // Explicitly name the relation for users belonging to this company
+  users           User[]        @relation("CompanyUsers")
+  documents       Document[]
+  licenses        License[]
+  maintenances    Maintenance[]
+  // NEW: Relación con los dispositivos de red de esta compañía
+  networks        Network[]
 }
 
 // =========================================================================
@@ -106,34 +117,29 @@ enum EquipmentStatus {
 }
 
 model Equipment {
-  id           String          @id @default(uuid())
-  type         String          // e.g., Laptop, Desktop, Printer, Server
-  brand        String
-  model        String
-  serialNumber String          @unique
-  plateNumber  String?         @unique // Número de placa, opcional y único
-  location     String?         // e.g., Oficina 101, Sala de Servidores
-  status       EquipmentStatus @default(ACTIVE)
-  acquisitionDate DateTime?
-  warrantyDetails String?      // Campo adicional para garantía detallada
-  qrCode         String?       // URL o identificador del QR (opcional)
+  id               String          @id @default(uuid())
+  type             String
+  brand            String
+  model            String
+  serialNumber     String          @unique
+  plateNumber      String?         @unique
+  location         String?
+  status           EquipmentStatus @default(ACTIVE)
+  acquisitionDate  DateTime?
+  warrantyDetails  String?
+  qrCode           String?
 
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
 
-  // Relación con la Empresa a la que pertenece el equipo
-  companyId    String
-  company      Company         @relation(fields: [companyId], references: [id])
+  companyId        String
+  company          Company         @relation(fields: [companyId], references: [id])
 
-  // Relación con el Usuario asignado (opcional)
   assignedToUserId String?
-  assignedToUser   User?         @relation(fields: [assignedToUserId], references: [id])
+  assignedToUser   User?           @relation(fields: [assignedToUserId], references: [id])
 
-  // Relación con Mantenimientos
-  maintenances Maintenance[]
-
-  // Relación con Documentos
-  documents    Document[]
+  maintenances     Maintenance[]
+  documents        Document[]
 }
 
 // =========================================================================
@@ -153,29 +159,26 @@ enum MaintenanceStatus {
 }
 
 model Maintenance {
-  id            String            @id @default(uuid())
-  title         String
-  description   String?
-  type          MaintenanceType
-  status        MaintenanceStatus @default(SCHEDULED)
-  scheduledDate DateTime
-  completionDate DateTime?
-  cost          Decimal?          @default(0.00) // Opcional, para registrar el costo del mantenimiento
+  id               String            @id @default(uuid())
+  title            String
+  description      String?
+  type             MaintenanceType
+  status           MaintenanceStatus @default(SCHEDULED)
+  scheduledDate    DateTime
+  completionDate   DateTime?
+  cost             Decimal?          @default(0.00)
 
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
 
-  // Relación con el Equipo al que se le realiza el mantenimiento
-  equipmentId   String
-  equipment     Equipment         @relation(fields: [equipmentId], references: [id])
+  equipmentId      String
+  equipment        Equipment         @relation(fields: [equipmentId], references: [id])
 
-  // Relación con el Técnico asignado al mantenimiento (opcional)
   assignedToUserId String?
-  assignedToUser   User?           @relation(fields: [assignedToUserId], references: [id])
+  assignedToUser   User?             @relation(fields: [assignedToUserId], references: [id])
 
-  // Relación con la Empresa (para filtros y reportes)
-  companyId String
-  company   Company @relation(fields: [companyId], references: [id])
+  companyId        String
+  company          Company           @relation(fields: [companyId], references: [id])
 }
 
 // =========================================================================
@@ -183,21 +186,19 @@ model Maintenance {
 // =========================================================================
 
 model Document {
-  id        String   @id @default(uuid())
-  title     String
+  id          String     @id @default(uuid())
+  title       String
   description String?
-  fileUrl   String   // URL del archivo almacenado (e.g., S3, Google Cloud Storage)
-  fileType  String?  // e.g., application/pdf, image/jpeg
-  category  String?  // e.g., Factura, Manual, Contrato
+  fileUrl     String
+  fileType    String?
+  category    String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 
-  // Relación con la Empresa a la que pertenece el documento
-  companyId String
-  company   Company @relation(fields: [companyId], references: [id])
+  companyId   String
+  company     Company    @relation(fields: [companyId], references: [id])
 
-  // Relación con el Equipo al que está asociado el documento (opcional)
   equipmentId String?
   equipment   Equipment? @relation(fields: [equipmentId], references: [id])
 }
@@ -207,20 +208,19 @@ model Document {
 // =========================================================================
 
 model License {
-  id            String   @id @default(uuid())
-  softwareName  String
-  licenseKey    String   @unique
-  provider      String?
+  id             String    @id @default(uuid())
+  softwareName   String
+  licenseKey     String    @unique
+  provider       String?
   activationDate DateTime
   expirationDate DateTime?
-  notes         String?
+  notes          String?
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
-  // Relación con la Empresa a la que pertenece la licencia
-  companyId     String
-  company       Company  @relation(fields: [companyId], references: [id])
+  companyId      String
+  company        Company   @relation(fields: [companyId], references: [id])
 }
 
 // =========================================================================
@@ -228,10 +228,65 @@ model License {
 // =========================================================================
 
 model SystemConfig {
-  id        String   @id @default(uuid())
-  key       String   @unique
-  value     String
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String
   description String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// =========================================================================
+// Modelos de Inventario de Red (Network)
+// =========================================================================
+
+enum NetworkDeviceType {
+  ROUTER
+  SWITCH
+  FIREWALL
+  ACCESS_POINT
+  SERVER
+  PRINTER
+  IP_PHONE
+  CAMERA
+  OTHER
+}
+
+enum NetworkDeviceStatus {
+  ONLINE
+  OFFLINE
+  MAINTENANCE
+  DECOMMISSIONED
+  UNKNOWN
+}
+
+model Network {
+  id               String              @id @default(uuid())
+  name             String
+  ipAddress        String              @unique // IP address or hostname
+  macAddress       String?             @unique
+  deviceType       NetworkDeviceType   @default(OTHER)
+  status           NetworkDeviceStatus @default(UNKNOWN)
+  location         String?             // Physical location within the company/branch
+  description      String?
+  serialNumber     String?             @unique // Optional: if applicable to the device
+  model            String?
+  brand            String?
+  purchaseDate     DateTime?
+  warrantyEndDate  DateTime?
+  notes            String?
+
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  companyId        String
+  company          Company             @relation(fields: [companyId], references: [id])
+
+  // Optional: If a network device can be assigned to a specific user
+  assignedToUserId String?
+  assignedToUser   User?               @relation(fields: [assignedToUserId], references: [id])
+
+  // Optional: Link to an Equipment if it's also considered a general asset
+  // equipmentId      String?
+  // equipment        Equipment?          @relation(fields: [equipmentId], references: [id])
 }

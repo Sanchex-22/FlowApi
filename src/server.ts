@@ -9,6 +9,13 @@ import flash from 'connect-flash';
 import bodyParser from 'body-parser';
 import { corsMiddleware } from './middlewares/CorsMiddleware.js';
 import UserRouter from './routes/UserRoutes.js';
+import CompaniesRouter from './routes/CompaniesRoutes.js';
+import EquipmentRouter from './routes/EquipmentRoutes.js';
+import MaintenanceRouter from './routes/MaintenanceRoutes.js';
+import DocumentRouter from './routes/DocumentRoutes.js';
+import LicenseRouter from './routes/LicenseRoutes.js';
+import NetworkRouter from './routes/NetworkRoutes.js';
+import SystemRouter from './routes/SystemRoutes.js';
 dotenv.config({ path: '.env' });
 
 const app = express();
@@ -47,12 +54,15 @@ app.get('/', (req, res) => {
 })
 app.use('/api/user/auth', AuthRouter);
 app.use('/api/users', UserRouter);
+app.use('/api/companies', CompaniesRouter);
 // Descomentar y usar cuando los módulos estén listos
 // app.use('/api/users', isAuthenticated, authorizeRolesMiddleware([UserRole.ADMIN, UserRole.SUPER_ADMIN]), userRoutes);
-// app.use('/api/equipments', isAuthenticated, authorizeCompanyAccessMiddleware, equipmentRoutes);
-// app.use('/api/maintenances', isAuthenticated, authorizeCompanyAccessMiddleware, maintenanceRoutes);
-// app.use('/api/documents', isAuthenticated, authorizeCompanyAccessMiddleware, documentRoutes);
-// app.use('/api/licenses', isAuthenticated, authorizeCompanyAccessMiddleware, licenseRoutes);
+app.use('/api/devices', EquipmentRouter);
+app.use('/api/maintenances', MaintenanceRouter);
+app.use('/api/documents', DocumentRouter);
+app.use('/api/licenses', LicenseRouter);
+app.use('/api/network', NetworkRouter);
+app.use('/api/system', SystemRouter);
 
 
 // Manejo de errores 404 (Debe ir después de todas tus rutas definidas)
