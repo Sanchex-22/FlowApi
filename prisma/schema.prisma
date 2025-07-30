@@ -52,7 +52,7 @@ model User {
   // Relación para las compañías creadas por este usuario
   createdCompanies      Company[]         @relation("CompanyCreatedBy")
 
-  // NEW: Relación con los dispositivos de red asignados a este usuario
+  // Relación con los dispositivos de red asignados a este usuario
   assignedNetworks      Network[]
 }
 
@@ -62,13 +62,15 @@ model Person {
   user          User         @relation(fields: [userId], references: [id])
   firstName     String?
   lastName      String?
-  fullName      String?      @unique
+  fullName      String?      
   contactEmail  String?      @unique
   phoneNumber   String?
-  department    String?
+  // CAMBIO CRÍTICO: Asegúrate de que esto exista en tu schema.prisma
+  departmentId  String? // Clave foránea al departamento
+  department    Department?  @relation(fields: [departmentId], references: [id]) // Relación con el modelo Department
   position      String?
   status        PersonStatus @default(Activo)
-  userCode      String?      @unique
+  userCode      String      @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -79,29 +81,52 @@ model Person {
 // =========================================================================
 
 model Company {
-  id              String        @id @default(uuid())
-  code            String        @unique @default("CO001")
-  name            String        @unique
-  address         String?
-  phone           String?
-  email           String?
-  isActive        Boolean       @default(true)
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  id               String        @id @default(uuid())
+  code             String        @unique @default("CO001")
+  name             String        @unique
+  address          String?
+  phone            String?
+  email            String?
+  isActive         Boolean       @default(true)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
 
   // Explicitly name the relation for the user who created the company
-  createdByUserId String?
-  createdBy       User?         @relation("CompanyCreatedBy", fields: [createdByUserId], references: [id])
+  createdByUserId  String?
+  createdBy        User?         @relation("CompanyCreatedBy", fields: [createdByUserId], references: [id])
 
-  equipments      Equipment[]
+  equipments       Equipment[]
   // Explicitly name the relation for users belonging to this company
-  users           User[]        @relation("CompanyUsers")
-  documents       Document[]
-  licenses        License[]
-  maintenances    Maintenance[]
+  users            User[]        @relation("CompanyUsers")
+  documents        Document[]
+  licenses         License[]
+  maintenances     Maintenance[]
   // NEW: Relación con los dispositivos de red de esta compañía
-  networks        Network[]
+  networks         Network[]
+  // NUEVO CAMBIO AQUÍ: Relación con los departamentos de esta compañía
+  departments      Department[]
 }
+
+// =========================================================================
+// NUEVO MODELO: Departamentos
+// =========================================================================
+
+model Department {
+  id          String   @id @default(uuid())
+  name        String   // Nombre del departamento (e.g., "IT", "Recursos Humanos")
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relación con la compañía a la que pertenece el departamento
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id])
+
+  // Relación de vuelta a las personas que pertenecen a este departamento
+  persons     Person[] // Relación inversa para Person
+}
+
 
 // =========================================================================
 // Modelos de Inventario de Equipos
@@ -117,29 +142,29 @@ enum EquipmentStatus {
 }
 
 model Equipment {
-  id               String          @id @default(uuid())
-  type             String
-  brand            String
-  model            String
-  serialNumber     String          @unique
-  plateNumber      String?         @unique
-  location         String?
-  status           EquipmentStatus @default(ACTIVE)
-  acquisitionDate  DateTime?
-  warrantyDetails  String?
-  qrCode           String?
+  id                String          @id @default(uuid())
+  type              String
+  brand             String
+  model             String
+  serialNumber      String          @unique
+  plateNumber       String?         @unique
+  location          String?
+  status            EquipmentStatus @default(ACTIVE)
+  acquisitionDate   DateTime?
+  warrantyDetails   String?
+  qrCode            String?
 
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
 
-  companyId        String
-  company          Company         @relation(fields: [companyId], references: [id])
+  companyId         String
+  company           Company         @relation(fields: [companyId], references: [id])
 
-  assignedToUserId String?
-  assignedToUser   User?           @relation(fields: [assignedToUserId], references: [id])
+  assignedToUserId  String?
+  assignedToUser    User?           @relation(fields: [assignedToUserId], references: [id])
 
-  maintenances     Maintenance[]
-  documents        Document[]
+  maintenances      Maintenance[]
+  documents         Document[]
 }
 
 // =========================================================================
@@ -159,26 +184,26 @@ enum MaintenanceStatus {
 }
 
 model Maintenance {
-  id               String            @id @default(uuid())
-  title            String
-  description      String?
-  type             MaintenanceType
-  status           MaintenanceStatus @default(SCHEDULED)
-  scheduledDate    DateTime
-  completionDate   DateTime?
-  cost             Decimal?          @default(0.00)
+  id                String            @id @default(uuid())
+  title             String
+  description       String?
+  type              MaintenanceType
+  status            MaintenanceStatus @default(SCHEDULED)
+  scheduledDate     DateTime
+  completionDate    DateTime?
+  cost              Decimal?          @default(0.00)
 
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
 
-  equipmentId      String
-  equipment        Equipment         @relation(fields: [equipmentId], references: [id])
+  equipmentId       String
+  equipment         Equipment         @relation(fields: [equipmentId], references: [id])
 
-  assignedToUserId String?
-  assignedToUser   User?             @relation(fields: [assignedToUserId], references: [id])
+  assignedToUserId  String?
+  assignedToUser    User?             @relation(fields: [assignedToUserId], references: [id])
 
-  companyId        String
-  company          Company           @relation(fields: [companyId], references: [id])
+  companyId         String
+  company           Company           @relation(fields: [companyId], references: [id])
 }
 
 // =========================================================================
@@ -261,32 +286,32 @@ enum NetworkDeviceStatus {
 }
 
 model Network {
-  id               String              @id @default(uuid())
+  id               String            @id @default(uuid())
   name             String
-  ipAddress        String              @unique // IP address or hostname
-  macAddress       String?             @unique
-  deviceType       NetworkDeviceType   @default(OTHER)
+  ipAddress        String            @unique // IP address or hostname
+  macAddress       String?           @unique
+  deviceType       NetworkDeviceType @default(OTHER)
   status           NetworkDeviceStatus @default(UNKNOWN)
-  location         String?             // Physical location within the company/branch
+  location         String?           // Physical location within the company/branch
   description      String?
-  serialNumber     String?             @unique // Optional: if applicable to the device
+  serialNumber     String?           @unique // Optional: if applicable to the device
   model            String?
   brand            String?
   purchaseDate     DateTime?
   warrantyEndDate  DateTime?
   notes            String?
 
-  createdAt        DateTime            @default(now())
-  updatedAt        DateTime            @updatedAt
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
 
   companyId        String
-  company          Company             @relation(fields: [companyId], references: [id])
+  company          Company           @relation(fields: [companyId], references: [id])
 
   // Optional: If a network device can be assigned to a specific user
   assignedToUserId String?
-  assignedToUser   User?               @relation(fields: [assignedToUserId], references: [id])
+  assignedToUser   User?             @relation(fields: [assignedToUserId], references: [id])
 
   // Optional: Link to an Equipment if it's also considered a general asset
   // equipmentId      String?
-  // equipment        Equipment?          @relation(fields: [equipmentId], references: [id])
+  // equipment        Equipment?        @relation(fields: [equipmentId], references: [id])
 }
