@@ -19,6 +19,7 @@ export class EquipmentController {
                 model,
                 serialNumber,
                 plateNumber,
+                cost, // Se añadió el campo 'cost'
                 location,
                 status,
                 acquisitionDate,
@@ -39,6 +40,7 @@ export class EquipmentController {
                     model,
                     serialNumber,
                     plateNumber,
+                    cost: cost ? parseFloat(cost) : undefined, // Se añade 'cost' y se parsea a un número si existe
                     location,
                     status: status || 'ACTIVE', // Default to ACTIVE
                     acquisitionDate: acquisitionDate ? new Date(acquisitionDate) : undefined,
@@ -104,6 +106,7 @@ export class EquipmentController {
                 model,
                 serialNumber,
                 plateNumber,
+                cost, // Se añadió el campo 'cost'
                 location,
                 status,
                 acquisitionDate,
@@ -121,6 +124,7 @@ export class EquipmentController {
                     model,
                     serialNumber,
                     plateNumber,
+                    cost: cost ? parseFloat(cost) : undefined, // Se añade 'cost' y se parse al número
                     location,
                     status,
                     acquisitionDate: acquisitionDate ? new Date(acquisitionDate) : undefined,

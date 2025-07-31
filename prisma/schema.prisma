@@ -63,7 +63,7 @@ model Person {
   firstName     String?
   lastName      String?
   fullName      String?      
-  contactEmail  String?      @unique
+  contactEmail  String?      
   phoneNumber   String?
   // CAMBIO CRÍTICO: Asegúrate de que esto exista en tu schema.prisma
   departmentId  String? // Clave foránea al departamento
@@ -153,7 +153,7 @@ model Equipment {
   acquisitionDate   DateTime?
   warrantyDetails   String?
   qrCode            String?
-
+  cost              Decimal?        @default(0.00)
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt
 
