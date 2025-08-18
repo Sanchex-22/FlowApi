@@ -8,12 +8,6 @@ const prisma = new PrismaClient();
 
 export class CompanyController {
 
-    /**
-     * Creates a new company.
-     * Automatically generates a sequential code for the company.
-     * @param req Express Request. Expects { name, address?, phone?, email?, createdByUserId? } in the body.
-     * @param res Express Response.
-     */
     async Create(req: Request, res: Response) {
         try {
             const { name, address, phone, email, createdByUserId } = req.body;
