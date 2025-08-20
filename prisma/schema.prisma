@@ -157,6 +157,9 @@ model Equipment {
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt
 
+  // AÑADE ESTA LÍNEA
+  warrantyEndDate   DateTime?       // Fecha de vencimiento de la garantía
+
   companyId         String
   company           Company         @relation(fields: [companyId], references: [id])
 

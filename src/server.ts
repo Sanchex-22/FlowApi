@@ -17,6 +17,8 @@ import LicenseRouter from './routes/LicenseRoutes.js';
 import NetworkRouter from './routes/NetworkRoutes.js';
 import SystemRouter from './routes/SystemRoutes.js';
 import DashboardRouter from './routes/DashboardRoutes.js';
+import { errorMiddleware } from './middlewares/errorHandler.js';
+import ReportsRouter from './routes/ReportRoutes.js';
 dotenv.config({ path: '.env' });
 
 const app = express();
@@ -65,7 +67,9 @@ app.use('/api/licenses', LicenseRouter);
 app.use('/api/network', NetworkRouter);
 app.use('/api/system', SystemRouter);
 app.use('/api/dashboard',DashboardRouter);
-
+app.use('/api/reports',ReportsRouter);
+// Middleware de manejo de errores al final
+app.use(errorMiddleware);
 
 // Manejo de errores 404 (Debe ir después de todas tus rutas definidas)
 // app.use((req, res, next) => {

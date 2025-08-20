@@ -1,6 +1,6 @@
 // src/companies/company.controller.ts
 import { PrismaClient } from '@prisma/client';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 // Asegúrate de que esta ruta sea correcta para tu proyecto
 import { generateNextCompanyCode } from '../utils/companyCodeGenerator.js';
 
@@ -100,7 +100,7 @@ export class CompanyController {
      * @param req Express Request. Expects the ID in req.params and the data to update in req.body.
      * @param res Express Response.
      */
-    async Edit(req: Request, res: Response) {
+    async Edit(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
             const { name, address, phone, email, isActive, createdByUserId } = req.body;
@@ -141,6 +141,7 @@ export class CompanyController {
                 return res.status(409).json({ error: errorMessage });
             }
             res.status(500).json({ error: 'Error interno del servidor al editar la compañía.' });
+            next(error);
         }
     }
 
@@ -150,7 +151,7 @@ export class CompanyController {
      * @param req Express Request. Expects the company ID in req.params.
      * @param res Express Response.
      */
-    async get(req: Request, res: Response) {
+    async get(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
             const company = await prisma.company.findUnique({
@@ -191,6 +192,7 @@ export class CompanyController {
         } catch (error) {
             console.error('Error al obtener la compañía:', error);
             res.status(500).json({ error: 'Error interno del servidor al obtener la compañía.' });
+            next(error);
         }
     }
 
@@ -200,7 +202,7 @@ export class CompanyController {
      * @param req Express Request.
      * @param res Express Response.
      */
-    async getAll(req: Request, res: Response) {
+    async getAll(req: Request, res: Response, next: NextFunction) {
         try {
             const companies = await prisma.company.findMany({
                 include: { // Include common relations for a list view if necessary
@@ -225,8 +227,9 @@ export class CompanyController {
             });
             res.json(companies);
         } catch (error) {
-            console.error('Error al obtener las compañías:', error);
-            res.status(500).json({ error: 'Error interno del servidor al obtener las compañías.' });
+            console.error('Error al obtener las compañías');
+            // res.status(500).json({ error: 'Error interno del servidor al obtener las compañías.' });
+            next(error);
         }
     }
 
