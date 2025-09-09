@@ -24,6 +24,7 @@ export class NetworkController {
                 model,
                 companyId,
                 assignedToUserId,
+                providerId, // NUEVO: ID del proveedor
             } = req.body;
 
             // Validación de campos obligatorios
@@ -36,7 +37,7 @@ export class NetworkController {
                     name,
                     ipAddress,
                     macAddress,
-                    deviceType: deviceType as NetworkDeviceType, // Se asegura que el string coincida con el enum
+                    deviceType: deviceType as NetworkDeviceType,
                     status: status as NetworkDeviceStatus,
                     location,
                     description,
@@ -48,6 +49,7 @@ export class NetworkController {
                     model,
                     company: { connect: { id: companyId } },
                     assignedToUser: assignedToUserId ? { connect: { id: assignedToUserId } } : undefined,
+                    provider: providerId ? { connect: { id: providerId } } : undefined, // NUEVO: Conectar al proveedor si se proporciona providerId
                 },
             });
 
@@ -104,6 +106,7 @@ export class NetworkController {
                 model,
                 companyId,
                 assignedToUserId,
+                providerId, // NUEVO: ID del proveedor
             } = req.body;
 
             const updatedDevice = await prisma.network.update({
@@ -124,6 +127,7 @@ export class NetworkController {
                     model,
                     company: companyId ? { connect: { id: companyId } } : undefined,
                     assignedToUser: assignedToUserId ? { connect: { id: assignedToUserId } } : undefined,
+                    provider: providerId ? { connect: { id: providerId } } : providerId === null ? { disconnect: true } : undefined, // NUEVO: Conectar, desconectar o dejar como está
                 },
             });
 
@@ -152,8 +156,9 @@ export class NetworkController {
                 include: {
                     company: true,
                     assignedToUser: {
-                        select: { id: true, username: true, email: true } // Selecciona solo campos específicos del usuario
+                        select: { id: true, username: true, email: true }
                     },
+                    provider: true, // NUEVO: Incluye la información del proveedor
                 },
             });
 
@@ -176,8 +181,12 @@ export class NetworkController {
             const allNetworkDevices = await prisma.network.findMany({
                 include: {
                     company: {
-                        select: { id: true, name: true } // Selecciona campos específicos de la compañía
+                        select: { id: true, name: true }
                     },
+                    assignedToUser: { // También incluyo el usuario asignado para consistencia, aunque no estaba en tu `getAll` original
+                        select: { id: true, username: true, email: true }
+                    },
+                    provider: true, // NUEVO: Incluye la información del proveedor
                 },
             });
             res.status(200).json(allNetworkDevices);
@@ -186,4 +195,5 @@ export class NetworkController {
             res.status(500).json({ error: 'Error interno del servidor al obtener los dispositivos de red.' });
         }
     }
+
 }

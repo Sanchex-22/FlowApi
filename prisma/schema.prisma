@@ -268,6 +268,34 @@ model SystemConfig {
 // Modelos de Inventario de Red (Network)
 // =========================================================================
 
+// =========================================================================
+// Modelo de Proveedor de Red (NetworkProvider)
+// =========================================================================
+
+model NetworkProvider {
+  id           String     @id @default(uuid())
+  name         String     @unique // Nombre del proveedor (e.g., Tigo, Claro)
+  providerIp   String?    // IP del proveedor (opcional)
+  dnsGateway   String?    // DNS Gateway del proveedor (opcional)
+  speed        String?    // Velocidad contratada (e.g., 100 Mbps)
+  cost         Decimal?   @default(0.00) // Costo mensual del servicio
+  notes        String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  // Relación con los dispositivos de red gestionados por este proveedor
+  networks     Network[]
+
+  // Campos para la gestión de dispositivos asociados al proveedor (ejemplo)
+  meshDevices  String?    // Lista de dispositivos MESH (podría ser un JSON string)
+  switchDevices String?   // Lista de switches (podría ser un JSON string)
+
+}
+
+// =========================================================================
+// Modelos de Inventario de Red (Network)
+// =========================================================================
+
 enum NetworkDeviceType {
   ROUTER
   SWITCH
@@ -292,12 +320,12 @@ model Network {
   id               String            @id @default(uuid())
   name             String
   ipAddress        String            @unique // IP address or hostname
-  macAddress       String?           
+  macAddress       String?
   deviceType       NetworkDeviceType @default(OTHER)
   status           NetworkDeviceStatus @default(UNKNOWN)
   location         String?           // Physical location within the company/branch
   description      String?
-  serialNumber     String?            
+  serialNumber     String?
   brand            String?
   purchaseDate     DateTime?
   warrantyEndDate  DateTime?
@@ -317,4 +345,8 @@ model Network {
   // Optional: Link to an Equipment if it's also considered a general asset
   // equipmentId      String?
   // equipment        Equipment?        @relation(fields: [equipmentId], references: [id])
+
+  // NUEVA RELACIÓN: Proveedor de Red (opcional)
+  providerId       String?
+  provider         NetworkProvider?  @relation(fields: [providerId], references: [id])
 }

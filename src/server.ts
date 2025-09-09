@@ -19,6 +19,7 @@ import SystemRouter from './routes/SystemRoutes.js';
 import DashboardRouter from './routes/DashboardRoutes.js';
 import { errorMiddleware } from './middlewares/errorHandler.js';
 import ReportsRouter from './routes/ReportRoutes.js';
+import NetworkProvidersRoutes from './routes/networkProvidersRoutes.js';
 dotenv.config({ path: '.env' });
 
 const app = express();
@@ -65,22 +66,12 @@ app.use('/api/maintenances', MaintenanceRouter);
 app.use('/api/documents', DocumentRouter);
 app.use('/api/licenses', LicenseRouter);
 app.use('/api/network', NetworkRouter);
+app.use('/api/network/providers', NetworkProvidersRoutes);
 app.use('/api/system', SystemRouter);
 app.use('/api/dashboard',DashboardRouter);
 app.use('/api/reports',ReportsRouter);
 // Middleware de manejo de errores al final
 app.use(errorMiddleware);
-
-// Manejo de errores 404 (Debe ir después de todas tus rutas definidas)
-// app.use((req, res, next) => {
-//   res.status(404).render('404', { title: 'Página no encontrada' });
-// });
-
-// Manejador de errores general (middleware de 4 argumentos, siempre al final)
-// app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-//   console.error(err.stack); // Registra el stack trace del error
-//   res.status(500).render('error', { title: 'Error del servidor', error: err.message });
-// });
 
 app.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);
