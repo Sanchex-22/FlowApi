@@ -6,7 +6,6 @@ import path from 'path';
 import AuthRouter from './routes/AuthRoutes.js';
 import expressLayouts from 'express-ejs-layouts';
 import flash from 'connect-flash';
-import bodyParser from 'body-parser';
 import { corsMiddleware } from './middlewares/CorsMiddleware.js';
 import UserRouter from './routes/UserRoutes.js';
 import CompaniesRouter from './routes/CompaniesRoutes.js';
@@ -20,27 +19,42 @@ import DashboardRouter from './routes/DashboardRoutes.js';
 import { errorMiddleware } from './middlewares/errorHandler.js';
 import ReportsRouter from './routes/ReportRoutes.js';
 import NetworkProvidersRoutes from './routes/networkProvidersRoutes.js';
+import TicketRouter from './routes/TicketRoutes.js';
+import InventoryRouter from './routes/InventoryRoutes.js';
+
 dotenv.config({ path: '.env' });
 
 const app = express();
-app.use(express.urlencoded({ extended: true }));
-app.use(bodyParser.urlencoded({ extended: false }))
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
+
 app.use(expressLayouts);
 app.set('layout', 'layout');
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.use(corsMiddleware)
+app.use(corsMiddleware);
+
+// ⛔ NO PARSEAR JSON en importación CSV
+app.use((req, res, next) => {
+  if (req.path.includes("/inventory/import")) return next();
+  express.json({ limit: "10mb" })(req, res, next);
+});
+
+// ⛔ NO PARSEAR URLENCODED en importación CSV
+app.use((req, res, next) => {
+  if (req.path.includes("/inventory/import")) return next();
+  express.urlencoded({ extended: true })(req, res, next);
+});
+
 app.use(session({
   secret: process.env.SESSION_SECRET || 'super_secret_key_for_session',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: 1000 * 60 * 60 * 24 // 1 día
-    // secure: process.env.NODE_ENV === 'production'
+    maxAge: 1000 * 60 * 60 * 24
   }
 }));
+
 app.use(flash());
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg');
@@ -50,17 +64,13 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.json());
-app.use(bodyParser.json({ limit: '10mb' }))
-
 app.get('/', (req, res) => {
   res.send('Welcome to IT System')
-})
+});
+
 app.use('/api/user/auth', AuthRouter);
 app.use('/api/users', UserRouter);
 app.use('/api/companies', CompaniesRouter);
-// Descomentar y usar cuando los módulos estén listos
-// app.use('/api/users', isAuthenticated, authorizeRolesMiddleware([UserRole.ADMIN, UserRole.SUPER_ADMIN]), userRoutes);
 app.use('/api/devices', EquipmentRouter);
 app.use('/api/maintenances', MaintenanceRouter);
 app.use('/api/documents', DocumentRouter);
@@ -70,7 +80,11 @@ app.use('/api/network/providers', NetworkProvidersRoutes);
 app.use('/api/system', SystemRouter);
 app.use('/api/dashboard',DashboardRouter);
 app.use('/api/reports',ReportsRouter);
-// Middleware de manejo de errores al final
+app.use('/api/ticket',TicketRouter);
+
+// ✔ Aquí sí se permite formidable sin interferencia
+app.use('/api/inventory', InventoryRouter);
+
 app.use(errorMiddleware);
 
 app.listen(port, () => {

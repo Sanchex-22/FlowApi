@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --watch src --exec \"node --loader ts-node/esm src/server.ts\"",
+    "dev": "tsx watch src/server.ts",
     "build": "prisma generate && tsc",
     "start": "node dist/server.js",
     "postinstall": "prisma generate",
@@ -31,15 +31,19 @@
     "@types/express-ejs-layouts": "^2.5.4",
     "@types/express-session": "^1.18.2",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.0.0",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "tsx": "^4.20.6",
+    "typescript": "^5.8.3",
+    "@types/formidable": "^3.4.5"
   },
   "dependencies": {
     "@prisma/client": "^6.12.0",
     "bcryptjs": "^3.0.2",
     "connect-flash": "^0.1.1",
     "cors": "^2.8.5",
+    "csv-parser": "^3.2.0",
     "date-fns": "^4.1.0",
     "dotenv": "^17.2.0",
     "ejs": "^3.1.10",
@@ -47,6 +51,8 @@
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.18.2",
     "jsonwebtoken": "^9.0.2",
-    "prisma": "6.12.0"
+    "multer": "^2.0.2",
+    "prisma": "6.12.0",
+    "formidable": "^3.5.4"
   }
 }

@@ -110,16 +110,24 @@ export class ReportController {
     const ninetyDaysFromNow = new Date();
     ninetyDaysFromNow.setDate(today.getDate() + 90);
 
+    // The Prisma schema for Equipment may not include a `warrantyEndDate` field
+    // in the generated types. To avoid TypeScript errors while still querying
+    // by that field when present in the database, build the filter and
+    // order objects as `any`.
+    const where: any = {
+      warrantyEndDate: {
+        gte: today, // Mayor o igual que hoy
+        lte: ninetyDaysFromNow, // Menor o igual que en 90 días
+      },
+    };
+
+    const orderBy: any = {
+      warrantyEndDate: 'asc',
+    };
+
     return this.prisma.equipment.findMany({
-      where: {
-        warrantyEndDate: {
-          gte: today, // Mayor o igual que hoy
-          lte: ninetyDaysFromNow, // Menor o igual que en 90 días
-        },
-      },
-      orderBy: {
-        warrantyEndDate: 'asc',
-      },
+      where,
+      orderBy,
     });
   }
 

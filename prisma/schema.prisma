@@ -1,29 +1,68 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql" // Puedes cambiar a "mysql", "sqlite", etc.
+  provider = "postgresql"
   url        = env("DATABASE_URL")
 }
 
-// =========================================================================
-// Modelos de Autenticación y Usuarios
-// =========================================================================
-
 enum UserRole {
-  USER        // Rol base para usuarios generales (e.g., técnicos)
-  ADMIN       // Puede gestionar equipos, mantenimientos, etc., dentro de su empresa/sucursal
-  MODERATOR   // Puede tener permisos intermedios, quizás sobre ciertos módulos o datos
-  SUPER_ADMIN // Acceso total al sistema, gestión de empresas, usuarios, configuración global
+  USER      
+  ADMIN      
+  MODERATOR  
+  SUPER_ADMIN
 }
 
 enum PersonStatus {
   Activo
   Inactivo
+}
+
+enum TicketType {
+  vacations
+  permission
+  ticket
+}
+
+enum TicketPriority {
+  urgent
+  high
+  medium
+  low
+  trivial
+}
+
+enum TicketStatus { 
+  standby
+  resolved
+  pending
+  in_process
+}
+
+model Ticket { // Renombrado de Form a Ticket
+  id             String       @id @default(uuid())
+  ticketNumber   Int?
+  title          String       @db.VarChar(50)
+  description    String       @db.VarChar(300)
+  img            String?      @db.VarChar(250)
+  comment        String?      @db.VarChar(300)
+  type           TicketType // Referencia al nuevo enum TicketType
+  priority       TicketPriority // Referencia al nuevo enum TicketPriority
+  status         TicketStatus // Referencia al nuevo enum TicketStatus
+  startDate      DateTime?
+  endDate        DateTime?
+  requestDays    Int?
+  approvedDays   Int?
+  reviewed       String?      @db.VarChar(50)
+  view           Boolean?
+  sendById       String?
+  sendBy         User?        @relation("TicketsSentBy", fields: [sendById], references: [id], onDelete: Cascade) // Renombrada relación
+  sendToId       String?
+  sendTo         User?        @relation("TicketsSentTo", fields: [sendToId], references: [id], onDelete: SetNull) // Renombrada relación
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 }
 
 model User {
@@ -35,26 +74,17 @@ model User {
   isActive              Boolean           @default(true)
   createdAt             DateTime          @default(now())
   updatedAt             DateTime          @updatedAt
-
-  // Relación con Equipos (si un usuario es el "asignado" a un equipo)
   assignedEquipments    Equipment[]
-
-  // Relación con Mantenimientos (si un usuario es el "técnico asignado")
   assignedMaintenances  Maintenance[]
-
-  // Relación con la Empresa a la que pertenece el usuario
   companyId             String?
   company               Company?          @relation("CompanyUsers", fields: [companyId], references: [id])
-
-  // Relación uno a uno con el modelo Person
   person                Person?
-
-  // Relación para las compañías creadas por este usuario
   createdCompanies      Company[]         @relation("CompanyCreatedBy")
-
-  // Relación con los dispositivos de red asignados a este usuario
   assignedNetworks      Network[]
+  ticketsSentBy         Ticket[]          @relation("TicketsSentBy") // Renombrada relación
+  ticketsSentTo         Ticket[]          @relation("TicketsSentTo") // Renombrada relación
 }
+
 
 model Person {
   id            String       @id @default(uuid())
@@ -62,10 +92,9 @@ model Person {
   user          User         @relation(fields: [userId], references: [id])
   firstName     String?
   lastName      String?
-  fullName      String?      
-  contactEmail  String?      
+  fullName      String?
+  contactEmail  String?
   phoneNumber   String?
-  // CAMBIO CRÍTICO: Asegúrate de que esto exista en tu schema.prisma
   departmentId  String? // Clave foránea al departamento
   department    Department?  @relation(fields: [departmentId], references: [id]) // Relación con el modelo Department
   position      String?
@@ -75,10 +104,6 @@ model Person {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
-// =========================================================================
-// Modelos de Empresas / Sucursales
-// =========================================================================
 
 model Company {
   id               String        @id @default(uuid())
@@ -90,26 +115,17 @@ model Company {
   isActive         Boolean       @default(true)
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
-
-  // Explicitly name the relation for the user who created the company
   createdByUserId  String?
   createdBy        User?         @relation("CompanyCreatedBy", fields: [createdByUserId], references: [id])
-
   equipments       Equipment[]
-  // Explicitly name the relation for users belonging to this company
   users            User[]        @relation("CompanyUsers")
   documents        Document[]
   licenses         License[]
   maintenances     Maintenance[]
-  // NEW: Relación con los dispositivos de red de esta compañía
   networks         Network[]
-  // NUEVO CAMBIO AQUÍ: Relación con los departamentos de esta compañía
   departments      Department[]
+  networkProviders NetworkProvider[]
 }
-
-// =========================================================================
-// NUEVO MODELO: Departamentos
-// =========================================================================
 
 model Department {
   id          String   @id @default(uuid())
@@ -118,19 +134,10 @@ model Department {
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  // Relación con la compañía a la que pertenece el departamento
   companyId   String
   company     Company  @relation(fields: [companyId], references: [id])
-
-  // Relación de vuelta a las personas que pertenecen a este departamento
   persons     Person[] // Relación inversa para Person
 }
-
-
-// =========================================================================
-// Modelos de Inventario de Equipos
-// =========================================================================
 
 enum EquipmentStatus {
   ACTIVE
@@ -142,37 +149,33 @@ enum EquipmentStatus {
 }
 
 model Equipment {
-  id                String          @id @default(uuid())
-  type              String
-  brand             String
-  model             String
-  serialNumber      String          @unique
-  plateNumber       String?         @unique
-  location          String?
-  status            EquipmentStatus @default(ACTIVE)
-  acquisitionDate   DateTime?
-  warrantyDetails   String?
-  qrCode            String?
-  cost              Decimal?        @default(0.00)
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
+  id              String    @id @default(uuid())
+  brand           String
+  model           String
+  serialNumber    String    @unique
+  plateNumber     String?   @unique
+  location        String?
+  cost            Decimal?  @default(0.0)
+  operatingSystem String?
+  endUser         String?
+  type            String    // Tipo de equipo (Laptop, Monitor, CPU, etc)
+  acquisitionDate DateTime?
+  warrantyDetails String?
+  qrCode          String?
+  status          EquipmentStatus  @default(ACTIVE)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
-  // AÑADE ESTA LÍNEA
-  warrantyEndDate   DateTime?       // Fecha de vencimiento de la garantía
+  companyId       String
+  company         Company   @relation(fields: [companyId], references: [id])
 
-  companyId         String
-  company           Company         @relation(fields: [companyId], references: [id])
+  assignedToUserId String?
+  assignedToUser   User?    @relation(fields: [assignedToUserId], references: [id])
 
-  assignedToUserId  String?
-  assignedToUser    User?           @relation(fields: [assignedToUserId], references: [id])
-
-  maintenances      Maintenance[]
-  documents         Document[]
+  maintenances    Maintenance[]
+  documents       Document[]
 }
 
-// =========================================================================
-// Modelos de Mantenimiento
-// =========================================================================
 
 enum MaintenanceType {
   PREVENTIVE
@@ -195,23 +198,15 @@ model Maintenance {
   scheduledDate     DateTime
   completionDate    DateTime?
   cost              Decimal?          @default(0.00)
-
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
-
   equipmentId       String
   equipment         Equipment         @relation(fields: [equipmentId], references: [id])
-
   assignedToUserId  String?
   assignedToUser    User?             @relation(fields: [assignedToUserId], references: [id])
-
   companyId         String
   company           Company           @relation(fields: [companyId], references: [id])
 }
-
-// =========================================================================
-// Modelos de Documentos y Facturas
-// =========================================================================
 
 model Document {
   id          String     @id @default(uuid())
@@ -220,20 +215,13 @@ model Document {
   fileUrl     String
   fileType    String?
   category    String?
-
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
-
   companyId   String
   company     Company    @relation(fields: [companyId], references: [id])
-
   equipmentId String?
   equipment   Equipment? @relation(fields: [equipmentId], references: [id])
 }
-
-// =========================================================================
-// Modelos de Licencias de Software
-// =========================================================================
 
 model License {
   id             String    @id @default(uuid())
@@ -243,17 +231,11 @@ model License {
   activationDate DateTime
   expirationDate DateTime?
   notes          String?
-
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
-
   companyId      String
   company        Company   @relation(fields: [companyId], references: [id])
 }
-
-// =========================================================================
-// Modelos de Configuración General (Opcional, si hay configuraciones a nivel de sistema)
-// =========================================================================
 
 model SystemConfig {
   id          String   @id @default(uuid())
@@ -263,14 +245,6 @@ model SystemConfig {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
-
-// =========================================================================
-// Modelos de Inventario de Red (Network)
-// =========================================================================
-
-// =========================================================================
-// Modelo de Proveedor de Red (NetworkProvider)
-// =========================================================================
 
 model NetworkProvider {
   id           String     @id @default(uuid())
@@ -282,19 +256,13 @@ model NetworkProvider {
   notes        String?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
-
-  // Relación con los dispositivos de red gestionados por este proveedor
+  companyId    String
+  company      Company           @relation(fields: [companyId], references: [id])
   networks     Network[]
-
-  // Campos para la gestión de dispositivos asociados al proveedor (ejemplo)
   meshDevices  String?    // Lista de dispositivos MESH (podría ser un JSON string)
   switchDevices String?   // Lista de switches (podría ser un JSON string)
 
 }
-
-// =========================================================================
-// Modelos de Inventario de Red (Network)
-// =========================================================================
 
 enum NetworkDeviceType {
   ROUTER
@@ -331,22 +299,13 @@ model Network {
   warrantyEndDate  DateTime?
   notes            String?
   model            String?
-
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
-
   companyId        String
   company          Company           @relation(fields: [companyId], references: [id])
-
-  // Optional: If a network device can be assigned to a specific user
   assignedToUserId String?
   assignedToUser   User?             @relation(fields: [assignedToUserId], references: [id])
-
-  // Optional: Link to an Equipment if it's also considered a general asset
-  // equipmentId      String?
-  // equipment        Equipment?        @relation(fields: [equipmentId], references: [id])
-
-  // NUEVA RELACIÓN: Proveedor de Red (opcional)
   providerId       String?
   provider         NetworkProvider?  @relation(fields: [providerId], references: [id])
 }
+
