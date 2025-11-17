@@ -196,4 +196,28 @@ export class NetworkController {
         }
     }
 
+      async getNetworkByCompanyCode(req: Request, res: Response) {
+        const { companyId } = req.params;
+        try {
+          const company = await prisma.company.findUnique({
+            where: { id: companyId },
+          });
+    
+          if (!company) {
+            res.status(404).json({ message: `Empresa con código ${companyId} no encontrada` });
+            return;
+          }
+          const providers = await prisma.network.findMany({
+            where: { companyId: company.id },
+            include: {
+              company: { select: { id: true, name: true }}
+            }
+          });
+          res.status(200).json(providers);
+        } catch (error: any) {
+          console.error('Error fetching network providers by company code:', error);
+          res.status(500).json({ error: 'Error interno del servidor al obtener los proveedores por código de compañía.', details: error.message });
+        }
+      }
+
 }

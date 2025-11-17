@@ -208,4 +208,37 @@ export class EquipmentController {
             res.status(500).json({ error: 'Error interno del servidor al obtener los equipos.' });
         }
     }
+
+    async getEquipmentByCompanyCode(req: Request, res: Response): Promise<void> {
+        const { companyId } = req.params;
+
+        try {
+            const company = await prisma.company.findUnique({
+                where: { id: companyId },
+            });
+
+            if (!company) {
+                res.status(404).json({ message: `Empresa con código ${companyId} no encontrada` });
+                return;
+            }
+
+            const inventory = await prisma.equipment.findMany({
+                where: { companyId: company.id },
+                include: {
+                    assignedToUser: true,
+                    maintenances: true,
+                    documents: true,
+                },
+                orderBy: { createdAt: 'desc' },
+            });
+
+            if (inventory.length === 0) {
+                res.status(200).json({ message: "No hay equipos registrados en inventario" });
+                return;
+            }
+            res.status(200).json(inventory);
+        } catch (error) {
+            res.status(500).json({ message: 'Error al obtener el inventario', error });
+        }
+    }
 }

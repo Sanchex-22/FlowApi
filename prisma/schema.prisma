@@ -248,21 +248,23 @@ model SystemConfig {
 
 model NetworkProvider {
   id           String     @id @default(uuid())
-  name         String     @unique // Nombre del proveedor (e.g., Tigo, Claro)
-  providerIp   String?    // IP del proveedor (opcional)
-  dnsGateway   String?    // DNS Gateway del proveedor (opcional)
-  speed        String?    // Velocidad contratada (e.g., 100 Mbps)
-  cost         Decimal?   @default(0.00) // Costo mensual del servicio
+  name         String     
+  providerIp   String?
+  dnsGateway   String?
+  speed        String?
+  cost         Decimal?   @default(0.00)
   notes        String?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   companyId    String
-  company      Company           @relation(fields: [companyId], references: [id])
+  company      Company     @relation(fields: [companyId], references: [id])
   networks     Network[]
-  meshDevices  String?    // Lista de dispositivos MESH (podría ser un JSON string)
-  switchDevices String?   // Lista de switches (podría ser un JSON string)
+  meshDevices  String?
+  switchDevices String?
 
+  @@unique([name, companyId])  // 🔥 Un nombre puede repetirse si es otra empresa
 }
+
 
 enum NetworkDeviceType {
   ROUTER

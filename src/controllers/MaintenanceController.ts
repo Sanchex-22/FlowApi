@@ -190,4 +190,38 @@ export class MaintenanceController {
             res.status(500).json({ error: 'Error interno del servidor al obtener los mantenimientos.' });
         }
     }
+    async getMaintenanceByCompanyCode(req: Request, res: Response) {
+        const { companyId } = req.params;
+        try {
+            const company = await prisma.company.findUnique({
+                where: { id: companyId },
+            });
+
+            if (!company) {
+                res.status(404).json({ message: `Empresa con código ${companyId} no encontrada` });
+                return;
+            }
+
+            const maintenances = await prisma.maintenance.findMany({
+                where: {
+                    companyId: company.id
+                },
+                include: {
+                    equipment: {
+                        select: { serialNumber: true, type: true }
+                    },
+                    assignedToUser: {
+                        select: { username: true }
+                    },
+                    company: {
+                        select: { name: true }
+                    }
+                }
+            });
+            res.json(maintenances);
+        } catch (error) {
+            console.error('Error al obtener los mantenimientos por código de compañía:', error);
+            res.status(500).json({ error: 'Error interno del servidor al obtener los mantenimientos por código de compañía.' });
+        }   
+    }
 }
