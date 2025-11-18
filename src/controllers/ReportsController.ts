@@ -5,7 +5,7 @@ import { Request, Response } from 'express';
 
 /**
  * @class ReportController
- * @description Maneja la lógica para obtener los datos detallados para los reportes.
+ * @description Maneja la lógica para obtener los datos detallados para los reportes filtrados por compañía.
  */
 export class ReportController {
   private prisma: PrismaClient;
@@ -15,7 +15,7 @@ export class ReportController {
   }
 
   /**
-   * Obtiene el listado completo de inventario filtrado por compañía.
+   * Inventario completo filtrado por compañía.
    */
   private async getFullInventoryReport(companyId: string) {
     return this.prisma.equipment.findMany({
@@ -23,8 +23,11 @@ export class ReportController {
       orderBy: { type: 'asc' },
       include: {
         company: { select: { name: true } },
-        assignedToUser: { 
-          select: { username: true, person: { select: { fullName: true } } } 
+        assignedToUser: {
+          select: {
+            username: true,
+            person: { select: { fullName: true } },
+          },
         },
       },
     });
@@ -42,11 +45,14 @@ export class ReportController {
       },
       orderBy: { completionDate: 'desc' },
       include: {
-        equipment: { 
-          select: { serialNumber: true, type: true, brand: true, model: true } 
+        equipment: {
+          select: { serialNumber: true, type: true, brand: true, model: true },
         },
-        assignedToUser: { 
-          select: { username: true, person: { select: { fullName: true } } } 
+        assignedToUser: {
+          select: {
+            username: true,
+            person: { select: { fullName: true } },
+          },
         },
       },
     });
@@ -57,7 +63,7 @@ export class ReportController {
    */
   private async getUserAssignmentsReport(companyId: string) {
     return this.prisma.equipment.findMany({
-      where: { 
+      where: {
         companyId,
         assignedToUserId: { not: null },
       },
@@ -73,7 +79,9 @@ export class ReportController {
           select: {
             username: true,
             email: true,
-            person: { include: { department: true } },
+            person: {
+              include: { department: true },
+            },
           },
         },
       },
@@ -88,22 +96,29 @@ export class ReportController {
       where: { companyId },
       orderBy: { scheduledDate: 'desc' },
       include: {
-        equipment: { select: { serialNumber: true, type: true } },
-        assignedToUser: { select: { username: true, person: { select: { fullName: true } } } },
+        equipment: {
+          select: { serialNumber: true, type: true },
+        },
+        assignedToUser: {
+          select: {
+            username: true,
+            person: { select: { fullName: true } },
+          },
+        },
         company: { select: { name: true } },
       },
     });
   }
 
   /**
-   * Garantías por vencer — desactivado (no existe warrantyEndDate).
+   * Garantías por vencer — desactivado porque no existe warrantyEndDate.
    */
   private async getExpiringWarrantiesReport() {
     return [];
   }
 
   /**
-   * Mantenimientos completados en últimos 30 días filtrados por compañía.
+   * Rendimiento de IT — mantenimientos completados últimos 30 días, filtrados por compañía.
    */
   private async getItPerformanceReport(companyId: string) {
     const thirtyDaysAgo = new Date();
@@ -125,7 +140,7 @@ export class ReportController {
 
   /**
    * @method getAllReports
-   * @description Punto de entrada para obtener todos los reportes por empresa.
+   * @description Obtiene todos los reportes del dashboard filtrados por empresa.
    */
   public getAllReports = async (req: Request, res: Response): Promise<void> => {
     try {
