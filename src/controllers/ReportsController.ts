@@ -15,70 +15,65 @@ export class ReportController {
   }
 
   /**
-   * Obtiene el listado completo de inventario, con detalles y ordenado por tipo.
+   * Obtiene el listado completo de inventario filtrado por compañía.
    */
-  private async getFullInventoryReport() {
+  private async getFullInventoryReport(companyId: string) {
     return this.prisma.equipment.findMany({
-      orderBy: {
-        type: 'asc',
-      },
+      where: { companyId },
+      orderBy: { type: 'asc' },
       include: {
         company: { select: { name: true } },
-        assignedToUser: { select: { username: true, person: { select: { fullName: true } } } },
+        assignedToUser: { 
+          select: { username: true, person: { select: { fullName: true } } } 
+        },
       },
     });
   }
 
   /**
-   * Obtiene la lista de todos los mantenimientos completados con sus costos y detalles.
+   * Costos de mantenimiento filtrados por compañía.
    */
-  private async getMaintenanceCostsReport() {
+  private async getMaintenanceCostsReport(companyId: string) {
     return this.prisma.maintenance.findMany({
       where: {
+        companyId,
         status: MaintenanceStatus.COMPLETED,
-        cost: {
-          gt: 0, // Solo mantenimientos que tuvieron un costo
-        },
+        cost: { gt: 0 },
       },
-      orderBy: {
-        completionDate: 'desc',
-      },
+      orderBy: { completionDate: 'desc' },
       include: {
-        equipment: { select: { serialNumber: true, type: true, brand: true, model: true } },
-        assignedToUser: { select: { username: true, person: { select: { fullName: true } } } },
+        equipment: { 
+          select: { serialNumber: true, type: true, brand: true, model: true } 
+        },
+        assignedToUser: { 
+          select: { username: true, person: { select: { fullName: true } } } 
+        },
       },
     });
   }
 
   /**
-   * Obtiene la lista de todos los equipos asignados, incluyendo detalles del usuario, persona y departamento.
+   * Equipos asignados filtrados por compañía.
    */
-  private async getUserAssignmentsReport() {
+  private async getUserAssignmentsReport(companyId: string) {
     return this.prisma.equipment.findMany({
-      where: {
-        assignedToUserId: {
-          not: null,
-        },
+      where: { 
+        companyId,
+        assignedToUserId: { not: null },
       },
       orderBy: {
         assignedToUser: {
           person: {
-            department: {
-              name: 'asc'
-            }
-          }
-        }
+            department: { name: 'asc' },
+          },
+        },
       },
       include: {
         assignedToUser: {
           select: {
             username: true,
             email: true,
-            person: {
-              include: {
-                department: true,
-              },
-            },
+            person: { include: { department: true } },
           },
         },
       },
@@ -86,13 +81,12 @@ export class ReportController {
   }
 
   /**
-   * Obtiene el historial completo de mantenimientos, ordenado por fecha.
+   * Historial de mantenimientos filtrado por compañía.
    */
-  private async getFullMaintenanceHistory() {
+  private async getFullMaintenanceHistory(companyId: string) {
     return this.prisma.maintenance.findMany({
-      orderBy: {
-        scheduledDate: 'desc',
-      },
+      where: { companyId },
+      orderBy: { scheduledDate: 'desc' },
       include: {
         equipment: { select: { serialNumber: true, type: true } },
         assignedToUser: { select: { username: true, person: { select: { fullName: true } } } },
@@ -102,52 +96,26 @@ export class ReportController {
   }
 
   /**
-   * Obtiene la lista de equipos cuya garantía vence en los próximos 90 días.
-   * REQUIERE el campo `warrantyEndDate` en el modelo `Equipment`.
+   * Garantías por vencer — desactivado (no existe warrantyEndDate).
    */
   private async getExpiringWarrantiesReport() {
-    const today = new Date();
-    const ninetyDaysFromNow = new Date();
-    ninetyDaysFromNow.setDate(today.getDate() + 90);
-
-    // The Prisma schema for Equipment may not include a `warrantyEndDate` field
-    // in the generated types. To avoid TypeScript errors while still querying
-    // by that field when present in the database, build the filter and
-    // order objects as `any`.
-    const where: any = {
-      warrantyEndDate: {
-        gte: today, // Mayor o igual que hoy
-        lte: ninetyDaysFromNow, // Menor o igual que en 90 días
-      },
-    };
-
-    const orderBy: any = {
-      warrantyEndDate: 'asc',
-    };
-
-    return this.prisma.equipment.findMany({
-      where,
-      orderBy,
-    });
+    return [];
   }
 
   /**
-   * Obtiene la lista de mantenimientos completados en los últimos 30 días como métrica de rendimiento.
+   * Mantenimientos completados en últimos 30 días filtrados por compañía.
    */
-  private async getItPerformanceReport() {
+  private async getItPerformanceReport(companyId: string) {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
     return this.prisma.maintenance.findMany({
       where: {
+        companyId,
         status: MaintenanceStatus.COMPLETED,
-        completionDate: {
-          gte: thirtyDaysAgo,
-        },
+        completionDate: { gte: thirtyDaysAgo },
       },
-      orderBy: {
-        completionDate: 'desc',
-      },
+      orderBy: { completionDate: 'desc' },
       include: {
         equipment: { select: { serialNumber: true, type: true } },
         assignedToUser: { select: { username: true } },
@@ -157,11 +125,17 @@ export class ReportController {
 
   /**
    * @method getAllReports
-   * @description Punto de entrada para obtener todos los reportes con datos detallados.
+   * @description Punto de entrada para obtener todos los reportes por empresa.
    */
   public getAllReports = async (req: Request, res: Response): Promise<void> => {
     try {
-      // Ejecutar todas las consultas en paralelo
+      const { companyId } = req.params;
+
+      if (!companyId) {
+        res.status(400).json({ message: "Debe enviar el companyId en los parámetros." });
+        return;
+      }
+
       const [
         inventory,
         maintenanceCosts,
@@ -170,15 +144,14 @@ export class ReportController {
         expiringWarranties,
         itPerformance,
       ] = await Promise.all([
-        this.getFullInventoryReport(),
-        this.getMaintenanceCostsReport(),
-        this.getUserAssignmentsReport(),
-        this.getFullMaintenanceHistory(),
+        this.getFullInventoryReport(companyId),
+        this.getMaintenanceCostsReport(companyId),
+        this.getUserAssignmentsReport(companyId),
+        this.getFullMaintenanceHistory(companyId),
         this.getExpiringWarrantiesReport(),
-        this.getItPerformanceReport(),
+        this.getItPerformanceReport(companyId),
       ]);
 
-      // Estructurar la respuesta final con los datos completos
       const reports = {
         inventoryReport: {
           title: 'Listado de Inventario',
@@ -213,9 +186,12 @@ export class ReportController {
       };
 
       res.status(200).json(reports);
+
     } catch (error) {
       console.error('Error al obtener los datos para los reportes:', error);
-      res.status(500).json({ message: 'Error al obtener los datos para los reportes.' });
+      res.status(500).json({
+        message: 'Error al obtener los datos para los reportes.',
+      });
     }
   };
 }

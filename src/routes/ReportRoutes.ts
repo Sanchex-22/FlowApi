@@ -5,6 +5,7 @@ import { ReportController } from '../controllers/ReportsController.js';
 const ReportsRouter = Router();
 const reportController = new ReportController();
 
-ReportsRouter.get('/all', reportController.getAllReports.bind(reportController));
+// ReportsRouter.get('/all', reportController.getAllReports.bind(reportController));
+ReportsRouter.get('/:companyId/all', reportController.getAllReports.bind(reportController));
 
 export default ReportsRouter;
