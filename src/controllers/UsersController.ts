@@ -262,15 +262,16 @@ async Create(req: Request, res: Response) {
     async getProfile(req: Request, res: Response) {
         try {
             const { id } = req.params;
+            console.log(`Fetching profile for user ID: ${id}`);
             const user = await prisma.user.findUnique({
                 where: { id },
                 include: {
                     person: {
                         include: {
-                            department: true, // Incluir el departamento asociado a la persona
+                            department: true,
                         },
                     },
-                    company: true, // También es útil incluir la compañía del perfil
+                    company: true,
                     assignedEquipments: {
                         select: {
                             id: true,
@@ -300,7 +301,7 @@ async Create(req: Request, res: Response) {
                     },
                 },
             });
-
+            console.log(`Fetching profile for user ID: ${user?.id}`);
             if (!user) {
                 return res.status(404).json({ error: 'Usuario no encontrado.' });
             }

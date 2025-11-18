@@ -43,13 +43,6 @@ export async function generateNextCompanyCode(prisma: PrismaClient): Promise<str
   return `CO${String(nextCodeNum).padStart(3, '0')}`;
 }
 
-/**
- * Genera el próximo código de usuario secuencial (ej. USR001, USR002).
- * Busca el código numérico más alto entre los usuarios existentes que comienzan con 'USR'
- * y lo incrementa.
- * @param prisma Instancia de PrismaClient.
- * @returns El próximo código de usuario disponible.
- */
 export async function generateNextUserCode(prisma: PrismaClient): Promise<string> {
   // Busca todas las personas con códigos de usuario que empiezan con 'USR'
   const persons = await prisma.person.findMany({
