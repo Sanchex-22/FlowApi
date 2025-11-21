@@ -80,7 +80,7 @@ app.use('/api/network/providers', NetworkProvidersRoutes);
 app.use('/api/system', SystemRouter);
 app.use('/api/dashboard',DashboardRouter);
 app.use('/api/reports',ReportsRouter);
-app.use('/api/ticket',TicketRouter);
+app.use('/api/tickets',TicketRouter);
 
 // ✔ Aquí sí se permite formidable sin interferencia
 app.use('/api/inventory', InventoryRouter);

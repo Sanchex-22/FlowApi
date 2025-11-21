@@ -6,116 +6,99 @@ const prisma = new PrismaClient();
 
 export class TicketController { // Renombrado de FormController a TicketController
 
-    /**
-     * Genera el siguiente número de ticket consecutivo.
-     * Podrías querer implementar una lógica más robusta para esto,
-     * por ejemplo, por compañía o por año, pero para empezar,
-     * busca el último ticket y le suma uno.
-     */
-    private async generateNextTicketNumber(): Promise<number> {
-        const lastTicket = await prisma.ticket.findFirst({ // Referencia a prisma.ticket
-            orderBy: {
-                ticketNumber: 'desc',
-            },
-            select: {
-                ticketNumber: true,
-            },
+    async generateNextTicketNumber() {
+        const lastTicket = await prisma.ticket.findFirst({
+            orderBy: { ticketNumber: "desc" }
         });
 
-        if (lastTicket && lastTicket.ticketNumber) {
-            return lastTicket.ticketNumber + 1;
-        }
-        return 1; // Primer ticket si no hay ninguno.
+        return lastTicket ? lastTicket.ticketNumber! + 1 : 1;
     }
 
-    /**
-     * Crea un nuevo ticket.
-     * @param req Express Request. Espera los datos del ticket en req.body.
-     * @param res Express Response.
-     */
-    async create(req: Request, res: Response, next: NextFunction) {
+    // ---------------------------------------------------------
+    // CREAR TICKET
+    // ---------------------------------------------------------
+    async create(req: Request, res: Response) {
         try {
-            const {
-                title,
-                description,
-                img,
-                comment,
-                type,
-                priority,
-                status,
-                startDate,
-                endDate,
-                requestDays,
-                approvedDays,
-                reviewed,
-                view,
-                sendById, // ID del usuario que envía
-                sendToId,   // ID del usuario a quien se envía
-            } = req.body;
+            console.log("📥 Datos recibidos para crear ticket:", req.body);
 
-            // Validación básica
-            if (!title || !description || !type || !priority || !status) {
-                return res.status(400).json({ error: 'Faltan campos obligatorios para crear el ticket.' });
-            }
-
-            // Generar el número de ticket
+            const data = req.body;
             const ticketNumber = await this.generateNextTicketNumber();
+            const reviewedValue =
+                data.reviewed === true ||
+                data.reviewed === "true" ||
+                data.reviewed === 1;
 
-            const newTicket = await prisma.ticket.create({ // Referencia a prisma.ticket.create
+            const sendByIdClean = data.sendById && data.sendById.trim() !== "" ? data.sendById : null;
+            const sendToIdClean = data.sendToId && data.sendToId.trim() !== "" ? data.sendToId : null;
+
+            console.log("🔍 Datos procesados:", {
+                ...data,
+                reviewed: reviewedValue,
+                sendById: sendByIdClean,
+                sendToId: sendToIdClean
+            });
+
+            // Crear ticket
+            const newTicket = await prisma.ticket.create({
                 data: {
                     ticketNumber,
-                    title,
-                    description,
-                    img,
-                    comment,
-                    type,
-                    priority,
-                    status,
-                    startDate: startDate ? new Date(startDate) : undefined,
-                    endDate: endDate ? new Date(endDate) : undefined,
-                    requestDays,
-                    approvedDays,
-                    reviewed,
-                    view,
-                    // Conectar con el usuario que envía si se proporciona un ID
-                    ...(sendById && {
-                        sendBy: {
-                            connect: { id: sendById },
-                        },
-                    }),
-                    // Conectar con el usuario a quien se envía si se proporciona un ID
-                    ...(sendToId && {
-                        sendTo: {
-                            connect: { id: sendToId },
-                        },
-                    }),
+                    title: data.title,
+                    description: data.description,
+                    img: data.img,
+                    comment: data.comment,
+
+                    // Enums del prisma
+                    type: data.type,
+                    priority: data.priority,
+                    status: data.status,
+
+                    // Fechas convertidas
+                    startDate: data.startDate ? new Date(data.startDate) : null,
+                    endDate: data.endDate ? new Date(data.endDate) : null,
+
+                    requestDays: Number(data.requestDays) || null,
+                    approvedDays: Number(data.approvedDays) || null,
+
+                    reviewed: reviewedValue,
+                    view: Boolean(data.view),
+
+                    sendById: sendByIdClean,
+                    sendToId: sendToIdClean
                 },
+
                 include: {
                     sendBy: {
                         select: {
                             id: true,
                             username: true,
-                            email: true,
-                        },
+                            email: true
+                        }
                     },
                     sendTo: {
                         select: {
                             id: true,
                             username: true,
-                            email: true,
-                        },
-                    },
-                },
+                            email: true
+                        }
+                    }
+                }
             });
 
-            res.status(201).json(newTicket);
-        } catch (error: any) {
-            console.error('Error al crear el ticket:', error); // Mensaje de error actualizado
-            if (error.code === 'P2025') { // Relación no encontrada (ej. sendById o sendToId no existen)
-                return res.status(404).json({ error: 'Uno de los usuarios especificados (sendBy o sendTo) no fue encontrado.' });
-            }
-            res.status(500).json({ error: 'Error interno del servidor al crear el ticket.' }); // Mensaje de error actualizado
-            next(error);
+            console.log("✅ Ticket creado correctamente:", newTicket);
+
+            return res.status(201).json({
+                ok: true,
+                message: "Ticket creado exitosamente",
+                ticket: newTicket
+            });
+
+        } catch (error) {
+            console.error("❌ Error creando ticket:", error);
+            return res.status(500).json({
+                ok: false,
+                message: "Error al crear el ticket",
+                error
+            });
         }
     }
 

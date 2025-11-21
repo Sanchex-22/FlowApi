@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,9 +8,9 @@ datasource db {
 }
 
 enum UserRole {
-  USER      
-  ADMIN      
-  MODERATOR  
+  USER
+  ADMIN
+  MODERATOR
   SUPER_ADMIN
 }
 
@@ -33,12 +32,12 @@ enum TicketPriority {
   low
   trivial
 }
-
-enum TicketStatus { 
-  standby
-  resolved
+enum TicketStatus {
+  open
   pending
-  in_process
+  approved
+  rejected
+  closed
 }
 
 model Ticket { // Renombrado de Form a Ticket
@@ -48,14 +47,14 @@ model Ticket { // Renombrado de Form a Ticket
   description    String       @db.VarChar(300)
   img            String?      @db.VarChar(250)
   comment        String?      @db.VarChar(300)
-  type           TicketType // Referencia al nuevo enum TicketType
-  priority       TicketPriority // Referencia al nuevo enum TicketPriority
-  status         TicketStatus // Referencia al nuevo enum TicketStatus
+  type           TicketType   // Referencia al enum TicketType
+  priority       TicketPriority // Referencia al enum TicketPriority
+  status         TicketStatus // Referencia al enum TicketStatus
   startDate      DateTime?
   endDate        DateTime?
   requestDays    Int?
   approvedDays   Int?
-  reviewed       String?      @db.VarChar(50)
+  reviewed       Boolean?     // Cambiado a Boolean para aceptar true/false del frontend
   view           Boolean?
   sendById       String?
   sendBy         User?        @relation("TicketsSentBy", fields: [sendById], references: [id], onDelete: Cascade) // Renombrada relación
@@ -84,7 +83,6 @@ model User {
   ticketsSentBy         Ticket[]          @relation("TicketsSentBy") // Renombrada relación
   ticketsSentTo         Ticket[]          @relation("TicketsSentTo") // Renombrada relación
 }
-
 
 model Person {
   id            String       @id @default(uuid())
@@ -176,7 +174,6 @@ model Equipment {
   documents       Document[]
 }
 
-
 enum MaintenanceType {
   PREVENTIVE
   CORRECTIVE
@@ -248,14 +245,14 @@ model SystemConfig {
 
 model NetworkProvider {
   id           String     @id @default(uuid())
-  name         String     
+  name         String
   providerIp   String?
   dnsGateway   String?
   speed        String?
   cost         Decimal?   @default(0.00)
   notes        String?
   createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  updatedAt    DateTime   @default(now())
   companyId    String
   company      Company     @relation(fields: [companyId], references: [id])
   networks     Network[]
@@ -264,7 +261,6 @@ model NetworkProvider {
 
   @@unique([name, companyId])  // 🔥 Un nombre puede repetirse si es otra empresa
 }
-
 
 enum NetworkDeviceType {
   ROUTER
@@ -310,4 +306,3 @@ model Network {
   providerId       String?
   provider         NetworkProvider?  @relation(fields: [providerId], references: [id])
 }
-
