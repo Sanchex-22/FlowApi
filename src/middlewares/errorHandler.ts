@@ -1,6 +1,6 @@
 // src/middlewares/errorHandler.ts
-import { Prisma } from "@prisma/client";
 import { Request, Response, NextFunction } from "express";
+import { Prisma } from "../../generated/prisma/client";
 
 export function errorMiddleware(err: any, req: Request, res: Response, next: NextFunction) {
   // 🔹 Evita "headers already sent"

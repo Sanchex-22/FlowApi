@@ -1,9 +1,8 @@
 // src/auth/auth.service.ts
-import { PrismaClient, User, UserRole } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { prisma } from '../../lib/prisma';
+import { User, UserRole } from '../../generated/prisma/client';
 
-// Instancia de PrismaClient para interactuar con la base de datos
-const prisma = new PrismaClient();
 
 export class AuthService {
 

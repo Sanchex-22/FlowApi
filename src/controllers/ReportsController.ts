@@ -1,19 +1,15 @@
 // src/controllers/ReportController.ts
 
-import { PrismaClient, MaintenanceStatus } from '@prisma/client';
 import { Request, Response } from 'express';
+import { prisma } from '../../lib/prisma';
+import { MaintenanceStatus } from '../../generated/prisma/enums';
 
 /**
  * @class ReportController
  * @description Maneja la lógica para obtener los datos detallados para los reportes filtrados por compañía.
  */
 export class ReportController {
-  private prisma: PrismaClient;
-
-  constructor() {
-    this.prisma = new PrismaClient();
-  }
-
+  private prisma = prisma;
   /**
    * Inventario completo filtrado por compañía.
    */

@@ -1,11 +1,8 @@
 // src/auth/user.controller.ts
-import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
-// Asegúrate de que esta ruta sea correcta para tu proyecto
+import { prisma } from '../../lib/prisma.js';
 import { generateNextUserCode } from '../../prisma/seed.js';
-
-const prisma = new PrismaClient();
 
 export class UserController {
 
@@ -34,7 +31,7 @@ async Create(req: Request, res: Response) {
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUserCode = await generateNextUserCode(prisma);
+        const newUserCode = await generateNextUserCode();
 
         const newUser = await prisma.user.create({
             data: {

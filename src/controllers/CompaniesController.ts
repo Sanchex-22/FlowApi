@@ -1,10 +1,7 @@
 // src/companies/company.controller.ts
-import { PrismaClient } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
-// Asegúrate de que esta ruta sea correcta para tu proyecto
 import { generateNextCompanyCode } from '../utils/companyCodeGenerator.js';
-
-const prisma = new PrismaClient();
+import prisma from '../../lib/prisma.js';
 
 export class CompanyController {
 

@@ -1,208 +1,150 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url        = env("DATABASE_URL")
 }
 
-enum UserRole {
-  USER
-  ADMIN
-  MODERATOR
-  SUPER_ADMIN
-}
-
-enum PersonStatus {
-  Activo
-  Inactivo
-}
-
-enum TicketType {
-  vacations
-  permission
-  ticket
-}
-
-enum TicketPriority {
-  urgent
-  high
-  medium
-  low
-  trivial
-}
-enum TicketStatus {
-  open
-  pending
-  approved
-  rejected
-  closed
-}
-
-model Ticket { // Renombrado de Form a Ticket
-  id             String       @id @default(uuid())
-  ticketNumber   Int?
-  title          String       @db.VarChar(50)
-  description    String       @db.VarChar(300)
-  img            String?      @db.VarChar(250)
-  comment        String?      @db.VarChar(300)
-  type           TicketType   // Referencia al enum TicketType
-  priority       TicketPriority // Referencia al enum TicketPriority
-  status         TicketStatus // Referencia al enum TicketStatus
-  startDate      DateTime?
-  endDate        DateTime?
-  requestDays    Int?
-  approvedDays   Int?
-  reviewed       Boolean?     // Cambiado a Boolean para aceptar true/false del frontend
-  view           Boolean?
-  sendById       String?
-  sendBy         User?        @relation("TicketsSentBy", fields: [sendById], references: [id], onDelete: Cascade) // Renombrada relación
-  sendToId       String?
-  sendTo         User?        @relation("TicketsSentTo", fields: [sendToId], references: [id], onDelete: SetNull) // Renombrada relación
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+model Ticket {
+  id           String         @id @default(uuid())
+  ticketNumber Int?
+  title        String         @db.VarChar(50)
+  description  String         @db.VarChar(300)
+  img          String?        @db.VarChar(250)
+  comment      String?        @db.VarChar(300)
+  type         TicketType
+  priority     TicketPriority
+  status       TicketStatus
+  startDate    DateTime?
+  endDate      DateTime?
+  requestDays  Int?
+  approvedDays Int?
+  view         Boolean?
+  sendById     String?
+  sendToId     String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  reviewed     Boolean?
+  sendBy       User?          @relation("TicketsSentBy", fields: [sendById], references: [id], onDelete: Cascade)
+  sendTo       User?          @relation("TicketsSentTo", fields: [sendToId], references: [id])
 }
 
 model User {
-  id                    String            @id @default(uuid())
-  username              String            @unique
-  email                 String            @unique
-  password              String
-  role                  UserRole          @default(USER)
-  isActive              Boolean           @default(true)
-  createdAt             DateTime          @default(now())
-  updatedAt             DateTime          @updatedAt
-  assignedEquipments    Equipment[]
-  assignedMaintenances  Maintenance[]
-  companyId             String?
-  company               Company?          @relation("CompanyUsers", fields: [companyId], references: [id])
-  person                Person?
-  createdCompanies      Company[]         @relation("CompanyCreatedBy")
-  assignedNetworks      Network[]
-  ticketsSentBy         Ticket[]          @relation("TicketsSentBy") // Renombrada relación
-  ticketsSentTo         Ticket[]          @relation("TicketsSentTo") // Renombrada relación
+  id                   String        @id @default(uuid())
+  username             String        @unique
+  email                String        @unique
+  password             String
+  role                 UserRole      @default(USER)
+  isActive             Boolean       @default(true)
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  companyId            String?
+  createdCompanies     Company[]     @relation("CompanyCreatedBy")
+  assignedEquipments   Equipment[]
+  assignedMaintenances Maintenance[]
+  assignedNetworks     Network[]
+  person               Person?
+  ticketsSentBy        Ticket[]      @relation("TicketsSentBy")
+  ticketsSentTo        Ticket[]      @relation("TicketsSentTo")
+  company              Company?      @relation("CompanyUsers", fields: [companyId], references: [id])
 }
 
 model Person {
-  id            String       @id @default(uuid())
-  userId        String       @unique // foreign key to User
-  user          User         @relation(fields: [userId], references: [id])
-  firstName     String?
-  lastName      String?
-  fullName      String?
-  contactEmail  String?
-  phoneNumber   String?
-  departmentId  String? // Clave foránea al departamento
-  department    Department?  @relation(fields: [departmentId], references: [id]) // Relación con el modelo Department
-  position      String?
-  status        PersonStatus @default(Activo)
-  userCode      String      @unique
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String       @id @default(uuid())
+  userId       String       @unique
+  firstName    String?
+  lastName     String?
+  fullName     String?
+  contactEmail String?
+  phoneNumber  String?
+  departmentId String?
+  position     String?
+  status       PersonStatus @default(Activo)
+  userCode     String       @unique
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  department   Department?  @relation(fields: [departmentId], references: [id])
+  user         User         @relation(fields: [userId], references: [id])
 }
 
 model Company {
-  id               String        @id @default(uuid())
-  code             String        @unique @default("CO001")
-  name             String        @unique
+  id               String            @id @default(uuid())
+  code             String            @unique @default("CO001")
+  name             String            @unique
   address          String?
   phone            String?
   email            String?
-  isActive         Boolean       @default(true)
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+  isActive         Boolean           @default(true)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
   createdByUserId  String?
-  createdBy        User?         @relation("CompanyCreatedBy", fields: [createdByUserId], references: [id])
-  equipments       Equipment[]
-  users            User[]        @relation("CompanyUsers")
+  createdBy        User?             @relation("CompanyCreatedBy", fields: [createdByUserId], references: [id])
+  departments      Department[]
   documents        Document[]
+  equipments       Equipment[]
   licenses         License[]
   maintenances     Maintenance[]
   networks         Network[]
-  departments      Department[]
   networkProviders NetworkProvider[]
+  users            User[]            @relation("CompanyUsers")
 }
 
 model Department {
   id          String   @id @default(uuid())
-  name        String   // Nombre del departamento (e.g., "IT", "Recursos Humanos")
+  name        String
   description String?
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   companyId   String
   company     Company  @relation(fields: [companyId], references: [id])
-  persons     Person[] // Relación inversa para Person
-}
-
-enum EquipmentStatus {
-  ACTIVE
-  IN_MAINTENANCE
-  DISPOSED
-  DAMAGED
-  ASSIGNED
-  STORAGE
+  persons     Person[]
 }
 
 model Equipment {
-  id              String    @id @default(uuid())
-  brand           String
-  model           String
-  serialNumber    String    @unique
-  plateNumber     String?   @unique
-  location        String?
-  cost            Decimal?  @default(0.0)
-  operatingSystem String?
-  endUser         String?
-  type            String    // Tipo de equipo (Laptop, Monitor, CPU, etc)
-  acquisitionDate DateTime?
-  warrantyDetails String?
-  qrCode          String?
-  status          EquipmentStatus  @default(ACTIVE)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-
-  companyId       String
-  company         Company   @relation(fields: [companyId], references: [id])
-
+  id               String          @id @default(uuid())
+  type             String
+  brand            String
+  model            String
+  serialNumber     String          @unique
+  plateNumber      String?         @unique
+  location         String?
+  status           EquipmentStatus @default(ACTIVE)
+  acquisitionDate  DateTime?
+  warrantyDetails  String?
+  qrCode           String?
+  cost             Decimal?        @default(0.00)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  companyId        String
   assignedToUserId String?
-  assignedToUser   User?    @relation(fields: [assignedToUserId], references: [id])
-
-  maintenances    Maintenance[]
-  documents       Document[]
-}
-
-enum MaintenanceType {
-  PREVENTIVE
-  CORRECTIVE
-}
-
-enum MaintenanceStatus {
-  SCHEDULED
-  IN_PROGRESS
-  COMPLETED
-  CANCELED
+  endUser          String?
+  operatingSystem  String?
+  documents        Document[]
+  assignedToUser   User?           @relation(fields: [assignedToUserId], references: [id])
+  company          Company         @relation(fields: [companyId], references: [id])
+  maintenances     Maintenance[]
 }
 
 model Maintenance {
-  id                String            @id @default(uuid())
-  title             String
-  description       String?
-  type              MaintenanceType
-  status            MaintenanceStatus @default(SCHEDULED)
-  scheduledDate     DateTime
-  completionDate    DateTime?
-  cost              Decimal?          @default(0.00)
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
-  equipmentId       String
-  equipment         Equipment         @relation(fields: [equipmentId], references: [id])
-  assignedToUserId  String?
-  assignedToUser    User?             @relation(fields: [assignedToUserId], references: [id])
-  companyId         String
-  company           Company           @relation(fields: [companyId], references: [id])
+  id               String            @id @default(uuid())
+  title            String
+  description      String?
+  type             MaintenanceType
+  status           MaintenanceStatus @default(SCHEDULED)
+  scheduledDate    DateTime
+  completionDate   DateTime?
+  cost             Decimal?          @default(0.00)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  equipmentId      String
+  assignedToUserId String?
+  companyId        String
+  assignedToUser   User?             @relation(fields: [assignedToUserId], references: [id])
+  company          Company           @relation(fields: [companyId], references: [id])
+  equipment        Equipment         @relation(fields: [equipmentId], references: [id])
 }
 
 model Document {
@@ -215,8 +157,8 @@ model Document {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   companyId   String
-  company     Company    @relation(fields: [companyId], references: [id])
   equipmentId String?
+  company     Company    @relation(fields: [companyId], references: [id])
   equipment   Equipment? @relation(fields: [equipmentId], references: [id])
 }
 
@@ -244,22 +186,102 @@ model SystemConfig {
 }
 
 model NetworkProvider {
-  id           String     @id @default(uuid())
-  name         String
-  providerIp   String?
-  dnsGateway   String?
-  speed        String?
-  cost         Decimal?   @default(0.00)
-  notes        String?
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @default(now())
-  companyId    String
-  company      Company     @relation(fields: [companyId], references: [id])
-  networks     Network[]
-  meshDevices  String?
+  id            String    @id @default(uuid())
+  name          String
+  providerIp    String?
+  dnsGateway    String?
+  speed         String?
+  cost          Decimal?  @default(0.00)
+  notes         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
+  meshDevices   String?
   switchDevices String?
+  companyId     String
+  networks      Network[]
+  company       Company   @relation(fields: [companyId], references: [id])
 
-  @@unique([name, companyId])  // 🔥 Un nombre puede repetirse si es otra empresa
+  @@unique([name, companyId])
+}
+
+model Network {
+  id               String              @id @default(uuid())
+  name             String
+  ipAddress        String              @unique
+  macAddress       String?
+  deviceType       NetworkDeviceType   @default(OTHER)
+  status           NetworkDeviceStatus @default(UNKNOWN)
+  location         String?
+  description      String?
+  serialNumber     String?
+  brand            String?
+  purchaseDate     DateTime?
+  warrantyEndDate  DateTime?
+  notes            String?
+  model            String?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  companyId        String
+  assignedToUserId String?
+  providerId       String?
+  assignedToUser   User?               @relation(fields: [assignedToUserId], references: [id])
+  company          Company             @relation(fields: [companyId], references: [id])
+  provider         NetworkProvider?    @relation(fields: [providerId], references: [id])
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  MODERATOR
+  SUPER_ADMIN
+}
+
+enum PersonStatus {
+  Activo
+  Inactivo
+}
+
+enum TicketType {
+  vacations
+  permission
+  ticket
+}
+
+enum TicketPriority {
+  urgent
+  high
+  medium
+  low
+  trivial
+}
+
+enum TicketStatus {
+  open
+  pending
+  approved
+  rejected
+  closed
+}
+
+enum EquipmentStatus {
+  ACTIVE
+  IN_MAINTENANCE
+  DISPOSED
+  DAMAGED
+  ASSIGNED
+  STORAGE
+}
+
+enum MaintenanceType {
+  PREVENTIVE
+  CORRECTIVE
+}
+
+enum MaintenanceStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELED
 }
 
 enum NetworkDeviceType {
@@ -280,29 +302,4 @@ enum NetworkDeviceStatus {
   MAINTENANCE
   DECOMMISSIONED
   UNKNOWN
-}
-
-model Network {
-  id               String            @id @default(uuid())
-  name             String
-  ipAddress        String            @unique // IP address or hostname
-  macAddress       String?
-  deviceType       NetworkDeviceType @default(OTHER)
-  status           NetworkDeviceStatus @default(UNKNOWN)
-  location         String?           // Physical location within the company/branch
-  description      String?
-  serialNumber     String?
-  brand            String?
-  purchaseDate     DateTime?
-  warrantyEndDate  DateTime?
-  notes            String?
-  model            String?
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-  companyId        String
-  company          Company           @relation(fields: [companyId], references: [id])
-  assignedToUserId String?
-  assignedToUser   User?             @relation(fields: [assignedToUserId], references: [id])
-  providerId       String?
-  provider         NetworkProvider?  @relation(fields: [providerId], references: [id])
 }

@@ -1,10 +1,8 @@
 import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
 import csvParser from 'csv-parser';
 import { Readable } from 'stream';
 import formidable from 'formidable';
-
-const prisma = new PrismaClient();
+import { prisma } from '../../lib/prisma';
 
 export class InventoryController {
 
