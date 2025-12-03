@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 import csvParser from 'csv-parser';
-import { Readable } from 'stream';
 import formidable from 'formidable';
-import { prisma } from '../../lib/prisma';
+import { prisma } from '../../lib/prisma.js';
 
 export class InventoryController {
 

@@ -1,6 +1,6 @@
 // src/network/network.controller.ts
 import { Request, Response } from 'express';
-import { prisma } from '../../lib/prisma';
+import { prisma } from '../../lib/prisma.js';
 import { NetworkDeviceStatus, NetworkDeviceType } from '../../generated/prisma/enums';
 
 

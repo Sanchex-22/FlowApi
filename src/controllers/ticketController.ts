@@ -1,6 +1,6 @@
 // src/tickets/ticket.controller.ts
 import { Request, Response, NextFunction } from 'express';
-import { prisma } from '../../lib/prisma';
+import { prisma } from '../../lib/prisma.js';
 
 export class TicketController { // Renombrado de FormController a TicketController
 
