@@ -1,6 +1,6 @@
 
 import bcrypt from 'bcryptjs';
-import prisma from '../../lib/prisma';
+import prisma from '../../lib/prisma.js';
 
 export async function createSuperAdminSeed() {
   const passwordHash = await bcrypt.hash('SuperAdmin123!', 10);
