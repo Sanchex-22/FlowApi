@@ -1,6 +1,6 @@
 // src/auth/auth.service.ts
 import bcrypt from 'bcryptjs';
-import { User, UserRole } from '../../generated/prisma/client';
+import { User, UserRole } from '../../generated/prisma/client.js';
 import prisma from '../../lib/prisma.js';
 
 export class UserServices {

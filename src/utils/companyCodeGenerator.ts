@@ -1,5 +1,6 @@
 // src/utils/companyCodeGenerator.ts
-import { PrismaClient } from '@prisma/client';
+
+import { PrismaClient } from "../../generated/prisma/client";
 
 /**
  * Generates the next sequential company code (e.g., CO001, CO002).
