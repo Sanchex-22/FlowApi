@@ -1,7 +1,7 @@
 // prisma/seed.ts
 import 'dotenv/config'
 import { hash } from 'bcryptjs'
-import prisma from '../lib/prisma'
+import prisma from '../lib/prisma.js'
 
 /**
  * Genera el próximo código de compañía secuencial (ej. CO001, CO002).
