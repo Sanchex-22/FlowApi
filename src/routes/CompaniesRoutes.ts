@@ -5,12 +5,24 @@ import { CompanyController } from '../controllers/CompaniesController.js';
 const CompaniesRouter = Router();
 const companyController = new CompanyController();
 
+// POST routes (específicas)
 CompaniesRouter.post('/create', companyController.Create.bind(companyController));
-CompaniesRouter.get('/all', companyController.getAll.bind(companyController));
-CompaniesRouter.get('/:id', companyController.get.bind(companyController));
-CompaniesRouter.put('/:id', companyController.Edit.bind(companyController));
-CompaniesRouter.delete('/delete/:id', companyController.Delete.bind(companyController));
-CompaniesRouter.get('/:companyCode/departments', companyController.getDepartmentsByCompanyCode.bind(companyController));
+CompaniesRouter.post('/:id/disassociate-users', companyController.disassociateUsers.bind(companyController));
 
+// GET routes (específicas primero)
+CompaniesRouter.get('/all', companyController.getAll.bind(companyController));
+CompaniesRouter.get('/my-companies', companyController.getMyCompanies.bind(companyController));
+
+// ✅ RUTA ESPECÍFICA PARA DEPARTAMENTOS (debe ir ANTES de /:id)
+CompaniesRouter.get('/departments/by-code/:companyCode', companyController.getDepartmentsByCompanyCode.bind(companyController));
+
+// GET routes (genéricas al final)
+CompaniesRouter.get('/:id', companyController.get.bind(companyController));
+
+// PUT routes
+CompaniesRouter.put('/:id', companyController.Edit.bind(companyController));
+
+// DELETE routes
+CompaniesRouter.delete('/:id', companyController.Delete.bind(companyController));
 
 export default CompaniesRouter;

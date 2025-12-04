@@ -28,7 +28,7 @@ model Ticket {
   updatedAt    DateTime       @updatedAt
   reviewed     Boolean?
   sendBy       User?          @relation("TicketsSentBy", fields: [sendById], references: [id], onDelete: Cascade)
-  sendTo       User?          @relation("TicketsSentTo", fields: [sendToId], references: [id])
+  sendTo       User?          @relation("TicketsSentTo", fields: [sendToId], references: [id], onDelete: Cascade)
 }
 
 model User {
@@ -48,14 +48,15 @@ model User {
   person               Person?
   ticketsSentBy        Ticket[]      @relation("TicketsSentBy")
   ticketsSentTo        Ticket[]      @relation("TicketsSentTo")
-  company              Company?      @relation("CompanyUsers", fields: [companyId], references: [id])
+  // ⚠️ NO CASCADE: Solo desasociar usuarios, no eliminarlos
+  company              Company?      @relation("CompanyUsers", fields: [companyId], references: [id], onDelete: SetNull)
 }
 
 model Person {
   id           String       @id @default(uuid())
   userId       String       @unique
   firstName    String?
-  lastName     String?
+  lastName    String?
   fullName     String?
   contactEmail String?
   phoneNumber  String?
@@ -65,8 +66,9 @@ model Person {
   userCode     String       @unique
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
-  department   Department?  @relation(fields: [departmentId], references: [id])
-  user         User         @relation(fields: [userId], references: [id])
+  // Si se elimina el departamento, la persona pierde la asignación
+  department   Department?  @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Company {
@@ -80,14 +82,23 @@ model Company {
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   createdByUserId  String?
-  createdBy        User?             @relation("CompanyCreatedBy", fields: [createdByUserId], references: [id])
-  departments      Department[]
-  documents        Document[]
-  equipments       Equipment[]
-  licenses         License[]
-  maintenances     Maintenance[]
-  networks         Network[]
-  networkProviders NetworkProvider[]
+  // Si se elimina el usuario creador, la compañía sigue existiendo
+  createdBy        User?             @relation("CompanyCreatedBy", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  // ✅ CASCADE: Elimina departamentos con la compañía
+  departments      Department[]      
+  // ✅ CASCADE: Elimina documentos con la compañía
+  documents        Document[]        
+  // ✅ CASCADE: Elimina equipos con la compañía
+  equipments       Equipment[]       
+  // ✅ CASCADE: Elimina licencias con la compañía
+  licenses         License[]         
+  // ✅ CASCADE: Elimina mantenimientos con la compañía
+  maintenances     Maintenance[]     
+  // ✅ CASCADE: Elimina redes con la compañía
+  networks         Network[]         
+  // ✅ CASCADE: Elimina proveedores de red con la compañía
+  networkProviders NetworkProvider[] 
+  // ⚠️ NO CASCADE: Solo desasociar usuarios
   users            User[]            @relation("CompanyUsers")
 }
 
@@ -99,7 +110,9 @@ model Department {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   companyId   String
-  company     Company  @relation(fields: [companyId], references: [id])
+  // ✅ CASCADE: Elimina departamento con la compañía
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  // Si se elimina el departamento, las personas pierden la asignación
   persons     Person[]
 }
 
@@ -122,10 +135,14 @@ model Equipment {
   assignedToUserId String?
   endUser          String?
   operatingSystem  String?
-  documents        Document[]
-  assignedToUser   User?           @relation(fields: [assignedToUserId], references: [id])
-  company          Company         @relation(fields: [companyId], references: [id])
-  maintenances     Maintenance[]
+  // ✅ CASCADE: Elimina documentos con el equipo
+  documents        Document[]      
+  // No cascada: El usuario no se elimina si se elimina el equipo
+  assignedToUser   User?           @relation(fields: [assignedToUserId], references: [id], onDelete: SetNull)
+  // ✅ CASCADE: Elimina equipo con la compañía
+  company          Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  // ✅ CASCADE: Elimina mantenimientos con el equipo
+  maintenances     Maintenance[]   
 }
 
 model Maintenance {
@@ -142,9 +159,12 @@ model Maintenance {
   equipmentId      String
   assignedToUserId String?
   companyId        String
-  assignedToUser   User?             @relation(fields: [assignedToUserId], references: [id])
-  company          Company           @relation(fields: [companyId], references: [id])
-  equipment        Equipment         @relation(fields: [equipmentId], references: [id])
+  // No cascada: El usuario no se elimina
+  assignedToUser   User?             @relation(fields: [assignedToUserId], references: [id], onDelete: SetNull)
+  // ✅ CASCADE: Elimina con la compañía
+  company          Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  // ✅ CASCADE: Elimina con el equipo
+  equipment        Equipment         @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
 }
 
 model Document {
@@ -158,8 +178,10 @@ model Document {
   updatedAt   DateTime   @updatedAt
   companyId   String
   equipmentId String?
-  company     Company    @relation(fields: [companyId], references: [id])
-  equipment   Equipment? @relation(fields: [equipmentId], references: [id])
+  // ✅ CASCADE: Elimina con la compañía
+  company     Company    @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  // ✅ CASCADE: Elimina con el equipo
+  equipment   Equipment? @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
 }
 
 model License {
@@ -173,7 +195,8 @@ model License {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   companyId      String
-  company        Company   @relation(fields: [companyId], references: [id])
+  // ✅ CASCADE: Elimina con la compañía
+  company        Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
 }
 
 model SystemConfig {
@@ -198,8 +221,10 @@ model NetworkProvider {
   meshDevices   String?
   switchDevices String?
   companyId     String
+  // ✅ CASCADE: Elimina redes con el proveedor
   networks      Network[]
-  company       Company   @relation(fields: [companyId], references: [id])
+  // ✅ CASCADE: Elimina con la compañía
+  company       Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@unique([name, companyId])
 }
@@ -224,9 +249,12 @@ model Network {
   companyId        String
   assignedToUserId String?
   providerId       String?
-  assignedToUser   User?               @relation(fields: [assignedToUserId], references: [id])
-  company          Company             @relation(fields: [companyId], references: [id])
-  provider         NetworkProvider?    @relation(fields: [providerId], references: [id])
+  // No cascada: El usuario no se elimina
+  assignedToUser   User?               @relation(fields: [assignedToUserId], references: [id], onDelete: SetNull)
+  // ✅ CASCADE: Elimina con la compañía
+  company          Company             @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  // ✅ CASCADE: Elimina con el proveedor
+  provider         NetworkProvider?    @relation(fields: [providerId], references: [id], onDelete: Cascade)
 }
 
 enum UserRole {
