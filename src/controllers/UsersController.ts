@@ -558,4 +558,29 @@ export class UserController {
       res.status(500).json({ error: 'Error al obtener los usuarios.' });
     }
   }
+
+  async getAllUserByCompanyId(req: Request, res: Response) {
+    try {
+      const companyId = await prisma.company.findUnique({
+        where: { id: req.params.companyCode },
+      });
+      if (!companyId) {
+        return res.status(404).json({ error: 'Compañía no encontrada.' });
+      }
+      const users = await prisma.user.findMany({
+        where: { companyId: companyId?.id },
+        include: {
+          person: {
+            include: {
+              department: true,
+            },
+          },
+        },
+      });
+      res.status(200).json(users);
+    } catch (error: any) {
+      console.error('Error fetching users with person data:', error);
+      res.status(500).json({ error: 'Error al obtener los usuarios.' });
+    }
+  }
 }
