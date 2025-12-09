@@ -1,5 +1,4 @@
 // src/auth/auth.service.ts
-import { PrismaClient, User, UserRole } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 // Instancia de PrismaClient para interactuar con la base de datos
