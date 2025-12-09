@@ -1356,12 +1356,13 @@ export const TicketScalarFieldEnum = {
   endDate: 'endDate',
   requestDays: 'requestDays',
   approvedDays: 'approvedDays',
-  reviewed: 'reviewed',
   view: 'view',
   sendById: 'sendById',
   sendToId: 'sendToId',
+  companyId: 'companyId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  reviewed: 'reviewed'
 } as const
 
 export type TicketScalarFieldEnum = (typeof TicketScalarFieldEnum)[keyof typeof TicketScalarFieldEnum]
@@ -1432,23 +1433,23 @@ export type DepartmentScalarFieldEnum = (typeof DepartmentScalarFieldEnum)[keyof
 
 export const EquipmentScalarFieldEnum = {
   id: 'id',
+  type: 'type',
   brand: 'brand',
   model: 'model',
   serialNumber: 'serialNumber',
   plateNumber: 'plateNumber',
   location: 'location',
-  cost: 'cost',
-  operatingSystem: 'operatingSystem',
-  endUser: 'endUser',
-  type: 'type',
+  status: 'status',
   acquisitionDate: 'acquisitionDate',
   warrantyDetails: 'warrantyDetails',
   qrCode: 'qrCode',
-  status: 'status',
+  cost: 'cost',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   companyId: 'companyId',
-  assignedToUserId: 'assignedToUserId'
+  assignedToUserId: 'assignedToUserId',
+  endUser: 'endUser',
+  operatingSystem: 'operatingSystem'
 } as const
 
 export type EquipmentScalarFieldEnum = (typeof EquipmentScalarFieldEnum)[keyof typeof EquipmentScalarFieldEnum]
@@ -1527,9 +1528,9 @@ export const NetworkProviderScalarFieldEnum = {
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  companyId: 'companyId',
   meshDevices: 'meshDevices',
-  switchDevices: 'switchDevices'
+  switchDevices: 'switchDevices',
+  companyId: 'companyId'
 } as const
 
 export type NetworkProviderScalarFieldEnum = (typeof NetworkProviderScalarFieldEnum)[keyof typeof NetworkProviderScalarFieldEnum]
@@ -1710,20 +1711,6 @@ export type ListEnumPersonStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
 
 
 /**
- * Reference to a field of type 'Decimal'
- */
-export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
-    
-
-
-/**
- * Reference to a field of type 'Decimal[]'
- */
-export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
-    
-
-
-/**
  * Reference to a field of type 'EquipmentStatus'
  */
 export type EnumEquipmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EquipmentStatus'>
@@ -1734,6 +1721,20 @@ export type EnumEquipmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$
  * Reference to a field of type 'EquipmentStatus[]'
  */
 export type ListEnumEquipmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EquipmentStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal'
+ */
+export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal[]'
+ */
+export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
     
 
 

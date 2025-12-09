@@ -253,7 +253,6 @@ export class CompanyController {
                     name: 'asc',
                 }
             });
-
             res.json(companies);
         } catch (error: any) {
             console.error('Error al obtener las compañías:', error);

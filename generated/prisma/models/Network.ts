@@ -294,8 +294,8 @@ export type NetworkWhereInput = {
   companyId?: Prisma.StringFilter<"Network"> | string
   assignedToUserId?: Prisma.StringNullableFilter<"Network"> | string | null
   providerId?: Prisma.StringNullableFilter<"Network"> | string | null
-  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   assignedToUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   provider?: Prisma.XOR<Prisma.NetworkProviderNullableScalarRelationFilter, Prisma.NetworkProviderWhereInput> | null
 }
 
@@ -319,8 +319,8 @@ export type NetworkOrderByWithRelationInput = {
   companyId?: Prisma.SortOrder
   assignedToUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   providerId?: Prisma.SortOrderInput | Prisma.SortOrder
-  company?: Prisma.CompanyOrderByWithRelationInput
   assignedToUser?: Prisma.UserOrderByWithRelationInput
+  company?: Prisma.CompanyOrderByWithRelationInput
   provider?: Prisma.NetworkProviderOrderByWithRelationInput
 }
 
@@ -347,8 +347,8 @@ export type NetworkWhereUniqueInput = Prisma.AtLeast<{
   companyId?: Prisma.StringFilter<"Network"> | string
   assignedToUserId?: Prisma.StringNullableFilter<"Network"> | string | null
   providerId?: Prisma.StringNullableFilter<"Network"> | string | null
-  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   assignedToUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   provider?: Prisma.XOR<Prisma.NetworkProviderNullableScalarRelationFilter, Prisma.NetworkProviderWhereInput> | null
 }, "id" | "ipAddress">
 
@@ -419,8 +419,8 @@ export type NetworkCreateInput = {
   model?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  company: Prisma.CompanyCreateNestedOneWithoutNetworksInput
   assignedToUser?: Prisma.UserCreateNestedOneWithoutAssignedNetworksInput
+  company: Prisma.CompanyCreateNestedOneWithoutNetworksInput
   provider?: Prisma.NetworkProviderCreateNestedOneWithoutNetworksInput
 }
 
@@ -463,8 +463,8 @@ export type NetworkUpdateInput = {
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  company?: Prisma.CompanyUpdateOneRequiredWithoutNetworksNestedInput
   assignedToUser?: Prisma.UserUpdateOneWithoutAssignedNetworksNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutNetworksNestedInput
   provider?: Prisma.NetworkProviderUpdateOneWithoutNetworksNestedInput
 }
 
@@ -941,8 +941,8 @@ export type NetworkCreateWithoutProviderInput = {
   model?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  company: Prisma.CompanyCreateNestedOneWithoutNetworksInput
   assignedToUser?: Prisma.UserCreateNestedOneWithoutAssignedNetworksInput
+  company: Prisma.CompanyCreateNestedOneWithoutNetworksInput
 }
 
 export type NetworkUncheckedCreateWithoutProviderInput = {
@@ -1198,8 +1198,8 @@ export type NetworkUpdateWithoutProviderInput = {
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  company?: Prisma.CompanyUpdateOneRequiredWithoutNetworksNestedInput
   assignedToUser?: Prisma.UserUpdateOneWithoutAssignedNetworksNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutNetworksNestedInput
 }
 
 export type NetworkUncheckedUpdateWithoutProviderInput = {
@@ -1266,8 +1266,8 @@ export type NetworkSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   companyId?: boolean
   assignedToUserId?: boolean
   providerId?: boolean
-  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   assignedToUser?: boolean | Prisma.Network$assignedToUserArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.Network$providerArgs<ExtArgs>
 }, ExtArgs["result"]["network"]>
 
@@ -1291,8 +1291,8 @@ export type NetworkSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   companyId?: boolean
   assignedToUserId?: boolean
   providerId?: boolean
-  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   assignedToUser?: boolean | Prisma.Network$assignedToUserArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.Network$providerArgs<ExtArgs>
 }, ExtArgs["result"]["network"]>
 
@@ -1316,8 +1316,8 @@ export type NetworkSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   companyId?: boolean
   assignedToUserId?: boolean
   providerId?: boolean
-  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   assignedToUser?: boolean | Prisma.Network$assignedToUserArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.Network$providerArgs<ExtArgs>
 }, ExtArgs["result"]["network"]>
 
@@ -1345,26 +1345,26 @@ export type NetworkSelectScalar = {
 
 export type NetworkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "ipAddress" | "macAddress" | "deviceType" | "status" | "location" | "description" | "serialNumber" | "brand" | "purchaseDate" | "warrantyEndDate" | "notes" | "model" | "createdAt" | "updatedAt" | "companyId" | "assignedToUserId" | "providerId", ExtArgs["result"]["network"]>
 export type NetworkInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   assignedToUser?: boolean | Prisma.Network$assignedToUserArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.Network$providerArgs<ExtArgs>
 }
 export type NetworkIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   assignedToUser?: boolean | Prisma.Network$assignedToUserArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.Network$providerArgs<ExtArgs>
 }
 export type NetworkIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   assignedToUser?: boolean | Prisma.Network$assignedToUserArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.Network$providerArgs<ExtArgs>
 }
 
 export type $NetworkPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Network"
   objects: {
-    company: Prisma.$CompanyPayload<ExtArgs>
     assignedToUser: Prisma.$UserPayload<ExtArgs> | null
+    company: Prisma.$CompanyPayload<ExtArgs>
     provider: Prisma.$NetworkProviderPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1781,8 +1781,8 @@ readonly fields: NetworkFieldRefs;
  */
 export interface Prisma__NetworkClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   assignedToUser<T extends Prisma.Network$assignedToUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Network$assignedToUserArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   provider<T extends Prisma.Network$providerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Network$providerArgs<ExtArgs>>): Prisma.Prisma__NetworkProviderClient<runtime.Types.Result.GetResult<Prisma.$NetworkProviderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.

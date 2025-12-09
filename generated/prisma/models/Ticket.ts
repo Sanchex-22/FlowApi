@@ -52,12 +52,13 @@ export type TicketMinAggregateOutputType = {
   endDate: Date | null
   requestDays: number | null
   approvedDays: number | null
-  reviewed: boolean | null
   view: boolean | null
   sendById: string | null
   sendToId: string | null
+  companyId: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  reviewed: boolean | null
 }
 
 export type TicketMaxAggregateOutputType = {
@@ -74,12 +75,13 @@ export type TicketMaxAggregateOutputType = {
   endDate: Date | null
   requestDays: number | null
   approvedDays: number | null
-  reviewed: boolean | null
   view: boolean | null
   sendById: string | null
   sendToId: string | null
+  companyId: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  reviewed: boolean | null
 }
 
 export type TicketCountAggregateOutputType = {
@@ -96,12 +98,13 @@ export type TicketCountAggregateOutputType = {
   endDate: number
   requestDays: number
   approvedDays: number
-  reviewed: number
   view: number
   sendById: number
   sendToId: number
+  companyId: number
   createdAt: number
   updatedAt: number
+  reviewed: number
   _all: number
 }
 
@@ -132,12 +135,13 @@ export type TicketMinAggregateInputType = {
   endDate?: true
   requestDays?: true
   approvedDays?: true
-  reviewed?: true
   view?: true
   sendById?: true
   sendToId?: true
+  companyId?: true
   createdAt?: true
   updatedAt?: true
+  reviewed?: true
 }
 
 export type TicketMaxAggregateInputType = {
@@ -154,12 +158,13 @@ export type TicketMaxAggregateInputType = {
   endDate?: true
   requestDays?: true
   approvedDays?: true
-  reviewed?: true
   view?: true
   sendById?: true
   sendToId?: true
+  companyId?: true
   createdAt?: true
   updatedAt?: true
+  reviewed?: true
 }
 
 export type TicketCountAggregateInputType = {
@@ -176,12 +181,13 @@ export type TicketCountAggregateInputType = {
   endDate?: true
   requestDays?: true
   approvedDays?: true
-  reviewed?: true
   view?: true
   sendById?: true
   sendToId?: true
+  companyId?: true
   createdAt?: true
   updatedAt?: true
+  reviewed?: true
   _all?: true
 }
 
@@ -285,12 +291,13 @@ export type TicketGroupByOutputType = {
   endDate: Date | null
   requestDays: number | null
   approvedDays: number | null
-  reviewed: boolean | null
   view: boolean | null
   sendById: string | null
   sendToId: string | null
+  companyId: string | null
   createdAt: Date
   updatedAt: Date
+  reviewed: boolean | null
   _count: TicketCountAggregateOutputType | null
   _avg: TicketAvgAggregateOutputType | null
   _sum: TicketSumAggregateOutputType | null
@@ -330,14 +337,16 @@ export type TicketWhereInput = {
   endDate?: Prisma.DateTimeNullableFilter<"Ticket"> | Date | string | null
   requestDays?: Prisma.IntNullableFilter<"Ticket"> | number | null
   approvedDays?: Prisma.IntNullableFilter<"Ticket"> | number | null
-  reviewed?: Prisma.BoolNullableFilter<"Ticket"> | boolean | null
   view?: Prisma.BoolNullableFilter<"Ticket"> | boolean | null
   sendById?: Prisma.StringNullableFilter<"Ticket"> | string | null
   sendToId?: Prisma.StringNullableFilter<"Ticket"> | string | null
+  companyId?: Prisma.StringNullableFilter<"Ticket"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Ticket"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ticket"> | Date | string
+  reviewed?: Prisma.BoolNullableFilter<"Ticket"> | boolean | null
   sendBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   sendTo?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
 }
 
 export type TicketOrderByWithRelationInput = {
@@ -354,14 +363,16 @@ export type TicketOrderByWithRelationInput = {
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
   requestDays?: Prisma.SortOrderInput | Prisma.SortOrder
   approvedDays?: Prisma.SortOrderInput | Prisma.SortOrder
-  reviewed?: Prisma.SortOrderInput | Prisma.SortOrder
   view?: Prisma.SortOrderInput | Prisma.SortOrder
   sendById?: Prisma.SortOrderInput | Prisma.SortOrder
   sendToId?: Prisma.SortOrderInput | Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  reviewed?: Prisma.SortOrderInput | Prisma.SortOrder
   sendBy?: Prisma.UserOrderByWithRelationInput
   sendTo?: Prisma.UserOrderByWithRelationInput
+  company?: Prisma.CompanyOrderByWithRelationInput
 }
 
 export type TicketWhereUniqueInput = Prisma.AtLeast<{
@@ -381,14 +392,16 @@ export type TicketWhereUniqueInput = Prisma.AtLeast<{
   endDate?: Prisma.DateTimeNullableFilter<"Ticket"> | Date | string | null
   requestDays?: Prisma.IntNullableFilter<"Ticket"> | number | null
   approvedDays?: Prisma.IntNullableFilter<"Ticket"> | number | null
-  reviewed?: Prisma.BoolNullableFilter<"Ticket"> | boolean | null
   view?: Prisma.BoolNullableFilter<"Ticket"> | boolean | null
   sendById?: Prisma.StringNullableFilter<"Ticket"> | string | null
   sendToId?: Prisma.StringNullableFilter<"Ticket"> | string | null
+  companyId?: Prisma.StringNullableFilter<"Ticket"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Ticket"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ticket"> | Date | string
+  reviewed?: Prisma.BoolNullableFilter<"Ticket"> | boolean | null
   sendBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   sendTo?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
 }, "id">
 
 export type TicketOrderByWithAggregationInput = {
@@ -405,12 +418,13 @@ export type TicketOrderByWithAggregationInput = {
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
   requestDays?: Prisma.SortOrderInput | Prisma.SortOrder
   approvedDays?: Prisma.SortOrderInput | Prisma.SortOrder
-  reviewed?: Prisma.SortOrderInput | Prisma.SortOrder
   view?: Prisma.SortOrderInput | Prisma.SortOrder
   sendById?: Prisma.SortOrderInput | Prisma.SortOrder
   sendToId?: Prisma.SortOrderInput | Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  reviewed?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TicketCountOrderByAggregateInput
   _avg?: Prisma.TicketAvgOrderByAggregateInput
   _max?: Prisma.TicketMaxOrderByAggregateInput
@@ -435,12 +449,13 @@ export type TicketScalarWhereWithAggregatesInput = {
   endDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Ticket"> | Date | string | null
   requestDays?: Prisma.IntNullableWithAggregatesFilter<"Ticket"> | number | null
   approvedDays?: Prisma.IntNullableWithAggregatesFilter<"Ticket"> | number | null
-  reviewed?: Prisma.BoolNullableWithAggregatesFilter<"Ticket"> | boolean | null
   view?: Prisma.BoolNullableWithAggregatesFilter<"Ticket"> | boolean | null
   sendById?: Prisma.StringNullableWithAggregatesFilter<"Ticket"> | string | null
   sendToId?: Prisma.StringNullableWithAggregatesFilter<"Ticket"> | string | null
+  companyId?: Prisma.StringNullableWithAggregatesFilter<"Ticket"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Ticket"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Ticket"> | Date | string
+  reviewed?: Prisma.BoolNullableWithAggregatesFilter<"Ticket"> | boolean | null
 }
 
 export type TicketCreateInput = {
@@ -457,12 +472,13 @@ export type TicketCreateInput = {
   endDate?: Date | string | null
   requestDays?: number | null
   approvedDays?: number | null
-  reviewed?: boolean | null
   view?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  reviewed?: boolean | null
   sendBy?: Prisma.UserCreateNestedOneWithoutTicketsSentByInput
   sendTo?: Prisma.UserCreateNestedOneWithoutTicketsSentToInput
+  company?: Prisma.CompanyCreateNestedOneWithoutTicketsInput
 }
 
 export type TicketUncheckedCreateInput = {
@@ -479,12 +495,13 @@ export type TicketUncheckedCreateInput = {
   endDate?: Date | string | null
   requestDays?: number | null
   approvedDays?: number | null
-  reviewed?: boolean | null
   view?: boolean | null
   sendById?: string | null
   sendToId?: string | null
+  companyId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  reviewed?: boolean | null
 }
 
 export type TicketUpdateInput = {
@@ -501,12 +518,13 @@ export type TicketUpdateInput = {
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   requestDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvedDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   view?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   sendBy?: Prisma.UserUpdateOneWithoutTicketsSentByNestedInput
   sendTo?: Prisma.UserUpdateOneWithoutTicketsSentToNestedInput
+  company?: Prisma.CompanyUpdateOneWithoutTicketsNestedInput
 }
 
 export type TicketUncheckedUpdateInput = {
@@ -523,12 +541,13 @@ export type TicketUncheckedUpdateInput = {
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   requestDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvedDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   view?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   sendById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sendToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
 }
 
 export type TicketCreateManyInput = {
@@ -545,12 +564,13 @@ export type TicketCreateManyInput = {
   endDate?: Date | string | null
   requestDays?: number | null
   approvedDays?: number | null
-  reviewed?: boolean | null
   view?: boolean | null
   sendById?: string | null
   sendToId?: string | null
+  companyId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  reviewed?: boolean | null
 }
 
 export type TicketUpdateManyMutationInput = {
@@ -567,10 +587,10 @@ export type TicketUpdateManyMutationInput = {
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   requestDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvedDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   view?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
 }
 
 export type TicketUncheckedUpdateManyInput = {
@@ -587,12 +607,13 @@ export type TicketUncheckedUpdateManyInput = {
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   requestDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvedDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   view?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   sendById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sendToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
 }
 
 export type TicketCountOrderByAggregateInput = {
@@ -609,12 +630,13 @@ export type TicketCountOrderByAggregateInput = {
   endDate?: Prisma.SortOrder
   requestDays?: Prisma.SortOrder
   approvedDays?: Prisma.SortOrder
-  reviewed?: Prisma.SortOrder
   view?: Prisma.SortOrder
   sendById?: Prisma.SortOrder
   sendToId?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  reviewed?: Prisma.SortOrder
 }
 
 export type TicketAvgOrderByAggregateInput = {
@@ -637,12 +659,13 @@ export type TicketMaxOrderByAggregateInput = {
   endDate?: Prisma.SortOrder
   requestDays?: Prisma.SortOrder
   approvedDays?: Prisma.SortOrder
-  reviewed?: Prisma.SortOrder
   view?: Prisma.SortOrder
   sendById?: Prisma.SortOrder
   sendToId?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  reviewed?: Prisma.SortOrder
 }
 
 export type TicketMinOrderByAggregateInput = {
@@ -659,12 +682,13 @@ export type TicketMinOrderByAggregateInput = {
   endDate?: Prisma.SortOrder
   requestDays?: Prisma.SortOrder
   approvedDays?: Prisma.SortOrder
-  reviewed?: Prisma.SortOrder
   view?: Prisma.SortOrder
   sendById?: Prisma.SortOrder
   sendToId?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  reviewed?: Prisma.SortOrder
 }
 
 export type TicketSumOrderByAggregateInput = {
@@ -807,6 +831,48 @@ export type TicketUncheckedUpdateManyWithoutSendToNestedInput = {
   deleteMany?: Prisma.TicketScalarWhereInput | Prisma.TicketScalarWhereInput[]
 }
 
+export type TicketCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.TicketCreateWithoutCompanyInput, Prisma.TicketUncheckedCreateWithoutCompanyInput> | Prisma.TicketCreateWithoutCompanyInput[] | Prisma.TicketUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.TicketCreateOrConnectWithoutCompanyInput | Prisma.TicketCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.TicketCreateManyCompanyInputEnvelope
+  connect?: Prisma.TicketWhereUniqueInput | Prisma.TicketWhereUniqueInput[]
+}
+
+export type TicketUncheckedCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.TicketCreateWithoutCompanyInput, Prisma.TicketUncheckedCreateWithoutCompanyInput> | Prisma.TicketCreateWithoutCompanyInput[] | Prisma.TicketUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.TicketCreateOrConnectWithoutCompanyInput | Prisma.TicketCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.TicketCreateManyCompanyInputEnvelope
+  connect?: Prisma.TicketWhereUniqueInput | Prisma.TicketWhereUniqueInput[]
+}
+
+export type TicketUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.TicketCreateWithoutCompanyInput, Prisma.TicketUncheckedCreateWithoutCompanyInput> | Prisma.TicketCreateWithoutCompanyInput[] | Prisma.TicketUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.TicketCreateOrConnectWithoutCompanyInput | Prisma.TicketCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.TicketUpsertWithWhereUniqueWithoutCompanyInput | Prisma.TicketUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.TicketCreateManyCompanyInputEnvelope
+  set?: Prisma.TicketWhereUniqueInput | Prisma.TicketWhereUniqueInput[]
+  disconnect?: Prisma.TicketWhereUniqueInput | Prisma.TicketWhereUniqueInput[]
+  delete?: Prisma.TicketWhereUniqueInput | Prisma.TicketWhereUniqueInput[]
+  connect?: Prisma.TicketWhereUniqueInput | Prisma.TicketWhereUniqueInput[]
+  update?: Prisma.TicketUpdateWithWhereUniqueWithoutCompanyInput | Prisma.TicketUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.TicketUpdateManyWithWhereWithoutCompanyInput | Prisma.TicketUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.TicketScalarWhereInput | Prisma.TicketScalarWhereInput[]
+}
+
+export type TicketUncheckedUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.TicketCreateWithoutCompanyInput, Prisma.TicketUncheckedCreateWithoutCompanyInput> | Prisma.TicketCreateWithoutCompanyInput[] | Prisma.TicketUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.TicketCreateOrConnectWithoutCompanyInput | Prisma.TicketCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.TicketUpsertWithWhereUniqueWithoutCompanyInput | Prisma.TicketUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.TicketCreateManyCompanyInputEnvelope
+  set?: Prisma.TicketWhereUniqueInput | Prisma.TicketWhereUniqueInput[]
+  disconnect?: Prisma.TicketWhereUniqueInput | Prisma.TicketWhereUniqueInput[]
+  delete?: Prisma.TicketWhereUniqueInput | Prisma.TicketWhereUniqueInput[]
+  connect?: Prisma.TicketWhereUniqueInput | Prisma.TicketWhereUniqueInput[]
+  update?: Prisma.TicketUpdateWithWhereUniqueWithoutCompanyInput | Prisma.TicketUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.TicketUpdateManyWithWhereWithoutCompanyInput | Prisma.TicketUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.TicketScalarWhereInput | Prisma.TicketScalarWhereInput[]
+}
+
 export type TicketCreateWithoutSendByInput = {
   id?: string
   ticketNumber?: number | null
@@ -821,11 +887,12 @@ export type TicketCreateWithoutSendByInput = {
   endDate?: Date | string | null
   requestDays?: number | null
   approvedDays?: number | null
-  reviewed?: boolean | null
   view?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  reviewed?: boolean | null
   sendTo?: Prisma.UserCreateNestedOneWithoutTicketsSentToInput
+  company?: Prisma.CompanyCreateNestedOneWithoutTicketsInput
 }
 
 export type TicketUncheckedCreateWithoutSendByInput = {
@@ -842,11 +909,12 @@ export type TicketUncheckedCreateWithoutSendByInput = {
   endDate?: Date | string | null
   requestDays?: number | null
   approvedDays?: number | null
-  reviewed?: boolean | null
   view?: boolean | null
   sendToId?: string | null
+  companyId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  reviewed?: boolean | null
 }
 
 export type TicketCreateOrConnectWithoutSendByInput = {
@@ -873,11 +941,12 @@ export type TicketCreateWithoutSendToInput = {
   endDate?: Date | string | null
   requestDays?: number | null
   approvedDays?: number | null
-  reviewed?: boolean | null
   view?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  reviewed?: boolean | null
   sendBy?: Prisma.UserCreateNestedOneWithoutTicketsSentByInput
+  company?: Prisma.CompanyCreateNestedOneWithoutTicketsInput
 }
 
 export type TicketUncheckedCreateWithoutSendToInput = {
@@ -894,11 +963,12 @@ export type TicketUncheckedCreateWithoutSendToInput = {
   endDate?: Date | string | null
   requestDays?: number | null
   approvedDays?: number | null
-  reviewed?: boolean | null
   view?: boolean | null
   sendById?: string | null
+  companyId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  reviewed?: boolean | null
 }
 
 export type TicketCreateOrConnectWithoutSendToInput = {
@@ -944,12 +1014,13 @@ export type TicketScalarWhereInput = {
   endDate?: Prisma.DateTimeNullableFilter<"Ticket"> | Date | string | null
   requestDays?: Prisma.IntNullableFilter<"Ticket"> | number | null
   approvedDays?: Prisma.IntNullableFilter<"Ticket"> | number | null
-  reviewed?: Prisma.BoolNullableFilter<"Ticket"> | boolean | null
   view?: Prisma.BoolNullableFilter<"Ticket"> | boolean | null
   sendById?: Prisma.StringNullableFilter<"Ticket"> | string | null
   sendToId?: Prisma.StringNullableFilter<"Ticket"> | string | null
+  companyId?: Prisma.StringNullableFilter<"Ticket"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Ticket"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ticket"> | Date | string
+  reviewed?: Prisma.BoolNullableFilter<"Ticket"> | boolean | null
 }
 
 export type TicketUpsertWithWhereUniqueWithoutSendToInput = {
@@ -968,6 +1039,76 @@ export type TicketUpdateManyWithWhereWithoutSendToInput = {
   data: Prisma.XOR<Prisma.TicketUpdateManyMutationInput, Prisma.TicketUncheckedUpdateManyWithoutSendToInput>
 }
 
+export type TicketCreateWithoutCompanyInput = {
+  id?: string
+  ticketNumber?: number | null
+  title: string
+  description: string
+  img?: string | null
+  comment?: string | null
+  type: $Enums.TicketType
+  priority: $Enums.TicketPriority
+  status: $Enums.TicketStatus
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  requestDays?: number | null
+  approvedDays?: number | null
+  view?: boolean | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  reviewed?: boolean | null
+  sendBy?: Prisma.UserCreateNestedOneWithoutTicketsSentByInput
+  sendTo?: Prisma.UserCreateNestedOneWithoutTicketsSentToInput
+}
+
+export type TicketUncheckedCreateWithoutCompanyInput = {
+  id?: string
+  ticketNumber?: number | null
+  title: string
+  description: string
+  img?: string | null
+  comment?: string | null
+  type: $Enums.TicketType
+  priority: $Enums.TicketPriority
+  status: $Enums.TicketStatus
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  requestDays?: number | null
+  approvedDays?: number | null
+  view?: boolean | null
+  sendById?: string | null
+  sendToId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  reviewed?: boolean | null
+}
+
+export type TicketCreateOrConnectWithoutCompanyInput = {
+  where: Prisma.TicketWhereUniqueInput
+  create: Prisma.XOR<Prisma.TicketCreateWithoutCompanyInput, Prisma.TicketUncheckedCreateWithoutCompanyInput>
+}
+
+export type TicketCreateManyCompanyInputEnvelope = {
+  data: Prisma.TicketCreateManyCompanyInput | Prisma.TicketCreateManyCompanyInput[]
+  skipDuplicates?: boolean
+}
+
+export type TicketUpsertWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.TicketWhereUniqueInput
+  update: Prisma.XOR<Prisma.TicketUpdateWithoutCompanyInput, Prisma.TicketUncheckedUpdateWithoutCompanyInput>
+  create: Prisma.XOR<Prisma.TicketCreateWithoutCompanyInput, Prisma.TicketUncheckedCreateWithoutCompanyInput>
+}
+
+export type TicketUpdateWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.TicketWhereUniqueInput
+  data: Prisma.XOR<Prisma.TicketUpdateWithoutCompanyInput, Prisma.TicketUncheckedUpdateWithoutCompanyInput>
+}
+
+export type TicketUpdateManyWithWhereWithoutCompanyInput = {
+  where: Prisma.TicketScalarWhereInput
+  data: Prisma.XOR<Prisma.TicketUpdateManyMutationInput, Prisma.TicketUncheckedUpdateManyWithoutCompanyInput>
+}
+
 export type TicketCreateManySendByInput = {
   id?: string
   ticketNumber?: number | null
@@ -982,11 +1123,12 @@ export type TicketCreateManySendByInput = {
   endDate?: Date | string | null
   requestDays?: number | null
   approvedDays?: number | null
-  reviewed?: boolean | null
   view?: boolean | null
   sendToId?: string | null
+  companyId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  reviewed?: boolean | null
 }
 
 export type TicketCreateManySendToInput = {
@@ -1003,11 +1145,12 @@ export type TicketCreateManySendToInput = {
   endDate?: Date | string | null
   requestDays?: number | null
   approvedDays?: number | null
-  reviewed?: boolean | null
   view?: boolean | null
   sendById?: string | null
+  companyId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  reviewed?: boolean | null
 }
 
 export type TicketUpdateWithoutSendByInput = {
@@ -1024,11 +1167,12 @@ export type TicketUpdateWithoutSendByInput = {
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   requestDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvedDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   view?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   sendTo?: Prisma.UserUpdateOneWithoutTicketsSentToNestedInput
+  company?: Prisma.CompanyUpdateOneWithoutTicketsNestedInput
 }
 
 export type TicketUncheckedUpdateWithoutSendByInput = {
@@ -1045,11 +1189,12 @@ export type TicketUncheckedUpdateWithoutSendByInput = {
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   requestDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvedDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   view?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   sendToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
 }
 
 export type TicketUncheckedUpdateManyWithoutSendByInput = {
@@ -1066,11 +1211,12 @@ export type TicketUncheckedUpdateManyWithoutSendByInput = {
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   requestDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvedDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   view?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   sendToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
 }
 
 export type TicketUpdateWithoutSendToInput = {
@@ -1087,11 +1233,12 @@ export type TicketUpdateWithoutSendToInput = {
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   requestDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvedDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   view?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   sendBy?: Prisma.UserUpdateOneWithoutTicketsSentByNestedInput
+  company?: Prisma.CompanyUpdateOneWithoutTicketsNestedInput
 }
 
 export type TicketUncheckedUpdateWithoutSendToInput = {
@@ -1108,11 +1255,12 @@ export type TicketUncheckedUpdateWithoutSendToInput = {
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   requestDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvedDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   view?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   sendById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
 }
 
 export type TicketUncheckedUpdateManyWithoutSendToInput = {
@@ -1129,11 +1277,100 @@ export type TicketUncheckedUpdateManyWithoutSendToInput = {
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   requestDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvedDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   view?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   sendById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+}
+
+export type TicketCreateManyCompanyInput = {
+  id?: string
+  ticketNumber?: number | null
+  title: string
+  description: string
+  img?: string | null
+  comment?: string | null
+  type: $Enums.TicketType
+  priority: $Enums.TicketPriority
+  status: $Enums.TicketStatus
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  requestDays?: number | null
+  approvedDays?: number | null
+  view?: boolean | null
+  sendById?: string | null
+  sendToId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  reviewed?: boolean | null
+}
+
+export type TicketUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ticketNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  img?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumTicketTypeFieldUpdateOperationsInput | $Enums.TicketType
+  priority?: Prisma.EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+  status?: Prisma.EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  requestDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  approvedDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  view?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sendBy?: Prisma.UserUpdateOneWithoutTicketsSentByNestedInput
+  sendTo?: Prisma.UserUpdateOneWithoutTicketsSentToNestedInput
+}
+
+export type TicketUncheckedUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ticketNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  img?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumTicketTypeFieldUpdateOperationsInput | $Enums.TicketType
+  priority?: Prisma.EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+  status?: Prisma.EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  requestDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  approvedDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  view?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sendById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sendToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+}
+
+export type TicketUncheckedUpdateManyWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ticketNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  img?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumTicketTypeFieldUpdateOperationsInput | $Enums.TicketType
+  priority?: Prisma.EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+  status?: Prisma.EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  requestDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  approvedDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  view?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sendById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sendToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
 }
 
 
@@ -1152,14 +1389,16 @@ export type TicketSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   endDate?: boolean
   requestDays?: boolean
   approvedDays?: boolean
-  reviewed?: boolean
   view?: boolean
   sendById?: boolean
   sendToId?: boolean
+  companyId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  reviewed?: boolean
   sendBy?: boolean | Prisma.Ticket$sendByArgs<ExtArgs>
   sendTo?: boolean | Prisma.Ticket$sendToArgs<ExtArgs>
+  company?: boolean | Prisma.Ticket$companyArgs<ExtArgs>
 }, ExtArgs["result"]["ticket"]>
 
 export type TicketSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1176,14 +1415,16 @@ export type TicketSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   endDate?: boolean
   requestDays?: boolean
   approvedDays?: boolean
-  reviewed?: boolean
   view?: boolean
   sendById?: boolean
   sendToId?: boolean
+  companyId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  reviewed?: boolean
   sendBy?: boolean | Prisma.Ticket$sendByArgs<ExtArgs>
   sendTo?: boolean | Prisma.Ticket$sendToArgs<ExtArgs>
+  company?: boolean | Prisma.Ticket$companyArgs<ExtArgs>
 }, ExtArgs["result"]["ticket"]>
 
 export type TicketSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1200,14 +1441,16 @@ export type TicketSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   endDate?: boolean
   requestDays?: boolean
   approvedDays?: boolean
-  reviewed?: boolean
   view?: boolean
   sendById?: boolean
   sendToId?: boolean
+  companyId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  reviewed?: boolean
   sendBy?: boolean | Prisma.Ticket$sendByArgs<ExtArgs>
   sendTo?: boolean | Prisma.Ticket$sendToArgs<ExtArgs>
+  company?: boolean | Prisma.Ticket$companyArgs<ExtArgs>
 }, ExtArgs["result"]["ticket"]>
 
 export type TicketSelectScalar = {
@@ -1224,26 +1467,30 @@ export type TicketSelectScalar = {
   endDate?: boolean
   requestDays?: boolean
   approvedDays?: boolean
-  reviewed?: boolean
   view?: boolean
   sendById?: boolean
   sendToId?: boolean
+  companyId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  reviewed?: boolean
 }
 
-export type TicketOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ticketNumber" | "title" | "description" | "img" | "comment" | "type" | "priority" | "status" | "startDate" | "endDate" | "requestDays" | "approvedDays" | "reviewed" | "view" | "sendById" | "sendToId" | "createdAt" | "updatedAt", ExtArgs["result"]["ticket"]>
+export type TicketOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ticketNumber" | "title" | "description" | "img" | "comment" | "type" | "priority" | "status" | "startDate" | "endDate" | "requestDays" | "approvedDays" | "view" | "sendById" | "sendToId" | "companyId" | "createdAt" | "updatedAt" | "reviewed", ExtArgs["result"]["ticket"]>
 export type TicketInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sendBy?: boolean | Prisma.Ticket$sendByArgs<ExtArgs>
   sendTo?: boolean | Prisma.Ticket$sendToArgs<ExtArgs>
+  company?: boolean | Prisma.Ticket$companyArgs<ExtArgs>
 }
 export type TicketIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sendBy?: boolean | Prisma.Ticket$sendByArgs<ExtArgs>
   sendTo?: boolean | Prisma.Ticket$sendToArgs<ExtArgs>
+  company?: boolean | Prisma.Ticket$companyArgs<ExtArgs>
 }
 export type TicketIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sendBy?: boolean | Prisma.Ticket$sendByArgs<ExtArgs>
   sendTo?: boolean | Prisma.Ticket$sendToArgs<ExtArgs>
+  company?: boolean | Prisma.Ticket$companyArgs<ExtArgs>
 }
 
 export type $TicketPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1251,6 +1498,7 @@ export type $TicketPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     sendBy: Prisma.$UserPayload<ExtArgs> | null
     sendTo: Prisma.$UserPayload<ExtArgs> | null
+    company: Prisma.$CompanyPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1266,12 +1514,13 @@ export type $TicketPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     endDate: Date | null
     requestDays: number | null
     approvedDays: number | null
-    reviewed: boolean | null
     view: boolean | null
     sendById: string | null
     sendToId: string | null
+    companyId: string | null
     createdAt: Date
     updatedAt: Date
+    reviewed: boolean | null
   }, ExtArgs["result"]["ticket"]>
   composites: {}
 }
@@ -1668,6 +1917,7 @@ export interface Prisma__TicketClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   sendBy<T extends Prisma.Ticket$sendByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ticket$sendByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   sendTo<T extends Prisma.Ticket$sendToArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ticket$sendToArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  company<T extends Prisma.Ticket$companyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ticket$companyArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1710,12 +1960,13 @@ export interface TicketFieldRefs {
   readonly endDate: Prisma.FieldRef<"Ticket", 'DateTime'>
   readonly requestDays: Prisma.FieldRef<"Ticket", 'Int'>
   readonly approvedDays: Prisma.FieldRef<"Ticket", 'Int'>
-  readonly reviewed: Prisma.FieldRef<"Ticket", 'Boolean'>
   readonly view: Prisma.FieldRef<"Ticket", 'Boolean'>
   readonly sendById: Prisma.FieldRef<"Ticket", 'String'>
   readonly sendToId: Prisma.FieldRef<"Ticket", 'String'>
+  readonly companyId: Prisma.FieldRef<"Ticket", 'String'>
   readonly createdAt: Prisma.FieldRef<"Ticket", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Ticket", 'DateTime'>
+  readonly reviewed: Prisma.FieldRef<"Ticket", 'Boolean'>
 }
     
 
@@ -2147,6 +2398,25 @@ export type Ticket$sendToArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   include?: Prisma.UserInclude<ExtArgs> | null
   where?: Prisma.UserWhereInput
+}
+
+/**
+ * Ticket.company
+ */
+export type Ticket$companyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Company
+   */
+  select?: Prisma.CompanySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Company
+   */
+  omit?: Prisma.CompanyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CompanyInclude<ExtArgs> | null
+  where?: Prisma.CompanyWhereInput
 }
 
 /**

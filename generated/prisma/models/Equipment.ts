@@ -36,65 +36,65 @@ export type EquipmentSumAggregateOutputType = {
 
 export type EquipmentMinAggregateOutputType = {
   id: string | null
+  type: string | null
   brand: string | null
   model: string | null
   serialNumber: string | null
   plateNumber: string | null
   location: string | null
-  cost: runtime.Decimal | null
-  operatingSystem: string | null
-  endUser: string | null
-  type: string | null
+  status: $Enums.EquipmentStatus | null
   acquisitionDate: Date | null
   warrantyDetails: string | null
   qrCode: string | null
-  status: $Enums.EquipmentStatus | null
+  cost: runtime.Decimal | null
   createdAt: Date | null
   updatedAt: Date | null
   companyId: string | null
   assignedToUserId: string | null
+  endUser: string | null
+  operatingSystem: string | null
 }
 
 export type EquipmentMaxAggregateOutputType = {
   id: string | null
+  type: string | null
   brand: string | null
   model: string | null
   serialNumber: string | null
   plateNumber: string | null
   location: string | null
-  cost: runtime.Decimal | null
-  operatingSystem: string | null
-  endUser: string | null
-  type: string | null
+  status: $Enums.EquipmentStatus | null
   acquisitionDate: Date | null
   warrantyDetails: string | null
   qrCode: string | null
-  status: $Enums.EquipmentStatus | null
+  cost: runtime.Decimal | null
   createdAt: Date | null
   updatedAt: Date | null
   companyId: string | null
   assignedToUserId: string | null
+  endUser: string | null
+  operatingSystem: string | null
 }
 
 export type EquipmentCountAggregateOutputType = {
   id: number
+  type: number
   brand: number
   model: number
   serialNumber: number
   plateNumber: number
   location: number
-  cost: number
-  operatingSystem: number
-  endUser: number
-  type: number
+  status: number
   acquisitionDate: number
   warrantyDetails: number
   qrCode: number
-  status: number
+  cost: number
   createdAt: number
   updatedAt: number
   companyId: number
   assignedToUserId: number
+  endUser: number
+  operatingSystem: number
   _all: number
 }
 
@@ -109,65 +109,65 @@ export type EquipmentSumAggregateInputType = {
 
 export type EquipmentMinAggregateInputType = {
   id?: true
+  type?: true
   brand?: true
   model?: true
   serialNumber?: true
   plateNumber?: true
   location?: true
-  cost?: true
-  operatingSystem?: true
-  endUser?: true
-  type?: true
+  status?: true
   acquisitionDate?: true
   warrantyDetails?: true
   qrCode?: true
-  status?: true
+  cost?: true
   createdAt?: true
   updatedAt?: true
   companyId?: true
   assignedToUserId?: true
+  endUser?: true
+  operatingSystem?: true
 }
 
 export type EquipmentMaxAggregateInputType = {
   id?: true
+  type?: true
   brand?: true
   model?: true
   serialNumber?: true
   plateNumber?: true
   location?: true
-  cost?: true
-  operatingSystem?: true
-  endUser?: true
-  type?: true
+  status?: true
   acquisitionDate?: true
   warrantyDetails?: true
   qrCode?: true
-  status?: true
+  cost?: true
   createdAt?: true
   updatedAt?: true
   companyId?: true
   assignedToUserId?: true
+  endUser?: true
+  operatingSystem?: true
 }
 
 export type EquipmentCountAggregateInputType = {
   id?: true
+  type?: true
   brand?: true
   model?: true
   serialNumber?: true
   plateNumber?: true
   location?: true
-  cost?: true
-  operatingSystem?: true
-  endUser?: true
-  type?: true
+  status?: true
   acquisitionDate?: true
   warrantyDetails?: true
   qrCode?: true
-  status?: true
+  cost?: true
   createdAt?: true
   updatedAt?: true
   companyId?: true
   assignedToUserId?: true
+  endUser?: true
+  operatingSystem?: true
   _all?: true
 }
 
@@ -259,23 +259,23 @@ export type EquipmentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
 
 export type EquipmentGroupByOutputType = {
   id: string
+  type: string
   brand: string
   model: string
   serialNumber: string
   plateNumber: string | null
   location: string | null
-  cost: runtime.Decimal | null
-  operatingSystem: string | null
-  endUser: string | null
-  type: string
+  status: $Enums.EquipmentStatus
   acquisitionDate: Date | null
   warrantyDetails: string | null
   qrCode: string | null
-  status: $Enums.EquipmentStatus
+  cost: runtime.Decimal | null
   createdAt: Date
   updatedAt: Date
   companyId: string
   assignedToUserId: string | null
+  endUser: string | null
+  operatingSystem: string | null
   _count: EquipmentCountAggregateOutputType | null
   _avg: EquipmentAvgAggregateOutputType | null
   _sum: EquipmentSumAggregateOutputType | null
@@ -303,52 +303,52 @@ export type EquipmentWhereInput = {
   OR?: Prisma.EquipmentWhereInput[]
   NOT?: Prisma.EquipmentWhereInput | Prisma.EquipmentWhereInput[]
   id?: Prisma.StringFilter<"Equipment"> | string
+  type?: Prisma.StringFilter<"Equipment"> | string
   brand?: Prisma.StringFilter<"Equipment"> | string
   model?: Prisma.StringFilter<"Equipment"> | string
   serialNumber?: Prisma.StringFilter<"Equipment"> | string
   plateNumber?: Prisma.StringNullableFilter<"Equipment"> | string | null
   location?: Prisma.StringNullableFilter<"Equipment"> | string | null
-  cost?: Prisma.DecimalNullableFilter<"Equipment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: Prisma.StringNullableFilter<"Equipment"> | string | null
-  endUser?: Prisma.StringNullableFilter<"Equipment"> | string | null
-  type?: Prisma.StringFilter<"Equipment"> | string
+  status?: Prisma.EnumEquipmentStatusFilter<"Equipment"> | $Enums.EquipmentStatus
   acquisitionDate?: Prisma.DateTimeNullableFilter<"Equipment"> | Date | string | null
   warrantyDetails?: Prisma.StringNullableFilter<"Equipment"> | string | null
   qrCode?: Prisma.StringNullableFilter<"Equipment"> | string | null
-  status?: Prisma.EnumEquipmentStatusFilter<"Equipment"> | $Enums.EquipmentStatus
+  cost?: Prisma.DecimalNullableFilter<"Equipment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
   companyId?: Prisma.StringFilter<"Equipment"> | string
   assignedToUserId?: Prisma.StringNullableFilter<"Equipment"> | string | null
-  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
-  assignedToUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-  maintenances?: Prisma.MaintenanceListRelationFilter
+  endUser?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  operatingSystem?: Prisma.StringNullableFilter<"Equipment"> | string | null
   documents?: Prisma.DocumentListRelationFilter
+  assignedToUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
+  maintenances?: Prisma.MaintenanceListRelationFilter
 }
 
 export type EquipmentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   brand?: Prisma.SortOrder
   model?: Prisma.SortOrder
   serialNumber?: Prisma.SortOrder
   plateNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
-  cost?: Prisma.SortOrderInput | Prisma.SortOrder
-  operatingSystem?: Prisma.SortOrderInput | Prisma.SortOrder
-  endUser?: Prisma.SortOrderInput | Prisma.SortOrder
-  type?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   acquisitionDate?: Prisma.SortOrderInput | Prisma.SortOrder
   warrantyDetails?: Prisma.SortOrderInput | Prisma.SortOrder
   qrCode?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrder
+  cost?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   assignedToUserId?: Prisma.SortOrderInput | Prisma.SortOrder
-  company?: Prisma.CompanyOrderByWithRelationInput
-  assignedToUser?: Prisma.UserOrderByWithRelationInput
-  maintenances?: Prisma.MaintenanceOrderByRelationAggregateInput
+  endUser?: Prisma.SortOrderInput | Prisma.SortOrder
+  operatingSystem?: Prisma.SortOrderInput | Prisma.SortOrder
   documents?: Prisma.DocumentOrderByRelationAggregateInput
+  assignedToUser?: Prisma.UserOrderByWithRelationInput
+  company?: Prisma.CompanyOrderByWithRelationInput
+  maintenances?: Prisma.MaintenanceOrderByRelationAggregateInput
 }
 
 export type EquipmentWhereUniqueInput = Prisma.AtLeast<{
@@ -358,46 +358,46 @@ export type EquipmentWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.EquipmentWhereInput | Prisma.EquipmentWhereInput[]
   OR?: Prisma.EquipmentWhereInput[]
   NOT?: Prisma.EquipmentWhereInput | Prisma.EquipmentWhereInput[]
+  type?: Prisma.StringFilter<"Equipment"> | string
   brand?: Prisma.StringFilter<"Equipment"> | string
   model?: Prisma.StringFilter<"Equipment"> | string
   location?: Prisma.StringNullableFilter<"Equipment"> | string | null
-  cost?: Prisma.DecimalNullableFilter<"Equipment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: Prisma.StringNullableFilter<"Equipment"> | string | null
-  endUser?: Prisma.StringNullableFilter<"Equipment"> | string | null
-  type?: Prisma.StringFilter<"Equipment"> | string
+  status?: Prisma.EnumEquipmentStatusFilter<"Equipment"> | $Enums.EquipmentStatus
   acquisitionDate?: Prisma.DateTimeNullableFilter<"Equipment"> | Date | string | null
   warrantyDetails?: Prisma.StringNullableFilter<"Equipment"> | string | null
   qrCode?: Prisma.StringNullableFilter<"Equipment"> | string | null
-  status?: Prisma.EnumEquipmentStatusFilter<"Equipment"> | $Enums.EquipmentStatus
+  cost?: Prisma.DecimalNullableFilter<"Equipment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
   companyId?: Prisma.StringFilter<"Equipment"> | string
   assignedToUserId?: Prisma.StringNullableFilter<"Equipment"> | string | null
-  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
-  assignedToUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-  maintenances?: Prisma.MaintenanceListRelationFilter
+  endUser?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  operatingSystem?: Prisma.StringNullableFilter<"Equipment"> | string | null
   documents?: Prisma.DocumentListRelationFilter
+  assignedToUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
+  maintenances?: Prisma.MaintenanceListRelationFilter
 }, "id" | "serialNumber" | "plateNumber">
 
 export type EquipmentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   brand?: Prisma.SortOrder
   model?: Prisma.SortOrder
   serialNumber?: Prisma.SortOrder
   plateNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
-  cost?: Prisma.SortOrderInput | Prisma.SortOrder
-  operatingSystem?: Prisma.SortOrderInput | Prisma.SortOrder
-  endUser?: Prisma.SortOrderInput | Prisma.SortOrder
-  type?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   acquisitionDate?: Prisma.SortOrderInput | Prisma.SortOrder
   warrantyDetails?: Prisma.SortOrderInput | Prisma.SortOrder
   qrCode?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrder
+  cost?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   assignedToUserId?: Prisma.SortOrderInput | Prisma.SortOrder
+  endUser?: Prisma.SortOrderInput | Prisma.SortOrder
+  operatingSystem?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.EquipmentCountOrderByAggregateInput
   _avg?: Prisma.EquipmentAvgOrderByAggregateInput
   _max?: Prisma.EquipmentMaxOrderByAggregateInput
@@ -410,176 +410,176 @@ export type EquipmentScalarWhereWithAggregatesInput = {
   OR?: Prisma.EquipmentScalarWhereWithAggregatesInput[]
   NOT?: Prisma.EquipmentScalarWhereWithAggregatesInput | Prisma.EquipmentScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Equipment"> | string
+  type?: Prisma.StringWithAggregatesFilter<"Equipment"> | string
   brand?: Prisma.StringWithAggregatesFilter<"Equipment"> | string
   model?: Prisma.StringWithAggregatesFilter<"Equipment"> | string
   serialNumber?: Prisma.StringWithAggregatesFilter<"Equipment"> | string
   plateNumber?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
   location?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
-  cost?: Prisma.DecimalNullableWithAggregatesFilter<"Equipment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
-  endUser?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
-  type?: Prisma.StringWithAggregatesFilter<"Equipment"> | string
+  status?: Prisma.EnumEquipmentStatusWithAggregatesFilter<"Equipment"> | $Enums.EquipmentStatus
   acquisitionDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Equipment"> | Date | string | null
   warrantyDetails?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
   qrCode?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
-  status?: Prisma.EnumEquipmentStatusWithAggregatesFilter<"Equipment"> | $Enums.EquipmentStatus
+  cost?: Prisma.DecimalNullableWithAggregatesFilter<"Equipment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Equipment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Equipment"> | Date | string
   companyId?: Prisma.StringWithAggregatesFilter<"Equipment"> | string
   assignedToUserId?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
+  endUser?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
+  operatingSystem?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
 }
 
 export type EquipmentCreateInput = {
   id?: string
+  type: string
   brand: string
   model: string
   serialNumber: string
   plateNumber?: string | null
   location?: string | null
-  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: string | null
-  endUser?: string | null
-  type: string
+  status?: $Enums.EquipmentStatus
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
-  status?: $Enums.EquipmentStatus
+  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  company: Prisma.CompanyCreateNestedOneWithoutEquipmentsInput
-  assignedToUser?: Prisma.UserCreateNestedOneWithoutAssignedEquipmentsInput
-  maintenances?: Prisma.MaintenanceCreateNestedManyWithoutEquipmentInput
+  endUser?: string | null
+  operatingSystem?: string | null
   documents?: Prisma.DocumentCreateNestedManyWithoutEquipmentInput
+  assignedToUser?: Prisma.UserCreateNestedOneWithoutAssignedEquipmentsInput
+  company: Prisma.CompanyCreateNestedOneWithoutEquipmentsInput
+  maintenances?: Prisma.MaintenanceCreateNestedManyWithoutEquipmentInput
 }
 
 export type EquipmentUncheckedCreateInput = {
   id?: string
+  type: string
   brand: string
   model: string
   serialNumber: string
   plateNumber?: string | null
   location?: string | null
-  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: string | null
-  endUser?: string | null
-  type: string
+  status?: $Enums.EquipmentStatus
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
-  status?: $Enums.EquipmentStatus
+  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   companyId: string
   assignedToUserId?: string | null
-  maintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutEquipmentInput
+  endUser?: string | null
+  operatingSystem?: string | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutEquipmentInput
+  maintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutEquipmentInput
 }
 
 export type EquipmentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   serialNumber?: Prisma.StringFieldUpdateOperationsInput | string
   plateNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  company?: Prisma.CompanyUpdateOneRequiredWithoutEquipmentsNestedInput
-  assignedToUser?: Prisma.UserUpdateOneWithoutAssignedEquipmentsNestedInput
-  maintenances?: Prisma.MaintenanceUpdateManyWithoutEquipmentNestedInput
+  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documents?: Prisma.DocumentUpdateManyWithoutEquipmentNestedInput
+  assignedToUser?: Prisma.UserUpdateOneWithoutAssignedEquipmentsNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutEquipmentsNestedInput
+  maintenances?: Prisma.MaintenanceUpdateManyWithoutEquipmentNestedInput
 }
 
 export type EquipmentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   serialNumber?: Prisma.StringFieldUpdateOperationsInput | string
   plateNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   assignedToUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  maintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutEquipmentNestedInput
+  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutEquipmentNestedInput
+  maintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutEquipmentNestedInput
 }
 
 export type EquipmentCreateManyInput = {
   id?: string
+  type: string
   brand: string
   model: string
   serialNumber: string
   plateNumber?: string | null
   location?: string | null
-  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: string | null
-  endUser?: string | null
-  type: string
+  status?: $Enums.EquipmentStatus
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
-  status?: $Enums.EquipmentStatus
+  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   companyId: string
   assignedToUserId?: string | null
+  endUser?: string | null
+  operatingSystem?: string | null
 }
 
 export type EquipmentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   serialNumber?: Prisma.StringFieldUpdateOperationsInput | string
   plateNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type EquipmentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   serialNumber?: Prisma.StringFieldUpdateOperationsInput | string
   plateNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   assignedToUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type EquipmentListRelationFilter = {
@@ -594,23 +594,23 @@ export type EquipmentOrderByRelationAggregateInput = {
 
 export type EquipmentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   brand?: Prisma.SortOrder
   model?: Prisma.SortOrder
   serialNumber?: Prisma.SortOrder
   plateNumber?: Prisma.SortOrder
   location?: Prisma.SortOrder
-  cost?: Prisma.SortOrder
-  operatingSystem?: Prisma.SortOrder
-  endUser?: Prisma.SortOrder
-  type?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   acquisitionDate?: Prisma.SortOrder
   warrantyDetails?: Prisma.SortOrder
   qrCode?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  cost?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   assignedToUserId?: Prisma.SortOrder
+  endUser?: Prisma.SortOrder
+  operatingSystem?: Prisma.SortOrder
 }
 
 export type EquipmentAvgOrderByAggregateInput = {
@@ -619,44 +619,44 @@ export type EquipmentAvgOrderByAggregateInput = {
 
 export type EquipmentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   brand?: Prisma.SortOrder
   model?: Prisma.SortOrder
   serialNumber?: Prisma.SortOrder
   plateNumber?: Prisma.SortOrder
   location?: Prisma.SortOrder
-  cost?: Prisma.SortOrder
-  operatingSystem?: Prisma.SortOrder
-  endUser?: Prisma.SortOrder
-  type?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   acquisitionDate?: Prisma.SortOrder
   warrantyDetails?: Prisma.SortOrder
   qrCode?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  cost?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   assignedToUserId?: Prisma.SortOrder
+  endUser?: Prisma.SortOrder
+  operatingSystem?: Prisma.SortOrder
 }
 
 export type EquipmentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   brand?: Prisma.SortOrder
   model?: Prisma.SortOrder
   serialNumber?: Prisma.SortOrder
   plateNumber?: Prisma.SortOrder
   location?: Prisma.SortOrder
-  cost?: Prisma.SortOrder
-  operatingSystem?: Prisma.SortOrder
-  endUser?: Prisma.SortOrder
-  type?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   acquisitionDate?: Prisma.SortOrder
   warrantyDetails?: Prisma.SortOrder
   qrCode?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  cost?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   assignedToUserId?: Prisma.SortOrder
+  endUser?: Prisma.SortOrder
+  operatingSystem?: Prisma.SortOrder
 }
 
 export type EquipmentSumOrderByAggregateInput = {
@@ -757,16 +757,16 @@ export type EquipmentUncheckedUpdateManyWithoutCompanyNestedInput = {
   deleteMany?: Prisma.EquipmentScalarWhereInput | Prisma.EquipmentScalarWhereInput[]
 }
 
+export type EnumEquipmentStatusFieldUpdateOperationsInput = {
+  set?: $Enums.EquipmentStatus
+}
+
 export type NullableDecimalFieldUpdateOperationsInput = {
   set?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
   decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
   multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
   divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
-export type EnumEquipmentStatusFieldUpdateOperationsInput = {
-  set?: $Enums.EquipmentStatus
 }
 
 export type EquipmentCreateNestedOneWithoutMaintenancesInput = {
@@ -801,46 +801,46 @@ export type EquipmentUpdateOneWithoutDocumentsNestedInput = {
 
 export type EquipmentCreateWithoutAssignedToUserInput = {
   id?: string
+  type: string
   brand: string
   model: string
   serialNumber: string
   plateNumber?: string | null
   location?: string | null
-  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: string | null
-  endUser?: string | null
-  type: string
+  status?: $Enums.EquipmentStatus
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
-  status?: $Enums.EquipmentStatus
+  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  endUser?: string | null
+  operatingSystem?: string | null
+  documents?: Prisma.DocumentCreateNestedManyWithoutEquipmentInput
   company: Prisma.CompanyCreateNestedOneWithoutEquipmentsInput
   maintenances?: Prisma.MaintenanceCreateNestedManyWithoutEquipmentInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutEquipmentInput
 }
 
 export type EquipmentUncheckedCreateWithoutAssignedToUserInput = {
   id?: string
+  type: string
   brand: string
   model: string
   serialNumber: string
   plateNumber?: string | null
   location?: string | null
-  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: string | null
-  endUser?: string | null
-  type: string
+  status?: $Enums.EquipmentStatus
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
-  status?: $Enums.EquipmentStatus
+  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   companyId: string
-  maintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutEquipmentInput
+  endUser?: string | null
+  operatingSystem?: string | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutEquipmentInput
+  maintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutEquipmentInput
 }
 
 export type EquipmentCreateOrConnectWithoutAssignedToUserInput = {
@@ -874,67 +874,67 @@ export type EquipmentScalarWhereInput = {
   OR?: Prisma.EquipmentScalarWhereInput[]
   NOT?: Prisma.EquipmentScalarWhereInput | Prisma.EquipmentScalarWhereInput[]
   id?: Prisma.StringFilter<"Equipment"> | string
+  type?: Prisma.StringFilter<"Equipment"> | string
   brand?: Prisma.StringFilter<"Equipment"> | string
   model?: Prisma.StringFilter<"Equipment"> | string
   serialNumber?: Prisma.StringFilter<"Equipment"> | string
   plateNumber?: Prisma.StringNullableFilter<"Equipment"> | string | null
   location?: Prisma.StringNullableFilter<"Equipment"> | string | null
-  cost?: Prisma.DecimalNullableFilter<"Equipment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: Prisma.StringNullableFilter<"Equipment"> | string | null
-  endUser?: Prisma.StringNullableFilter<"Equipment"> | string | null
-  type?: Prisma.StringFilter<"Equipment"> | string
+  status?: Prisma.EnumEquipmentStatusFilter<"Equipment"> | $Enums.EquipmentStatus
   acquisitionDate?: Prisma.DateTimeNullableFilter<"Equipment"> | Date | string | null
   warrantyDetails?: Prisma.StringNullableFilter<"Equipment"> | string | null
   qrCode?: Prisma.StringNullableFilter<"Equipment"> | string | null
-  status?: Prisma.EnumEquipmentStatusFilter<"Equipment"> | $Enums.EquipmentStatus
+  cost?: Prisma.DecimalNullableFilter<"Equipment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
   companyId?: Prisma.StringFilter<"Equipment"> | string
   assignedToUserId?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  endUser?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  operatingSystem?: Prisma.StringNullableFilter<"Equipment"> | string | null
 }
 
 export type EquipmentCreateWithoutCompanyInput = {
   id?: string
+  type: string
   brand: string
   model: string
   serialNumber: string
   plateNumber?: string | null
   location?: string | null
-  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: string | null
-  endUser?: string | null
-  type: string
+  status?: $Enums.EquipmentStatus
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
-  status?: $Enums.EquipmentStatus
+  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  endUser?: string | null
+  operatingSystem?: string | null
+  documents?: Prisma.DocumentCreateNestedManyWithoutEquipmentInput
   assignedToUser?: Prisma.UserCreateNestedOneWithoutAssignedEquipmentsInput
   maintenances?: Prisma.MaintenanceCreateNestedManyWithoutEquipmentInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutEquipmentInput
 }
 
 export type EquipmentUncheckedCreateWithoutCompanyInput = {
   id?: string
+  type: string
   brand: string
   model: string
   serialNumber: string
   plateNumber?: string | null
   location?: string | null
-  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: string | null
-  endUser?: string | null
-  type: string
+  status?: $Enums.EquipmentStatus
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
-  status?: $Enums.EquipmentStatus
+  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   assignedToUserId?: string | null
-  maintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutEquipmentInput
+  endUser?: string | null
+  operatingSystem?: string | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutEquipmentInput
+  maintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutEquipmentInput
 }
 
 export type EquipmentCreateOrConnectWithoutCompanyInput = {
@@ -965,45 +965,45 @@ export type EquipmentUpdateManyWithWhereWithoutCompanyInput = {
 
 export type EquipmentCreateWithoutMaintenancesInput = {
   id?: string
+  type: string
   brand: string
   model: string
   serialNumber: string
   plateNumber?: string | null
   location?: string | null
-  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: string | null
-  endUser?: string | null
-  type: string
+  status?: $Enums.EquipmentStatus
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
-  status?: $Enums.EquipmentStatus
+  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  company: Prisma.CompanyCreateNestedOneWithoutEquipmentsInput
-  assignedToUser?: Prisma.UserCreateNestedOneWithoutAssignedEquipmentsInput
+  endUser?: string | null
+  operatingSystem?: string | null
   documents?: Prisma.DocumentCreateNestedManyWithoutEquipmentInput
+  assignedToUser?: Prisma.UserCreateNestedOneWithoutAssignedEquipmentsInput
+  company: Prisma.CompanyCreateNestedOneWithoutEquipmentsInput
 }
 
 export type EquipmentUncheckedCreateWithoutMaintenancesInput = {
   id?: string
+  type: string
   brand: string
   model: string
   serialNumber: string
   plateNumber?: string | null
   location?: string | null
-  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: string | null
-  endUser?: string | null
-  type: string
+  status?: $Enums.EquipmentStatus
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
-  status?: $Enums.EquipmentStatus
+  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   companyId: string
   assignedToUserId?: string | null
+  endUser?: string | null
+  operatingSystem?: string | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutEquipmentInput
 }
 
@@ -1025,89 +1025,89 @@ export type EquipmentUpdateToOneWithWhereWithoutMaintenancesInput = {
 
 export type EquipmentUpdateWithoutMaintenancesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   serialNumber?: Prisma.StringFieldUpdateOperationsInput | string
   plateNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  company?: Prisma.CompanyUpdateOneRequiredWithoutEquipmentsNestedInput
-  assignedToUser?: Prisma.UserUpdateOneWithoutAssignedEquipmentsNestedInput
+  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documents?: Prisma.DocumentUpdateManyWithoutEquipmentNestedInput
+  assignedToUser?: Prisma.UserUpdateOneWithoutAssignedEquipmentsNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutEquipmentsNestedInput
 }
 
 export type EquipmentUncheckedUpdateWithoutMaintenancesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   serialNumber?: Prisma.StringFieldUpdateOperationsInput | string
   plateNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   assignedToUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutEquipmentNestedInput
 }
 
 export type EquipmentCreateWithoutDocumentsInput = {
   id?: string
+  type: string
   brand: string
   model: string
   serialNumber: string
   plateNumber?: string | null
   location?: string | null
-  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: string | null
-  endUser?: string | null
-  type: string
+  status?: $Enums.EquipmentStatus
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
-  status?: $Enums.EquipmentStatus
+  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  company: Prisma.CompanyCreateNestedOneWithoutEquipmentsInput
+  endUser?: string | null
+  operatingSystem?: string | null
   assignedToUser?: Prisma.UserCreateNestedOneWithoutAssignedEquipmentsInput
+  company: Prisma.CompanyCreateNestedOneWithoutEquipmentsInput
   maintenances?: Prisma.MaintenanceCreateNestedManyWithoutEquipmentInput
 }
 
 export type EquipmentUncheckedCreateWithoutDocumentsInput = {
   id?: string
+  type: string
   brand: string
   model: string
   serialNumber: string
   plateNumber?: string | null
   location?: string | null
-  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: string | null
-  endUser?: string | null
-  type: string
+  status?: $Enums.EquipmentStatus
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
-  status?: $Enums.EquipmentStatus
+  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   companyId: string
   assignedToUserId?: string | null
+  endUser?: string | null
+  operatingSystem?: string | null
   maintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutEquipmentInput
 }
 
@@ -1129,214 +1129,214 @@ export type EquipmentUpdateToOneWithWhereWithoutDocumentsInput = {
 
 export type EquipmentUpdateWithoutDocumentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   serialNumber?: Prisma.StringFieldUpdateOperationsInput | string
   plateNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  company?: Prisma.CompanyUpdateOneRequiredWithoutEquipmentsNestedInput
+  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedToUser?: Prisma.UserUpdateOneWithoutAssignedEquipmentsNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutEquipmentsNestedInput
   maintenances?: Prisma.MaintenanceUpdateManyWithoutEquipmentNestedInput
 }
 
 export type EquipmentUncheckedUpdateWithoutDocumentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   serialNumber?: Prisma.StringFieldUpdateOperationsInput | string
   plateNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   assignedToUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   maintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutEquipmentNestedInput
 }
 
 export type EquipmentCreateManyAssignedToUserInput = {
   id?: string
+  type: string
   brand: string
   model: string
   serialNumber: string
   plateNumber?: string | null
   location?: string | null
-  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: string | null
-  endUser?: string | null
-  type: string
+  status?: $Enums.EquipmentStatus
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
-  status?: $Enums.EquipmentStatus
+  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   companyId: string
+  endUser?: string | null
+  operatingSystem?: string | null
 }
 
 export type EquipmentUpdateWithoutAssignedToUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   serialNumber?: Prisma.StringFieldUpdateOperationsInput | string
   plateNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documents?: Prisma.DocumentUpdateManyWithoutEquipmentNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutEquipmentsNestedInput
   maintenances?: Prisma.MaintenanceUpdateManyWithoutEquipmentNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutEquipmentNestedInput
 }
 
 export type EquipmentUncheckedUpdateWithoutAssignedToUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   serialNumber?: Prisma.StringFieldUpdateOperationsInput | string
   plateNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  maintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutEquipmentNestedInput
+  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutEquipmentNestedInput
+  maintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutEquipmentNestedInput
 }
 
 export type EquipmentUncheckedUpdateManyWithoutAssignedToUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   serialNumber?: Prisma.StringFieldUpdateOperationsInput | string
   plateNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type EquipmentCreateManyCompanyInput = {
   id?: string
+  type: string
   brand: string
   model: string
   serialNumber: string
   plateNumber?: string | null
   location?: string | null
-  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: string | null
-  endUser?: string | null
-  type: string
+  status?: $Enums.EquipmentStatus
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
-  status?: $Enums.EquipmentStatus
+  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   assignedToUserId?: string | null
+  endUser?: string | null
+  operatingSystem?: string | null
 }
 
 export type EquipmentUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   serialNumber?: Prisma.StringFieldUpdateOperationsInput | string
   plateNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documents?: Prisma.DocumentUpdateManyWithoutEquipmentNestedInput
   assignedToUser?: Prisma.UserUpdateOneWithoutAssignedEquipmentsNestedInput
   maintenances?: Prisma.MaintenanceUpdateManyWithoutEquipmentNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutEquipmentNestedInput
 }
 
 export type EquipmentUncheckedUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   serialNumber?: Prisma.StringFieldUpdateOperationsInput | string
   plateNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedToUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  maintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutEquipmentNestedInput
+  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutEquipmentNestedInput
+  maintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutEquipmentNestedInput
 }
 
 export type EquipmentUncheckedUpdateManyWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   serialNumber?: Prisma.StringFieldUpdateOperationsInput | string
   plateNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedToUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endUser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatingSystem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -1345,13 +1345,13 @@ export type EquipmentUncheckedUpdateManyWithoutCompanyInput = {
  */
 
 export type EquipmentCountOutputType = {
-  maintenances: number
   documents: number
+  maintenances: number
 }
 
 export type EquipmentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  maintenances?: boolean | EquipmentCountOutputTypeCountMaintenancesArgs
   documents?: boolean | EquipmentCountOutputTypeCountDocumentsArgs
+  maintenances?: boolean | EquipmentCountOutputTypeCountMaintenancesArgs
 }
 
 /**
@@ -1367,155 +1367,155 @@ export type EquipmentCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ex
 /**
  * EquipmentCountOutputType without action
  */
-export type EquipmentCountOutputTypeCountMaintenancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.MaintenanceWhereInput
+export type EquipmentCountOutputTypeCountDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DocumentWhereInput
 }
 
 /**
  * EquipmentCountOutputType without action
  */
-export type EquipmentCountOutputTypeCountDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.DocumentWhereInput
+export type EquipmentCountOutputTypeCountMaintenancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MaintenanceWhereInput
 }
 
 
 export type EquipmentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  type?: boolean
   brand?: boolean
   model?: boolean
   serialNumber?: boolean
   plateNumber?: boolean
   location?: boolean
-  cost?: boolean
-  operatingSystem?: boolean
-  endUser?: boolean
-  type?: boolean
+  status?: boolean
   acquisitionDate?: boolean
   warrantyDetails?: boolean
   qrCode?: boolean
-  status?: boolean
+  cost?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   companyId?: boolean
   assignedToUserId?: boolean
-  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
-  assignedToUser?: boolean | Prisma.Equipment$assignedToUserArgs<ExtArgs>
-  maintenances?: boolean | Prisma.Equipment$maintenancesArgs<ExtArgs>
+  endUser?: boolean
+  operatingSystem?: boolean
   documents?: boolean | Prisma.Equipment$documentsArgs<ExtArgs>
+  assignedToUser?: boolean | Prisma.Equipment$assignedToUserArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  maintenances?: boolean | Prisma.Equipment$maintenancesArgs<ExtArgs>
   _count?: boolean | Prisma.EquipmentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["equipment"]>
 
 export type EquipmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  type?: boolean
   brand?: boolean
   model?: boolean
   serialNumber?: boolean
   plateNumber?: boolean
   location?: boolean
-  cost?: boolean
-  operatingSystem?: boolean
-  endUser?: boolean
-  type?: boolean
+  status?: boolean
   acquisitionDate?: boolean
   warrantyDetails?: boolean
   qrCode?: boolean
-  status?: boolean
+  cost?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   companyId?: boolean
   assignedToUserId?: boolean
-  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  endUser?: boolean
+  operatingSystem?: boolean
   assignedToUser?: boolean | Prisma.Equipment$assignedToUserArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["equipment"]>
 
 export type EquipmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  type?: boolean
   brand?: boolean
   model?: boolean
   serialNumber?: boolean
   plateNumber?: boolean
   location?: boolean
-  cost?: boolean
-  operatingSystem?: boolean
-  endUser?: boolean
-  type?: boolean
+  status?: boolean
   acquisitionDate?: boolean
   warrantyDetails?: boolean
   qrCode?: boolean
-  status?: boolean
+  cost?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   companyId?: boolean
   assignedToUserId?: boolean
-  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  endUser?: boolean
+  operatingSystem?: boolean
   assignedToUser?: boolean | Prisma.Equipment$assignedToUserArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["equipment"]>
 
 export type EquipmentSelectScalar = {
   id?: boolean
+  type?: boolean
   brand?: boolean
   model?: boolean
   serialNumber?: boolean
   plateNumber?: boolean
   location?: boolean
-  cost?: boolean
-  operatingSystem?: boolean
-  endUser?: boolean
-  type?: boolean
+  status?: boolean
   acquisitionDate?: boolean
   warrantyDetails?: boolean
   qrCode?: boolean
-  status?: boolean
+  cost?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   companyId?: boolean
   assignedToUserId?: boolean
+  endUser?: boolean
+  operatingSystem?: boolean
 }
 
-export type EquipmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "brand" | "model" | "serialNumber" | "plateNumber" | "location" | "cost" | "operatingSystem" | "endUser" | "type" | "acquisitionDate" | "warrantyDetails" | "qrCode" | "status" | "createdAt" | "updatedAt" | "companyId" | "assignedToUserId", ExtArgs["result"]["equipment"]>
+export type EquipmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "brand" | "model" | "serialNumber" | "plateNumber" | "location" | "status" | "acquisitionDate" | "warrantyDetails" | "qrCode" | "cost" | "createdAt" | "updatedAt" | "companyId" | "assignedToUserId" | "endUser" | "operatingSystem", ExtArgs["result"]["equipment"]>
 export type EquipmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
-  assignedToUser?: boolean | Prisma.Equipment$assignedToUserArgs<ExtArgs>
-  maintenances?: boolean | Prisma.Equipment$maintenancesArgs<ExtArgs>
   documents?: boolean | Prisma.Equipment$documentsArgs<ExtArgs>
+  assignedToUser?: boolean | Prisma.Equipment$assignedToUserArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  maintenances?: boolean | Prisma.Equipment$maintenancesArgs<ExtArgs>
   _count?: boolean | Prisma.EquipmentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type EquipmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   assignedToUser?: boolean | Prisma.Equipment$assignedToUserArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
 }
 export type EquipmentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   assignedToUser?: boolean | Prisma.Equipment$assignedToUserArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
 }
 
 export type $EquipmentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Equipment"
   objects: {
-    company: Prisma.$CompanyPayload<ExtArgs>
-    assignedToUser: Prisma.$UserPayload<ExtArgs> | null
-    maintenances: Prisma.$MaintenancePayload<ExtArgs>[]
     documents: Prisma.$DocumentPayload<ExtArgs>[]
+    assignedToUser: Prisma.$UserPayload<ExtArgs> | null
+    company: Prisma.$CompanyPayload<ExtArgs>
+    maintenances: Prisma.$MaintenancePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    type: string
     brand: string
     model: string
     serialNumber: string
     plateNumber: string | null
     location: string | null
-    cost: runtime.Decimal | null
-    operatingSystem: string | null
-    endUser: string | null
-    type: string
+    status: $Enums.EquipmentStatus
     acquisitionDate: Date | null
     warrantyDetails: string | null
     qrCode: string | null
-    status: $Enums.EquipmentStatus
+    cost: runtime.Decimal | null
     createdAt: Date
     updatedAt: Date
     companyId: string
     assignedToUserId: string | null
+    endUser: string | null
+    operatingSystem: string | null
   }, ExtArgs["result"]["equipment"]>
   composites: {}
 }
@@ -1910,10 +1910,10 @@ readonly fields: EquipmentFieldRefs;
  */
 export interface Prisma__EquipmentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  assignedToUser<T extends Prisma.Equipment$assignedToUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Equipment$assignedToUserArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  maintenances<T extends Prisma.Equipment$maintenancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Equipment$maintenancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MaintenancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   documents<T extends Prisma.Equipment$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Equipment$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assignedToUser<T extends Prisma.Equipment$assignedToUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Equipment$assignedToUserArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  maintenances<T extends Prisma.Equipment$maintenancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Equipment$maintenancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MaintenancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1944,23 +1944,23 @@ export interface Prisma__EquipmentClient<T, Null = never, ExtArgs extends runtim
  */
 export interface EquipmentFieldRefs {
   readonly id: Prisma.FieldRef<"Equipment", 'String'>
+  readonly type: Prisma.FieldRef<"Equipment", 'String'>
   readonly brand: Prisma.FieldRef<"Equipment", 'String'>
   readonly model: Prisma.FieldRef<"Equipment", 'String'>
   readonly serialNumber: Prisma.FieldRef<"Equipment", 'String'>
   readonly plateNumber: Prisma.FieldRef<"Equipment", 'String'>
   readonly location: Prisma.FieldRef<"Equipment", 'String'>
-  readonly cost: Prisma.FieldRef<"Equipment", 'Decimal'>
-  readonly operatingSystem: Prisma.FieldRef<"Equipment", 'String'>
-  readonly endUser: Prisma.FieldRef<"Equipment", 'String'>
-  readonly type: Prisma.FieldRef<"Equipment", 'String'>
+  readonly status: Prisma.FieldRef<"Equipment", 'EquipmentStatus'>
   readonly acquisitionDate: Prisma.FieldRef<"Equipment", 'DateTime'>
   readonly warrantyDetails: Prisma.FieldRef<"Equipment", 'String'>
   readonly qrCode: Prisma.FieldRef<"Equipment", 'String'>
-  readonly status: Prisma.FieldRef<"Equipment", 'EquipmentStatus'>
+  readonly cost: Prisma.FieldRef<"Equipment", 'Decimal'>
   readonly createdAt: Prisma.FieldRef<"Equipment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Equipment", 'DateTime'>
   readonly companyId: Prisma.FieldRef<"Equipment", 'String'>
   readonly assignedToUserId: Prisma.FieldRef<"Equipment", 'String'>
+  readonly endUser: Prisma.FieldRef<"Equipment", 'String'>
+  readonly operatingSystem: Prisma.FieldRef<"Equipment", 'String'>
 }
     
 
@@ -2357,6 +2357,30 @@ export type EquipmentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
+ * Equipment.documents
+ */
+export type Equipment$documentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Document
+   */
+  select?: Prisma.DocumentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Document
+   */
+  omit?: Prisma.DocumentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentInclude<ExtArgs> | null
+  where?: Prisma.DocumentWhereInput
+  orderBy?: Prisma.DocumentOrderByWithRelationInput | Prisma.DocumentOrderByWithRelationInput[]
+  cursor?: Prisma.DocumentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DocumentScalarFieldEnum | Prisma.DocumentScalarFieldEnum[]
+}
+
+/**
  * Equipment.assignedToUser
  */
 export type Equipment$assignedToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2397,30 +2421,6 @@ export type Equipment$maintenancesArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.MaintenanceScalarFieldEnum | Prisma.MaintenanceScalarFieldEnum[]
-}
-
-/**
- * Equipment.documents
- */
-export type Equipment$documentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Document
-   */
-  select?: Prisma.DocumentSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Document
-   */
-  omit?: Prisma.DocumentOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.DocumentInclude<ExtArgs> | null
-  where?: Prisma.DocumentWhereInput
-  orderBy?: Prisma.DocumentOrderByWithRelationInput | Prisma.DocumentOrderByWithRelationInput[]
-  cursor?: Prisma.DocumentWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.DocumentScalarFieldEnum | Prisma.DocumentScalarFieldEnum[]
 }
 
 /**

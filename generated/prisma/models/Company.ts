@@ -223,14 +223,15 @@ export type CompanyWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   createdByUserId?: Prisma.StringNullableFilter<"Company"> | string | null
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-  equipments?: Prisma.EquipmentListRelationFilter
-  users?: Prisma.UserListRelationFilter
+  departments?: Prisma.DepartmentListRelationFilter
   documents?: Prisma.DocumentListRelationFilter
+  equipments?: Prisma.EquipmentListRelationFilter
   licenses?: Prisma.LicenseListRelationFilter
   maintenances?: Prisma.MaintenanceListRelationFilter
   networks?: Prisma.NetworkListRelationFilter
-  departments?: Prisma.DepartmentListRelationFilter
   networkProviders?: Prisma.NetworkProviderListRelationFilter
+  users?: Prisma.UserListRelationFilter
+  tickets?: Prisma.TicketListRelationFilter
 }
 
 export type CompanyOrderByWithRelationInput = {
@@ -245,14 +246,15 @@ export type CompanyOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   createdByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdBy?: Prisma.UserOrderByWithRelationInput
-  equipments?: Prisma.EquipmentOrderByRelationAggregateInput
-  users?: Prisma.UserOrderByRelationAggregateInput
+  departments?: Prisma.DepartmentOrderByRelationAggregateInput
   documents?: Prisma.DocumentOrderByRelationAggregateInput
+  equipments?: Prisma.EquipmentOrderByRelationAggregateInput
   licenses?: Prisma.LicenseOrderByRelationAggregateInput
   maintenances?: Prisma.MaintenanceOrderByRelationAggregateInput
   networks?: Prisma.NetworkOrderByRelationAggregateInput
-  departments?: Prisma.DepartmentOrderByRelationAggregateInput
   networkProviders?: Prisma.NetworkProviderOrderByRelationAggregateInput
+  users?: Prisma.UserOrderByRelationAggregateInput
+  tickets?: Prisma.TicketOrderByRelationAggregateInput
 }
 
 export type CompanyWhereUniqueInput = Prisma.AtLeast<{
@@ -270,14 +272,15 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   createdByUserId?: Prisma.StringNullableFilter<"Company"> | string | null
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-  equipments?: Prisma.EquipmentListRelationFilter
-  users?: Prisma.UserListRelationFilter
+  departments?: Prisma.DepartmentListRelationFilter
   documents?: Prisma.DocumentListRelationFilter
+  equipments?: Prisma.EquipmentListRelationFilter
   licenses?: Prisma.LicenseListRelationFilter
   maintenances?: Prisma.MaintenanceListRelationFilter
   networks?: Prisma.NetworkListRelationFilter
-  departments?: Prisma.DepartmentListRelationFilter
   networkProviders?: Prisma.NetworkProviderListRelationFilter
+  users?: Prisma.UserListRelationFilter
+  tickets?: Prisma.TicketListRelationFilter
 }, "id" | "code" | "name">
 
 export type CompanyOrderByWithAggregationInput = {
@@ -323,14 +326,15 @@ export type CompanyCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedCompaniesInput
-  equipments?: Prisma.EquipmentCreateNestedManyWithoutCompanyInput
-  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutCompanyInput
   documents?: Prisma.DocumentCreateNestedManyWithoutCompanyInput
+  equipments?: Prisma.EquipmentCreateNestedManyWithoutCompanyInput
   licenses?: Prisma.LicenseCreateNestedManyWithoutCompanyInput
   maintenances?: Prisma.MaintenanceCreateNestedManyWithoutCompanyInput
   networks?: Prisma.NetworkCreateNestedManyWithoutCompanyInput
-  departments?: Prisma.DepartmentCreateNestedManyWithoutCompanyInput
   networkProviders?: Prisma.NetworkProviderCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  tickets?: Prisma.TicketCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateInput = {
@@ -344,14 +348,15 @@ export type CompanyUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   createdByUserId?: string | null
-  equipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCompanyInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCompanyInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutCompanyInput
+  equipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCompanyInput
   licenses?: Prisma.LicenseUncheckedCreateNestedManyWithoutCompanyInput
   maintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutCompanyInput
   networks?: Prisma.NetworkUncheckedCreateNestedManyWithoutCompanyInput
-  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCompanyInput
   networkProviders?: Prisma.NetworkProviderUncheckedCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUpdateInput = {
@@ -365,14 +370,15 @@ export type CompanyUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedCompaniesNestedInput
-  equipments?: Prisma.EquipmentUpdateManyWithoutCompanyNestedInput
-  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutCompanyNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutCompanyNestedInput
+  equipments?: Prisma.EquipmentUpdateManyWithoutCompanyNestedInput
   licenses?: Prisma.LicenseUpdateManyWithoutCompanyNestedInput
   maintenances?: Prisma.MaintenanceUpdateManyWithoutCompanyNestedInput
   networks?: Prisma.NetworkUpdateManyWithoutCompanyNestedInput
-  departments?: Prisma.DepartmentUpdateManyWithoutCompanyNestedInput
   networkProviders?: Prisma.NetworkProviderUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  tickets?: Prisma.TicketUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateInput = {
@@ -386,14 +392,15 @@ export type CompanyUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  equipments?: Prisma.EquipmentUncheckedUpdateManyWithoutCompanyNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCompanyNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  equipments?: Prisma.EquipmentUncheckedUpdateManyWithoutCompanyNestedInput
   licenses?: Prisma.LicenseUncheckedUpdateManyWithoutCompanyNestedInput
   maintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutCompanyNestedInput
   networks?: Prisma.NetworkUncheckedUpdateManyWithoutCompanyNestedInput
-  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCompanyNestedInput
   networkProviders?: Prisma.NetworkProviderUncheckedUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  tickets?: Prisma.TicketUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateManyInput = {
@@ -493,10 +500,20 @@ export type CompanyScalarRelationFilter = {
   isNot?: Prisma.CompanyWhereInput
 }
 
-export type CompanyCreateNestedOneWithoutUsersInput = {
-  create?: Prisma.XOR<Prisma.CompanyCreateWithoutUsersInput, Prisma.CompanyUncheckedCreateWithoutUsersInput>
-  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutUsersInput
+export type CompanyCreateNestedOneWithoutTicketsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutTicketsInput, Prisma.CompanyUncheckedCreateWithoutTicketsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutTicketsInput
   connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneWithoutTicketsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutTicketsInput, Prisma.CompanyUncheckedCreateWithoutTicketsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutTicketsInput
+  upsert?: Prisma.CompanyUpsertWithoutTicketsInput
+  disconnect?: Prisma.CompanyWhereInput | boolean
+  delete?: Prisma.CompanyWhereInput | boolean
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutTicketsInput, Prisma.CompanyUpdateWithoutTicketsInput>, Prisma.CompanyUncheckedUpdateWithoutTicketsInput>
 }
 
 export type CompanyCreateNestedManyWithoutCreatedByInput = {
@@ -506,21 +523,17 @@ export type CompanyCreateNestedManyWithoutCreatedByInput = {
   connect?: Prisma.CompanyWhereUniqueInput | Prisma.CompanyWhereUniqueInput[]
 }
 
+export type CompanyCreateNestedOneWithoutUsersInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutUsersInput, Prisma.CompanyUncheckedCreateWithoutUsersInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutUsersInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
 export type CompanyUncheckedCreateNestedManyWithoutCreatedByInput = {
   create?: Prisma.XOR<Prisma.CompanyCreateWithoutCreatedByInput, Prisma.CompanyUncheckedCreateWithoutCreatedByInput> | Prisma.CompanyCreateWithoutCreatedByInput[] | Prisma.CompanyUncheckedCreateWithoutCreatedByInput[]
   connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutCreatedByInput | Prisma.CompanyCreateOrConnectWithoutCreatedByInput[]
   createMany?: Prisma.CompanyCreateManyCreatedByInputEnvelope
   connect?: Prisma.CompanyWhereUniqueInput | Prisma.CompanyWhereUniqueInput[]
-}
-
-export type CompanyUpdateOneWithoutUsersNestedInput = {
-  create?: Prisma.XOR<Prisma.CompanyCreateWithoutUsersInput, Prisma.CompanyUncheckedCreateWithoutUsersInput>
-  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutUsersInput
-  upsert?: Prisma.CompanyUpsertWithoutUsersInput
-  disconnect?: Prisma.CompanyWhereInput | boolean
-  delete?: Prisma.CompanyWhereInput | boolean
-  connect?: Prisma.CompanyWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutUsersInput, Prisma.CompanyUpdateWithoutUsersInput>, Prisma.CompanyUncheckedUpdateWithoutUsersInput>
 }
 
 export type CompanyUpdateManyWithoutCreatedByNestedInput = {
@@ -535,6 +548,16 @@ export type CompanyUpdateManyWithoutCreatedByNestedInput = {
   update?: Prisma.CompanyUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.CompanyUpdateWithWhereUniqueWithoutCreatedByInput[]
   updateMany?: Prisma.CompanyUpdateManyWithWhereWithoutCreatedByInput | Prisma.CompanyUpdateManyWithWhereWithoutCreatedByInput[]
   deleteMany?: Prisma.CompanyScalarWhereInput | Prisma.CompanyScalarWhereInput[]
+}
+
+export type CompanyUpdateOneWithoutUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutUsersInput, Prisma.CompanyUncheckedCreateWithoutUsersInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutUsersInput
+  upsert?: Prisma.CompanyUpsertWithoutUsersInput
+  disconnect?: Prisma.CompanyWhereInput | boolean
+  delete?: Prisma.CompanyWhereInput | boolean
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutUsersInput, Prisma.CompanyUpdateWithoutUsersInput>, Prisma.CompanyUncheckedUpdateWithoutUsersInput>
 }
 
 export type CompanyUncheckedUpdateManyWithoutCreatedByNestedInput = {
@@ -649,6 +672,158 @@ export type CompanyUpdateOneRequiredWithoutNetworksNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutNetworksInput, Prisma.CompanyUpdateWithoutNetworksInput>, Prisma.CompanyUncheckedUpdateWithoutNetworksInput>
 }
 
+export type CompanyCreateWithoutTicketsInput = {
+  id?: string
+  code?: string
+  name: string
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedCompaniesInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutCompanyInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutCompanyInput
+  equipments?: Prisma.EquipmentCreateNestedManyWithoutCompanyInput
+  licenses?: Prisma.LicenseCreateNestedManyWithoutCompanyInput
+  maintenances?: Prisma.MaintenanceCreateNestedManyWithoutCompanyInput
+  networks?: Prisma.NetworkCreateNestedManyWithoutCompanyInput
+  networkProviders?: Prisma.NetworkProviderCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutTicketsInput = {
+  id?: string
+  code?: string
+  name: string
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdByUserId?: string | null
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCompanyInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutCompanyInput
+  equipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCompanyInput
+  licenses?: Prisma.LicenseUncheckedCreateNestedManyWithoutCompanyInput
+  maintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutCompanyInput
+  networks?: Prisma.NetworkUncheckedCreateNestedManyWithoutCompanyInput
+  networkProviders?: Prisma.NetworkProviderUncheckedCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutTicketsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutTicketsInput, Prisma.CompanyUncheckedCreateWithoutTicketsInput>
+}
+
+export type CompanyUpsertWithoutTicketsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutTicketsInput, Prisma.CompanyUncheckedUpdateWithoutTicketsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutTicketsInput, Prisma.CompanyUncheckedCreateWithoutTicketsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutTicketsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutTicketsInput, Prisma.CompanyUncheckedUpdateWithoutTicketsInput>
+}
+
+export type CompanyUpdateWithoutTicketsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedCompaniesNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutCompanyNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutCompanyNestedInput
+  equipments?: Prisma.EquipmentUpdateManyWithoutCompanyNestedInput
+  licenses?: Prisma.LicenseUpdateManyWithoutCompanyNestedInput
+  maintenances?: Prisma.MaintenanceUpdateManyWithoutCompanyNestedInput
+  networks?: Prisma.NetworkUpdateManyWithoutCompanyNestedInput
+  networkProviders?: Prisma.NetworkProviderUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutTicketsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCompanyNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  equipments?: Prisma.EquipmentUncheckedUpdateManyWithoutCompanyNestedInput
+  licenses?: Prisma.LicenseUncheckedUpdateManyWithoutCompanyNestedInput
+  maintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutCompanyNestedInput
+  networks?: Prisma.NetworkUncheckedUpdateManyWithoutCompanyNestedInput
+  networkProviders?: Prisma.NetworkProviderUncheckedUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutCreatedByInput = {
+  id?: string
+  code?: string
+  name: string
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  departments?: Prisma.DepartmentCreateNestedManyWithoutCompanyInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutCompanyInput
+  equipments?: Prisma.EquipmentCreateNestedManyWithoutCompanyInput
+  licenses?: Prisma.LicenseCreateNestedManyWithoutCompanyInput
+  maintenances?: Prisma.MaintenanceCreateNestedManyWithoutCompanyInput
+  networks?: Prisma.NetworkCreateNestedManyWithoutCompanyInput
+  networkProviders?: Prisma.NetworkProviderCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  tickets?: Prisma.TicketCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutCreatedByInput = {
+  id?: string
+  code?: string
+  name: string
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCompanyInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutCompanyInput
+  equipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCompanyInput
+  licenses?: Prisma.LicenseUncheckedCreateNestedManyWithoutCompanyInput
+  maintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutCompanyInput
+  networks?: Prisma.NetworkUncheckedCreateNestedManyWithoutCompanyInput
+  networkProviders?: Prisma.NetworkProviderUncheckedCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutCreatedByInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutCreatedByInput, Prisma.CompanyUncheckedCreateWithoutCreatedByInput>
+}
+
+export type CompanyCreateManyCreatedByInputEnvelope = {
+  data: Prisma.CompanyCreateManyCreatedByInput | Prisma.CompanyCreateManyCreatedByInput[]
+  skipDuplicates?: boolean
+}
+
 export type CompanyCreateWithoutUsersInput = {
   id?: string
   code?: string
@@ -660,13 +835,14 @@ export type CompanyCreateWithoutUsersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedCompaniesInput
-  equipments?: Prisma.EquipmentCreateNestedManyWithoutCompanyInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutCompanyInput
   documents?: Prisma.DocumentCreateNestedManyWithoutCompanyInput
+  equipments?: Prisma.EquipmentCreateNestedManyWithoutCompanyInput
   licenses?: Prisma.LicenseCreateNestedManyWithoutCompanyInput
   maintenances?: Prisma.MaintenanceCreateNestedManyWithoutCompanyInput
   networks?: Prisma.NetworkCreateNestedManyWithoutCompanyInput
-  departments?: Prisma.DepartmentCreateNestedManyWithoutCompanyInput
   networkProviders?: Prisma.NetworkProviderCreateNestedManyWithoutCompanyInput
+  tickets?: Prisma.TicketCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutUsersInput = {
@@ -680,119 +856,19 @@ export type CompanyUncheckedCreateWithoutUsersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   createdByUserId?: string | null
-  equipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCompanyInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCompanyInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutCompanyInput
+  equipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCompanyInput
   licenses?: Prisma.LicenseUncheckedCreateNestedManyWithoutCompanyInput
   maintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutCompanyInput
   networks?: Prisma.NetworkUncheckedCreateNestedManyWithoutCompanyInput
-  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCompanyInput
   networkProviders?: Prisma.NetworkProviderUncheckedCreateNestedManyWithoutCompanyInput
+  tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutUsersInput = {
   where: Prisma.CompanyWhereUniqueInput
   create: Prisma.XOR<Prisma.CompanyCreateWithoutUsersInput, Prisma.CompanyUncheckedCreateWithoutUsersInput>
-}
-
-export type CompanyCreateWithoutCreatedByInput = {
-  id?: string
-  code?: string
-  name: string
-  address?: string | null
-  phone?: string | null
-  email?: string | null
-  isActive?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  equipments?: Prisma.EquipmentCreateNestedManyWithoutCompanyInput
-  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutCompanyInput
-  licenses?: Prisma.LicenseCreateNestedManyWithoutCompanyInput
-  maintenances?: Prisma.MaintenanceCreateNestedManyWithoutCompanyInput
-  networks?: Prisma.NetworkCreateNestedManyWithoutCompanyInput
-  departments?: Prisma.DepartmentCreateNestedManyWithoutCompanyInput
-  networkProviders?: Prisma.NetworkProviderCreateNestedManyWithoutCompanyInput
-}
-
-export type CompanyUncheckedCreateWithoutCreatedByInput = {
-  id?: string
-  code?: string
-  name: string
-  address?: string | null
-  phone?: string | null
-  email?: string | null
-  isActive?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  equipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCompanyInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutCompanyInput
-  licenses?: Prisma.LicenseUncheckedCreateNestedManyWithoutCompanyInput
-  maintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutCompanyInput
-  networks?: Prisma.NetworkUncheckedCreateNestedManyWithoutCompanyInput
-  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCompanyInput
-  networkProviders?: Prisma.NetworkProviderUncheckedCreateNestedManyWithoutCompanyInput
-}
-
-export type CompanyCreateOrConnectWithoutCreatedByInput = {
-  where: Prisma.CompanyWhereUniqueInput
-  create: Prisma.XOR<Prisma.CompanyCreateWithoutCreatedByInput, Prisma.CompanyUncheckedCreateWithoutCreatedByInput>
-}
-
-export type CompanyCreateManyCreatedByInputEnvelope = {
-  data: Prisma.CompanyCreateManyCreatedByInput | Prisma.CompanyCreateManyCreatedByInput[]
-  skipDuplicates?: boolean
-}
-
-export type CompanyUpsertWithoutUsersInput = {
-  update: Prisma.XOR<Prisma.CompanyUpdateWithoutUsersInput, Prisma.CompanyUncheckedUpdateWithoutUsersInput>
-  create: Prisma.XOR<Prisma.CompanyCreateWithoutUsersInput, Prisma.CompanyUncheckedCreateWithoutUsersInput>
-  where?: Prisma.CompanyWhereInput
-}
-
-export type CompanyUpdateToOneWithWhereWithoutUsersInput = {
-  where?: Prisma.CompanyWhereInput
-  data: Prisma.XOR<Prisma.CompanyUpdateWithoutUsersInput, Prisma.CompanyUncheckedUpdateWithoutUsersInput>
-}
-
-export type CompanyUpdateWithoutUsersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  createdBy?: Prisma.UserUpdateOneWithoutCreatedCompaniesNestedInput
-  equipments?: Prisma.EquipmentUpdateManyWithoutCompanyNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutCompanyNestedInput
-  licenses?: Prisma.LicenseUpdateManyWithoutCompanyNestedInput
-  maintenances?: Prisma.MaintenanceUpdateManyWithoutCompanyNestedInput
-  networks?: Prisma.NetworkUpdateManyWithoutCompanyNestedInput
-  departments?: Prisma.DepartmentUpdateManyWithoutCompanyNestedInput
-  networkProviders?: Prisma.NetworkProviderUpdateManyWithoutCompanyNestedInput
-}
-
-export type CompanyUncheckedUpdateWithoutUsersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  equipments?: Prisma.EquipmentUncheckedUpdateManyWithoutCompanyNestedInput
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutCompanyNestedInput
-  licenses?: Prisma.LicenseUncheckedUpdateManyWithoutCompanyNestedInput
-  maintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutCompanyNestedInput
-  networks?: Prisma.NetworkUncheckedUpdateManyWithoutCompanyNestedInput
-  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCompanyNestedInput
-  networkProviders?: Prisma.NetworkProviderUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUpsertWithWhereUniqueWithoutCreatedByInput = {
@@ -827,6 +903,59 @@ export type CompanyScalarWhereInput = {
   createdByUserId?: Prisma.StringNullableFilter<"Company"> | string | null
 }
 
+export type CompanyUpsertWithoutUsersInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutUsersInput, Prisma.CompanyUncheckedUpdateWithoutUsersInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutUsersInput, Prisma.CompanyUncheckedCreateWithoutUsersInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutUsersInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutUsersInput, Prisma.CompanyUncheckedUpdateWithoutUsersInput>
+}
+
+export type CompanyUpdateWithoutUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedCompaniesNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutCompanyNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutCompanyNestedInput
+  equipments?: Prisma.EquipmentUpdateManyWithoutCompanyNestedInput
+  licenses?: Prisma.LicenseUpdateManyWithoutCompanyNestedInput
+  maintenances?: Prisma.MaintenanceUpdateManyWithoutCompanyNestedInput
+  networks?: Prisma.NetworkUpdateManyWithoutCompanyNestedInput
+  networkProviders?: Prisma.NetworkProviderUpdateManyWithoutCompanyNestedInput
+  tickets?: Prisma.TicketUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCompanyNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  equipments?: Prisma.EquipmentUncheckedUpdateManyWithoutCompanyNestedInput
+  licenses?: Prisma.LicenseUncheckedUpdateManyWithoutCompanyNestedInput
+  maintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutCompanyNestedInput
+  networks?: Prisma.NetworkUncheckedUpdateManyWithoutCompanyNestedInput
+  networkProviders?: Prisma.NetworkProviderUncheckedUpdateManyWithoutCompanyNestedInput
+  tickets?: Prisma.TicketUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
 export type CompanyCreateWithoutDepartmentsInput = {
   id?: string
   code?: string
@@ -838,13 +967,14 @@ export type CompanyCreateWithoutDepartmentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedCompaniesInput
-  equipments?: Prisma.EquipmentCreateNestedManyWithoutCompanyInput
-  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
   documents?: Prisma.DocumentCreateNestedManyWithoutCompanyInput
+  equipments?: Prisma.EquipmentCreateNestedManyWithoutCompanyInput
   licenses?: Prisma.LicenseCreateNestedManyWithoutCompanyInput
   maintenances?: Prisma.MaintenanceCreateNestedManyWithoutCompanyInput
   networks?: Prisma.NetworkCreateNestedManyWithoutCompanyInput
   networkProviders?: Prisma.NetworkProviderCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  tickets?: Prisma.TicketCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutDepartmentsInput = {
@@ -858,13 +988,14 @@ export type CompanyUncheckedCreateWithoutDepartmentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   createdByUserId?: string | null
-  equipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCompanyInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutCompanyInput
+  equipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCompanyInput
   licenses?: Prisma.LicenseUncheckedCreateNestedManyWithoutCompanyInput
   maintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutCompanyInput
   networks?: Prisma.NetworkUncheckedCreateNestedManyWithoutCompanyInput
   networkProviders?: Prisma.NetworkProviderUncheckedCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutDepartmentsInput = {
@@ -894,13 +1025,14 @@ export type CompanyUpdateWithoutDepartmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedCompaniesNestedInput
-  equipments?: Prisma.EquipmentUpdateManyWithoutCompanyNestedInput
-  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutCompanyNestedInput
+  equipments?: Prisma.EquipmentUpdateManyWithoutCompanyNestedInput
   licenses?: Prisma.LicenseUpdateManyWithoutCompanyNestedInput
   maintenances?: Prisma.MaintenanceUpdateManyWithoutCompanyNestedInput
   networks?: Prisma.NetworkUpdateManyWithoutCompanyNestedInput
   networkProviders?: Prisma.NetworkProviderUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  tickets?: Prisma.TicketUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutDepartmentsInput = {
@@ -914,13 +1046,14 @@ export type CompanyUncheckedUpdateWithoutDepartmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  equipments?: Prisma.EquipmentUncheckedUpdateManyWithoutCompanyNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  equipments?: Prisma.EquipmentUncheckedUpdateManyWithoutCompanyNestedInput
   licenses?: Prisma.LicenseUncheckedUpdateManyWithoutCompanyNestedInput
   maintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutCompanyNestedInput
   networks?: Prisma.NetworkUncheckedUpdateManyWithoutCompanyNestedInput
   networkProviders?: Prisma.NetworkProviderUncheckedUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  tickets?: Prisma.TicketUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutEquipmentsInput = {
@@ -934,13 +1067,14 @@ export type CompanyCreateWithoutEquipmentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedCompaniesInput
-  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutCompanyInput
   documents?: Prisma.DocumentCreateNestedManyWithoutCompanyInput
   licenses?: Prisma.LicenseCreateNestedManyWithoutCompanyInput
   maintenances?: Prisma.MaintenanceCreateNestedManyWithoutCompanyInput
   networks?: Prisma.NetworkCreateNestedManyWithoutCompanyInput
-  departments?: Prisma.DepartmentCreateNestedManyWithoutCompanyInput
   networkProviders?: Prisma.NetworkProviderCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  tickets?: Prisma.TicketCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutEquipmentsInput = {
@@ -954,13 +1088,14 @@ export type CompanyUncheckedCreateWithoutEquipmentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   createdByUserId?: string | null
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCompanyInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutCompanyInput
   licenses?: Prisma.LicenseUncheckedCreateNestedManyWithoutCompanyInput
   maintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutCompanyInput
   networks?: Prisma.NetworkUncheckedCreateNestedManyWithoutCompanyInput
-  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCompanyInput
   networkProviders?: Prisma.NetworkProviderUncheckedCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutEquipmentsInput = {
@@ -990,13 +1125,14 @@ export type CompanyUpdateWithoutEquipmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedCompaniesNestedInput
-  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutCompanyNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutCompanyNestedInput
   licenses?: Prisma.LicenseUpdateManyWithoutCompanyNestedInput
   maintenances?: Prisma.MaintenanceUpdateManyWithoutCompanyNestedInput
   networks?: Prisma.NetworkUpdateManyWithoutCompanyNestedInput
-  departments?: Prisma.DepartmentUpdateManyWithoutCompanyNestedInput
   networkProviders?: Prisma.NetworkProviderUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  tickets?: Prisma.TicketUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutEquipmentsInput = {
@@ -1010,13 +1146,14 @@ export type CompanyUncheckedUpdateWithoutEquipmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCompanyNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutCompanyNestedInput
   licenses?: Prisma.LicenseUncheckedUpdateManyWithoutCompanyNestedInput
   maintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutCompanyNestedInput
   networks?: Prisma.NetworkUncheckedUpdateManyWithoutCompanyNestedInput
-  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCompanyNestedInput
   networkProviders?: Prisma.NetworkProviderUncheckedUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  tickets?: Prisma.TicketUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutMaintenancesInput = {
@@ -1030,13 +1167,14 @@ export type CompanyCreateWithoutMaintenancesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedCompaniesInput
-  equipments?: Prisma.EquipmentCreateNestedManyWithoutCompanyInput
-  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutCompanyInput
   documents?: Prisma.DocumentCreateNestedManyWithoutCompanyInput
+  equipments?: Prisma.EquipmentCreateNestedManyWithoutCompanyInput
   licenses?: Prisma.LicenseCreateNestedManyWithoutCompanyInput
   networks?: Prisma.NetworkCreateNestedManyWithoutCompanyInput
-  departments?: Prisma.DepartmentCreateNestedManyWithoutCompanyInput
   networkProviders?: Prisma.NetworkProviderCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  tickets?: Prisma.TicketCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutMaintenancesInput = {
@@ -1050,13 +1188,14 @@ export type CompanyUncheckedCreateWithoutMaintenancesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   createdByUserId?: string | null
-  equipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCompanyInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCompanyInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutCompanyInput
+  equipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCompanyInput
   licenses?: Prisma.LicenseUncheckedCreateNestedManyWithoutCompanyInput
   networks?: Prisma.NetworkUncheckedCreateNestedManyWithoutCompanyInput
-  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCompanyInput
   networkProviders?: Prisma.NetworkProviderUncheckedCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutMaintenancesInput = {
@@ -1086,13 +1225,14 @@ export type CompanyUpdateWithoutMaintenancesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedCompaniesNestedInput
-  equipments?: Prisma.EquipmentUpdateManyWithoutCompanyNestedInput
-  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutCompanyNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutCompanyNestedInput
+  equipments?: Prisma.EquipmentUpdateManyWithoutCompanyNestedInput
   licenses?: Prisma.LicenseUpdateManyWithoutCompanyNestedInput
   networks?: Prisma.NetworkUpdateManyWithoutCompanyNestedInput
-  departments?: Prisma.DepartmentUpdateManyWithoutCompanyNestedInput
   networkProviders?: Prisma.NetworkProviderUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  tickets?: Prisma.TicketUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutMaintenancesInput = {
@@ -1106,13 +1246,14 @@ export type CompanyUncheckedUpdateWithoutMaintenancesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  equipments?: Prisma.EquipmentUncheckedUpdateManyWithoutCompanyNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCompanyNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  equipments?: Prisma.EquipmentUncheckedUpdateManyWithoutCompanyNestedInput
   licenses?: Prisma.LicenseUncheckedUpdateManyWithoutCompanyNestedInput
   networks?: Prisma.NetworkUncheckedUpdateManyWithoutCompanyNestedInput
-  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCompanyNestedInput
   networkProviders?: Prisma.NetworkProviderUncheckedUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  tickets?: Prisma.TicketUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutDocumentsInput = {
@@ -1126,13 +1267,14 @@ export type CompanyCreateWithoutDocumentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedCompaniesInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutCompanyInput
   equipments?: Prisma.EquipmentCreateNestedManyWithoutCompanyInput
-  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
   licenses?: Prisma.LicenseCreateNestedManyWithoutCompanyInput
   maintenances?: Prisma.MaintenanceCreateNestedManyWithoutCompanyInput
   networks?: Prisma.NetworkCreateNestedManyWithoutCompanyInput
-  departments?: Prisma.DepartmentCreateNestedManyWithoutCompanyInput
   networkProviders?: Prisma.NetworkProviderCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  tickets?: Prisma.TicketCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutDocumentsInput = {
@@ -1146,13 +1288,14 @@ export type CompanyUncheckedCreateWithoutDocumentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   createdByUserId?: string | null
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCompanyInput
   equipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCompanyInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
   licenses?: Prisma.LicenseUncheckedCreateNestedManyWithoutCompanyInput
   maintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutCompanyInput
   networks?: Prisma.NetworkUncheckedCreateNestedManyWithoutCompanyInput
-  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCompanyInput
   networkProviders?: Prisma.NetworkProviderUncheckedCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutDocumentsInput = {
@@ -1182,13 +1325,14 @@ export type CompanyUpdateWithoutDocumentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedCompaniesNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutCompanyNestedInput
   equipments?: Prisma.EquipmentUpdateManyWithoutCompanyNestedInput
-  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
   licenses?: Prisma.LicenseUpdateManyWithoutCompanyNestedInput
   maintenances?: Prisma.MaintenanceUpdateManyWithoutCompanyNestedInput
   networks?: Prisma.NetworkUpdateManyWithoutCompanyNestedInput
-  departments?: Prisma.DepartmentUpdateManyWithoutCompanyNestedInput
   networkProviders?: Prisma.NetworkProviderUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  tickets?: Prisma.TicketUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutDocumentsInput = {
@@ -1202,13 +1346,14 @@ export type CompanyUncheckedUpdateWithoutDocumentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCompanyNestedInput
   equipments?: Prisma.EquipmentUncheckedUpdateManyWithoutCompanyNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
   licenses?: Prisma.LicenseUncheckedUpdateManyWithoutCompanyNestedInput
   maintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutCompanyNestedInput
   networks?: Prisma.NetworkUncheckedUpdateManyWithoutCompanyNestedInput
-  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCompanyNestedInput
   networkProviders?: Prisma.NetworkProviderUncheckedUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  tickets?: Prisma.TicketUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutLicensesInput = {
@@ -1222,13 +1367,14 @@ export type CompanyCreateWithoutLicensesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedCompaniesInput
-  equipments?: Prisma.EquipmentCreateNestedManyWithoutCompanyInput
-  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutCompanyInput
   documents?: Prisma.DocumentCreateNestedManyWithoutCompanyInput
+  equipments?: Prisma.EquipmentCreateNestedManyWithoutCompanyInput
   maintenances?: Prisma.MaintenanceCreateNestedManyWithoutCompanyInput
   networks?: Prisma.NetworkCreateNestedManyWithoutCompanyInput
-  departments?: Prisma.DepartmentCreateNestedManyWithoutCompanyInput
   networkProviders?: Prisma.NetworkProviderCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  tickets?: Prisma.TicketCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutLicensesInput = {
@@ -1242,13 +1388,14 @@ export type CompanyUncheckedCreateWithoutLicensesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   createdByUserId?: string | null
-  equipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCompanyInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCompanyInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutCompanyInput
+  equipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCompanyInput
   maintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutCompanyInput
   networks?: Prisma.NetworkUncheckedCreateNestedManyWithoutCompanyInput
-  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCompanyInput
   networkProviders?: Prisma.NetworkProviderUncheckedCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutLicensesInput = {
@@ -1278,13 +1425,14 @@ export type CompanyUpdateWithoutLicensesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedCompaniesNestedInput
-  equipments?: Prisma.EquipmentUpdateManyWithoutCompanyNestedInput
-  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutCompanyNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutCompanyNestedInput
+  equipments?: Prisma.EquipmentUpdateManyWithoutCompanyNestedInput
   maintenances?: Prisma.MaintenanceUpdateManyWithoutCompanyNestedInput
   networks?: Prisma.NetworkUpdateManyWithoutCompanyNestedInput
-  departments?: Prisma.DepartmentUpdateManyWithoutCompanyNestedInput
   networkProviders?: Prisma.NetworkProviderUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  tickets?: Prisma.TicketUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutLicensesInput = {
@@ -1298,13 +1446,14 @@ export type CompanyUncheckedUpdateWithoutLicensesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  equipments?: Prisma.EquipmentUncheckedUpdateManyWithoutCompanyNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCompanyNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  equipments?: Prisma.EquipmentUncheckedUpdateManyWithoutCompanyNestedInput
   maintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutCompanyNestedInput
   networks?: Prisma.NetworkUncheckedUpdateManyWithoutCompanyNestedInput
-  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCompanyNestedInput
   networkProviders?: Prisma.NetworkProviderUncheckedUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  tickets?: Prisma.TicketUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutNetworkProvidersInput = {
@@ -1318,13 +1467,14 @@ export type CompanyCreateWithoutNetworkProvidersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedCompaniesInput
-  equipments?: Prisma.EquipmentCreateNestedManyWithoutCompanyInput
-  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutCompanyInput
   documents?: Prisma.DocumentCreateNestedManyWithoutCompanyInput
+  equipments?: Prisma.EquipmentCreateNestedManyWithoutCompanyInput
   licenses?: Prisma.LicenseCreateNestedManyWithoutCompanyInput
   maintenances?: Prisma.MaintenanceCreateNestedManyWithoutCompanyInput
   networks?: Prisma.NetworkCreateNestedManyWithoutCompanyInput
-  departments?: Prisma.DepartmentCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  tickets?: Prisma.TicketCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutNetworkProvidersInput = {
@@ -1338,13 +1488,14 @@ export type CompanyUncheckedCreateWithoutNetworkProvidersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   createdByUserId?: string | null
-  equipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCompanyInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCompanyInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutCompanyInput
+  equipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCompanyInput
   licenses?: Prisma.LicenseUncheckedCreateNestedManyWithoutCompanyInput
   maintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutCompanyInput
   networks?: Prisma.NetworkUncheckedCreateNestedManyWithoutCompanyInput
-  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutNetworkProvidersInput = {
@@ -1374,13 +1525,14 @@ export type CompanyUpdateWithoutNetworkProvidersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedCompaniesNestedInput
-  equipments?: Prisma.EquipmentUpdateManyWithoutCompanyNestedInput
-  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutCompanyNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutCompanyNestedInput
+  equipments?: Prisma.EquipmentUpdateManyWithoutCompanyNestedInput
   licenses?: Prisma.LicenseUpdateManyWithoutCompanyNestedInput
   maintenances?: Prisma.MaintenanceUpdateManyWithoutCompanyNestedInput
   networks?: Prisma.NetworkUpdateManyWithoutCompanyNestedInput
-  departments?: Prisma.DepartmentUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  tickets?: Prisma.TicketUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutNetworkProvidersInput = {
@@ -1394,13 +1546,14 @@ export type CompanyUncheckedUpdateWithoutNetworkProvidersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  equipments?: Prisma.EquipmentUncheckedUpdateManyWithoutCompanyNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCompanyNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  equipments?: Prisma.EquipmentUncheckedUpdateManyWithoutCompanyNestedInput
   licenses?: Prisma.LicenseUncheckedUpdateManyWithoutCompanyNestedInput
   maintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutCompanyNestedInput
   networks?: Prisma.NetworkUncheckedUpdateManyWithoutCompanyNestedInput
-  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  tickets?: Prisma.TicketUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutNetworksInput = {
@@ -1414,13 +1567,14 @@ export type CompanyCreateWithoutNetworksInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedCompaniesInput
-  equipments?: Prisma.EquipmentCreateNestedManyWithoutCompanyInput
-  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutCompanyInput
   documents?: Prisma.DocumentCreateNestedManyWithoutCompanyInput
+  equipments?: Prisma.EquipmentCreateNestedManyWithoutCompanyInput
   licenses?: Prisma.LicenseCreateNestedManyWithoutCompanyInput
   maintenances?: Prisma.MaintenanceCreateNestedManyWithoutCompanyInput
-  departments?: Prisma.DepartmentCreateNestedManyWithoutCompanyInput
   networkProviders?: Prisma.NetworkProviderCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  tickets?: Prisma.TicketCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutNetworksInput = {
@@ -1434,13 +1588,14 @@ export type CompanyUncheckedCreateWithoutNetworksInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   createdByUserId?: string | null
-  equipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCompanyInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCompanyInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutCompanyInput
+  equipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCompanyInput
   licenses?: Prisma.LicenseUncheckedCreateNestedManyWithoutCompanyInput
   maintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutCompanyInput
-  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCompanyInput
   networkProviders?: Prisma.NetworkProviderUncheckedCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutNetworksInput = {
@@ -1470,13 +1625,14 @@ export type CompanyUpdateWithoutNetworksInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutCreatedCompaniesNestedInput
-  equipments?: Prisma.EquipmentUpdateManyWithoutCompanyNestedInput
-  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutCompanyNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutCompanyNestedInput
+  equipments?: Prisma.EquipmentUpdateManyWithoutCompanyNestedInput
   licenses?: Prisma.LicenseUpdateManyWithoutCompanyNestedInput
   maintenances?: Prisma.MaintenanceUpdateManyWithoutCompanyNestedInput
-  departments?: Prisma.DepartmentUpdateManyWithoutCompanyNestedInput
   networkProviders?: Prisma.NetworkProviderUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  tickets?: Prisma.TicketUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutNetworksInput = {
@@ -1490,13 +1646,14 @@ export type CompanyUncheckedUpdateWithoutNetworksInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  equipments?: Prisma.EquipmentUncheckedUpdateManyWithoutCompanyNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCompanyNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  equipments?: Prisma.EquipmentUncheckedUpdateManyWithoutCompanyNestedInput
   licenses?: Prisma.LicenseUncheckedUpdateManyWithoutCompanyNestedInput
   maintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutCompanyNestedInput
-  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCompanyNestedInput
   networkProviders?: Prisma.NetworkProviderUncheckedUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  tickets?: Prisma.TicketUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateManyCreatedByInput = {
@@ -1521,14 +1678,15 @@ export type CompanyUpdateWithoutCreatedByInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  equipments?: Prisma.EquipmentUpdateManyWithoutCompanyNestedInput
-  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutCompanyNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutCompanyNestedInput
+  equipments?: Prisma.EquipmentUpdateManyWithoutCompanyNestedInput
   licenses?: Prisma.LicenseUpdateManyWithoutCompanyNestedInput
   maintenances?: Prisma.MaintenanceUpdateManyWithoutCompanyNestedInput
   networks?: Prisma.NetworkUpdateManyWithoutCompanyNestedInput
-  departments?: Prisma.DepartmentUpdateManyWithoutCompanyNestedInput
   networkProviders?: Prisma.NetworkProviderUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  tickets?: Prisma.TicketUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutCreatedByInput = {
@@ -1541,14 +1699,15 @@ export type CompanyUncheckedUpdateWithoutCreatedByInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  equipments?: Prisma.EquipmentUncheckedUpdateManyWithoutCompanyNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCompanyNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  equipments?: Prisma.EquipmentUncheckedUpdateManyWithoutCompanyNestedInput
   licenses?: Prisma.LicenseUncheckedUpdateManyWithoutCompanyNestedInput
   maintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutCompanyNestedInput
   networks?: Prisma.NetworkUncheckedUpdateManyWithoutCompanyNestedInput
-  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutCompanyNestedInput
   networkProviders?: Prisma.NetworkProviderUncheckedUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  tickets?: Prisma.TicketUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateManyWithoutCreatedByInput = {
@@ -1569,25 +1728,27 @@ export type CompanyUncheckedUpdateManyWithoutCreatedByInput = {
  */
 
 export type CompanyCountOutputType = {
-  equipments: number
-  users: number
+  departments: number
   documents: number
+  equipments: number
   licenses: number
   maintenances: number
   networks: number
-  departments: number
   networkProviders: number
+  users: number
+  tickets: number
 }
 
 export type CompanyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  equipments?: boolean | CompanyCountOutputTypeCountEquipmentsArgs
-  users?: boolean | CompanyCountOutputTypeCountUsersArgs
+  departments?: boolean | CompanyCountOutputTypeCountDepartmentsArgs
   documents?: boolean | CompanyCountOutputTypeCountDocumentsArgs
+  equipments?: boolean | CompanyCountOutputTypeCountEquipmentsArgs
   licenses?: boolean | CompanyCountOutputTypeCountLicensesArgs
   maintenances?: boolean | CompanyCountOutputTypeCountMaintenancesArgs
   networks?: boolean | CompanyCountOutputTypeCountNetworksArgs
-  departments?: boolean | CompanyCountOutputTypeCountDepartmentsArgs
   networkProviders?: boolean | CompanyCountOutputTypeCountNetworkProvidersArgs
+  users?: boolean | CompanyCountOutputTypeCountUsersArgs
+  tickets?: boolean | CompanyCountOutputTypeCountTicketsArgs
 }
 
 /**
@@ -1603,15 +1764,8 @@ export type CompanyCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
 /**
  * CompanyCountOutputType without action
  */
-export type CompanyCountOutputTypeCountEquipmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.EquipmentWhereInput
-}
-
-/**
- * CompanyCountOutputType without action
- */
-export type CompanyCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.UserWhereInput
+export type CompanyCountOutputTypeCountDepartmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DepartmentWhereInput
 }
 
 /**
@@ -1619,6 +1773,13 @@ export type CompanyCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.E
  */
 export type CompanyCountOutputTypeCountDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.DocumentWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountEquipmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EquipmentWhereInput
 }
 
 /**
@@ -1645,15 +1806,22 @@ export type CompanyCountOutputTypeCountNetworksArgs<ExtArgs extends runtime.Type
 /**
  * CompanyCountOutputType without action
  */
-export type CompanyCountOutputTypeCountDepartmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.DepartmentWhereInput
+export type CompanyCountOutputTypeCountNetworkProvidersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NetworkProviderWhereInput
 }
 
 /**
  * CompanyCountOutputType without action
  */
-export type CompanyCountOutputTypeCountNetworkProvidersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.NetworkProviderWhereInput
+export type CompanyCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TicketWhereInput
 }
 
 
@@ -1669,14 +1837,15 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   updatedAt?: boolean
   createdByUserId?: boolean
   createdBy?: boolean | Prisma.Company$createdByArgs<ExtArgs>
-  equipments?: boolean | Prisma.Company$equipmentsArgs<ExtArgs>
-  users?: boolean | Prisma.Company$usersArgs<ExtArgs>
+  departments?: boolean | Prisma.Company$departmentsArgs<ExtArgs>
   documents?: boolean | Prisma.Company$documentsArgs<ExtArgs>
+  equipments?: boolean | Prisma.Company$equipmentsArgs<ExtArgs>
   licenses?: boolean | Prisma.Company$licensesArgs<ExtArgs>
   maintenances?: boolean | Prisma.Company$maintenancesArgs<ExtArgs>
   networks?: boolean | Prisma.Company$networksArgs<ExtArgs>
-  departments?: boolean | Prisma.Company$departmentsArgs<ExtArgs>
   networkProviders?: boolean | Prisma.Company$networkProvidersArgs<ExtArgs>
+  users?: boolean | Prisma.Company$usersArgs<ExtArgs>
+  tickets?: boolean | Prisma.Company$ticketsArgs<ExtArgs>
   _count?: boolean | Prisma.CompanyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["company"]>
 
@@ -1724,14 +1893,15 @@ export type CompanySelectScalar = {
 export type CompanyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "name" | "address" | "phone" | "email" | "isActive" | "createdAt" | "updatedAt" | "createdByUserId", ExtArgs["result"]["company"]>
 export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.Company$createdByArgs<ExtArgs>
-  equipments?: boolean | Prisma.Company$equipmentsArgs<ExtArgs>
-  users?: boolean | Prisma.Company$usersArgs<ExtArgs>
+  departments?: boolean | Prisma.Company$departmentsArgs<ExtArgs>
   documents?: boolean | Prisma.Company$documentsArgs<ExtArgs>
+  equipments?: boolean | Prisma.Company$equipmentsArgs<ExtArgs>
   licenses?: boolean | Prisma.Company$licensesArgs<ExtArgs>
   maintenances?: boolean | Prisma.Company$maintenancesArgs<ExtArgs>
   networks?: boolean | Prisma.Company$networksArgs<ExtArgs>
-  departments?: boolean | Prisma.Company$departmentsArgs<ExtArgs>
   networkProviders?: boolean | Prisma.Company$networkProvidersArgs<ExtArgs>
+  users?: boolean | Prisma.Company$usersArgs<ExtArgs>
+  tickets?: boolean | Prisma.Company$ticketsArgs<ExtArgs>
   _count?: boolean | Prisma.CompanyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CompanyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1745,14 +1915,15 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   name: "Company"
   objects: {
     createdBy: Prisma.$UserPayload<ExtArgs> | null
-    equipments: Prisma.$EquipmentPayload<ExtArgs>[]
-    users: Prisma.$UserPayload<ExtArgs>[]
+    departments: Prisma.$DepartmentPayload<ExtArgs>[]
     documents: Prisma.$DocumentPayload<ExtArgs>[]
+    equipments: Prisma.$EquipmentPayload<ExtArgs>[]
     licenses: Prisma.$LicensePayload<ExtArgs>[]
     maintenances: Prisma.$MaintenancePayload<ExtArgs>[]
     networks: Prisma.$NetworkPayload<ExtArgs>[]
-    departments: Prisma.$DepartmentPayload<ExtArgs>[]
     networkProviders: Prisma.$NetworkProviderPayload<ExtArgs>[]
+    users: Prisma.$UserPayload<ExtArgs>[]
+    tickets: Prisma.$TicketPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2160,14 +2331,15 @@ readonly fields: CompanyFieldRefs;
 export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   createdBy<T extends Prisma.Company$createdByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$createdByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  equipments<T extends Prisma.Company$equipmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$equipmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EquipmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  users<T extends Prisma.Company$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  departments<T extends Prisma.Company$departmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$departmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   documents<T extends Prisma.Company$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  equipments<T extends Prisma.Company$equipmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$equipmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EquipmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   licenses<T extends Prisma.Company$licensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$licensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LicensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   maintenances<T extends Prisma.Company$maintenancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$maintenancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MaintenancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   networks<T extends Prisma.Company$networksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$networksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NetworkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  departments<T extends Prisma.Company$departmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$departmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   networkProviders<T extends Prisma.Company$networkProvidersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$networkProvidersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NetworkProviderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  users<T extends Prisma.Company$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tickets<T extends Prisma.Company$ticketsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$ticketsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2622,51 +2794,27 @@ export type Company$createdByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Company.equipments
+ * Company.departments
  */
-export type Company$equipmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Company$departmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Equipment
+   * Select specific fields to fetch from the Department
    */
-  select?: Prisma.EquipmentSelect<ExtArgs> | null
+  select?: Prisma.DepartmentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Equipment
+   * Omit specific fields from the Department
    */
-  omit?: Prisma.EquipmentOmit<ExtArgs> | null
+  omit?: Prisma.DepartmentOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.EquipmentInclude<ExtArgs> | null
-  where?: Prisma.EquipmentWhereInput
-  orderBy?: Prisma.EquipmentOrderByWithRelationInput | Prisma.EquipmentOrderByWithRelationInput[]
-  cursor?: Prisma.EquipmentWhereUniqueInput
+  include?: Prisma.DepartmentInclude<ExtArgs> | null
+  where?: Prisma.DepartmentWhereInput
+  orderBy?: Prisma.DepartmentOrderByWithRelationInput | Prisma.DepartmentOrderByWithRelationInput[]
+  cursor?: Prisma.DepartmentWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.EquipmentScalarFieldEnum | Prisma.EquipmentScalarFieldEnum[]
-}
-
-/**
- * Company.users
- */
-export type Company$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the User
-   */
-  select?: Prisma.UserSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the User
-   */
-  omit?: Prisma.UserOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
-  orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[]
-  cursor?: Prisma.UserWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+  distinct?: Prisma.DepartmentScalarFieldEnum | Prisma.DepartmentScalarFieldEnum[]
 }
 
 /**
@@ -2691,6 +2839,30 @@ export type Company$documentsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.DocumentScalarFieldEnum | Prisma.DocumentScalarFieldEnum[]
+}
+
+/**
+ * Company.equipments
+ */
+export type Company$equipmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Equipment
+   */
+  select?: Prisma.EquipmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Equipment
+   */
+  omit?: Prisma.EquipmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EquipmentInclude<ExtArgs> | null
+  where?: Prisma.EquipmentWhereInput
+  orderBy?: Prisma.EquipmentOrderByWithRelationInput | Prisma.EquipmentOrderByWithRelationInput[]
+  cursor?: Prisma.EquipmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EquipmentScalarFieldEnum | Prisma.EquipmentScalarFieldEnum[]
 }
 
 /**
@@ -2766,30 +2938,6 @@ export type Company$networksArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * Company.departments
- */
-export type Company$departmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Department
-   */
-  select?: Prisma.DepartmentSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Department
-   */
-  omit?: Prisma.DepartmentOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.DepartmentInclude<ExtArgs> | null
-  where?: Prisma.DepartmentWhereInput
-  orderBy?: Prisma.DepartmentOrderByWithRelationInput | Prisma.DepartmentOrderByWithRelationInput[]
-  cursor?: Prisma.DepartmentWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.DepartmentScalarFieldEnum | Prisma.DepartmentScalarFieldEnum[]
-}
-
-/**
  * Company.networkProviders
  */
 export type Company$networkProvidersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2811,6 +2959,54 @@ export type Company$networkProvidersArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.NetworkProviderScalarFieldEnum | Prisma.NetworkProviderScalarFieldEnum[]
+}
+
+/**
+ * Company.users
+ */
+export type Company$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+  orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[]
+  cursor?: Prisma.UserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+}
+
+/**
+ * Company.tickets
+ */
+export type Company$ticketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Ticket
+   */
+  select?: Prisma.TicketSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Ticket
+   */
+  omit?: Prisma.TicketOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TicketInclude<ExtArgs> | null
+  where?: Prisma.TicketWhereInput
+  orderBy?: Prisma.TicketOrderByWithRelationInput | Prisma.TicketOrderByWithRelationInput[]
+  cursor?: Prisma.TicketWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TicketScalarFieldEnum | Prisma.TicketScalarFieldEnum[]
 }
 
 /**

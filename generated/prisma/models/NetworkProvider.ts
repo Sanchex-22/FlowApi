@@ -44,9 +44,9 @@ export type NetworkProviderMinAggregateOutputType = {
   notes: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  companyId: string | null
   meshDevices: string | null
   switchDevices: string | null
+  companyId: string | null
 }
 
 export type NetworkProviderMaxAggregateOutputType = {
@@ -59,9 +59,9 @@ export type NetworkProviderMaxAggregateOutputType = {
   notes: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  companyId: string | null
   meshDevices: string | null
   switchDevices: string | null
+  companyId: string | null
 }
 
 export type NetworkProviderCountAggregateOutputType = {
@@ -74,9 +74,9 @@ export type NetworkProviderCountAggregateOutputType = {
   notes: number
   createdAt: number
   updatedAt: number
-  companyId: number
   meshDevices: number
   switchDevices: number
+  companyId: number
   _all: number
 }
 
@@ -99,9 +99,9 @@ export type NetworkProviderMinAggregateInputType = {
   notes?: true
   createdAt?: true
   updatedAt?: true
-  companyId?: true
   meshDevices?: true
   switchDevices?: true
+  companyId?: true
 }
 
 export type NetworkProviderMaxAggregateInputType = {
@@ -114,9 +114,9 @@ export type NetworkProviderMaxAggregateInputType = {
   notes?: true
   createdAt?: true
   updatedAt?: true
-  companyId?: true
   meshDevices?: true
   switchDevices?: true
+  companyId?: true
 }
 
 export type NetworkProviderCountAggregateInputType = {
@@ -129,9 +129,9 @@ export type NetworkProviderCountAggregateInputType = {
   notes?: true
   createdAt?: true
   updatedAt?: true
-  companyId?: true
   meshDevices?: true
   switchDevices?: true
+  companyId?: true
   _all?: true
 }
 
@@ -231,9 +231,9 @@ export type NetworkProviderGroupByOutputType = {
   notes: string | null
   createdAt: Date
   updatedAt: Date
-  companyId: string
   meshDevices: string | null
   switchDevices: string | null
+  companyId: string
   _count: NetworkProviderCountAggregateOutputType | null
   _avg: NetworkProviderAvgAggregateOutputType | null
   _sum: NetworkProviderSumAggregateOutputType | null
@@ -269,11 +269,11 @@ export type NetworkProviderWhereInput = {
   notes?: Prisma.StringNullableFilter<"NetworkProvider"> | string | null
   createdAt?: Prisma.DateTimeFilter<"NetworkProvider"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NetworkProvider"> | Date | string
-  companyId?: Prisma.StringFilter<"NetworkProvider"> | string
   meshDevices?: Prisma.StringNullableFilter<"NetworkProvider"> | string | null
   switchDevices?: Prisma.StringNullableFilter<"NetworkProvider"> | string | null
-  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
+  companyId?: Prisma.StringFilter<"NetworkProvider"> | string
   networks?: Prisma.NetworkListRelationFilter
+  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
 }
 
 export type NetworkProviderOrderByWithRelationInput = {
@@ -286,11 +286,11 @@ export type NetworkProviderOrderByWithRelationInput = {
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  companyId?: Prisma.SortOrder
   meshDevices?: Prisma.SortOrderInput | Prisma.SortOrder
   switchDevices?: Prisma.SortOrderInput | Prisma.SortOrder
-  company?: Prisma.CompanyOrderByWithRelationInput
+  companyId?: Prisma.SortOrder
   networks?: Prisma.NetworkOrderByRelationAggregateInput
+  company?: Prisma.CompanyOrderByWithRelationInput
 }
 
 export type NetworkProviderWhereUniqueInput = Prisma.AtLeast<{
@@ -307,11 +307,11 @@ export type NetworkProviderWhereUniqueInput = Prisma.AtLeast<{
   notes?: Prisma.StringNullableFilter<"NetworkProvider"> | string | null
   createdAt?: Prisma.DateTimeFilter<"NetworkProvider"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NetworkProvider"> | Date | string
-  companyId?: Prisma.StringFilter<"NetworkProvider"> | string
   meshDevices?: Prisma.StringNullableFilter<"NetworkProvider"> | string | null
   switchDevices?: Prisma.StringNullableFilter<"NetworkProvider"> | string | null
-  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
+  companyId?: Prisma.StringFilter<"NetworkProvider"> | string
   networks?: Prisma.NetworkListRelationFilter
+  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
 }, "id" | "name_companyId">
 
 export type NetworkProviderOrderByWithAggregationInput = {
@@ -324,9 +324,9 @@ export type NetworkProviderOrderByWithAggregationInput = {
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  companyId?: Prisma.SortOrder
   meshDevices?: Prisma.SortOrderInput | Prisma.SortOrder
   switchDevices?: Prisma.SortOrderInput | Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   _count?: Prisma.NetworkProviderCountOrderByAggregateInput
   _avg?: Prisma.NetworkProviderAvgOrderByAggregateInput
   _max?: Prisma.NetworkProviderMaxOrderByAggregateInput
@@ -347,9 +347,9 @@ export type NetworkProviderScalarWhereWithAggregatesInput = {
   notes?: Prisma.StringNullableWithAggregatesFilter<"NetworkProvider"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"NetworkProvider"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"NetworkProvider"> | Date | string
-  companyId?: Prisma.StringWithAggregatesFilter<"NetworkProvider"> | string
   meshDevices?: Prisma.StringNullableWithAggregatesFilter<"NetworkProvider"> | string | null
   switchDevices?: Prisma.StringNullableWithAggregatesFilter<"NetworkProvider"> | string | null
+  companyId?: Prisma.StringWithAggregatesFilter<"NetworkProvider"> | string
 }
 
 export type NetworkProviderCreateInput = {
@@ -364,8 +364,8 @@ export type NetworkProviderCreateInput = {
   updatedAt?: Date | string
   meshDevices?: string | null
   switchDevices?: string | null
-  company: Prisma.CompanyCreateNestedOneWithoutNetworkProvidersInput
   networks?: Prisma.NetworkCreateNestedManyWithoutProviderInput
+  company: Prisma.CompanyCreateNestedOneWithoutNetworkProvidersInput
 }
 
 export type NetworkProviderUncheckedCreateInput = {
@@ -378,9 +378,9 @@ export type NetworkProviderUncheckedCreateInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  companyId: string
   meshDevices?: string | null
   switchDevices?: string | null
+  companyId: string
   networks?: Prisma.NetworkUncheckedCreateNestedManyWithoutProviderInput
 }
 
@@ -396,8 +396,8 @@ export type NetworkProviderUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   meshDevices?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   switchDevices?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  company?: Prisma.CompanyUpdateOneRequiredWithoutNetworkProvidersNestedInput
   networks?: Prisma.NetworkUpdateManyWithoutProviderNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutNetworkProvidersNestedInput
 }
 
 export type NetworkProviderUncheckedUpdateInput = {
@@ -410,9 +410,9 @@ export type NetworkProviderUncheckedUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   meshDevices?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   switchDevices?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   networks?: Prisma.NetworkUncheckedUpdateManyWithoutProviderNestedInput
 }
 
@@ -426,9 +426,9 @@ export type NetworkProviderCreateManyInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  companyId: string
   meshDevices?: string | null
   switchDevices?: string | null
+  companyId: string
 }
 
 export type NetworkProviderUpdateManyMutationInput = {
@@ -455,9 +455,9 @@ export type NetworkProviderUncheckedUpdateManyInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   meshDevices?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   switchDevices?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type NetworkProviderListRelationFilter = {
@@ -485,9 +485,9 @@ export type NetworkProviderCountOrderByAggregateInput = {
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  companyId?: Prisma.SortOrder
   meshDevices?: Prisma.SortOrder
   switchDevices?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
 }
 
 export type NetworkProviderAvgOrderByAggregateInput = {
@@ -504,9 +504,9 @@ export type NetworkProviderMaxOrderByAggregateInput = {
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  companyId?: Prisma.SortOrder
   meshDevices?: Prisma.SortOrder
   switchDevices?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
 }
 
 export type NetworkProviderMinOrderByAggregateInput = {
@@ -519,9 +519,9 @@ export type NetworkProviderMinOrderByAggregateInput = {
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  companyId?: Prisma.SortOrder
   meshDevices?: Prisma.SortOrder
   switchDevices?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
 }
 
 export type NetworkProviderSumOrderByAggregateInput = {
@@ -660,9 +660,9 @@ export type NetworkProviderScalarWhereInput = {
   notes?: Prisma.StringNullableFilter<"NetworkProvider"> | string | null
   createdAt?: Prisma.DateTimeFilter<"NetworkProvider"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NetworkProvider"> | Date | string
-  companyId?: Prisma.StringFilter<"NetworkProvider"> | string
   meshDevices?: Prisma.StringNullableFilter<"NetworkProvider"> | string | null
   switchDevices?: Prisma.StringNullableFilter<"NetworkProvider"> | string | null
+  companyId?: Prisma.StringFilter<"NetworkProvider"> | string
 }
 
 export type NetworkProviderCreateWithoutNetworksInput = {
@@ -690,9 +690,9 @@ export type NetworkProviderUncheckedCreateWithoutNetworksInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  companyId: string
   meshDevices?: string | null
   switchDevices?: string | null
+  companyId: string
 }
 
 export type NetworkProviderCreateOrConnectWithoutNetworksInput = {
@@ -736,9 +736,9 @@ export type NetworkProviderUncheckedUpdateWithoutNetworksInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   meshDevices?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   switchDevices?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type NetworkProviderCreateManyCompanyInput = {
@@ -840,11 +840,11 @@ export type NetworkProviderSelect<ExtArgs extends runtime.Types.Extensions.Inter
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  companyId?: boolean
   meshDevices?: boolean
   switchDevices?: boolean
-  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  companyId?: boolean
   networks?: boolean | Prisma.NetworkProvider$networksArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.NetworkProviderCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["networkProvider"]>
 
@@ -858,9 +858,9 @@ export type NetworkProviderSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  companyId?: boolean
   meshDevices?: boolean
   switchDevices?: boolean
+  companyId?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["networkProvider"]>
 
@@ -874,9 +874,9 @@ export type NetworkProviderSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  companyId?: boolean
   meshDevices?: boolean
   switchDevices?: boolean
+  companyId?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["networkProvider"]>
 
@@ -890,15 +890,15 @@ export type NetworkProviderSelectScalar = {
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  companyId?: boolean
   meshDevices?: boolean
   switchDevices?: boolean
+  companyId?: boolean
 }
 
-export type NetworkProviderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "providerIp" | "dnsGateway" | "speed" | "cost" | "notes" | "createdAt" | "updatedAt" | "companyId" | "meshDevices" | "switchDevices", ExtArgs["result"]["networkProvider"]>
+export type NetworkProviderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "providerIp" | "dnsGateway" | "speed" | "cost" | "notes" | "createdAt" | "updatedAt" | "meshDevices" | "switchDevices" | "companyId", ExtArgs["result"]["networkProvider"]>
 export type NetworkProviderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   networks?: boolean | Prisma.NetworkProvider$networksArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.NetworkProviderCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type NetworkProviderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -911,8 +911,8 @@ export type NetworkProviderIncludeUpdateManyAndReturn<ExtArgs extends runtime.Ty
 export type $NetworkProviderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "NetworkProvider"
   objects: {
-    company: Prisma.$CompanyPayload<ExtArgs>
     networks: Prisma.$NetworkPayload<ExtArgs>[]
+    company: Prisma.$CompanyPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -924,9 +924,9 @@ export type $NetworkProviderPayload<ExtArgs extends runtime.Types.Extensions.Int
     notes: string | null
     createdAt: Date
     updatedAt: Date
-    companyId: string
     meshDevices: string | null
     switchDevices: string | null
+    companyId: string
   }, ExtArgs["result"]["networkProvider"]>
   composites: {}
 }
@@ -1321,8 +1321,8 @@ readonly fields: NetworkProviderFieldRefs;
  */
 export interface Prisma__NetworkProviderClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   networks<T extends Prisma.NetworkProvider$networksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NetworkProvider$networksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NetworkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1361,9 +1361,9 @@ export interface NetworkProviderFieldRefs {
   readonly notes: Prisma.FieldRef<"NetworkProvider", 'String'>
   readonly createdAt: Prisma.FieldRef<"NetworkProvider", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"NetworkProvider", 'DateTime'>
-  readonly companyId: Prisma.FieldRef<"NetworkProvider", 'String'>
   readonly meshDevices: Prisma.FieldRef<"NetworkProvider", 'String'>
   readonly switchDevices: Prisma.FieldRef<"NetworkProvider", 'String'>
+  readonly companyId: Prisma.FieldRef<"NetworkProvider", 'String'>
 }
     
 

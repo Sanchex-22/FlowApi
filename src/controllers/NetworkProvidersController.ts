@@ -61,6 +61,7 @@ export class NetworkProvidersController {
       res.status(500).json({ error: 'Error interno del servidor al obtener los proveedores.', details: error.message });
     }
   }
+  
   async getNetworkByCompanyCode(req: Request, res: Response) {
     const { companyId } = req.params;
     try {

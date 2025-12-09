@@ -24,11 +24,16 @@ model Ticket {
   view         Boolean?
   sendById     String?
   sendToId     String?
+  companyId    String?
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   reviewed     Boolean?
-  sendBy       User?          @relation("TicketsSentBy", fields: [sendById], references: [id], onDelete: Cascade)
-  sendTo       User?          @relation("TicketsSentTo", fields: [sendToId], references: [id], onDelete: Cascade)
+  // No cascada: El usuario no se elimina si se elimina el ticket
+  sendBy       User?          @relation("TicketsSentBy", fields: [sendById], references: [id], onDelete: SetNull)
+  // No cascada: El usuario no se elimina si se elimina el ticket
+  sendTo       User?          @relation("TicketsSentTo", fields: [sendToId], references: [id], onDelete: SetNull)
+  // ⚠️ NO CASCADE: Si se elimina la compañía, el ticket se desasocia (companyId pasa a null)
+  company      Company?       @relation(fields: [companyId], references: [id], onDelete: SetNull)
 }
 
 model User {
@@ -100,6 +105,8 @@ model Company {
   networkProviders NetworkProvider[] 
   // ⚠️ NO CASCADE: Solo desasociar usuarios
   users            User[]            @relation("CompanyUsers")
+  // ⚠️ NO CASCADE: Si se elimina la compañía, los tickets se desasocian (companyId pasa a null)
+  tickets          Ticket[]
 }
 
 model Department {
