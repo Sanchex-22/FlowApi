@@ -1,6 +1,5 @@
 // src/middlewares/errorHandler.ts
-import { Prisma } from "@prisma/client";
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from 'express';
 
 export function errorMiddleware(err: any, req: Request, res: Response, next: NextFunction) {
   // 🔹 Evita "headers already sent"
@@ -10,7 +9,7 @@ export function errorMiddleware(err: any, req: Request, res: Response, next: Nex
 
   console.error("⚠️ Error capturado:", err.code);
 
-  if (err instanceof Prisma.PrismaClientKnownRequestError) {
+  if (err) {
     switch (err.code) {
       case "P2002":
         console.error("Registro duplicado");

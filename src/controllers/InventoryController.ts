@@ -1,10 +1,7 @@
 import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
 import csvParser from 'csv-parser';
-import { Readable } from 'stream';
 import formidable from 'formidable';
-
-const prisma = new PrismaClient();
+import { prisma } from '../../lib/prisma.js';
 
 export class InventoryController {
 
@@ -186,7 +183,7 @@ export class InventoryController {
             console.log("📄 Leyendo archivo desde:", csvFile.filepath);
 
             const results: any[] = [];
-            const errors: { row: number; message: string }[] = [];
+            const errors: { row: number; serialNumber?: string; message: string }[] = [];
             let rowIndex = 1;
 
             import("fs").then((fs) => {
@@ -203,18 +200,28 @@ export class InventoryController {
                         console.log(`➡️ FILA ${rowIndex} cruda:`, row);
 
                         if (!row["Tipo"]) {
-                            errors.push({ row: rowIndex, message: "'Tipo' es obligatorio" });
+                            errors.push({
+                                row: rowIndex,
+                                serialNumber: row["Numero de Serie"],
+                                message: "'Tipo' es obligatorio"
+                            });
                         }
                         if (!row["Numero de Serie"]) {
-                            errors.push({ row: rowIndex, message: "'Numero de Serie' es obligatorio" });
+                            errors.push({
+                                row: rowIndex,
+                                message: "'Numero de Serie' es obligatorio"
+                            });
                         }
 
-                        results.push(row);
+                        results.push({ ...row, originalRow: rowIndex });
                         rowIndex++;
                     })
                     .on("error", (error) => {
                         console.log("❌ ERROR en csvParser:", error);
-                        res.status(400).json({ message: "Error parseando CSV", error });
+                        res.status(400).json({
+                            message: "Error parseando CSV",
+                            error: error.message
+                        });
                     })
                     .on("end", async () => {
                         console.log("✅ Parsing finalizado");
@@ -222,17 +229,33 @@ export class InventoryController {
                         console.log("Errores detectados:", errors);
 
                         const validRows = results.filter(
-                            (_, idx) => !errors.find((e) => e.row === idx + 1)
+                            (row) => !errors.find((e) => e.row === row.originalRow)
                         );
 
                         console.log("Filas válidas:", validRows.length);
 
                         const inserted = [];
+                        const skipped: { row: number; serialNumber: string; reason: string }[] = [];
 
                         for (const row of validRows) {
                             console.log("➡️ Insertando fila:", row);
 
                             try {
+                                // Verificar si ya existe el número de serie
+                                const existingEquipment = await prisma.equipment.findUnique({
+                                    where: { serialNumber: row["Numero de Serie"] }
+                                });
+
+                                if (existingEquipment) {
+                                    console.log(`⚠️ Serial duplicado en fila ${row.originalRow}: ${row["Numero de Serie"]}`);
+                                    skipped.push({
+                                        row: row.originalRow,
+                                        serialNumber: row["Numero de Serie"],
+                                        reason: "Número de serie duplicado - ya existe en la base de datos"
+                                    });
+                                    continue;
+                                }
+
                                 const record = await prisma.equipment.create({
                                     data: {
                                         brand: row["Marca"] || "",
@@ -252,21 +275,41 @@ export class InventoryController {
                                 inserted.push(record);
                             } catch (err: any) {
                                 console.log("❌ Error insertando fila:", err);
+
+                                let errorMessage = err.message;
+
+                                // Manejar errores específicos de Prisma
+                                if (err.code === 'P2002') {
+                                    errorMessage = `Número de serie duplicado: ${row["Numero de Serie"]}`;
+                                }
+
                                 errors.push({
-                                    row: rowIndex,
-                                    message: err.message,
+                                    row: row.originalRow,
+                                    serialNumber: row["Numero de Serie"],
+                                    message: errorMessage,
                                 });
                             }
                         }
 
                         console.log("📦 RESUMEN FINAL");
                         console.log("Insertados:", inserted.length);
+                        console.log("Omitidos:", skipped.length);
                         console.log("Errores:", errors.length);
 
-                        res.status(201).json({
+                        // Si no se insertó nada y hay errores, devolver status 400
+                        const statusCode = inserted.length > 0 ? 201 : (errors.length > 0 || skipped.length > 0) ? 400 : 201;
+
+                        res.status(statusCode).json({
+                            success: inserted.length > 0,
                             inserted: inserted.length,
-                            errors,
+                            skipped: skipped.length,
+                            errors: errors.length,
                             totalRows: results.length,
+                            details: {
+                                insertedRecords: inserted.map(i => i.serialNumber),
+                                skippedRecords: skipped,
+                                errorRecords: errors
+                            }
                         });
                     });
             });

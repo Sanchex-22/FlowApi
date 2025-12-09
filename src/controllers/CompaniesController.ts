@@ -1,13 +1,15 @@
 // src/companies/company.controller.ts
-import { PrismaClient } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
-// Asegúrate de que esta ruta sea correcta para tu proyecto
 import { generateNextCompanyCode } from '../utils/companyCodeGenerator.js';
-
-const prisma = new PrismaClient();
+import prisma from '../../lib/prisma.js';
 
 export class CompanyController {
 
+    /**
+     * Creates a new company
+     * @param req Express Request with company data in body
+     * @param res Express Response
+     */
     async Create(req: Request, res: Response) {
         try {
             const { name, address, phone, email, createdByUserId } = req.body;
@@ -23,28 +25,22 @@ export class CompanyController {
             const newCompany = await prisma.company.create({
                 data: {
                     name,
-                    code: companyCode, // Assign the generated code
+                    code: companyCode,
                     address,
                     phone,
                     email,
-                    isActive: true, // By default, a new company is active
-                    // Optional: connect to the creating user if an ID is provided
+                    isActive: true,
                     ...(createdByUserId && {
                         createdBy: {
                             connect: { id: createdByUserId },
                         },
                     }),
                 },
-                // Incluir departamentos para la respuesta de creación si se desea
-                // include: {
-                //     departments: true,
-                // }
             });
 
-            res.status(201).json(newCompany); // 201 Created
+            res.status(201).json(newCompany);
         } catch (error: any) {
             console.error('Error al crear la compañía:', error);
-            // Handle uniqueness errors (e.g., name or code already exist)
             if (error.code === 'P2002') {
                 let errorMessage = 'Ya existe una compañía con este nombre o código.';
                 if (error.meta?.target) {
@@ -58,47 +54,70 @@ export class CompanyController {
     }
 
     /**
-     * Deletes a company by its ID.
-     * Handles deletion of associated departments before deleting the company.
-     * @param req Express Request. Expects the company ID in req.params.
-     * @param res Express Response.
+     * Deletes a company and all its related data
+     * Users are automatically disassociated (companyId set to null)
+     * @param req Express Request with company ID in params
+     * @param res Express Response
      */
     async Delete(req: Request, res: Response) {
         try {
             const { id } = req.params;
 
+            // Verify company exists
             const company = await prisma.company.findUnique({
                 where: { id },
+                include: {
+                    users: {
+                        select: { id: true, username: true },
+                    },
+                },
             });
 
             if (!company) {
                 return res.status(404).json({ error: 'Compañía no encontrada.' });
             }
 
-            // Primero, elimina todos los departamentos asociados a esta compañía
-            await prisma.department.deleteMany({
-                where: { companyId: id },
-            });
+            // Log which users will be disassociated
+            console.log(
+                `Eliminando compañía "${company.name}" (${company.code}). ` +
+                `${company.users.length} usuario(s) serán desasociado(s).`
+            );
 
-            // Luego, elimina la compañía
+            // Delete the company
+            // Due to the cascade configuration in schema.prisma:
+            // - Departments, Equipment, Licenses, Maintenances, Documents, Networks, NetworkProviders will be DELETED
+            // - Users will be DISASSOCIATED (companyId set to null)
             await prisma.company.delete({
                 where: { id },
             });
 
-            res.status(204).send(); // 204 No Content for successful deletion
+            res.status(200).json({
+                message: 'Compañía eliminada correctamente',
+                deletedCompany: {
+                    id: company.id,
+                    name: company.name,
+                    code: company.code,
+                },
+                usersDisassociated: company.users.length,
+                usersDetails: company.users.map(u => ({
+                    id: u.id,
+                    username: u.username,
+                    status: 'Desasociado',
+                })),
+            });
         } catch (error: any) {
             console.error('Error al eliminar la compañía:', error);
             if (error.code === 'P2025') {
-                 return res.status(404).json({ error: 'Compañía no encontrada.' });
+                return res.status(404).json({ error: 'Compañía no encontrada.' });
             }
             res.status(500).json({ error: 'Error interno del servidor al eliminar la compañía.' });
         }
     }
 
     /**
-     * Edits an existing company by its ID.
-     * @param req Express Request. Expects the ID in req.params and the data to update in req.body.
-     * @param res Express Response.
+     * Updates an existing company
+     * @param req Express Request with company ID in params and update data in body
+     * @param res Express Response
      */
     async Edit(req: Request, res: Response, next: NextFunction) {
         try {
@@ -113,27 +132,22 @@ export class CompanyController {
                     phone,
                     email,
                     isActive,
-                    // Optional: update the company creator
                     ...(createdByUserId && {
                         createdBy: {
                             connect: { id: createdByUserId },
                         },
                     }),
                 },
-                // Incluir departamentos para la respuesta de edición si se desea
-                // include: {
-                //     departments: true,
-                // }
             });
 
             res.json(updatedCompany);
         } catch (error: any) {
             console.error('Error al editar la compañía:', error);
-            if (error.code === 'P2025') { // Record not found
+            if (error.code === 'P2025') {
                 return res.status(404).json({ error: 'Compañía no encontrada para actualizar.' });
             }
-            if (error.code === 'P2002') { // Unique constraint violation
-                 let errorMessage = 'Ya existe una compañía con el nombre o código proporcionado.';
+            if (error.code === 'P2002') {
+                let errorMessage = 'Ya existe una compañía con el nombre o código proporcionado.';
                 if (error.meta?.target) {
                     if (error.meta.target.includes('name')) errorMessage = 'El nombre de la compañía ya existe.';
                     if (error.meta.target.includes('code')) errorMessage = 'El código de la compañía ya existe.';
@@ -146,17 +160,17 @@ export class CompanyController {
     }
 
     /**
-     * Gets a company by its ID.
-     * Includes related users, equipments, licenses, documents, maintenances, and departments.
-     * @param req Express Request. Expects the company ID in req.params.
-     * @param res Express Response.
+     * Gets a single company with all its relations
+     * @param req Express Request with company ID in params
+     * @param res Express Response
      */
     async get(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
+            
             const company = await prisma.company.findUnique({
                 where: { id },
-                include: { // Include common relations for a detailed view
+                include: {
                     users: {
                         select: {
                             id: true,
@@ -174,7 +188,7 @@ export class CompanyController {
                     licenses: true,
                     documents: true,
                     maintenances: true,
-                    departments: { // <--- **IMPORTANTE: Se ha añadido esta línea para incluir los departamentos**
+                    departments: {
                         select: {
                             id: true,
                             name: true,
@@ -188,8 +202,9 @@ export class CompanyController {
             if (!company) {
                 return res.status(404).json({ error: 'Compañía no encontrada.' });
             }
+
             res.json(company);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error al obtener la compañía:', error);
             res.status(500).json({ error: 'Error interno del servidor al obtener la compañía.' });
             next(error);
@@ -197,15 +212,22 @@ export class CompanyController {
     }
 
     /**
-     * Gets all companies.
-     * Includes counts of related users, equipments, licenses, documents, maintenances, and departments.
-     * @param req Express Request.
-     * @param res Express Response.
+     * Gets all companies with counts of related records
+     * Filters based on user role:
+     * - SUPER_ADMIN: sees all companies
+     * - ADMIN: sees only their company
+     * @param req Express Request with optional user context
+     * @param res Express Response
      */
     async getAll(req: Request, res: Response, next: NextFunction) {
         try {
+            // Optional: Filter by user's company if not super admin
+            // const userRole = (req as any).user?.role;
+            // const userId = (req as any).user?.id;
+            // const userCompany = (req as any).user?.companyId;
+
             const companies = await prisma.company.findMany({
-                include: { // Include common relations for a list view if necessary
+                include: {
                     _count: {
                         select: {
                             users: true,
@@ -213,43 +235,125 @@ export class CompanyController {
                             licenses: true,
                             documents: true,
                             maintenances: true,
-                            departments: true, // <--- **IMPORTANTE: Se ha añadido esta línea para incluir el conteo de departamentos**
+                            departments: true,
+                            networks: true,
                         }
                     },
-                    // Si deseas obtener los datos completos de los departamentos en la lista, descomenta lo siguiente:
-                    // departments: {
-                    //     select: {
-                    //         id: true,
-                    //         name: true,
-                    //     }
-                    // }
+                    departments: {
+                        select: {
+                            id: true,
+                            name: true,
+                            description: true,
+                            isActive: true,
+                        },
+                        where: { isActive: true },
+                    },
+                },
+                orderBy: {
+                    name: 'asc',
                 }
             });
+
             res.json(companies);
-        } catch (error) {
-            console.error('Error al obtener las compañías');
-            // res.status(500).json({ error: 'Error interno del servidor al obtener las compañías.' });
+        } catch (error: any) {
+            console.error('Error al obtener las compañías:', error);
+            res.status(500).json({ error: 'Error interno del servidor al obtener las compañías.' });
             next(error);
         }
     }
 
     /**
-     * Retrieves all departments belonging to a specific company identified by its code.
-     * @param req Express Request. Expects the company code in req.params.
-     * @param res Express Response.
+     * Gets companies filtered by user role
+     * SUPER_ADMIN: sees all companies
+     * ADMIN/USER: sees only their company
+     * @param req Express Request with authenticated user
+     * @param res Express Response
+     */
+    async getMyCompanies(req: Request, res: Response, next: NextFunction) {
+        try {
+            const userRole = (req as any).user?.role;
+            const userCompanyId = (req as any).user?.companyId;
+
+            let companies;
+
+            if (userRole === 'SUPER_ADMIN') {
+                // Super admin sees all companies
+                companies = await prisma.company.findMany({
+                    include: {
+                        _count: {
+                            select: {
+                                users: true,
+                                equipments: true,
+                                licenses: true,
+                                documents: true,
+                                maintenances: true,
+                                departments: true,
+                            }
+                        },
+                        departments: {
+                            select: {
+                                id: true,
+                                name: true,
+                                isActive: true,
+                            },
+                        },
+                    },
+                    orderBy: { name: 'asc' },
+                });
+            } else if (userCompanyId) {
+                // Other roles see only their company
+                companies = await prisma.company.findMany({
+                    where: { id: userCompanyId },
+                    include: {
+                        _count: {
+                            select: {
+                                users: true,
+                                equipments: true,
+                                licenses: true,
+                                documents: true,
+                                maintenances: true,
+                                departments: true,
+                            }
+                        },
+                        departments: {
+                            select: {
+                                id: true,
+                                name: true,
+                                isActive: true,
+                            },
+                        },
+                    },
+                });
+            } else {
+                return res.status(403).json({ error: 'Usuario no asociado a ninguna compañía.' });
+            }
+
+            res.json(companies);
+        } catch (error: any) {
+            console.error('Error al obtener compañías del usuario:', error);
+            res.status(500).json({ error: 'Error interno del servidor.' });
+            next(error);
+        }
+    }
+
+    /**
+     * Gets all departments of a company by company code
+     * @param req Express Request with company code in params
+     * @param res Express Response
      */
     async getDepartmentsByCompanyCode(req: Request, res: Response) {
         try {
-            const { companyCode } = req.params; // Asume que el código de la compañía viene en los parámetros de la URL
+            const { companyCode } = req.params;
+
+            console.log('getDepartmentsByCompanyCode - Params recibidos:', req.params);
+            console.log('companyCode:', companyCode);
 
             if (!companyCode) {
                 return res.status(400).json({ error: 'El código de la compañía es obligatorio.' });
             }
 
-            // Buscar la compañía por su código
             const company = await prisma.company.findUnique({
                 where: { code: companyCode },
-                // Incluir los departamentos directamente para obtenerlos en la misma consulta
                 include: {
                     departments: {
                         select: {
@@ -260,27 +364,81 @@ export class CompanyController {
                             createdAt: true,
                             updatedAt: true,
                         },
-                        orderBy: {
-                            name: 'asc' // Opcional: ordenar los departamentos por nombre
-                        }
+                        orderBy: { name: 'asc' },
                     },
                 },
             });
 
             if (!company) {
-                return res.status(404).json({ error: `Compañía con código '${companyCode}' no encontrada.` });
+                console.log(`Compañía con código '${companyCode}' no encontrada`);
+                return res.status(404).json({ 
+                    error: `Compañía con código '${companyCode}' no encontrada.`,
+                    receivedCode: companyCode,
+                });
             }
 
             if (company.departments.length === 0) {
-                return res.status(404).json({ error: `Compañía con código '${companyCode}' no tiene departamentos.` });
+                console.log(`Compañía '${companyCode}' no tiene departamentos`);
+                return res.status(404).json({ 
+                    error: `Compañía con código '${companyCode}' no tiene departamentos.` 
+                });
             }
 
-            // Si la compañía existe, devuelve sus departamentos
             res.status(200).json(company.departments);
 
         } catch (error: any) {
             console.error('Error fetching departments by company code:', error);
-            res.status(500).json({ error: 'Error interno del servidor al obtener los departamentos de la compañía.', details: error.message });
+            res.status(500).json({ 
+                error: 'Error interno del servidor al obtener los departamentos de la compañía.',
+                details: error.message 
+            });
+        }
+    }
+
+    /**
+     * Disassociate users from a company (set companyId to null)
+     * Useful when you want to remove users without deleting the company
+     * @param req Express Request with company ID in params and userIds in body
+     * @param res Express Response
+     */
+    async disassociateUsers(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { id } = req.params;
+            const { userIds } = req.body;
+
+            if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+                return res.status(400).json({ error: 'Se requiere un array de IDs de usuarios.' });
+            }
+
+            // Verify company exists
+            const company = await prisma.company.findUnique({
+                where: { id },
+            });
+
+            if (!company) {
+                return res.status(404).json({ error: 'Compañía no encontrada.' });
+            }
+
+            // Update users to remove company association
+            const updatedUsers = await prisma.user.updateMany({
+                where: {
+                    id: { in: userIds },
+                    companyId: id, // Only update users from this company
+                },
+                data: {
+                    companyId: null,
+                },
+            });
+
+            res.json({
+                message: 'Usuarios desasociados correctamente',
+                updatedCount: updatedUsers.count,
+                companyId: id,
+            });
+        } catch (error: any) {
+            console.error('Error al desasociar usuarios:', error);
+            res.status(500).json({ error: 'Error interno del servidor al desasociar usuarios.' });
+            next(error);
         }
     }
 }

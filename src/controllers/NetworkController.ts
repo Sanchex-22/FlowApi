@@ -1,8 +1,8 @@
 // src/network/network.controller.ts
-import { PrismaClient, NetworkDeviceType, NetworkDeviceStatus } from '@prisma/client';
 import { Request, Response } from 'express';
+import { prisma } from '../../lib/prisma.js';
+import { NetworkDeviceStatus, NetworkDeviceType } from '../../generated/prisma/enums';
 
-const prisma = new PrismaClient();
 
 export class NetworkController {
 

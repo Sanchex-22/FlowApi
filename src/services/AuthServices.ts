@@ -1,25 +1,17 @@
 // src/auth/auth.service.ts
 import bcrypt from 'bcryptjs';
+import { prisma } from '../../lib/prisma.js';
+import { User, UserRole } from '../../generated/prisma/client.js';
 
-// Instancia de PrismaClient para interactuar con la base de datos
-const prisma = new PrismaClient();
 
 export class AuthService {
 
-  /**
-   * Intenta autenticar un usuario con el email y la contraseña proporcionados.
-   * @param email El correo electrónico del usuario.
-   * @param password_plain La contraseña sin hashear proporcionada por el usuario.
-   * @returns El objeto User si la autenticación es exitosa.
-   * @throws Error si las credenciales son inválidas o el usuario está inactivo.
-   */
   async login(email: string, password_plain: string): Promise<User> {
     // 1. Buscar el usuario por email
     const user = await prisma.user.findUnique({
       where: { email },
     });
 
-    // 2. Verificar si el usuario existe
     if (!user) {
       throw new Error('Credenciales inválidas.');
     }
@@ -41,17 +33,6 @@ export class AuthService {
     return user;
   }
 
-  /**
-   * Registra un nuevo usuario en la base de datos.
-   * La validación de permisos (quién puede crear qué rol) debe hacerse en el controlador o un middleware.
-   * @param username El nombre de usuario.
-   * @param email El correo electrónico (debe ser único).
-   * @param password_plain La contraseña sin hashear.
-   * @param role El rol del usuario (UserRole enum).
-   * @param companyId (Opcional) El ID de la empresa a la que pertenece el usuario.
-   * @returns El objeto User recién creado.
-   * @throws Error si el email ya está en uso o hay un problema en la creación.
-   */
   async register(username: string, email: string, password_plain: string, role: UserRole, companyId?: string): Promise<User> {
     // 1. Hashear la contraseña antes de almacenarla
     const hashedPassword = await bcrypt.hash(password_plain, 10);

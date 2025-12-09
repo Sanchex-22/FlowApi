@@ -1,10 +1,260 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url        = env("DATABASE_URL")
+}
+
+model Ticket {
+  id           String         @id @default(uuid())
+  ticketNumber Int?
+  title        String         @db.VarChar(50)
+  description  String         @db.VarChar(300)
+  img          String?        @db.VarChar(250)
+  comment      String?        @db.VarChar(300)
+  type         TicketType
+  priority     TicketPriority
+  status       TicketStatus
+  startDate    DateTime?
+  endDate      DateTime?
+  requestDays  Int?
+  approvedDays Int?
+  view         Boolean?
+  sendById     String?
+  sendToId     String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  reviewed     Boolean?
+  sendBy       User?          @relation("TicketsSentBy", fields: [sendById], references: [id], onDelete: Cascade)
+  sendTo       User?          @relation("TicketsSentTo", fields: [sendToId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id                   String        @id @default(uuid())
+  username             String        @unique
+  email                String        @unique
+  password             String
+  role                 UserRole      @default(USER)
+  isActive             Boolean       @default(true)
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  companyId            String?
+  createdCompanies     Company[]     @relation("CompanyCreatedBy")
+  assignedEquipments   Equipment[]
+  assignedMaintenances Maintenance[]
+  assignedNetworks     Network[]
+  person               Person?
+  ticketsSentBy        Ticket[]      @relation("TicketsSentBy")
+  ticketsSentTo        Ticket[]      @relation("TicketsSentTo")
+  // ⚠️ NO CASCADE: Solo desasociar usuarios, no eliminarlos
+  company              Company?      @relation("CompanyUsers", fields: [companyId], references: [id], onDelete: SetNull)
+}
+
+model Person {
+  id           String       @id @default(uuid())
+  userId       String       @unique
+  firstName    String?
+  lastName    String?
+  fullName     String?
+  contactEmail String?
+  phoneNumber  String?
+  departmentId String?
+  position     String?
+  status       PersonStatus @default(Activo)
+  userCode     String       @unique
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  // Si se elimina el departamento, la persona pierde la asignación
+  department   Department?  @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Company {
+  id               String            @id @default(uuid())
+  code             String            @unique @default("CO001")
+  name             String            @unique
+  address          String?
+  phone            String?
+  email            String?
+  isActive         Boolean           @default(true)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  createdByUserId  String?
+  // Si se elimina el usuario creador, la compañía sigue existiendo
+  createdBy        User?             @relation("CompanyCreatedBy", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  // ✅ CASCADE: Elimina departamentos con la compañía
+  departments      Department[]      
+  // ✅ CASCADE: Elimina documentos con la compañía
+  documents        Document[]        
+  // ✅ CASCADE: Elimina equipos con la compañía
+  equipments       Equipment[]       
+  // ✅ CASCADE: Elimina licencias con la compañía
+  licenses         License[]         
+  // ✅ CASCADE: Elimina mantenimientos con la compañía
+  maintenances     Maintenance[]     
+  // ✅ CASCADE: Elimina redes con la compañía
+  networks         Network[]         
+  // ✅ CASCADE: Elimina proveedores de red con la compañía
+  networkProviders NetworkProvider[] 
+  // ⚠️ NO CASCADE: Solo desasociar usuarios
+  users            User[]            @relation("CompanyUsers")
+}
+
+model Department {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  companyId   String
+  // ✅ CASCADE: Elimina departamento con la compañía
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  // Si se elimina el departamento, las personas pierden la asignación
+  persons     Person[]
+}
+
+model Equipment {
+  id               String          @id @default(uuid())
+  type             String
+  brand            String
+  model            String
+  serialNumber     String          @unique
+  plateNumber      String?         @unique
+  location         String?
+  status           EquipmentStatus @default(ACTIVE)
+  acquisitionDate  DateTime?
+  warrantyDetails  String?
+  qrCode           String?
+  cost             Decimal?        @default(0.00)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  companyId        String
+  assignedToUserId String?
+  endUser          String?
+  operatingSystem  String?
+  // ✅ CASCADE: Elimina documentos con el equipo
+  documents        Document[]      
+  // No cascada: El usuario no se elimina si se elimina el equipo
+  assignedToUser   User?           @relation(fields: [assignedToUserId], references: [id], onDelete: SetNull)
+  // ✅ CASCADE: Elimina equipo con la compañía
+  company          Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  // ✅ CASCADE: Elimina mantenimientos con el equipo
+  maintenances     Maintenance[]   
+}
+
+model Maintenance {
+  id               String            @id @default(uuid())
+  title            String
+  description      String?
+  type             MaintenanceType
+  status           MaintenanceStatus @default(SCHEDULED)
+  scheduledDate    DateTime
+  completionDate   DateTime?
+  cost             Decimal?          @default(0.00)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  equipmentId      String
+  assignedToUserId String?
+  companyId        String
+  // No cascada: El usuario no se elimina
+  assignedToUser   User?             @relation(fields: [assignedToUserId], references: [id], onDelete: SetNull)
+  // ✅ CASCADE: Elimina con la compañía
+  company          Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  // ✅ CASCADE: Elimina con el equipo
+  equipment        Equipment         @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+}
+
+model Document {
+  id          String     @id @default(uuid())
+  title       String
+  description String?
+  fileUrl     String
+  fileType    String?
+  category    String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  companyId   String
+  equipmentId String?
+  // ✅ CASCADE: Elimina con la compañía
+  company     Company    @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  // ✅ CASCADE: Elimina con el equipo
+  equipment   Equipment? @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+}
+
+model License {
+  id             String    @id @default(uuid())
+  softwareName   String
+  licenseKey     String    @unique
+  provider       String?
+  activationDate DateTime
+  expirationDate DateTime?
+  notes          String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  companyId      String
+  // ✅ CASCADE: Elimina con la compañía
+  company        Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model SystemConfig {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model NetworkProvider {
+  id            String    @id @default(uuid())
+  name          String
+  providerIp    String?
+  dnsGateway    String?
+  speed         String?
+  cost          Decimal?  @default(0.00)
+  notes         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
+  meshDevices   String?
+  switchDevices String?
+  companyId     String
+  // ✅ CASCADE: Elimina redes con el proveedor
+  networks      Network[]
+  // ✅ CASCADE: Elimina con la compañía
+  company       Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([name, companyId])
+}
+
+model Network {
+  id               String              @id @default(uuid())
+  name             String
+  ipAddress        String              @unique
+  macAddress       String?
+  deviceType       NetworkDeviceType   @default(OTHER)
+  status           NetworkDeviceStatus @default(UNKNOWN)
+  location         String?
+  description      String?
+  serialNumber     String?
+  brand            String?
+  purchaseDate     DateTime?
+  warrantyEndDate  DateTime?
+  notes            String?
+  model            String?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  companyId        String
+  assignedToUserId String?
+  providerId       String?
+  // No cascada: El usuario no se elimina
+  assignedToUser   User?               @relation(fields: [assignedToUserId], references: [id], onDelete: SetNull)
+  // ✅ CASCADE: Elimina con la compañía
+  company          Company             @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  // ✅ CASCADE: Elimina con el proveedor
+  provider         NetworkProvider?    @relation(fields: [providerId], references: [id], onDelete: Cascade)
 }
 
 enum UserRole {
@@ -32,109 +282,13 @@ enum TicketPriority {
   low
   trivial
 }
+
 enum TicketStatus {
   open
   pending
   approved
   rejected
   closed
-}
-
-model Ticket { // Renombrado de Form a Ticket
-  id             String       @id @default(uuid())
-  ticketNumber   Int?
-  title          String       @db.VarChar(50)
-  description    String       @db.VarChar(300)
-  img            String?      @db.VarChar(250)
-  comment        String?      @db.VarChar(300)
-  type           TicketType   // Referencia al enum TicketType
-  priority       TicketPriority // Referencia al enum TicketPriority
-  status         TicketStatus // Referencia al enum TicketStatus
-  startDate      DateTime?
-  endDate        DateTime?
-  requestDays    Int?
-  approvedDays   Int?
-  reviewed       Boolean?     // Cambiado a Boolean para aceptar true/false del frontend
-  view           Boolean?
-  sendById       String?
-  sendBy         User?        @relation("TicketsSentBy", fields: [sendById], references: [id], onDelete: Cascade) // Renombrada relación
-  sendToId       String?
-  sendTo         User?        @relation("TicketsSentTo", fields: [sendToId], references: [id], onDelete: SetNull) // Renombrada relación
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-}
-
-model User {
-  id                    String            @id @default(uuid())
-  username              String            @unique
-  email                 String            @unique
-  password              String
-  role                  UserRole          @default(USER)
-  isActive              Boolean           @default(true)
-  createdAt             DateTime          @default(now())
-  updatedAt             DateTime          @updatedAt
-  assignedEquipments    Equipment[]
-  assignedMaintenances  Maintenance[]
-  companyId             String?
-  company               Company?          @relation("CompanyUsers", fields: [companyId], references: [id])
-  person                Person?
-  createdCompanies      Company[]         @relation("CompanyCreatedBy")
-  assignedNetworks      Network[]
-  ticketsSentBy         Ticket[]          @relation("TicketsSentBy") // Renombrada relación
-  ticketsSentTo         Ticket[]          @relation("TicketsSentTo") // Renombrada relación
-}
-
-model Person {
-  id            String       @id @default(uuid())
-  userId        String       @unique // foreign key to User
-  user          User         @relation(fields: [userId], references: [id])
-  firstName     String?
-  lastName      String?
-  fullName      String?
-  contactEmail  String?
-  phoneNumber   String?
-  departmentId  String? // Clave foránea al departamento
-  department    Department?  @relation(fields: [departmentId], references: [id]) // Relación con el modelo Department
-  position      String?
-  status        PersonStatus @default(Activo)
-  userCode      String      @unique
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Company {
-  id               String        @id @default(uuid())
-  code             String        @unique @default("CO001")
-  name             String        @unique
-  address          String?
-  phone            String?
-  email            String?
-  isActive         Boolean       @default(true)
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
-  createdByUserId  String?
-  createdBy        User?         @relation("CompanyCreatedBy", fields: [createdByUserId], references: [id])
-  equipments       Equipment[]
-  users            User[]        @relation("CompanyUsers")
-  documents        Document[]
-  licenses         License[]
-  maintenances     Maintenance[]
-  networks         Network[]
-  departments      Department[]
-  networkProviders NetworkProvider[]
-}
-
-model Department {
-  id          String   @id @default(uuid())
-  name        String   // Nombre del departamento (e.g., "IT", "Recursos Humanos")
-  description String?
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  companyId   String
-  company     Company  @relation(fields: [companyId], references: [id])
-  persons     Person[] // Relación inversa para Person
 }
 
 enum EquipmentStatus {
@@ -144,34 +298,6 @@ enum EquipmentStatus {
   DAMAGED
   ASSIGNED
   STORAGE
-}
-
-model Equipment {
-  id              String    @id @default(uuid())
-  brand           String
-  model           String
-  serialNumber    String    @unique
-  plateNumber     String?   @unique
-  location        String?
-  cost            Decimal?  @default(0.0)
-  operatingSystem String?
-  endUser         String?
-  type            String    // Tipo de equipo (Laptop, Monitor, CPU, etc)
-  acquisitionDate DateTime?
-  warrantyDetails String?
-  qrCode          String?
-  status          EquipmentStatus  @default(ACTIVE)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-
-  companyId       String
-  company         Company   @relation(fields: [companyId], references: [id])
-
-  assignedToUserId String?
-  assignedToUser   User?    @relation(fields: [assignedToUserId], references: [id])
-
-  maintenances    Maintenance[]
-  documents       Document[]
 }
 
 enum MaintenanceType {
@@ -184,82 +310,6 @@ enum MaintenanceStatus {
   IN_PROGRESS
   COMPLETED
   CANCELED
-}
-
-model Maintenance {
-  id                String            @id @default(uuid())
-  title             String
-  description       String?
-  type              MaintenanceType
-  status            MaintenanceStatus @default(SCHEDULED)
-  scheduledDate     DateTime
-  completionDate    DateTime?
-  cost              Decimal?          @default(0.00)
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
-  equipmentId       String
-  equipment         Equipment         @relation(fields: [equipmentId], references: [id])
-  assignedToUserId  String?
-  assignedToUser    User?             @relation(fields: [assignedToUserId], references: [id])
-  companyId         String
-  company           Company           @relation(fields: [companyId], references: [id])
-}
-
-model Document {
-  id          String     @id @default(uuid())
-  title       String
-  description String?
-  fileUrl     String
-  fileType    String?
-  category    String?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  companyId   String
-  company     Company    @relation(fields: [companyId], references: [id])
-  equipmentId String?
-  equipment   Equipment? @relation(fields: [equipmentId], references: [id])
-}
-
-model License {
-  id             String    @id @default(uuid())
-  softwareName   String
-  licenseKey     String    @unique
-  provider       String?
-  activationDate DateTime
-  expirationDate DateTime?
-  notes          String?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  companyId      String
-  company        Company   @relation(fields: [companyId], references: [id])
-}
-
-model SystemConfig {
-  id          String   @id @default(uuid())
-  key         String   @unique
-  value       String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model NetworkProvider {
-  id           String     @id @default(uuid())
-  name         String
-  providerIp   String?
-  dnsGateway   String?
-  speed        String?
-  cost         Decimal?   @default(0.00)
-  notes        String?
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @default(now())
-  companyId    String
-  company      Company     @relation(fields: [companyId], references: [id])
-  networks     Network[]
-  meshDevices  String?
-  switchDevices String?
-
-  @@unique([name, companyId])  // 🔥 Un nombre puede repetirse si es otra empresa
 }
 
 enum NetworkDeviceType {
@@ -280,29 +330,4 @@ enum NetworkDeviceStatus {
   MAINTENANCE
   DECOMMISSIONED
   UNKNOWN
-}
-
-model Network {
-  id               String            @id @default(uuid())
-  name             String
-  ipAddress        String            @unique // IP address or hostname
-  macAddress       String?
-  deviceType       NetworkDeviceType @default(OTHER)
-  status           NetworkDeviceStatus @default(UNKNOWN)
-  location         String?           // Physical location within the company/branch
-  description      String?
-  serialNumber     String?
-  brand            String?
-  purchaseDate     DateTime?
-  warrantyEndDate  DateTime?
-  notes            String?
-  model            String?
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-  companyId        String
-  company          Company           @relation(fields: [companyId], references: [id])
-  assignedToUserId String?
-  assignedToUser   User?             @relation(fields: [assignedToUserId], references: [id])
-  providerId       String?
-  provider         NetworkProvider?  @relation(fields: [providerId], references: [id])
 }

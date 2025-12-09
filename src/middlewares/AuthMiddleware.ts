@@ -1,8 +1,7 @@
 // src/middlewares/auth.middleware.ts
-
-import { UserRole } from "@prisma/client";
 import { NextFunction, Request as ExpressRequest, Response as ExpressResponse } from "express";
 import session from "express-session";
+import { UserRole } from "../../generated/prisma/enums";
 
 declare module 'express-session' {
   interface SessionData {

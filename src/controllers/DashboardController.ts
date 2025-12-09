@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
-import { PrismaClient, EquipmentStatus, MaintenanceStatus } from '@prisma/client';
 import { subMonths, startOfMonth } from 'date-fns';
-
-const prisma = new PrismaClient();
+import { prisma } from '../../lib/prisma.js';
+import { EquipmentStatus, MaintenanceStatus } from '../../generated/prisma/enums.js';
 
 /**
  * Agrega los datos para el dashboard principal de una compañía.
