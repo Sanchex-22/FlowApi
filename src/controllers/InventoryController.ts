@@ -144,7 +144,6 @@ export class InventoryController {
     async importCSV(req: Request, res: Response): Promise<void> {
         console.log("🌟 IMPORT CSV INICIADO");
         const { companyId } = req.params;
-        console.log("companyId recibido:", companyId);
 
         const company = await prisma.company.findUnique({ where: { id: companyId } });
         console.log("Empresa encontrada:", company);

@@ -115,6 +115,7 @@ export class NetworkController {
                 providerId,
             } = req.body;
 
+
             // Construir objeto de actualización dinámicamente
             const updateData: any = {};
             if (name !== undefined) updateData.name = name;
@@ -229,7 +230,6 @@ export class NetworkController {
      */
     async getNetworkByCompanyCode(req: Request, res: Response) {
         const { companyId } = req.params;
-        console.log('companyId recibido:', companyId);
         try {
             const company = await prisma.company.findUnique({
                 where: { id: companyId },
