@@ -519,8 +519,7 @@ export class UserController {
             select: {
               id: true,
               name: true,
-              ipAddress: true,
-              deviceType: true,
+              ip: true,
               status: true,
             },
           },
