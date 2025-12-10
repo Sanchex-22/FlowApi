@@ -351,28 +351,11 @@ export type EnumMaintenanceStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumMaintenanceStatusFilter<$PrismaModel>
 }
 
-export type EnumNetworkDeviceTypeFilter<$PrismaModel = never> = {
-  equals?: $Enums.NetworkDeviceType | Prisma.EnumNetworkDeviceTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.NetworkDeviceType[] | Prisma.ListEnumNetworkDeviceTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.NetworkDeviceType[] | Prisma.ListEnumNetworkDeviceTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumNetworkDeviceTypeFilter<$PrismaModel> | $Enums.NetworkDeviceType
-}
-
 export type EnumNetworkDeviceStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.NetworkDeviceStatus | Prisma.EnumNetworkDeviceStatusFieldRefInput<$PrismaModel>
   in?: $Enums.NetworkDeviceStatus[] | Prisma.ListEnumNetworkDeviceStatusFieldRefInput<$PrismaModel>
   notIn?: $Enums.NetworkDeviceStatus[] | Prisma.ListEnumNetworkDeviceStatusFieldRefInput<$PrismaModel>
   not?: Prisma.NestedEnumNetworkDeviceStatusFilter<$PrismaModel> | $Enums.NetworkDeviceStatus
-}
-
-export type EnumNetworkDeviceTypeWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.NetworkDeviceType | Prisma.EnumNetworkDeviceTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.NetworkDeviceType[] | Prisma.ListEnumNetworkDeviceTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.NetworkDeviceType[] | Prisma.ListEnumNetworkDeviceTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumNetworkDeviceTypeWithAggregatesFilter<$PrismaModel> | $Enums.NetworkDeviceType
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumNetworkDeviceTypeFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumNetworkDeviceTypeFilter<$PrismaModel>
 }
 
 export type EnumNetworkDeviceStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -735,28 +718,11 @@ export type NestedEnumMaintenanceStatusWithAggregatesFilter<$PrismaModel = never
   _max?: Prisma.NestedEnumMaintenanceStatusFilter<$PrismaModel>
 }
 
-export type NestedEnumNetworkDeviceTypeFilter<$PrismaModel = never> = {
-  equals?: $Enums.NetworkDeviceType | Prisma.EnumNetworkDeviceTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.NetworkDeviceType[] | Prisma.ListEnumNetworkDeviceTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.NetworkDeviceType[] | Prisma.ListEnumNetworkDeviceTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumNetworkDeviceTypeFilter<$PrismaModel> | $Enums.NetworkDeviceType
-}
-
 export type NestedEnumNetworkDeviceStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.NetworkDeviceStatus | Prisma.EnumNetworkDeviceStatusFieldRefInput<$PrismaModel>
   in?: $Enums.NetworkDeviceStatus[] | Prisma.ListEnumNetworkDeviceStatusFieldRefInput<$PrismaModel>
   notIn?: $Enums.NetworkDeviceStatus[] | Prisma.ListEnumNetworkDeviceStatusFieldRefInput<$PrismaModel>
   not?: Prisma.NestedEnumNetworkDeviceStatusFilter<$PrismaModel> | $Enums.NetworkDeviceStatus
-}
-
-export type NestedEnumNetworkDeviceTypeWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.NetworkDeviceType | Prisma.EnumNetworkDeviceTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.NetworkDeviceType[] | Prisma.ListEnumNetworkDeviceTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.NetworkDeviceType[] | Prisma.ListEnumNetworkDeviceTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumNetworkDeviceTypeWithAggregatesFilter<$PrismaModel> | $Enums.NetworkDeviceType
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumNetworkDeviceTypeFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumNetworkDeviceTypeFilter<$PrismaModel>
 }
 
 export type NestedEnumNetworkDeviceStatusWithAggregatesFilter<$PrismaModel = never> = {

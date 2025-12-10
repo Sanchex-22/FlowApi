@@ -27,66 +27,66 @@ export type AggregateNetwork = {
 export type NetworkMinAggregateOutputType = {
   id: string | null
   name: string | null
-  ipAddress: string | null
-  macAddress: string | null
-  deviceType: $Enums.NetworkDeviceType | null
   status: $Enums.NetworkDeviceStatus | null
   location: string | null
   description: string | null
-  serialNumber: string | null
-  brand: string | null
-  purchaseDate: Date | null
-  warrantyEndDate: Date | null
   notes: string | null
-  model: string | null
+  ssid: string | null
+  password: string | null
+  ip: string | null
+  dns: string | null
+  gw: string | null
+  uploadSpeed: string | null
+  downloadSpeed: string | null
   createdAt: Date | null
   updatedAt: Date | null
   companyId: string | null
   assignedToUserId: string | null
+  createdByUserId: string | null
   providerId: string | null
 }
 
 export type NetworkMaxAggregateOutputType = {
   id: string | null
   name: string | null
-  ipAddress: string | null
-  macAddress: string | null
-  deviceType: $Enums.NetworkDeviceType | null
   status: $Enums.NetworkDeviceStatus | null
   location: string | null
   description: string | null
-  serialNumber: string | null
-  brand: string | null
-  purchaseDate: Date | null
-  warrantyEndDate: Date | null
   notes: string | null
-  model: string | null
+  ssid: string | null
+  password: string | null
+  ip: string | null
+  dns: string | null
+  gw: string | null
+  uploadSpeed: string | null
+  downloadSpeed: string | null
   createdAt: Date | null
   updatedAt: Date | null
   companyId: string | null
   assignedToUserId: string | null
+  createdByUserId: string | null
   providerId: string | null
 }
 
 export type NetworkCountAggregateOutputType = {
   id: number
   name: number
-  ipAddress: number
-  macAddress: number
-  deviceType: number
   status: number
   location: number
   description: number
-  serialNumber: number
-  brand: number
-  purchaseDate: number
-  warrantyEndDate: number
   notes: number
-  model: number
+  ssid: number
+  password: number
+  ip: number
+  dns: number
+  gw: number
+  uploadSpeed: number
+  downloadSpeed: number
   createdAt: number
   updatedAt: number
   companyId: number
   assignedToUserId: number
+  createdByUserId: number
   providerId: number
   _all: number
 }
@@ -95,66 +95,66 @@ export type NetworkCountAggregateOutputType = {
 export type NetworkMinAggregateInputType = {
   id?: true
   name?: true
-  ipAddress?: true
-  macAddress?: true
-  deviceType?: true
   status?: true
   location?: true
   description?: true
-  serialNumber?: true
-  brand?: true
-  purchaseDate?: true
-  warrantyEndDate?: true
   notes?: true
-  model?: true
+  ssid?: true
+  password?: true
+  ip?: true
+  dns?: true
+  gw?: true
+  uploadSpeed?: true
+  downloadSpeed?: true
   createdAt?: true
   updatedAt?: true
   companyId?: true
   assignedToUserId?: true
+  createdByUserId?: true
   providerId?: true
 }
 
 export type NetworkMaxAggregateInputType = {
   id?: true
   name?: true
-  ipAddress?: true
-  macAddress?: true
-  deviceType?: true
   status?: true
   location?: true
   description?: true
-  serialNumber?: true
-  brand?: true
-  purchaseDate?: true
-  warrantyEndDate?: true
   notes?: true
-  model?: true
+  ssid?: true
+  password?: true
+  ip?: true
+  dns?: true
+  gw?: true
+  uploadSpeed?: true
+  downloadSpeed?: true
   createdAt?: true
   updatedAt?: true
   companyId?: true
   assignedToUserId?: true
+  createdByUserId?: true
   providerId?: true
 }
 
 export type NetworkCountAggregateInputType = {
   id?: true
   name?: true
-  ipAddress?: true
-  macAddress?: true
-  deviceType?: true
   status?: true
   location?: true
   description?: true
-  serialNumber?: true
-  brand?: true
-  purchaseDate?: true
-  warrantyEndDate?: true
   notes?: true
-  model?: true
+  ssid?: true
+  password?: true
+  ip?: true
+  dns?: true
+  gw?: true
+  uploadSpeed?: true
+  downloadSpeed?: true
   createdAt?: true
   updatedAt?: true
   companyId?: true
   assignedToUserId?: true
+  createdByUserId?: true
   providerId?: true
   _all?: true
 }
@@ -234,22 +234,22 @@ export type NetworkGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type NetworkGroupByOutputType = {
   id: string
   name: string
-  ipAddress: string
-  macAddress: string | null
-  deviceType: $Enums.NetworkDeviceType
   status: $Enums.NetworkDeviceStatus
   location: string | null
   description: string | null
-  serialNumber: string | null
-  brand: string | null
-  purchaseDate: Date | null
-  warrantyEndDate: Date | null
   notes: string | null
-  model: string | null
+  ssid: string | null
+  password: string | null
+  ip: string | null
+  dns: string | null
+  gw: string | null
+  uploadSpeed: string | null
+  downloadSpeed: string | null
   createdAt: Date
   updatedAt: Date
   companyId: string
   assignedToUserId: string | null
+  createdByUserId: string | null
   providerId: string | null
   _count: NetworkCountAggregateOutputType | null
   _min: NetworkMinAggregateOutputType | null
@@ -277,24 +277,25 @@ export type NetworkWhereInput = {
   NOT?: Prisma.NetworkWhereInput | Prisma.NetworkWhereInput[]
   id?: Prisma.StringFilter<"Network"> | string
   name?: Prisma.StringFilter<"Network"> | string
-  ipAddress?: Prisma.StringFilter<"Network"> | string
-  macAddress?: Prisma.StringNullableFilter<"Network"> | string | null
-  deviceType?: Prisma.EnumNetworkDeviceTypeFilter<"Network"> | $Enums.NetworkDeviceType
   status?: Prisma.EnumNetworkDeviceStatusFilter<"Network"> | $Enums.NetworkDeviceStatus
   location?: Prisma.StringNullableFilter<"Network"> | string | null
   description?: Prisma.StringNullableFilter<"Network"> | string | null
-  serialNumber?: Prisma.StringNullableFilter<"Network"> | string | null
-  brand?: Prisma.StringNullableFilter<"Network"> | string | null
-  purchaseDate?: Prisma.DateTimeNullableFilter<"Network"> | Date | string | null
-  warrantyEndDate?: Prisma.DateTimeNullableFilter<"Network"> | Date | string | null
   notes?: Prisma.StringNullableFilter<"Network"> | string | null
-  model?: Prisma.StringNullableFilter<"Network"> | string | null
+  ssid?: Prisma.StringNullableFilter<"Network"> | string | null
+  password?: Prisma.StringNullableFilter<"Network"> | string | null
+  ip?: Prisma.StringNullableFilter<"Network"> | string | null
+  dns?: Prisma.StringNullableFilter<"Network"> | string | null
+  gw?: Prisma.StringNullableFilter<"Network"> | string | null
+  uploadSpeed?: Prisma.StringNullableFilter<"Network"> | string | null
+  downloadSpeed?: Prisma.StringNullableFilter<"Network"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Network"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Network"> | Date | string
   companyId?: Prisma.StringFilter<"Network"> | string
   assignedToUserId?: Prisma.StringNullableFilter<"Network"> | string | null
+  createdByUserId?: Prisma.StringNullableFilter<"Network"> | string | null
   providerId?: Prisma.StringNullableFilter<"Network"> | string | null
   assignedToUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   provider?: Prisma.XOR<Prisma.NetworkProviderNullableScalarRelationFilter, Prisma.NetworkProviderWhereInput> | null
 }
@@ -302,75 +303,77 @@ export type NetworkWhereInput = {
 export type NetworkOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  ipAddress?: Prisma.SortOrder
-  macAddress?: Prisma.SortOrderInput | Prisma.SortOrder
-  deviceType?: Prisma.SortOrder
   status?: Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  serialNumber?: Prisma.SortOrderInput | Prisma.SortOrder
-  brand?: Prisma.SortOrderInput | Prisma.SortOrder
-  purchaseDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  warrantyEndDate?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
-  model?: Prisma.SortOrderInput | Prisma.SortOrder
+  ssid?: Prisma.SortOrderInput | Prisma.SortOrder
+  password?: Prisma.SortOrderInput | Prisma.SortOrder
+  ip?: Prisma.SortOrderInput | Prisma.SortOrder
+  dns?: Prisma.SortOrderInput | Prisma.SortOrder
+  gw?: Prisma.SortOrderInput | Prisma.SortOrder
+  uploadSpeed?: Prisma.SortOrderInput | Prisma.SortOrder
+  downloadSpeed?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   assignedToUserId?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   providerId?: Prisma.SortOrderInput | Prisma.SortOrder
   assignedToUser?: Prisma.UserOrderByWithRelationInput
+  createdBy?: Prisma.UserOrderByWithRelationInput
   company?: Prisma.CompanyOrderByWithRelationInput
   provider?: Prisma.NetworkProviderOrderByWithRelationInput
 }
 
 export type NetworkWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  ipAddress?: string
   AND?: Prisma.NetworkWhereInput | Prisma.NetworkWhereInput[]
   OR?: Prisma.NetworkWhereInput[]
   NOT?: Prisma.NetworkWhereInput | Prisma.NetworkWhereInput[]
   name?: Prisma.StringFilter<"Network"> | string
-  macAddress?: Prisma.StringNullableFilter<"Network"> | string | null
-  deviceType?: Prisma.EnumNetworkDeviceTypeFilter<"Network"> | $Enums.NetworkDeviceType
   status?: Prisma.EnumNetworkDeviceStatusFilter<"Network"> | $Enums.NetworkDeviceStatus
   location?: Prisma.StringNullableFilter<"Network"> | string | null
   description?: Prisma.StringNullableFilter<"Network"> | string | null
-  serialNumber?: Prisma.StringNullableFilter<"Network"> | string | null
-  brand?: Prisma.StringNullableFilter<"Network"> | string | null
-  purchaseDate?: Prisma.DateTimeNullableFilter<"Network"> | Date | string | null
-  warrantyEndDate?: Prisma.DateTimeNullableFilter<"Network"> | Date | string | null
   notes?: Prisma.StringNullableFilter<"Network"> | string | null
-  model?: Prisma.StringNullableFilter<"Network"> | string | null
+  ssid?: Prisma.StringNullableFilter<"Network"> | string | null
+  password?: Prisma.StringNullableFilter<"Network"> | string | null
+  ip?: Prisma.StringNullableFilter<"Network"> | string | null
+  dns?: Prisma.StringNullableFilter<"Network"> | string | null
+  gw?: Prisma.StringNullableFilter<"Network"> | string | null
+  uploadSpeed?: Prisma.StringNullableFilter<"Network"> | string | null
+  downloadSpeed?: Prisma.StringNullableFilter<"Network"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Network"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Network"> | Date | string
   companyId?: Prisma.StringFilter<"Network"> | string
   assignedToUserId?: Prisma.StringNullableFilter<"Network"> | string | null
+  createdByUserId?: Prisma.StringNullableFilter<"Network"> | string | null
   providerId?: Prisma.StringNullableFilter<"Network"> | string | null
   assignedToUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   provider?: Prisma.XOR<Prisma.NetworkProviderNullableScalarRelationFilter, Prisma.NetworkProviderWhereInput> | null
-}, "id" | "ipAddress">
+}, "id">
 
 export type NetworkOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  ipAddress?: Prisma.SortOrder
-  macAddress?: Prisma.SortOrderInput | Prisma.SortOrder
-  deviceType?: Prisma.SortOrder
   status?: Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  serialNumber?: Prisma.SortOrderInput | Prisma.SortOrder
-  brand?: Prisma.SortOrderInput | Prisma.SortOrder
-  purchaseDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  warrantyEndDate?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
-  model?: Prisma.SortOrderInput | Prisma.SortOrder
+  ssid?: Prisma.SortOrderInput | Prisma.SortOrder
+  password?: Prisma.SortOrderInput | Prisma.SortOrder
+  ip?: Prisma.SortOrderInput | Prisma.SortOrder
+  dns?: Prisma.SortOrderInput | Prisma.SortOrder
+  gw?: Prisma.SortOrderInput | Prisma.SortOrder
+  uploadSpeed?: Prisma.SortOrderInput | Prisma.SortOrder
+  downloadSpeed?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   assignedToUserId?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   providerId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.NetworkCountOrderByAggregateInput
   _max?: Prisma.NetworkMaxOrderByAggregateInput
@@ -383,43 +386,43 @@ export type NetworkScalarWhereWithAggregatesInput = {
   NOT?: Prisma.NetworkScalarWhereWithAggregatesInput | Prisma.NetworkScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Network"> | string
   name?: Prisma.StringWithAggregatesFilter<"Network"> | string
-  ipAddress?: Prisma.StringWithAggregatesFilter<"Network"> | string
-  macAddress?: Prisma.StringNullableWithAggregatesFilter<"Network"> | string | null
-  deviceType?: Prisma.EnumNetworkDeviceTypeWithAggregatesFilter<"Network"> | $Enums.NetworkDeviceType
   status?: Prisma.EnumNetworkDeviceStatusWithAggregatesFilter<"Network"> | $Enums.NetworkDeviceStatus
   location?: Prisma.StringNullableWithAggregatesFilter<"Network"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Network"> | string | null
-  serialNumber?: Prisma.StringNullableWithAggregatesFilter<"Network"> | string | null
-  brand?: Prisma.StringNullableWithAggregatesFilter<"Network"> | string | null
-  purchaseDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Network"> | Date | string | null
-  warrantyEndDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Network"> | Date | string | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"Network"> | string | null
-  model?: Prisma.StringNullableWithAggregatesFilter<"Network"> | string | null
+  ssid?: Prisma.StringNullableWithAggregatesFilter<"Network"> | string | null
+  password?: Prisma.StringNullableWithAggregatesFilter<"Network"> | string | null
+  ip?: Prisma.StringNullableWithAggregatesFilter<"Network"> | string | null
+  dns?: Prisma.StringNullableWithAggregatesFilter<"Network"> | string | null
+  gw?: Prisma.StringNullableWithAggregatesFilter<"Network"> | string | null
+  uploadSpeed?: Prisma.StringNullableWithAggregatesFilter<"Network"> | string | null
+  downloadSpeed?: Prisma.StringNullableWithAggregatesFilter<"Network"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Network"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Network"> | Date | string
   companyId?: Prisma.StringWithAggregatesFilter<"Network"> | string
   assignedToUserId?: Prisma.StringNullableWithAggregatesFilter<"Network"> | string | null
+  createdByUserId?: Prisma.StringNullableWithAggregatesFilter<"Network"> | string | null
   providerId?: Prisma.StringNullableWithAggregatesFilter<"Network"> | string | null
 }
 
 export type NetworkCreateInput = {
   id?: string
   name: string
-  ipAddress: string
-  macAddress?: string | null
-  deviceType?: $Enums.NetworkDeviceType
   status?: $Enums.NetworkDeviceStatus
   location?: string | null
   description?: string | null
-  serialNumber?: string | null
-  brand?: string | null
-  purchaseDate?: Date | string | null
-  warrantyEndDate?: Date | string | null
   notes?: string | null
-  model?: string | null
+  ssid?: string | null
+  password?: string | null
+  ip?: string | null
+  dns?: string | null
+  gw?: string | null
+  uploadSpeed?: string | null
+  downloadSpeed?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   assignedToUser?: Prisma.UserCreateNestedOneWithoutAssignedNetworksInput
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedNetworksInput
   company: Prisma.CompanyCreateNestedOneWithoutNetworksInput
   provider?: Prisma.NetworkProviderCreateNestedOneWithoutNetworksInput
 }
@@ -427,43 +430,43 @@ export type NetworkCreateInput = {
 export type NetworkUncheckedCreateInput = {
   id?: string
   name: string
-  ipAddress: string
-  macAddress?: string | null
-  deviceType?: $Enums.NetworkDeviceType
   status?: $Enums.NetworkDeviceStatus
   location?: string | null
   description?: string | null
-  serialNumber?: string | null
-  brand?: string | null
-  purchaseDate?: Date | string | null
-  warrantyEndDate?: Date | string | null
   notes?: string | null
-  model?: string | null
+  ssid?: string | null
+  password?: string | null
+  ip?: string | null
+  dns?: string | null
+  gw?: string | null
+  uploadSpeed?: string | null
+  downloadSpeed?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   companyId: string
   assignedToUserId?: string | null
+  createdByUserId?: string | null
   providerId?: string | null
 }
 
 export type NetworkUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ipAddress?: Prisma.StringFieldUpdateOperationsInput | string
-  macAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deviceType?: Prisma.EnumNetworkDeviceTypeFieldUpdateOperationsInput | $Enums.NetworkDeviceType
   status?: Prisma.EnumNetworkDeviceStatusFieldUpdateOperationsInput | $Enums.NetworkDeviceStatus
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ssid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gw?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uploadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  downloadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedToUser?: Prisma.UserUpdateOneWithoutAssignedNetworksNestedInput
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedNetworksNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutNetworksNestedInput
   provider?: Prisma.NetworkProviderUpdateOneWithoutNetworksNestedInput
 }
@@ -471,62 +474,61 @@ export type NetworkUpdateInput = {
 export type NetworkUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ipAddress?: Prisma.StringFieldUpdateOperationsInput | string
-  macAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deviceType?: Prisma.EnumNetworkDeviceTypeFieldUpdateOperationsInput | $Enums.NetworkDeviceType
   status?: Prisma.EnumNetworkDeviceStatusFieldUpdateOperationsInput | $Enums.NetworkDeviceStatus
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ssid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gw?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uploadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  downloadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   assignedToUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type NetworkCreateManyInput = {
   id?: string
   name: string
-  ipAddress: string
-  macAddress?: string | null
-  deviceType?: $Enums.NetworkDeviceType
   status?: $Enums.NetworkDeviceStatus
   location?: string | null
   description?: string | null
-  serialNumber?: string | null
-  brand?: string | null
-  purchaseDate?: Date | string | null
-  warrantyEndDate?: Date | string | null
   notes?: string | null
-  model?: string | null
+  ssid?: string | null
+  password?: string | null
+  ip?: string | null
+  dns?: string | null
+  gw?: string | null
+  uploadSpeed?: string | null
+  downloadSpeed?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   companyId: string
   assignedToUserId?: string | null
+  createdByUserId?: string | null
   providerId?: string | null
 }
 
 export type NetworkUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ipAddress?: Prisma.StringFieldUpdateOperationsInput | string
-  macAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deviceType?: Prisma.EnumNetworkDeviceTypeFieldUpdateOperationsInput | $Enums.NetworkDeviceType
   status?: Prisma.EnumNetworkDeviceStatusFieldUpdateOperationsInput | $Enums.NetworkDeviceStatus
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ssid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gw?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uploadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  downloadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -534,22 +536,22 @@ export type NetworkUpdateManyMutationInput = {
 export type NetworkUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ipAddress?: Prisma.StringFieldUpdateOperationsInput | string
-  macAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deviceType?: Prisma.EnumNetworkDeviceTypeFieldUpdateOperationsInput | $Enums.NetworkDeviceType
   status?: Prisma.EnumNetworkDeviceStatusFieldUpdateOperationsInput | $Enums.NetworkDeviceStatus
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ssid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gw?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uploadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  downloadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   assignedToUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -566,66 +568,66 @@ export type NetworkOrderByRelationAggregateInput = {
 export type NetworkCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  ipAddress?: Prisma.SortOrder
-  macAddress?: Prisma.SortOrder
-  deviceType?: Prisma.SortOrder
   status?: Prisma.SortOrder
   location?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  serialNumber?: Prisma.SortOrder
-  brand?: Prisma.SortOrder
-  purchaseDate?: Prisma.SortOrder
-  warrantyEndDate?: Prisma.SortOrder
   notes?: Prisma.SortOrder
-  model?: Prisma.SortOrder
+  ssid?: Prisma.SortOrder
+  password?: Prisma.SortOrder
+  ip?: Prisma.SortOrder
+  dns?: Prisma.SortOrder
+  gw?: Prisma.SortOrder
+  uploadSpeed?: Prisma.SortOrder
+  downloadSpeed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   assignedToUserId?: Prisma.SortOrder
+  createdByUserId?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
 }
 
 export type NetworkMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  ipAddress?: Prisma.SortOrder
-  macAddress?: Prisma.SortOrder
-  deviceType?: Prisma.SortOrder
   status?: Prisma.SortOrder
   location?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  serialNumber?: Prisma.SortOrder
-  brand?: Prisma.SortOrder
-  purchaseDate?: Prisma.SortOrder
-  warrantyEndDate?: Prisma.SortOrder
   notes?: Prisma.SortOrder
-  model?: Prisma.SortOrder
+  ssid?: Prisma.SortOrder
+  password?: Prisma.SortOrder
+  ip?: Prisma.SortOrder
+  dns?: Prisma.SortOrder
+  gw?: Prisma.SortOrder
+  uploadSpeed?: Prisma.SortOrder
+  downloadSpeed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   assignedToUserId?: Prisma.SortOrder
+  createdByUserId?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
 }
 
 export type NetworkMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  ipAddress?: Prisma.SortOrder
-  macAddress?: Prisma.SortOrder
-  deviceType?: Prisma.SortOrder
   status?: Prisma.SortOrder
   location?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  serialNumber?: Prisma.SortOrder
-  brand?: Prisma.SortOrder
-  purchaseDate?: Prisma.SortOrder
-  warrantyEndDate?: Prisma.SortOrder
   notes?: Prisma.SortOrder
-  model?: Prisma.SortOrder
+  ssid?: Prisma.SortOrder
+  password?: Prisma.SortOrder
+  ip?: Prisma.SortOrder
+  dns?: Prisma.SortOrder
+  gw?: Prisma.SortOrder
+  uploadSpeed?: Prisma.SortOrder
+  downloadSpeed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   assignedToUserId?: Prisma.SortOrder
+  createdByUserId?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
 }
 
@@ -636,10 +638,24 @@ export type NetworkCreateNestedManyWithoutAssignedToUserInput = {
   connect?: Prisma.NetworkWhereUniqueInput | Prisma.NetworkWhereUniqueInput[]
 }
 
+export type NetworkCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.NetworkCreateWithoutCreatedByInput, Prisma.NetworkUncheckedCreateWithoutCreatedByInput> | Prisma.NetworkCreateWithoutCreatedByInput[] | Prisma.NetworkUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.NetworkCreateOrConnectWithoutCreatedByInput | Prisma.NetworkCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.NetworkCreateManyCreatedByInputEnvelope
+  connect?: Prisma.NetworkWhereUniqueInput | Prisma.NetworkWhereUniqueInput[]
+}
+
 export type NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput = {
   create?: Prisma.XOR<Prisma.NetworkCreateWithoutAssignedToUserInput, Prisma.NetworkUncheckedCreateWithoutAssignedToUserInput> | Prisma.NetworkCreateWithoutAssignedToUserInput[] | Prisma.NetworkUncheckedCreateWithoutAssignedToUserInput[]
   connectOrCreate?: Prisma.NetworkCreateOrConnectWithoutAssignedToUserInput | Prisma.NetworkCreateOrConnectWithoutAssignedToUserInput[]
   createMany?: Prisma.NetworkCreateManyAssignedToUserInputEnvelope
+  connect?: Prisma.NetworkWhereUniqueInput | Prisma.NetworkWhereUniqueInput[]
+}
+
+export type NetworkUncheckedCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.NetworkCreateWithoutCreatedByInput, Prisma.NetworkUncheckedCreateWithoutCreatedByInput> | Prisma.NetworkCreateWithoutCreatedByInput[] | Prisma.NetworkUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.NetworkCreateOrConnectWithoutCreatedByInput | Prisma.NetworkCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.NetworkCreateManyCreatedByInputEnvelope
   connect?: Prisma.NetworkWhereUniqueInput | Prisma.NetworkWhereUniqueInput[]
 }
 
@@ -657,6 +673,20 @@ export type NetworkUpdateManyWithoutAssignedToUserNestedInput = {
   deleteMany?: Prisma.NetworkScalarWhereInput | Prisma.NetworkScalarWhereInput[]
 }
 
+export type NetworkUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.NetworkCreateWithoutCreatedByInput, Prisma.NetworkUncheckedCreateWithoutCreatedByInput> | Prisma.NetworkCreateWithoutCreatedByInput[] | Prisma.NetworkUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.NetworkCreateOrConnectWithoutCreatedByInput | Prisma.NetworkCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.NetworkUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.NetworkUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.NetworkCreateManyCreatedByInputEnvelope
+  set?: Prisma.NetworkWhereUniqueInput | Prisma.NetworkWhereUniqueInput[]
+  disconnect?: Prisma.NetworkWhereUniqueInput | Prisma.NetworkWhereUniqueInput[]
+  delete?: Prisma.NetworkWhereUniqueInput | Prisma.NetworkWhereUniqueInput[]
+  connect?: Prisma.NetworkWhereUniqueInput | Prisma.NetworkWhereUniqueInput[]
+  update?: Prisma.NetworkUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.NetworkUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.NetworkUpdateManyWithWhereWithoutCreatedByInput | Prisma.NetworkUpdateManyWithWhereWithoutCreatedByInput[]
+  deleteMany?: Prisma.NetworkScalarWhereInput | Prisma.NetworkScalarWhereInput[]
+}
+
 export type NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput = {
   create?: Prisma.XOR<Prisma.NetworkCreateWithoutAssignedToUserInput, Prisma.NetworkUncheckedCreateWithoutAssignedToUserInput> | Prisma.NetworkCreateWithoutAssignedToUserInput[] | Prisma.NetworkUncheckedCreateWithoutAssignedToUserInput[]
   connectOrCreate?: Prisma.NetworkCreateOrConnectWithoutAssignedToUserInput | Prisma.NetworkCreateOrConnectWithoutAssignedToUserInput[]
@@ -668,6 +698,20 @@ export type NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput = {
   connect?: Prisma.NetworkWhereUniqueInput | Prisma.NetworkWhereUniqueInput[]
   update?: Prisma.NetworkUpdateWithWhereUniqueWithoutAssignedToUserInput | Prisma.NetworkUpdateWithWhereUniqueWithoutAssignedToUserInput[]
   updateMany?: Prisma.NetworkUpdateManyWithWhereWithoutAssignedToUserInput | Prisma.NetworkUpdateManyWithWhereWithoutAssignedToUserInput[]
+  deleteMany?: Prisma.NetworkScalarWhereInput | Prisma.NetworkScalarWhereInput[]
+}
+
+export type NetworkUncheckedUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.NetworkCreateWithoutCreatedByInput, Prisma.NetworkUncheckedCreateWithoutCreatedByInput> | Prisma.NetworkCreateWithoutCreatedByInput[] | Prisma.NetworkUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.NetworkCreateOrConnectWithoutCreatedByInput | Prisma.NetworkCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.NetworkUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.NetworkUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.NetworkCreateManyCreatedByInputEnvelope
+  set?: Prisma.NetworkWhereUniqueInput | Prisma.NetworkWhereUniqueInput[]
+  disconnect?: Prisma.NetworkWhereUniqueInput | Prisma.NetworkWhereUniqueInput[]
+  delete?: Prisma.NetworkWhereUniqueInput | Prisma.NetworkWhereUniqueInput[]
+  connect?: Prisma.NetworkWhereUniqueInput | Prisma.NetworkWhereUniqueInput[]
+  update?: Prisma.NetworkUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.NetworkUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.NetworkUpdateManyWithWhereWithoutCreatedByInput | Prisma.NetworkUpdateManyWithWhereWithoutCreatedByInput[]
   deleteMany?: Prisma.NetworkScalarWhereInput | Prisma.NetworkScalarWhereInput[]
 }
 
@@ -755,10 +799,6 @@ export type NetworkUncheckedUpdateManyWithoutProviderNestedInput = {
   deleteMany?: Prisma.NetworkScalarWhereInput | Prisma.NetworkScalarWhereInput[]
 }
 
-export type EnumNetworkDeviceTypeFieldUpdateOperationsInput = {
-  set?: $Enums.NetworkDeviceType
-}
-
 export type EnumNetworkDeviceStatusFieldUpdateOperationsInput = {
   set?: $Enums.NetworkDeviceStatus
 }
@@ -766,20 +806,20 @@ export type EnumNetworkDeviceStatusFieldUpdateOperationsInput = {
 export type NetworkCreateWithoutAssignedToUserInput = {
   id?: string
   name: string
-  ipAddress: string
-  macAddress?: string | null
-  deviceType?: $Enums.NetworkDeviceType
   status?: $Enums.NetworkDeviceStatus
   location?: string | null
   description?: string | null
-  serialNumber?: string | null
-  brand?: string | null
-  purchaseDate?: Date | string | null
-  warrantyEndDate?: Date | string | null
   notes?: string | null
-  model?: string | null
+  ssid?: string | null
+  password?: string | null
+  ip?: string | null
+  dns?: string | null
+  gw?: string | null
+  uploadSpeed?: string | null
+  downloadSpeed?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedNetworksInput
   company: Prisma.CompanyCreateNestedOneWithoutNetworksInput
   provider?: Prisma.NetworkProviderCreateNestedOneWithoutNetworksInput
 }
@@ -787,21 +827,21 @@ export type NetworkCreateWithoutAssignedToUserInput = {
 export type NetworkUncheckedCreateWithoutAssignedToUserInput = {
   id?: string
   name: string
-  ipAddress: string
-  macAddress?: string | null
-  deviceType?: $Enums.NetworkDeviceType
   status?: $Enums.NetworkDeviceStatus
   location?: string | null
   description?: string | null
-  serialNumber?: string | null
-  brand?: string | null
-  purchaseDate?: Date | string | null
-  warrantyEndDate?: Date | string | null
   notes?: string | null
-  model?: string | null
+  ssid?: string | null
+  password?: string | null
+  ip?: string | null
+  dns?: string | null
+  gw?: string | null
+  uploadSpeed?: string | null
+  downloadSpeed?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   companyId: string
+  createdByUserId?: string | null
   providerId?: string | null
 }
 
@@ -812,6 +852,58 @@ export type NetworkCreateOrConnectWithoutAssignedToUserInput = {
 
 export type NetworkCreateManyAssignedToUserInputEnvelope = {
   data: Prisma.NetworkCreateManyAssignedToUserInput | Prisma.NetworkCreateManyAssignedToUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type NetworkCreateWithoutCreatedByInput = {
+  id?: string
+  name: string
+  status?: $Enums.NetworkDeviceStatus
+  location?: string | null
+  description?: string | null
+  notes?: string | null
+  ssid?: string | null
+  password?: string | null
+  ip?: string | null
+  dns?: string | null
+  gw?: string | null
+  uploadSpeed?: string | null
+  downloadSpeed?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignedToUser?: Prisma.UserCreateNestedOneWithoutAssignedNetworksInput
+  company: Prisma.CompanyCreateNestedOneWithoutNetworksInput
+  provider?: Prisma.NetworkProviderCreateNestedOneWithoutNetworksInput
+}
+
+export type NetworkUncheckedCreateWithoutCreatedByInput = {
+  id?: string
+  name: string
+  status?: $Enums.NetworkDeviceStatus
+  location?: string | null
+  description?: string | null
+  notes?: string | null
+  ssid?: string | null
+  password?: string | null
+  ip?: string | null
+  dns?: string | null
+  gw?: string | null
+  uploadSpeed?: string | null
+  downloadSpeed?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  companyId: string
+  assignedToUserId?: string | null
+  providerId?: string | null
+}
+
+export type NetworkCreateOrConnectWithoutCreatedByInput = {
+  where: Prisma.NetworkWhereUniqueInput
+  create: Prisma.XOR<Prisma.NetworkCreateWithoutCreatedByInput, Prisma.NetworkUncheckedCreateWithoutCreatedByInput>
+}
+
+export type NetworkCreateManyCreatedByInputEnvelope = {
+  data: Prisma.NetworkCreateManyCreatedByInput | Prisma.NetworkCreateManyCreatedByInput[]
   skipDuplicates?: boolean
 }
 
@@ -837,64 +929,80 @@ export type NetworkScalarWhereInput = {
   NOT?: Prisma.NetworkScalarWhereInput | Prisma.NetworkScalarWhereInput[]
   id?: Prisma.StringFilter<"Network"> | string
   name?: Prisma.StringFilter<"Network"> | string
-  ipAddress?: Prisma.StringFilter<"Network"> | string
-  macAddress?: Prisma.StringNullableFilter<"Network"> | string | null
-  deviceType?: Prisma.EnumNetworkDeviceTypeFilter<"Network"> | $Enums.NetworkDeviceType
   status?: Prisma.EnumNetworkDeviceStatusFilter<"Network"> | $Enums.NetworkDeviceStatus
   location?: Prisma.StringNullableFilter<"Network"> | string | null
   description?: Prisma.StringNullableFilter<"Network"> | string | null
-  serialNumber?: Prisma.StringNullableFilter<"Network"> | string | null
-  brand?: Prisma.StringNullableFilter<"Network"> | string | null
-  purchaseDate?: Prisma.DateTimeNullableFilter<"Network"> | Date | string | null
-  warrantyEndDate?: Prisma.DateTimeNullableFilter<"Network"> | Date | string | null
   notes?: Prisma.StringNullableFilter<"Network"> | string | null
-  model?: Prisma.StringNullableFilter<"Network"> | string | null
+  ssid?: Prisma.StringNullableFilter<"Network"> | string | null
+  password?: Prisma.StringNullableFilter<"Network"> | string | null
+  ip?: Prisma.StringNullableFilter<"Network"> | string | null
+  dns?: Prisma.StringNullableFilter<"Network"> | string | null
+  gw?: Prisma.StringNullableFilter<"Network"> | string | null
+  uploadSpeed?: Prisma.StringNullableFilter<"Network"> | string | null
+  downloadSpeed?: Prisma.StringNullableFilter<"Network"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Network"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Network"> | Date | string
   companyId?: Prisma.StringFilter<"Network"> | string
   assignedToUserId?: Prisma.StringNullableFilter<"Network"> | string | null
+  createdByUserId?: Prisma.StringNullableFilter<"Network"> | string | null
   providerId?: Prisma.StringNullableFilter<"Network"> | string | null
+}
+
+export type NetworkUpsertWithWhereUniqueWithoutCreatedByInput = {
+  where: Prisma.NetworkWhereUniqueInput
+  update: Prisma.XOR<Prisma.NetworkUpdateWithoutCreatedByInput, Prisma.NetworkUncheckedUpdateWithoutCreatedByInput>
+  create: Prisma.XOR<Prisma.NetworkCreateWithoutCreatedByInput, Prisma.NetworkUncheckedCreateWithoutCreatedByInput>
+}
+
+export type NetworkUpdateWithWhereUniqueWithoutCreatedByInput = {
+  where: Prisma.NetworkWhereUniqueInput
+  data: Prisma.XOR<Prisma.NetworkUpdateWithoutCreatedByInput, Prisma.NetworkUncheckedUpdateWithoutCreatedByInput>
+}
+
+export type NetworkUpdateManyWithWhereWithoutCreatedByInput = {
+  where: Prisma.NetworkScalarWhereInput
+  data: Prisma.XOR<Prisma.NetworkUpdateManyMutationInput, Prisma.NetworkUncheckedUpdateManyWithoutCreatedByInput>
 }
 
 export type NetworkCreateWithoutCompanyInput = {
   id?: string
   name: string
-  ipAddress: string
-  macAddress?: string | null
-  deviceType?: $Enums.NetworkDeviceType
   status?: $Enums.NetworkDeviceStatus
   location?: string | null
   description?: string | null
-  serialNumber?: string | null
-  brand?: string | null
-  purchaseDate?: Date | string | null
-  warrantyEndDate?: Date | string | null
   notes?: string | null
-  model?: string | null
+  ssid?: string | null
+  password?: string | null
+  ip?: string | null
+  dns?: string | null
+  gw?: string | null
+  uploadSpeed?: string | null
+  downloadSpeed?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   assignedToUser?: Prisma.UserCreateNestedOneWithoutAssignedNetworksInput
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedNetworksInput
   provider?: Prisma.NetworkProviderCreateNestedOneWithoutNetworksInput
 }
 
 export type NetworkUncheckedCreateWithoutCompanyInput = {
   id?: string
   name: string
-  ipAddress: string
-  macAddress?: string | null
-  deviceType?: $Enums.NetworkDeviceType
   status?: $Enums.NetworkDeviceStatus
   location?: string | null
   description?: string | null
-  serialNumber?: string | null
-  brand?: string | null
-  purchaseDate?: Date | string | null
-  warrantyEndDate?: Date | string | null
   notes?: string | null
-  model?: string | null
+  ssid?: string | null
+  password?: string | null
+  ip?: string | null
+  dns?: string | null
+  gw?: string | null
+  uploadSpeed?: string | null
+  downloadSpeed?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   assignedToUserId?: string | null
+  createdByUserId?: string | null
   providerId?: string | null
 }
 
@@ -927,43 +1035,43 @@ export type NetworkUpdateManyWithWhereWithoutCompanyInput = {
 export type NetworkCreateWithoutProviderInput = {
   id?: string
   name: string
-  ipAddress: string
-  macAddress?: string | null
-  deviceType?: $Enums.NetworkDeviceType
   status?: $Enums.NetworkDeviceStatus
   location?: string | null
   description?: string | null
-  serialNumber?: string | null
-  brand?: string | null
-  purchaseDate?: Date | string | null
-  warrantyEndDate?: Date | string | null
   notes?: string | null
-  model?: string | null
+  ssid?: string | null
+  password?: string | null
+  ip?: string | null
+  dns?: string | null
+  gw?: string | null
+  uploadSpeed?: string | null
+  downloadSpeed?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   assignedToUser?: Prisma.UserCreateNestedOneWithoutAssignedNetworksInput
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedNetworksInput
   company: Prisma.CompanyCreateNestedOneWithoutNetworksInput
 }
 
 export type NetworkUncheckedCreateWithoutProviderInput = {
   id?: string
   name: string
-  ipAddress: string
-  macAddress?: string | null
-  deviceType?: $Enums.NetworkDeviceType
   status?: $Enums.NetworkDeviceStatus
   location?: string | null
   description?: string | null
-  serialNumber?: string | null
-  brand?: string | null
-  purchaseDate?: Date | string | null
-  warrantyEndDate?: Date | string | null
   notes?: string | null
-  model?: string | null
+  ssid?: string | null
+  password?: string | null
+  ip?: string | null
+  dns?: string | null
+  gw?: string | null
+  uploadSpeed?: string | null
+  downloadSpeed?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   companyId: string
   assignedToUserId?: string | null
+  createdByUserId?: string | null
 }
 
 export type NetworkCreateOrConnectWithoutProviderInput = {
@@ -995,41 +1103,62 @@ export type NetworkUpdateManyWithWhereWithoutProviderInput = {
 export type NetworkCreateManyAssignedToUserInput = {
   id?: string
   name: string
-  ipAddress: string
-  macAddress?: string | null
-  deviceType?: $Enums.NetworkDeviceType
   status?: $Enums.NetworkDeviceStatus
   location?: string | null
   description?: string | null
-  serialNumber?: string | null
-  brand?: string | null
-  purchaseDate?: Date | string | null
-  warrantyEndDate?: Date | string | null
   notes?: string | null
-  model?: string | null
+  ssid?: string | null
+  password?: string | null
+  ip?: string | null
+  dns?: string | null
+  gw?: string | null
+  uploadSpeed?: string | null
+  downloadSpeed?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   companyId: string
+  createdByUserId?: string | null
+  providerId?: string | null
+}
+
+export type NetworkCreateManyCreatedByInput = {
+  id?: string
+  name: string
+  status?: $Enums.NetworkDeviceStatus
+  location?: string | null
+  description?: string | null
+  notes?: string | null
+  ssid?: string | null
+  password?: string | null
+  ip?: string | null
+  dns?: string | null
+  gw?: string | null
+  uploadSpeed?: string | null
+  downloadSpeed?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  companyId: string
+  assignedToUserId?: string | null
   providerId?: string | null
 }
 
 export type NetworkUpdateWithoutAssignedToUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ipAddress?: Prisma.StringFieldUpdateOperationsInput | string
-  macAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deviceType?: Prisma.EnumNetworkDeviceTypeFieldUpdateOperationsInput | $Enums.NetworkDeviceType
   status?: Prisma.EnumNetworkDeviceStatusFieldUpdateOperationsInput | $Enums.NetworkDeviceStatus
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ssid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gw?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uploadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  downloadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedNetworksNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutNetworksNestedInput
   provider?: Prisma.NetworkProviderUpdateOneWithoutNetworksNestedInput
 }
@@ -1037,211 +1166,274 @@ export type NetworkUpdateWithoutAssignedToUserInput = {
 export type NetworkUncheckedUpdateWithoutAssignedToUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ipAddress?: Prisma.StringFieldUpdateOperationsInput | string
-  macAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deviceType?: Prisma.EnumNetworkDeviceTypeFieldUpdateOperationsInput | $Enums.NetworkDeviceType
   status?: Prisma.EnumNetworkDeviceStatusFieldUpdateOperationsInput | $Enums.NetworkDeviceStatus
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ssid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gw?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uploadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  downloadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type NetworkUncheckedUpdateManyWithoutAssignedToUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ipAddress?: Prisma.StringFieldUpdateOperationsInput | string
-  macAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deviceType?: Prisma.EnumNetworkDeviceTypeFieldUpdateOperationsInput | $Enums.NetworkDeviceType
   status?: Prisma.EnumNetworkDeviceStatusFieldUpdateOperationsInput | $Enums.NetworkDeviceStatus
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ssid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gw?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uploadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  downloadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type NetworkUpdateWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumNetworkDeviceStatusFieldUpdateOperationsInput | $Enums.NetworkDeviceStatus
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ssid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gw?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uploadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  downloadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignedToUser?: Prisma.UserUpdateOneWithoutAssignedNetworksNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutNetworksNestedInput
+  provider?: Prisma.NetworkProviderUpdateOneWithoutNetworksNestedInput
+}
+
+export type NetworkUncheckedUpdateWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumNetworkDeviceStatusFieldUpdateOperationsInput | $Enums.NetworkDeviceStatus
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ssid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gw?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uploadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  downloadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedToUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type NetworkUncheckedUpdateManyWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumNetworkDeviceStatusFieldUpdateOperationsInput | $Enums.NetworkDeviceStatus
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ssid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gw?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uploadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  downloadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedToUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type NetworkCreateManyCompanyInput = {
   id?: string
   name: string
-  ipAddress: string
-  macAddress?: string | null
-  deviceType?: $Enums.NetworkDeviceType
   status?: $Enums.NetworkDeviceStatus
   location?: string | null
   description?: string | null
-  serialNumber?: string | null
-  brand?: string | null
-  purchaseDate?: Date | string | null
-  warrantyEndDate?: Date | string | null
   notes?: string | null
-  model?: string | null
+  ssid?: string | null
+  password?: string | null
+  ip?: string | null
+  dns?: string | null
+  gw?: string | null
+  uploadSpeed?: string | null
+  downloadSpeed?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   assignedToUserId?: string | null
+  createdByUserId?: string | null
   providerId?: string | null
 }
 
 export type NetworkUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ipAddress?: Prisma.StringFieldUpdateOperationsInput | string
-  macAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deviceType?: Prisma.EnumNetworkDeviceTypeFieldUpdateOperationsInput | $Enums.NetworkDeviceType
   status?: Prisma.EnumNetworkDeviceStatusFieldUpdateOperationsInput | $Enums.NetworkDeviceStatus
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ssid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gw?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uploadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  downloadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedToUser?: Prisma.UserUpdateOneWithoutAssignedNetworksNestedInput
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedNetworksNestedInput
   provider?: Prisma.NetworkProviderUpdateOneWithoutNetworksNestedInput
 }
 
 export type NetworkUncheckedUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ipAddress?: Prisma.StringFieldUpdateOperationsInput | string
-  macAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deviceType?: Prisma.EnumNetworkDeviceTypeFieldUpdateOperationsInput | $Enums.NetworkDeviceType
   status?: Prisma.EnumNetworkDeviceStatusFieldUpdateOperationsInput | $Enums.NetworkDeviceStatus
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ssid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gw?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uploadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  downloadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedToUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type NetworkUncheckedUpdateManyWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ipAddress?: Prisma.StringFieldUpdateOperationsInput | string
-  macAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deviceType?: Prisma.EnumNetworkDeviceTypeFieldUpdateOperationsInput | $Enums.NetworkDeviceType
   status?: Prisma.EnumNetworkDeviceStatusFieldUpdateOperationsInput | $Enums.NetworkDeviceStatus
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ssid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gw?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uploadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  downloadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedToUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type NetworkCreateManyProviderInput = {
   id?: string
   name: string
-  ipAddress: string
-  macAddress?: string | null
-  deviceType?: $Enums.NetworkDeviceType
   status?: $Enums.NetworkDeviceStatus
   location?: string | null
   description?: string | null
-  serialNumber?: string | null
-  brand?: string | null
-  purchaseDate?: Date | string | null
-  warrantyEndDate?: Date | string | null
   notes?: string | null
-  model?: string | null
+  ssid?: string | null
+  password?: string | null
+  ip?: string | null
+  dns?: string | null
+  gw?: string | null
+  uploadSpeed?: string | null
+  downloadSpeed?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   companyId: string
   assignedToUserId?: string | null
+  createdByUserId?: string | null
 }
 
 export type NetworkUpdateWithoutProviderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ipAddress?: Prisma.StringFieldUpdateOperationsInput | string
-  macAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deviceType?: Prisma.EnumNetworkDeviceTypeFieldUpdateOperationsInput | $Enums.NetworkDeviceType
   status?: Prisma.EnumNetworkDeviceStatusFieldUpdateOperationsInput | $Enums.NetworkDeviceStatus
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ssid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gw?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uploadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  downloadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedToUser?: Prisma.UserUpdateOneWithoutAssignedNetworksNestedInput
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedNetworksNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutNetworksNestedInput
 }
 
 export type NetworkUncheckedUpdateWithoutProviderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ipAddress?: Prisma.StringFieldUpdateOperationsInput | string
-  macAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deviceType?: Prisma.EnumNetworkDeviceTypeFieldUpdateOperationsInput | $Enums.NetworkDeviceType
   status?: Prisma.EnumNetworkDeviceStatusFieldUpdateOperationsInput | $Enums.NetworkDeviceStatus
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ssid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gw?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uploadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  downloadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   assignedToUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type NetworkUncheckedUpdateManyWithoutProviderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ipAddress?: Prisma.StringFieldUpdateOperationsInput | string
-  macAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deviceType?: Prisma.EnumNetworkDeviceTypeFieldUpdateOperationsInput | $Enums.NetworkDeviceType
   status?: Prisma.EnumNetworkDeviceStatusFieldUpdateOperationsInput | $Enums.NetworkDeviceStatus
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ssid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gw?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uploadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  downloadSpeed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   assignedToUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -1249,24 +1441,25 @@ export type NetworkUncheckedUpdateManyWithoutProviderInput = {
 export type NetworkSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  ipAddress?: boolean
-  macAddress?: boolean
-  deviceType?: boolean
   status?: boolean
   location?: boolean
   description?: boolean
-  serialNumber?: boolean
-  brand?: boolean
-  purchaseDate?: boolean
-  warrantyEndDate?: boolean
   notes?: boolean
-  model?: boolean
+  ssid?: boolean
+  password?: boolean
+  ip?: boolean
+  dns?: boolean
+  gw?: boolean
+  uploadSpeed?: boolean
+  downloadSpeed?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   companyId?: boolean
   assignedToUserId?: boolean
+  createdByUserId?: boolean
   providerId?: boolean
   assignedToUser?: boolean | Prisma.Network$assignedToUserArgs<ExtArgs>
+  createdBy?: boolean | Prisma.Network$createdByArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.Network$providerArgs<ExtArgs>
 }, ExtArgs["result"]["network"]>
@@ -1274,24 +1467,25 @@ export type NetworkSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type NetworkSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  ipAddress?: boolean
-  macAddress?: boolean
-  deviceType?: boolean
   status?: boolean
   location?: boolean
   description?: boolean
-  serialNumber?: boolean
-  brand?: boolean
-  purchaseDate?: boolean
-  warrantyEndDate?: boolean
   notes?: boolean
-  model?: boolean
+  ssid?: boolean
+  password?: boolean
+  ip?: boolean
+  dns?: boolean
+  gw?: boolean
+  uploadSpeed?: boolean
+  downloadSpeed?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   companyId?: boolean
   assignedToUserId?: boolean
+  createdByUserId?: boolean
   providerId?: boolean
   assignedToUser?: boolean | Prisma.Network$assignedToUserArgs<ExtArgs>
+  createdBy?: boolean | Prisma.Network$createdByArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.Network$providerArgs<ExtArgs>
 }, ExtArgs["result"]["network"]>
@@ -1299,24 +1493,25 @@ export type NetworkSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type NetworkSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  ipAddress?: boolean
-  macAddress?: boolean
-  deviceType?: boolean
   status?: boolean
   location?: boolean
   description?: boolean
-  serialNumber?: boolean
-  brand?: boolean
-  purchaseDate?: boolean
-  warrantyEndDate?: boolean
   notes?: boolean
-  model?: boolean
+  ssid?: boolean
+  password?: boolean
+  ip?: boolean
+  dns?: boolean
+  gw?: boolean
+  uploadSpeed?: boolean
+  downloadSpeed?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   companyId?: boolean
   assignedToUserId?: boolean
+  createdByUserId?: boolean
   providerId?: boolean
   assignedToUser?: boolean | Prisma.Network$assignedToUserArgs<ExtArgs>
+  createdBy?: boolean | Prisma.Network$createdByArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.Network$providerArgs<ExtArgs>
 }, ExtArgs["result"]["network"]>
@@ -1324,38 +1519,41 @@ export type NetworkSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type NetworkSelectScalar = {
   id?: boolean
   name?: boolean
-  ipAddress?: boolean
-  macAddress?: boolean
-  deviceType?: boolean
   status?: boolean
   location?: boolean
   description?: boolean
-  serialNumber?: boolean
-  brand?: boolean
-  purchaseDate?: boolean
-  warrantyEndDate?: boolean
   notes?: boolean
-  model?: boolean
+  ssid?: boolean
+  password?: boolean
+  ip?: boolean
+  dns?: boolean
+  gw?: boolean
+  uploadSpeed?: boolean
+  downloadSpeed?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   companyId?: boolean
   assignedToUserId?: boolean
+  createdByUserId?: boolean
   providerId?: boolean
 }
 
-export type NetworkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "ipAddress" | "macAddress" | "deviceType" | "status" | "location" | "description" | "serialNumber" | "brand" | "purchaseDate" | "warrantyEndDate" | "notes" | "model" | "createdAt" | "updatedAt" | "companyId" | "assignedToUserId" | "providerId", ExtArgs["result"]["network"]>
+export type NetworkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "status" | "location" | "description" | "notes" | "ssid" | "password" | "ip" | "dns" | "gw" | "uploadSpeed" | "downloadSpeed" | "createdAt" | "updatedAt" | "companyId" | "assignedToUserId" | "createdByUserId" | "providerId", ExtArgs["result"]["network"]>
 export type NetworkInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   assignedToUser?: boolean | Prisma.Network$assignedToUserArgs<ExtArgs>
+  createdBy?: boolean | Prisma.Network$createdByArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.Network$providerArgs<ExtArgs>
 }
 export type NetworkIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   assignedToUser?: boolean | Prisma.Network$assignedToUserArgs<ExtArgs>
+  createdBy?: boolean | Prisma.Network$createdByArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.Network$providerArgs<ExtArgs>
 }
 export type NetworkIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   assignedToUser?: boolean | Prisma.Network$assignedToUserArgs<ExtArgs>
+  createdBy?: boolean | Prisma.Network$createdByArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.Network$providerArgs<ExtArgs>
 }
@@ -1364,28 +1562,29 @@ export type $NetworkPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   name: "Network"
   objects: {
     assignedToUser: Prisma.$UserPayload<ExtArgs> | null
+    createdBy: Prisma.$UserPayload<ExtArgs> | null
     company: Prisma.$CompanyPayload<ExtArgs>
     provider: Prisma.$NetworkProviderPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
-    ipAddress: string
-    macAddress: string | null
-    deviceType: $Enums.NetworkDeviceType
     status: $Enums.NetworkDeviceStatus
     location: string | null
     description: string | null
-    serialNumber: string | null
-    brand: string | null
-    purchaseDate: Date | null
-    warrantyEndDate: Date | null
     notes: string | null
-    model: string | null
+    ssid: string | null
+    password: string | null
+    ip: string | null
+    dns: string | null
+    gw: string | null
+    uploadSpeed: string | null
+    downloadSpeed: string | null
     createdAt: Date
     updatedAt: Date
     companyId: string
     assignedToUserId: string | null
+    createdByUserId: string | null
     providerId: string | null
   }, ExtArgs["result"]["network"]>
   composites: {}
@@ -1782,6 +1981,7 @@ readonly fields: NetworkFieldRefs;
 export interface Prisma__NetworkClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   assignedToUser<T extends Prisma.Network$assignedToUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Network$assignedToUserArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  createdBy<T extends Prisma.Network$createdByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Network$createdByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   provider<T extends Prisma.Network$providerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Network$providerArgs<ExtArgs>>): Prisma.Prisma__NetworkProviderClient<runtime.Types.Result.GetResult<Prisma.$NetworkProviderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
@@ -1815,22 +2015,22 @@ export interface Prisma__NetworkClient<T, Null = never, ExtArgs extends runtime.
 export interface NetworkFieldRefs {
   readonly id: Prisma.FieldRef<"Network", 'String'>
   readonly name: Prisma.FieldRef<"Network", 'String'>
-  readonly ipAddress: Prisma.FieldRef<"Network", 'String'>
-  readonly macAddress: Prisma.FieldRef<"Network", 'String'>
-  readonly deviceType: Prisma.FieldRef<"Network", 'NetworkDeviceType'>
   readonly status: Prisma.FieldRef<"Network", 'NetworkDeviceStatus'>
   readonly location: Prisma.FieldRef<"Network", 'String'>
   readonly description: Prisma.FieldRef<"Network", 'String'>
-  readonly serialNumber: Prisma.FieldRef<"Network", 'String'>
-  readonly brand: Prisma.FieldRef<"Network", 'String'>
-  readonly purchaseDate: Prisma.FieldRef<"Network", 'DateTime'>
-  readonly warrantyEndDate: Prisma.FieldRef<"Network", 'DateTime'>
   readonly notes: Prisma.FieldRef<"Network", 'String'>
-  readonly model: Prisma.FieldRef<"Network", 'String'>
+  readonly ssid: Prisma.FieldRef<"Network", 'String'>
+  readonly password: Prisma.FieldRef<"Network", 'String'>
+  readonly ip: Prisma.FieldRef<"Network", 'String'>
+  readonly dns: Prisma.FieldRef<"Network", 'String'>
+  readonly gw: Prisma.FieldRef<"Network", 'String'>
+  readonly uploadSpeed: Prisma.FieldRef<"Network", 'String'>
+  readonly downloadSpeed: Prisma.FieldRef<"Network", 'String'>
   readonly createdAt: Prisma.FieldRef<"Network", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Network", 'DateTime'>
   readonly companyId: Prisma.FieldRef<"Network", 'String'>
   readonly assignedToUserId: Prisma.FieldRef<"Network", 'String'>
+  readonly createdByUserId: Prisma.FieldRef<"Network", 'String'>
   readonly providerId: Prisma.FieldRef<"Network", 'String'>
 }
     
@@ -2231,6 +2431,25 @@ export type NetworkDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
  * Network.assignedToUser
  */
 export type Network$assignedToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * Network.createdBy
+ */
+export type Network$createdByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the User
    */

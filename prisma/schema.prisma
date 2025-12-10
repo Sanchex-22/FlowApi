@@ -28,11 +28,8 @@ model Ticket {
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   reviewed     Boolean?
-  // No cascada: El usuario no se elimina si se elimina el ticket
   sendBy       User?          @relation("TicketsSentBy", fields: [sendById], references: [id], onDelete: SetNull)
-  // No cascada: El usuario no se elimina si se elimina el ticket
   sendTo       User?          @relation("TicketsSentTo", fields: [sendToId], references: [id], onDelete: SetNull)
-  // ⚠️ NO CASCADE: Si se elimina la compañía, el ticket se desasocia (companyId pasa a null)
   company      Company?       @relation(fields: [companyId], references: [id], onDelete: SetNull)
 }
 
@@ -50,10 +47,10 @@ model User {
   assignedEquipments   Equipment[]
   assignedMaintenances Maintenance[]
   assignedNetworks     Network[]
+  createdNetworks      Network[]     @relation("NetworkCreatedBy")
   person               Person?
   ticketsSentBy        Ticket[]      @relation("TicketsSentBy")
   ticketsSentTo        Ticket[]      @relation("TicketsSentTo")
-  // ⚠️ NO CASCADE: Solo desasociar usuarios, no eliminarlos
   company              Company?      @relation("CompanyUsers", fields: [companyId], references: [id], onDelete: SetNull)
 }
 
@@ -71,7 +68,6 @@ model Person {
   userCode     String       @unique
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
-  // Si se elimina el departamento, la persona pierde la asignación
   department   Department?  @relation(fields: [departmentId], references: [id], onDelete: SetNull)
   user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -87,25 +83,15 @@ model Company {
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   createdByUserId  String?
-  // Si se elimina el usuario creador, la compañía sigue existiendo
   createdBy        User?             @relation("CompanyCreatedBy", fields: [createdByUserId], references: [id], onDelete: SetNull)
-  // ✅ CASCADE: Elimina departamentos con la compañía
   departments      Department[]      
-  // ✅ CASCADE: Elimina documentos con la compañía
   documents        Document[]        
-  // ✅ CASCADE: Elimina equipos con la compañía
   equipments       Equipment[]       
-  // ✅ CASCADE: Elimina licencias con la compañía
   licenses         License[]         
-  // ✅ CASCADE: Elimina mantenimientos con la compañía
   maintenances     Maintenance[]     
-  // ✅ CASCADE: Elimina redes con la compañía
   networks         Network[]         
-  // ✅ CASCADE: Elimina proveedores de red con la compañía
   networkProviders NetworkProvider[] 
-  // ⚠️ NO CASCADE: Solo desasociar usuarios
   users            User[]            @relation("CompanyUsers")
-  // ⚠️ NO CASCADE: Si se elimina la compañía, los tickets se desasocian (companyId pasa a null)
   tickets          Ticket[]
 }
 
@@ -117,9 +103,7 @@ model Department {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   companyId   String
-  // ✅ CASCADE: Elimina departamento con la compañía
   company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  // Si se elimina el departamento, las personas pierden la asignación
   persons     Person[]
 }
 
@@ -142,13 +126,9 @@ model Equipment {
   assignedToUserId String?
   endUser          String?
   operatingSystem  String?
-  // ✅ CASCADE: Elimina documentos con el equipo
   documents        Document[]      
-  // No cascada: El usuario no se elimina si se elimina el equipo
   assignedToUser   User?           @relation(fields: [assignedToUserId], references: [id], onDelete: SetNull)
-  // ✅ CASCADE: Elimina equipo con la compañía
   company          Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  // ✅ CASCADE: Elimina mantenimientos con el equipo
   maintenances     Maintenance[]   
 }
 
@@ -166,11 +146,8 @@ model Maintenance {
   equipmentId      String
   assignedToUserId String?
   companyId        String
-  // No cascada: El usuario no se elimina
   assignedToUser   User?             @relation(fields: [assignedToUserId], references: [id], onDelete: SetNull)
-  // ✅ CASCADE: Elimina con la compañía
   company          Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  // ✅ CASCADE: Elimina con el equipo
   equipment        Equipment         @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
 }
 
@@ -185,9 +162,7 @@ model Document {
   updatedAt   DateTime   @updatedAt
   companyId   String
   equipmentId String?
-  // ✅ CASCADE: Elimina con la compañía
   company     Company    @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  // ✅ CASCADE: Elimina con el equipo
   equipment   Equipment? @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
 }
 
@@ -202,7 +177,6 @@ model License {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   companyId      String
-  // ✅ CASCADE: Elimina con la compañía
   company        Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
 }
 
@@ -228,40 +202,42 @@ model NetworkProvider {
   meshDevices   String?
   switchDevices String?
   companyId     String
-  // ✅ CASCADE: Elimina redes con el proveedor
   networks      Network[]
-  // ✅ CASCADE: Elimina con la compañía
   company       Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@unique([name, companyId])
 }
 
 model Network {
-  id               String              @id @default(uuid())
-  name             String
-  ipAddress        String              @unique
-  macAddress       String?
-  deviceType       NetworkDeviceType   @default(OTHER)
-  status           NetworkDeviceStatus @default(UNKNOWN)
-  location         String?
-  description      String?
-  serialNumber     String?
-  brand            String?
-  purchaseDate     DateTime?
-  warrantyEndDate  DateTime?
-  notes            String?
-  model            String?
-  createdAt        DateTime            @default(now())
-  updatedAt        DateTime            @updatedAt
-  companyId        String
-  assignedToUserId String?
-  providerId       String?
+  id                String              @id @default(uuid())
+  name              String
+  status            NetworkDeviceStatus @default(UNKNOWN)
+  location          String?
+  description       String?
+  notes             String?
+  ssid              String?
+  password          String?
+  ip                String?
+  dns               String?
+  gw                String?
+  uploadSpeed       String?
+  downloadSpeed     String?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  companyId         String
+  assignedToUserId  String?
+  createdByUserId   String?
+  providerId        String?
   // No cascada: El usuario no se elimina
-  assignedToUser   User?               @relation(fields: [assignedToUserId], references: [id], onDelete: SetNull)
+  assignedToUser    User?               @relation(fields: [assignedToUserId], references: [id], onDelete: SetNull)
+  // No cascada: El usuario creador no se elimina
+  createdBy         User?               @relation("NetworkCreatedBy", fields: [createdByUserId], references: [id], onDelete: SetNull)
   // ✅ CASCADE: Elimina con la compañía
-  company          Company             @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  company           Company             @relation(fields: [companyId], references: [id], onDelete: Cascade)
   // ✅ CASCADE: Elimina con el proveedor
-  provider         NetworkProvider?    @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  provider          NetworkProvider?    @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+  // @@unique([name, companyId])
 }
 
 enum UserRole {

@@ -72,8 +72,8 @@ export class DashboardController {
             const desktopsCount = await prisma.equipment.count({ where: { companyId, type: { equals: 'Desktop', mode: 'insensitive' } } });
             const mobilesCount = await prisma.equipment.count({ where: { companyId, type: { equals: 'Móvil', mode: 'insensitive' } } });
             // Para impresoras y networking, consultamos el modelo Network
-            const printersCount = await prisma.network.count({ where: { companyId, deviceType: 'PRINTER' } });
-            const networkingCount = await prisma.network.count({ where: { companyId, deviceType: { not: 'PRINTER' } } });
+            // const printersCount = await prisma.network.count({ where: { companyId, deviceType: 'PRINTER' } });
+            // const networkingCount = await prisma.network.count({ where: { companyId, deviceType: { not: 'PRINTER' } } });
 
 
             // --- 4. Datos para la Actividad Reciente ---
@@ -176,8 +176,8 @@ export class DashboardController {
                     { name: 'Laptops', count: laptopsCount },
                     { name: 'Desktops', count: desktopsCount },
                     { name: 'Móviles', count: mobilesCount },
-                    { name: 'Impresoras', count: printersCount },
-                    { name: 'Networking', count: networkingCount },
+                    // { name: 'Impresoras', count: printersCount },
+                    // { name: 'Networking', count: networkingCount },
                 ],
                 recentActivity,
             };

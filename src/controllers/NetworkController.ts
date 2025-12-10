@@ -1,8 +1,7 @@
 // src/network/network.controller.ts
 import { Request, Response } from 'express';
-import { prisma } from '../../lib/prisma.js';
-import { NetworkDeviceStatus, NetworkDeviceType } from '../../generated/prisma/enums';
-
+import { NetworkDeviceStatus } from '../../generated/prisma/enums.js';
+import prisma from '../../lib/prisma.js';
 
 export class NetworkController {
 
@@ -10,55 +9,63 @@ export class NetworkController {
         try {
             const {
                 name,
-                ipAddress,
-                macAddress,
-                deviceType,
                 status,
                 location,
                 description,
-                serialNumber,
-                brand,
-                purchaseDate,
-                warrantyEndDate,
                 notes,
-                model,
+                ssid,
+                password,
+                ip,
+                dns,
+                gw,
+                uploadSpeed,
+                downloadSpeed,
                 companyId,
                 assignedToUserId,
-                providerId, // NUEVO: ID del proveedor
+                createdByUserId,
+                providerId,
             } = req.body;
 
             // Validación de campos obligatorios
-            if (!name || !ipAddress || !companyId || !deviceType) {
-                return res.status(400).json({ error: 'Los campos nombre, IP, compañía y tipo de dispositivo son obligatorios.' });
+            if (!name || !companyId) {
+                return res.status(400).json({ error: 'Los campos nombre y compañía son obligatorios.' });
             }
 
             const newNetworkDevice = await prisma.network.create({
                 data: {
                     name,
-                    ipAddress,
-                    macAddress,
-                    deviceType: deviceType as NetworkDeviceType,
-                    status: status as NetworkDeviceStatus,
+                    status: status as NetworkDeviceStatus || NetworkDeviceStatus.UNKNOWN,
                     location,
                     description,
-                    serialNumber,
-                    brand,
-                    purchaseDate: purchaseDate ? new Date(purchaseDate) : undefined,
-                    warrantyEndDate: warrantyEndDate ? new Date(warrantyEndDate) : undefined,
                     notes,
-                    model,
+                    ssid,
+                    password,
+                    ip,
+                    dns,
+                    gw,
+                    uploadSpeed,
+                    downloadSpeed,
                     company: { connect: { id: companyId } },
                     assignedToUser: assignedToUserId ? { connect: { id: assignedToUserId } } : undefined,
-                    provider: providerId ? { connect: { id: providerId } } : undefined, // NUEVO: Conectar al proveedor si se proporciona providerId
+                    createdBy: createdByUserId ? { connect: { id: createdByUserId } } : undefined,
+                    provider: providerId ? { connect: { id: providerId } } : undefined,
+                },
+                include: {
+                    company: { select: { id: true, name: true } },
+                    assignedToUser: { select: { id: true, username: true, email: true } },
+                    createdBy: { select: { id: true, username: true, email: true } },
+                    provider: true,
                 },
             });
 
             res.status(201).json({ message: 'Dispositivo de red creado exitosamente', data: newNetworkDevice });
         } catch (error: any) {
             console.error('Error al crear el dispositivo de red:', error);
-            // Error de restricción única (ej. IP, MAC o Serial duplicados)
             if (error.code === 'P2002') {
                 return res.status(409).json({ error: `Conflicto: El valor para ${error.meta.target.join(', ')} ya existe.` });
+            }
+            if (error.code === 'P2025') {
+                return res.status(404).json({ error: 'La compañía, usuario o proveedor no existe.' });
             }
             res.status(500).json({ error: 'Error interno del servidor al crear el dispositivo de red.' });
         }
@@ -76,7 +83,6 @@ export class NetworkController {
             res.status(200).json({ message: 'Dispositivo de red eliminado exitosamente.' });
         } catch (error: any) {
             console.error(`Error al eliminar el dispositivo de red con ID ${id}:`, error);
-            // Error cuando el registro a eliminar no se encuentra
             if (error.code === 'P2025') {
                 return res.status(404).json({ error: 'Dispositivo de red no encontrado.' });
             }
@@ -92,42 +98,59 @@ export class NetworkController {
         try {
             const {
                 name,
-                ipAddress,
-                macAddress,
-                deviceType,
                 status,
                 location,
                 description,
-                serialNumber,
-                brand,
-                purchaseDate,
-                warrantyEndDate,
                 notes,
-                model,
+                ssid,
+                password,
+                ip,
+                dns,
+                gw,
+                uploadSpeed,
+                downloadSpeed,
                 companyId,
                 assignedToUserId,
-                providerId, // NUEVO: ID del proveedor
+                createdByUserId,
+                providerId,
             } = req.body;
+
+            // Construir objeto de actualización dinámicamente
+            const updateData: any = {};
+            if (name !== undefined) updateData.name = name;
+            if (status !== undefined) updateData.status = status as NetworkDeviceStatus;
+            if (location !== undefined) updateData.location = location;
+            if (description !== undefined) updateData.description = description;
+            if (notes !== undefined) updateData.notes = notes;
+            if (ssid !== undefined) updateData.ssid = ssid;
+            if (password !== undefined) updateData.password = password;
+            if (ip !== undefined) updateData.ip = ip;
+            if (dns !== undefined) updateData.dns = dns;
+            if (gw !== undefined) updateData.gw = gw;
+            if (uploadSpeed !== undefined) updateData.uploadSpeed = uploadSpeed;
+            if (downloadSpeed !== undefined) updateData.downloadSpeed = downloadSpeed;
+
+            if (companyId !== undefined) {
+                updateData.company = { connect: { id: companyId } };
+            }
+            if (assignedToUserId !== undefined) {
+                updateData.assignedToUser = assignedToUserId ? { connect: { id: assignedToUserId } } : { disconnect: true };
+            }
+            if (createdByUserId !== undefined) {
+                updateData.createdBy = createdByUserId ? { connect: { id: createdByUserId } } : { disconnect: true };
+            }
+            if (providerId !== undefined) {
+                updateData.provider = providerId ? { connect: { id: providerId } } : { disconnect: true };
+            }
 
             const updatedDevice = await prisma.network.update({
                 where: { id },
-                data: {
-                    name,
-                    ipAddress,
-                    macAddress,
-                    deviceType: deviceType as NetworkDeviceType,
-                    status: status as NetworkDeviceStatus,
-                    location,
-                    description,
-                    serialNumber,
-                    brand,
-                    purchaseDate: purchaseDate ? new Date(purchaseDate) : undefined,
-                    warrantyEndDate: warrantyEndDate ? new Date(warrantyEndDate) : undefined,
-                    notes,
-                    model,
-                    company: companyId ? { connect: { id: companyId } } : undefined,
-                    assignedToUser: assignedToUserId ? { connect: { id: assignedToUserId } } : undefined,
-                    provider: providerId ? { connect: { id: providerId } } : providerId === null ? { disconnect: true } : undefined, // NUEVO: Conectar, desconectar o dejar como está
+                data: updateData,
+                include: {
+                    company: { select: { id: true, name: true } },
+                    assignedToUser: { select: { id: true, username: true, email: true } },
+                    createdBy: { select: { id: true, username: true, email: true } },
+                    provider: true,
                 },
             });
 
@@ -144,7 +167,6 @@ export class NetworkController {
         }
     }
 
-
     /**
      * Obtiene un dispositivo de red por su ID.
      */
@@ -154,11 +176,14 @@ export class NetworkController {
             const networkDevice = await prisma.network.findUnique({
                 where: { id },
                 include: {
-                    company: true,
+                    company: { select: { id: true, name: true } },
                     assignedToUser: {
                         select: { id: true, username: true, email: true }
                     },
-                    provider: true, // NUEVO: Incluye la información del proveedor
+                    createdBy: {
+                        select: { id: true, username: true, email: true }
+                    },
+                    provider: true,
                 },
             });
 
@@ -183,10 +208,13 @@ export class NetworkController {
                     company: {
                         select: { id: true, name: true }
                     },
-                    assignedToUser: { // También incluyo el usuario asignado para consistencia, aunque no estaba en tu `getAll` original
+                    assignedToUser: {
                         select: { id: true, username: true, email: true }
                     },
-                    provider: true, // NUEVO: Incluye la información del proveedor
+                    createdBy: {
+                        select: { id: true, username: true, email: true }
+                    },
+                    provider: true,
                 },
             });
             res.status(200).json(allNetworkDevices);
@@ -196,28 +224,35 @@ export class NetworkController {
         }
     }
 
-      async getNetworkByCompanyCode(req: Request, res: Response) {
+    /**
+     * Obtiene todos los dispositivos de red de una compañía.
+     */
+    async getNetworkByCompanyCode(req: Request, res: Response) {
         const { companyId } = req.params;
+        console.log('companyId recibido:', companyId);
         try {
-          const company = await prisma.company.findUnique({
-            where: { id: companyId },
-          });
-    
-          if (!company) {
-            res.status(404).json({ message: `Empresa con código ${companyId} no encontrada` });
-            return;
-          }
-          const providers = await prisma.network.findMany({
-            where: { companyId: company.id },
-            include: {
-              company: { select: { id: true, name: true }}
-            }
-          });
-          res.status(200).json(providers);
-        } catch (error: any) {
-          console.error('Error fetching network providers by company code:', error);
-          res.status(500).json({ error: 'Error interno del servidor al obtener los proveedores por código de compañía.', details: error.message });
-        }
-      }
+            const company = await prisma.company.findUnique({
+                where: { id: companyId },
+            });
 
+            if (!company) {
+                return res.status(404).json({ message: `Empresa con ID ${companyId} no encontrada` });
+            }
+
+            const networks = await prisma.network.findMany({
+                where: { companyId: company.id },
+                // include: {
+                //     // company: { select: { id: true, name: true } },
+                //     // assignedToUser: { select: { id: true, username: true, email: true } },
+                //     createdBy: { select: { id: true, username: true, email: true } },
+                //     // provider: true,
+                // },
+            });
+
+            res.status(200).json(networks);
+        } catch (error: any) {
+            console.error('Error al obtener dispositivos de red por ID de compañía:', error);
+            res.status(500).json({ error: 'Error interno del servidor al obtener los dispositivos de red por compañía.', details: error.message });
+        }
+    }
 }

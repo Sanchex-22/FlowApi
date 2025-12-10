@@ -5,13 +5,13 @@ export class NetworkProvidersController {
 
   async create(req: Request, res: Response) {
     try {
-      const { name, providerIp, dnsGateway, speed, cost, notes, meshDevices, switchDevices, companyId } = req.body; // NUEVO: companyId
+      const { name, providerIp, dnsGateway, speed, cost, notes, meshDevices, switchDevices, companyId } = req.body;
 
       // Validación de campos obligatorios
       if (!name || name.trim() === '') {
         return res.status(400).json({ error: 'El nombre del proveedor es obligatorio.' });
       }
-      if (!companyId || companyId.trim() === '') { // NUEVO: Validación de companyId
+      if (!companyId || companyId.trim() === '') {
         return res.status(400).json({ error: 'La compañía es obligatoria para el proveedor.' });
       }
 
@@ -25,17 +25,17 @@ export class NetworkProvidersController {
           notes: notes || null,
           meshDevices: meshDevices || null,
           switchDevices: switchDevices || null,
-          company: { connect: { id: companyId } }, // NUEVO: Conectar a la compañía
+          company: { connect: { id: companyId } },
         },
       });
 
       res.status(201).json(newProvider);
     } catch (error: any) {
       console.error('Error creating network provider:', error);
-      if (error.code === 'P2002') { // Error de restricción única
+      if (error.code === 'P2002') {
         return res.status(409).json({ error: `Conflicto: El proveedor con nombre '${req.body.name}' ya existe.` });
       }
-      if (error.code === 'P2025') { // Si el companyId no existe
+      if (error.code === 'P2025') {
         return res.status(400).json({ error: 'La compañía especificada no existe.', details: error.message });
       }
       res.status(500).json({ error: 'Error interno del servidor al crear el proveedor.', details: error.message });
@@ -46,13 +46,9 @@ export class NetworkProvidersController {
     try {
       const providers = await prisma.networkProvider.findMany({
         include: {
-          company: { // NUEVO: Incluir la compañía en el getAll
+          company: {
             select: { id: true, name: true }
           },
-          // Opcional: Si quieres contar las redes asociadas en la lista, descomenta esto
-          // networks: {
-          //   select: { id: true }
-          // }
         }
       });
       res.status(200).json(providers);
@@ -78,7 +74,16 @@ export class NetworkProvidersController {
         include: {
           company: { select: { id: true, name: true }},
           networks: {
-            select: { id: true, name: true, ipAddress: true, deviceType: true, status: true }
+            select: { 
+              id: true, 
+              name: true, 
+              ip: true,
+              status: true,
+              location: true,
+              description: true,
+              ssid: true,
+              password: true
+            }
           }
         }
       });
@@ -95,11 +100,20 @@ export class NetworkProvidersController {
       const provider = await prisma.networkProvider.findUnique({
         where: { id },
         include: {
-          company: { // NUEVO: Incluir la compañía en el getById
+          company: {
             select: { id: true, name: true }
           },
-          networks: { // Incluye las redes asociadas para este proveedor específico
-            select: { id: true, name: true, ipAddress: true, deviceType: true, status: true } // Selecciona campos relevantes
+          networks: {
+            select: { 
+              id: true, 
+              name: true, 
+              ip: true,
+              status: true,
+              location: true,
+              description: true,
+              ssid: true,
+              password: true
+            }
           }
         },
       });
@@ -118,7 +132,7 @@ export class NetworkProvidersController {
   async update(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { name, providerIp, dnsGateway, speed, cost, notes, meshDevices, switchDevices, companyId } = req.body; // NUEVO: companyId
+      const { name, providerIp, dnsGateway, speed, cost, notes, meshDevices, switchDevices, companyId } = req.body;
 
       if (!name || name.trim() === '') {
         return res.status(400).json({ error: 'El nombre del proveedor es obligatorio.' });
@@ -126,7 +140,6 @@ export class NetworkProvidersController {
       if (companyId && companyId.trim() === '') {
         return res.status(400).json({ error: 'La ID de compañía no puede ser vacía si se proporciona.' });
       }
-
 
       const updatedProvider = await prisma.networkProvider.update({
         where: { id },
@@ -139,7 +152,7 @@ export class NetworkProvidersController {
           notes: notes || null,
           meshDevices: meshDevices || null,
           switchDevices: switchDevices || null,
-          company: companyId ? { connect: { id: companyId } } : undefined, // NUEVO: Conectar solo si companyId se proporciona
+          company: companyId ? { connect: { id: companyId } } : undefined,
         },
       });
 
@@ -147,13 +160,12 @@ export class NetworkProvidersController {
     } catch (error: any) {
       console.error('Error updating network provider:', error);
       if (error.code === 'P2025') {
-        // Puede ser el proveedor no encontrado o la compañía no encontrada
         if (error.meta?.cause?.includes('Company') || error.meta?.cause?.includes('company')) {
           return res.status(400).json({ error: 'La compañía especificada no existe.', details: error.message });
         }
         return res.status(404).json({ error: 'Proveedor de red no encontrado.' });
       }
-      if (error.code === 'P2002') { // Error de restricción única
+      if (error.code === 'P2002') {
         return res.status(409).json({ error: `Conflicto: El proveedor con nombre '${req.body.name}' ya existe.` });
       }
       res.status(500).json({ error: 'Error interno del servidor al actualizar el proveedor.', details: error.message });
@@ -167,13 +179,13 @@ export class NetworkProvidersController {
         where: { id },
       });
 
-      res.status(204).send(); // No Content
+      res.status(204).send();
     } catch (error: any) {
       console.error('Error deleting network provider:', error);
       if (error.code === 'P2025') {
         return res.status(404).json({ error: 'Proveedor de red no encontrado.' });
       }
-      if (error.code === 'P2003') { // ForeignKeyConstraintViolation
+      if (error.code === 'P2003') {
         return res.status(409).json({ error: 'No se puede eliminar el proveedor porque tiene dispositivos de red asociados o está referenciado por una compañía. Desasócialos primero.' });
       }
       res.status(500).json({ error: 'Error interno del servidor al eliminar el proveedor.', details: error.message });

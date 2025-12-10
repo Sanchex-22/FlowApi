@@ -5,6 +5,15 @@ CREATE TYPE "UserRole" AS ENUM ('USER', 'ADMIN', 'MODERATOR', 'SUPER_ADMIN');
 CREATE TYPE "PersonStatus" AS ENUM ('Activo', 'Inactivo');
 
 -- CreateEnum
+CREATE TYPE "TicketType" AS ENUM ('vacations', 'permission', 'ticket');
+
+-- CreateEnum
+CREATE TYPE "TicketPriority" AS ENUM ('urgent', 'high', 'medium', 'low', 'trivial');
+
+-- CreateEnum
+CREATE TYPE "TicketStatus" AS ENUM ('open', 'pending', 'approved', 'rejected', 'closed');
+
+-- CreateEnum
 CREATE TYPE "EquipmentStatus" AS ENUM ('ACTIVE', 'IN_MAINTENANCE', 'DISPOSED', 'DAMAGED', 'ASSIGNED', 'STORAGE');
 
 -- CreateEnum
@@ -18,6 +27,32 @@ CREATE TYPE "NetworkDeviceType" AS ENUM ('ROUTER', 'SWITCH', 'FIREWALL', 'ACCESS
 
 -- CreateEnum
 CREATE TYPE "NetworkDeviceStatus" AS ENUM ('ONLINE', 'OFFLINE', 'MAINTENANCE', 'DECOMMISSIONED', 'UNKNOWN');
+
+-- CreateTable
+CREATE TABLE "Ticket" (
+    "id" TEXT NOT NULL,
+    "ticketNumber" INTEGER,
+    "title" VARCHAR(50) NOT NULL,
+    "description" VARCHAR(300) NOT NULL,
+    "img" VARCHAR(250),
+    "comment" VARCHAR(300),
+    "type" "TicketType" NOT NULL,
+    "priority" "TicketPriority" NOT NULL,
+    "status" "TicketStatus" NOT NULL,
+    "startDate" TIMESTAMP(3),
+    "endDate" TIMESTAMP(3),
+    "requestDays" INTEGER,
+    "approvedDays" INTEGER,
+    "view" BOOLEAN,
+    "sendById" TEXT,
+    "sendToId" TEXT,
+    "companyId" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "reviewed" BOOLEAN,
+
+    CONSTRAINT "Ticket_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -98,9 +133,10 @@ CREATE TABLE "Equipment" (
     "cost" DECIMAL(65,30) DEFAULT 0.00,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "warrantyEndDate" TIMESTAMP(3),
     "companyId" TEXT NOT NULL,
     "assignedToUserId" TEXT,
+    "endUser" TEXT,
+    "operatingSystem" TEXT,
 
     CONSTRAINT "Equipment_pkey" PRIMARY KEY ("id")
 );
@@ -178,9 +214,10 @@ CREATE TABLE "NetworkProvider" (
     "cost" DECIMAL(65,30) DEFAULT 0.00,
     "notes" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "meshDevices" TEXT,
     "switchDevices" TEXT,
+    "companyId" TEXT NOT NULL,
 
     CONSTRAINT "NetworkProvider_pkey" PRIMARY KEY ("id")
 );
@@ -189,22 +226,22 @@ CREATE TABLE "NetworkProvider" (
 CREATE TABLE "Network" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "ipAddress" TEXT NOT NULL,
-    "macAddress" TEXT,
-    "deviceType" "NetworkDeviceType" NOT NULL DEFAULT 'OTHER',
     "status" "NetworkDeviceStatus" NOT NULL DEFAULT 'UNKNOWN',
     "location" TEXT,
     "description" TEXT,
-    "serialNumber" TEXT,
-    "brand" TEXT,
-    "purchaseDate" TIMESTAMP(3),
-    "warrantyEndDate" TIMESTAMP(3),
     "notes" TEXT,
-    "model" TEXT,
+    "ssid" TEXT,
+    "password" TEXT,
+    "ip" TEXT,
+    "dns" TEXT,
+    "gw" TEXT,
+    "uploadSpeed" TEXT,
+    "downloadSpeed" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "companyId" TEXT NOT NULL,
     "assignedToUserId" TEXT,
+    "createdByUserId" TEXT,
     "providerId" TEXT,
 
     CONSTRAINT "Network_pkey" PRIMARY KEY ("id")
@@ -241,55 +278,70 @@ CREATE UNIQUE INDEX "License_licenseKey_key" ON "License"("licenseKey");
 CREATE UNIQUE INDEX "SystemConfig_key_key" ON "SystemConfig"("key");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "NetworkProvider_name_key" ON "NetworkProvider"("name");
+CREATE UNIQUE INDEX "NetworkProvider_name_companyId_key" ON "NetworkProvider"("name", "companyId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Network_ipAddress_key" ON "Network"("ipAddress");
+CREATE UNIQUE INDEX "Network_name_companyId_key" ON "Network"("name", "companyId");
+
+-- AddForeignKey
+ALTER TABLE "Ticket" ADD CONSTRAINT "Ticket_sendById_fkey" FOREIGN KEY ("sendById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Ticket" ADD CONSTRAINT "Ticket_sendToId_fkey" FOREIGN KEY ("sendToId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Ticket" ADD CONSTRAINT "Ticket_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Person" ADD CONSTRAINT "Person_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Person" ADD CONSTRAINT "Person_departmentId_fkey" FOREIGN KEY ("departmentId") REFERENCES "Department"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Person" ADD CONSTRAINT "Person_departmentId_fkey" FOREIGN KEY ("departmentId") REFERENCES "Department"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Person" ADD CONSTRAINT "Person_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Company" ADD CONSTRAINT "Company_createdByUserId_fkey" FOREIGN KEY ("createdByUserId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Department" ADD CONSTRAINT "Department_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Equipment" ADD CONSTRAINT "Equipment_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Department" ADD CONSTRAINT "Department_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Equipment" ADD CONSTRAINT "Equipment_assignedToUserId_fkey" FOREIGN KEY ("assignedToUserId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Maintenance" ADD CONSTRAINT "Maintenance_equipmentId_fkey" FOREIGN KEY ("equipmentId") REFERENCES "Equipment"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Equipment" ADD CONSTRAINT "Equipment_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Maintenance" ADD CONSTRAINT "Maintenance_assignedToUserId_fkey" FOREIGN KEY ("assignedToUserId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Maintenance" ADD CONSTRAINT "Maintenance_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Maintenance" ADD CONSTRAINT "Maintenance_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Document" ADD CONSTRAINT "Document_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Maintenance" ADD CONSTRAINT "Maintenance_equipmentId_fkey" FOREIGN KEY ("equipmentId") REFERENCES "Equipment"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Document" ADD CONSTRAINT "Document_equipmentId_fkey" FOREIGN KEY ("equipmentId") REFERENCES "Equipment"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Document" ADD CONSTRAINT "Document_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "License" ADD CONSTRAINT "License_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Document" ADD CONSTRAINT "Document_equipmentId_fkey" FOREIGN KEY ("equipmentId") REFERENCES "Equipment"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Network" ADD CONSTRAINT "Network_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "License" ADD CONSTRAINT "License_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "NetworkProvider" ADD CONSTRAINT "NetworkProvider_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Network" ADD CONSTRAINT "Network_assignedToUserId_fkey" FOREIGN KEY ("assignedToUserId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Network" ADD CONSTRAINT "Network_providerId_fkey" FOREIGN KEY ("providerId") REFERENCES "NetworkProvider"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Network" ADD CONSTRAINT "Network_createdByUserId_fkey" FOREIGN KEY ("createdByUserId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Network" ADD CONSTRAINT "Network_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Network" ADD CONSTRAINT "Network_providerId_fkey" FOREIGN KEY ("providerId") REFERENCES "NetworkProvider"("id") ON DELETE CASCADE ON UPDATE CASCADE;

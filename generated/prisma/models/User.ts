@@ -218,6 +218,7 @@ export type UserWhereInput = {
   assignedEquipments?: Prisma.EquipmentListRelationFilter
   assignedMaintenances?: Prisma.MaintenanceListRelationFilter
   assignedNetworks?: Prisma.NetworkListRelationFilter
+  createdNetworks?: Prisma.NetworkListRelationFilter
   person?: Prisma.XOR<Prisma.PersonNullableScalarRelationFilter, Prisma.PersonWhereInput> | null
   ticketsSentBy?: Prisma.TicketListRelationFilter
   ticketsSentTo?: Prisma.TicketListRelationFilter
@@ -238,6 +239,7 @@ export type UserOrderByWithRelationInput = {
   assignedEquipments?: Prisma.EquipmentOrderByRelationAggregateInput
   assignedMaintenances?: Prisma.MaintenanceOrderByRelationAggregateInput
   assignedNetworks?: Prisma.NetworkOrderByRelationAggregateInput
+  createdNetworks?: Prisma.NetworkOrderByRelationAggregateInput
   person?: Prisma.PersonOrderByWithRelationInput
   ticketsSentBy?: Prisma.TicketOrderByRelationAggregateInput
   ticketsSentTo?: Prisma.TicketOrderByRelationAggregateInput
@@ -261,6 +263,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   assignedEquipments?: Prisma.EquipmentListRelationFilter
   assignedMaintenances?: Prisma.MaintenanceListRelationFilter
   assignedNetworks?: Prisma.NetworkListRelationFilter
+  createdNetworks?: Prisma.NetworkListRelationFilter
   person?: Prisma.XOR<Prisma.PersonNullableScalarRelationFilter, Prisma.PersonWhereInput> | null
   ticketsSentBy?: Prisma.TicketListRelationFilter
   ticketsSentTo?: Prisma.TicketListRelationFilter
@@ -310,6 +313,7 @@ export type UserCreateInput = {
   assignedEquipments?: Prisma.EquipmentCreateNestedManyWithoutAssignedToUserInput
   assignedMaintenances?: Prisma.MaintenanceCreateNestedManyWithoutAssignedToUserInput
   assignedNetworks?: Prisma.NetworkCreateNestedManyWithoutAssignedToUserInput
+  createdNetworks?: Prisma.NetworkCreateNestedManyWithoutCreatedByInput
   person?: Prisma.PersonCreateNestedOneWithoutUserInput
   ticketsSentBy?: Prisma.TicketCreateNestedManyWithoutSendByInput
   ticketsSentTo?: Prisma.TicketCreateNestedManyWithoutSendToInput
@@ -330,6 +334,7 @@ export type UserUncheckedCreateInput = {
   assignedEquipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutAssignedToUserInput
   assignedMaintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput
   assignedNetworks?: Prisma.NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput
+  createdNetworks?: Prisma.NetworkUncheckedCreateNestedManyWithoutCreatedByInput
   person?: Prisma.PersonUncheckedCreateNestedOneWithoutUserInput
   ticketsSentBy?: Prisma.TicketUncheckedCreateNestedManyWithoutSendByInput
   ticketsSentTo?: Prisma.TicketUncheckedCreateNestedManyWithoutSendToInput
@@ -348,6 +353,7 @@ export type UserUpdateInput = {
   assignedEquipments?: Prisma.EquipmentUpdateManyWithoutAssignedToUserNestedInput
   assignedMaintenances?: Prisma.MaintenanceUpdateManyWithoutAssignedToUserNestedInput
   assignedNetworks?: Prisma.NetworkUpdateManyWithoutAssignedToUserNestedInput
+  createdNetworks?: Prisma.NetworkUpdateManyWithoutCreatedByNestedInput
   person?: Prisma.PersonUpdateOneWithoutUserNestedInput
   ticketsSentBy?: Prisma.TicketUpdateManyWithoutSendByNestedInput
   ticketsSentTo?: Prisma.TicketUpdateManyWithoutSendToNestedInput
@@ -368,6 +374,7 @@ export type UserUncheckedUpdateInput = {
   assignedEquipments?: Prisma.EquipmentUncheckedUpdateManyWithoutAssignedToUserNestedInput
   assignedMaintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput
   assignedNetworks?: Prisma.NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  createdNetworks?: Prisma.NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
   person?: Prisma.PersonUncheckedUpdateOneWithoutUserNestedInput
   ticketsSentBy?: Prisma.TicketUncheckedUpdateManyWithoutSendByNestedInput
   ticketsSentTo?: Prisma.TicketUncheckedUpdateManyWithoutSendToNestedInput
@@ -614,6 +621,12 @@ export type UserCreateNestedOneWithoutAssignedNetworksInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedOneWithoutCreatedNetworksInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedNetworksInput, Prisma.UserUncheckedCreateWithoutCreatedNetworksInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedNetworksInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserUpdateOneWithoutAssignedNetworksNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedNetworksInput, Prisma.UserUncheckedCreateWithoutAssignedNetworksInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedNetworksInput
@@ -622,6 +635,16 @@ export type UserUpdateOneWithoutAssignedNetworksNestedInput = {
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAssignedNetworksInput, Prisma.UserUpdateWithoutAssignedNetworksInput>, Prisma.UserUncheckedUpdateWithoutAssignedNetworksInput>
+}
+
+export type UserUpdateOneWithoutCreatedNetworksNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedNetworksInput, Prisma.UserUncheckedCreateWithoutCreatedNetworksInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedNetworksInput
+  upsert?: Prisma.UserUpsertWithoutCreatedNetworksInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedNetworksInput, Prisma.UserUpdateWithoutCreatedNetworksInput>, Prisma.UserUncheckedUpdateWithoutCreatedNetworksInput>
 }
 
 export type UserCreateWithoutTicketsSentByInput = {
@@ -637,6 +660,7 @@ export type UserCreateWithoutTicketsSentByInput = {
   assignedEquipments?: Prisma.EquipmentCreateNestedManyWithoutAssignedToUserInput
   assignedMaintenances?: Prisma.MaintenanceCreateNestedManyWithoutAssignedToUserInput
   assignedNetworks?: Prisma.NetworkCreateNestedManyWithoutAssignedToUserInput
+  createdNetworks?: Prisma.NetworkCreateNestedManyWithoutCreatedByInput
   person?: Prisma.PersonCreateNestedOneWithoutUserInput
   ticketsSentTo?: Prisma.TicketCreateNestedManyWithoutSendToInput
   company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
@@ -656,6 +680,7 @@ export type UserUncheckedCreateWithoutTicketsSentByInput = {
   assignedEquipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutAssignedToUserInput
   assignedMaintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput
   assignedNetworks?: Prisma.NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput
+  createdNetworks?: Prisma.NetworkUncheckedCreateNestedManyWithoutCreatedByInput
   person?: Prisma.PersonUncheckedCreateNestedOneWithoutUserInput
   ticketsSentTo?: Prisma.TicketUncheckedCreateNestedManyWithoutSendToInput
 }
@@ -678,6 +703,7 @@ export type UserCreateWithoutTicketsSentToInput = {
   assignedEquipments?: Prisma.EquipmentCreateNestedManyWithoutAssignedToUserInput
   assignedMaintenances?: Prisma.MaintenanceCreateNestedManyWithoutAssignedToUserInput
   assignedNetworks?: Prisma.NetworkCreateNestedManyWithoutAssignedToUserInput
+  createdNetworks?: Prisma.NetworkCreateNestedManyWithoutCreatedByInput
   person?: Prisma.PersonCreateNestedOneWithoutUserInput
   ticketsSentBy?: Prisma.TicketCreateNestedManyWithoutSendByInput
   company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
@@ -697,6 +723,7 @@ export type UserUncheckedCreateWithoutTicketsSentToInput = {
   assignedEquipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutAssignedToUserInput
   assignedMaintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput
   assignedNetworks?: Prisma.NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput
+  createdNetworks?: Prisma.NetworkUncheckedCreateNestedManyWithoutCreatedByInput
   person?: Prisma.PersonUncheckedCreateNestedOneWithoutUserInput
   ticketsSentBy?: Prisma.TicketUncheckedCreateNestedManyWithoutSendByInput
 }
@@ -730,6 +757,7 @@ export type UserUpdateWithoutTicketsSentByInput = {
   assignedEquipments?: Prisma.EquipmentUpdateManyWithoutAssignedToUserNestedInput
   assignedMaintenances?: Prisma.MaintenanceUpdateManyWithoutAssignedToUserNestedInput
   assignedNetworks?: Prisma.NetworkUpdateManyWithoutAssignedToUserNestedInput
+  createdNetworks?: Prisma.NetworkUpdateManyWithoutCreatedByNestedInput
   person?: Prisma.PersonUpdateOneWithoutUserNestedInput
   ticketsSentTo?: Prisma.TicketUpdateManyWithoutSendToNestedInput
   company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
@@ -749,6 +777,7 @@ export type UserUncheckedUpdateWithoutTicketsSentByInput = {
   assignedEquipments?: Prisma.EquipmentUncheckedUpdateManyWithoutAssignedToUserNestedInput
   assignedMaintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput
   assignedNetworks?: Prisma.NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  createdNetworks?: Prisma.NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
   person?: Prisma.PersonUncheckedUpdateOneWithoutUserNestedInput
   ticketsSentTo?: Prisma.TicketUncheckedUpdateManyWithoutSendToNestedInput
 }
@@ -777,6 +806,7 @@ export type UserUpdateWithoutTicketsSentToInput = {
   assignedEquipments?: Prisma.EquipmentUpdateManyWithoutAssignedToUserNestedInput
   assignedMaintenances?: Prisma.MaintenanceUpdateManyWithoutAssignedToUserNestedInput
   assignedNetworks?: Prisma.NetworkUpdateManyWithoutAssignedToUserNestedInput
+  createdNetworks?: Prisma.NetworkUpdateManyWithoutCreatedByNestedInput
   person?: Prisma.PersonUpdateOneWithoutUserNestedInput
   ticketsSentBy?: Prisma.TicketUpdateManyWithoutSendByNestedInput
   company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
@@ -796,6 +826,7 @@ export type UserUncheckedUpdateWithoutTicketsSentToInput = {
   assignedEquipments?: Prisma.EquipmentUncheckedUpdateManyWithoutAssignedToUserNestedInput
   assignedMaintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput
   assignedNetworks?: Prisma.NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  createdNetworks?: Prisma.NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
   person?: Prisma.PersonUncheckedUpdateOneWithoutUserNestedInput
   ticketsSentBy?: Prisma.TicketUncheckedUpdateManyWithoutSendByNestedInput
 }
@@ -813,6 +844,7 @@ export type UserCreateWithoutPersonInput = {
   assignedEquipments?: Prisma.EquipmentCreateNestedManyWithoutAssignedToUserInput
   assignedMaintenances?: Prisma.MaintenanceCreateNestedManyWithoutAssignedToUserInput
   assignedNetworks?: Prisma.NetworkCreateNestedManyWithoutAssignedToUserInput
+  createdNetworks?: Prisma.NetworkCreateNestedManyWithoutCreatedByInput
   ticketsSentBy?: Prisma.TicketCreateNestedManyWithoutSendByInput
   ticketsSentTo?: Prisma.TicketCreateNestedManyWithoutSendToInput
   company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
@@ -832,6 +864,7 @@ export type UserUncheckedCreateWithoutPersonInput = {
   assignedEquipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutAssignedToUserInput
   assignedMaintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput
   assignedNetworks?: Prisma.NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput
+  createdNetworks?: Prisma.NetworkUncheckedCreateNestedManyWithoutCreatedByInput
   ticketsSentBy?: Prisma.TicketUncheckedCreateNestedManyWithoutSendByInput
   ticketsSentTo?: Prisma.TicketUncheckedCreateNestedManyWithoutSendToInput
 }
@@ -865,6 +898,7 @@ export type UserUpdateWithoutPersonInput = {
   assignedEquipments?: Prisma.EquipmentUpdateManyWithoutAssignedToUserNestedInput
   assignedMaintenances?: Prisma.MaintenanceUpdateManyWithoutAssignedToUserNestedInput
   assignedNetworks?: Prisma.NetworkUpdateManyWithoutAssignedToUserNestedInput
+  createdNetworks?: Prisma.NetworkUpdateManyWithoutCreatedByNestedInput
   ticketsSentBy?: Prisma.TicketUpdateManyWithoutSendByNestedInput
   ticketsSentTo?: Prisma.TicketUpdateManyWithoutSendToNestedInput
   company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
@@ -884,6 +918,7 @@ export type UserUncheckedUpdateWithoutPersonInput = {
   assignedEquipments?: Prisma.EquipmentUncheckedUpdateManyWithoutAssignedToUserNestedInput
   assignedMaintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput
   assignedNetworks?: Prisma.NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  createdNetworks?: Prisma.NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
   ticketsSentBy?: Prisma.TicketUncheckedUpdateManyWithoutSendByNestedInput
   ticketsSentTo?: Prisma.TicketUncheckedUpdateManyWithoutSendToNestedInput
 }
@@ -900,6 +935,7 @@ export type UserCreateWithoutCreatedCompaniesInput = {
   assignedEquipments?: Prisma.EquipmentCreateNestedManyWithoutAssignedToUserInput
   assignedMaintenances?: Prisma.MaintenanceCreateNestedManyWithoutAssignedToUserInput
   assignedNetworks?: Prisma.NetworkCreateNestedManyWithoutAssignedToUserInput
+  createdNetworks?: Prisma.NetworkCreateNestedManyWithoutCreatedByInput
   person?: Prisma.PersonCreateNestedOneWithoutUserInput
   ticketsSentBy?: Prisma.TicketCreateNestedManyWithoutSendByInput
   ticketsSentTo?: Prisma.TicketCreateNestedManyWithoutSendToInput
@@ -919,6 +955,7 @@ export type UserUncheckedCreateWithoutCreatedCompaniesInput = {
   assignedEquipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutAssignedToUserInput
   assignedMaintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput
   assignedNetworks?: Prisma.NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput
+  createdNetworks?: Prisma.NetworkUncheckedCreateNestedManyWithoutCreatedByInput
   person?: Prisma.PersonUncheckedCreateNestedOneWithoutUserInput
   ticketsSentBy?: Prisma.TicketUncheckedCreateNestedManyWithoutSendByInput
   ticketsSentTo?: Prisma.TicketUncheckedCreateNestedManyWithoutSendToInput
@@ -942,6 +979,7 @@ export type UserCreateWithoutCompanyInput = {
   assignedEquipments?: Prisma.EquipmentCreateNestedManyWithoutAssignedToUserInput
   assignedMaintenances?: Prisma.MaintenanceCreateNestedManyWithoutAssignedToUserInput
   assignedNetworks?: Prisma.NetworkCreateNestedManyWithoutAssignedToUserInput
+  createdNetworks?: Prisma.NetworkCreateNestedManyWithoutCreatedByInput
   person?: Prisma.PersonCreateNestedOneWithoutUserInput
   ticketsSentBy?: Prisma.TicketCreateNestedManyWithoutSendByInput
   ticketsSentTo?: Prisma.TicketCreateNestedManyWithoutSendToInput
@@ -960,6 +998,7 @@ export type UserUncheckedCreateWithoutCompanyInput = {
   assignedEquipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutAssignedToUserInput
   assignedMaintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput
   assignedNetworks?: Prisma.NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput
+  createdNetworks?: Prisma.NetworkUncheckedCreateNestedManyWithoutCreatedByInput
   person?: Prisma.PersonUncheckedCreateNestedOneWithoutUserInput
   ticketsSentBy?: Prisma.TicketUncheckedCreateNestedManyWithoutSendByInput
   ticketsSentTo?: Prisma.TicketUncheckedCreateNestedManyWithoutSendToInput
@@ -998,6 +1037,7 @@ export type UserUpdateWithoutCreatedCompaniesInput = {
   assignedEquipments?: Prisma.EquipmentUpdateManyWithoutAssignedToUserNestedInput
   assignedMaintenances?: Prisma.MaintenanceUpdateManyWithoutAssignedToUserNestedInput
   assignedNetworks?: Prisma.NetworkUpdateManyWithoutAssignedToUserNestedInput
+  createdNetworks?: Prisma.NetworkUpdateManyWithoutCreatedByNestedInput
   person?: Prisma.PersonUpdateOneWithoutUserNestedInput
   ticketsSentBy?: Prisma.TicketUpdateManyWithoutSendByNestedInput
   ticketsSentTo?: Prisma.TicketUpdateManyWithoutSendToNestedInput
@@ -1017,6 +1057,7 @@ export type UserUncheckedUpdateWithoutCreatedCompaniesInput = {
   assignedEquipments?: Prisma.EquipmentUncheckedUpdateManyWithoutAssignedToUserNestedInput
   assignedMaintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput
   assignedNetworks?: Prisma.NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  createdNetworks?: Prisma.NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
   person?: Prisma.PersonUncheckedUpdateOneWithoutUserNestedInput
   ticketsSentBy?: Prisma.TicketUncheckedUpdateManyWithoutSendByNestedInput
   ticketsSentTo?: Prisma.TicketUncheckedUpdateManyWithoutSendToNestedInput
@@ -1065,6 +1106,7 @@ export type UserCreateWithoutAssignedEquipmentsInput = {
   createdCompanies?: Prisma.CompanyCreateNestedManyWithoutCreatedByInput
   assignedMaintenances?: Prisma.MaintenanceCreateNestedManyWithoutAssignedToUserInput
   assignedNetworks?: Prisma.NetworkCreateNestedManyWithoutAssignedToUserInput
+  createdNetworks?: Prisma.NetworkCreateNestedManyWithoutCreatedByInput
   person?: Prisma.PersonCreateNestedOneWithoutUserInput
   ticketsSentBy?: Prisma.TicketCreateNestedManyWithoutSendByInput
   ticketsSentTo?: Prisma.TicketCreateNestedManyWithoutSendToInput
@@ -1084,6 +1126,7 @@ export type UserUncheckedCreateWithoutAssignedEquipmentsInput = {
   createdCompanies?: Prisma.CompanyUncheckedCreateNestedManyWithoutCreatedByInput
   assignedMaintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput
   assignedNetworks?: Prisma.NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput
+  createdNetworks?: Prisma.NetworkUncheckedCreateNestedManyWithoutCreatedByInput
   person?: Prisma.PersonUncheckedCreateNestedOneWithoutUserInput
   ticketsSentBy?: Prisma.TicketUncheckedCreateNestedManyWithoutSendByInput
   ticketsSentTo?: Prisma.TicketUncheckedCreateNestedManyWithoutSendToInput
@@ -1117,6 +1160,7 @@ export type UserUpdateWithoutAssignedEquipmentsInput = {
   createdCompanies?: Prisma.CompanyUpdateManyWithoutCreatedByNestedInput
   assignedMaintenances?: Prisma.MaintenanceUpdateManyWithoutAssignedToUserNestedInput
   assignedNetworks?: Prisma.NetworkUpdateManyWithoutAssignedToUserNestedInput
+  createdNetworks?: Prisma.NetworkUpdateManyWithoutCreatedByNestedInput
   person?: Prisma.PersonUpdateOneWithoutUserNestedInput
   ticketsSentBy?: Prisma.TicketUpdateManyWithoutSendByNestedInput
   ticketsSentTo?: Prisma.TicketUpdateManyWithoutSendToNestedInput
@@ -1136,6 +1180,7 @@ export type UserUncheckedUpdateWithoutAssignedEquipmentsInput = {
   createdCompanies?: Prisma.CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
   assignedMaintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput
   assignedNetworks?: Prisma.NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  createdNetworks?: Prisma.NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
   person?: Prisma.PersonUncheckedUpdateOneWithoutUserNestedInput
   ticketsSentBy?: Prisma.TicketUncheckedUpdateManyWithoutSendByNestedInput
   ticketsSentTo?: Prisma.TicketUncheckedUpdateManyWithoutSendToNestedInput
@@ -1153,6 +1198,7 @@ export type UserCreateWithoutAssignedMaintenancesInput = {
   createdCompanies?: Prisma.CompanyCreateNestedManyWithoutCreatedByInput
   assignedEquipments?: Prisma.EquipmentCreateNestedManyWithoutAssignedToUserInput
   assignedNetworks?: Prisma.NetworkCreateNestedManyWithoutAssignedToUserInput
+  createdNetworks?: Prisma.NetworkCreateNestedManyWithoutCreatedByInput
   person?: Prisma.PersonCreateNestedOneWithoutUserInput
   ticketsSentBy?: Prisma.TicketCreateNestedManyWithoutSendByInput
   ticketsSentTo?: Prisma.TicketCreateNestedManyWithoutSendToInput
@@ -1172,6 +1218,7 @@ export type UserUncheckedCreateWithoutAssignedMaintenancesInput = {
   createdCompanies?: Prisma.CompanyUncheckedCreateNestedManyWithoutCreatedByInput
   assignedEquipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutAssignedToUserInput
   assignedNetworks?: Prisma.NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput
+  createdNetworks?: Prisma.NetworkUncheckedCreateNestedManyWithoutCreatedByInput
   person?: Prisma.PersonUncheckedCreateNestedOneWithoutUserInput
   ticketsSentBy?: Prisma.TicketUncheckedCreateNestedManyWithoutSendByInput
   ticketsSentTo?: Prisma.TicketUncheckedCreateNestedManyWithoutSendToInput
@@ -1205,6 +1252,7 @@ export type UserUpdateWithoutAssignedMaintenancesInput = {
   createdCompanies?: Prisma.CompanyUpdateManyWithoutCreatedByNestedInput
   assignedEquipments?: Prisma.EquipmentUpdateManyWithoutAssignedToUserNestedInput
   assignedNetworks?: Prisma.NetworkUpdateManyWithoutAssignedToUserNestedInput
+  createdNetworks?: Prisma.NetworkUpdateManyWithoutCreatedByNestedInput
   person?: Prisma.PersonUpdateOneWithoutUserNestedInput
   ticketsSentBy?: Prisma.TicketUpdateManyWithoutSendByNestedInput
   ticketsSentTo?: Prisma.TicketUpdateManyWithoutSendToNestedInput
@@ -1224,6 +1272,7 @@ export type UserUncheckedUpdateWithoutAssignedMaintenancesInput = {
   createdCompanies?: Prisma.CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
   assignedEquipments?: Prisma.EquipmentUncheckedUpdateManyWithoutAssignedToUserNestedInput
   assignedNetworks?: Prisma.NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  createdNetworks?: Prisma.NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
   person?: Prisma.PersonUncheckedUpdateOneWithoutUserNestedInput
   ticketsSentBy?: Prisma.TicketUncheckedUpdateManyWithoutSendByNestedInput
   ticketsSentTo?: Prisma.TicketUncheckedUpdateManyWithoutSendToNestedInput
@@ -1241,6 +1290,7 @@ export type UserCreateWithoutAssignedNetworksInput = {
   createdCompanies?: Prisma.CompanyCreateNestedManyWithoutCreatedByInput
   assignedEquipments?: Prisma.EquipmentCreateNestedManyWithoutAssignedToUserInput
   assignedMaintenances?: Prisma.MaintenanceCreateNestedManyWithoutAssignedToUserInput
+  createdNetworks?: Prisma.NetworkCreateNestedManyWithoutCreatedByInput
   person?: Prisma.PersonCreateNestedOneWithoutUserInput
   ticketsSentBy?: Prisma.TicketCreateNestedManyWithoutSendByInput
   ticketsSentTo?: Prisma.TicketCreateNestedManyWithoutSendToInput
@@ -1260,6 +1310,7 @@ export type UserUncheckedCreateWithoutAssignedNetworksInput = {
   createdCompanies?: Prisma.CompanyUncheckedCreateNestedManyWithoutCreatedByInput
   assignedEquipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutAssignedToUserInput
   assignedMaintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput
+  createdNetworks?: Prisma.NetworkUncheckedCreateNestedManyWithoutCreatedByInput
   person?: Prisma.PersonUncheckedCreateNestedOneWithoutUserInput
   ticketsSentBy?: Prisma.TicketUncheckedCreateNestedManyWithoutSendByInput
   ticketsSentTo?: Prisma.TicketUncheckedCreateNestedManyWithoutSendToInput
@@ -1268,6 +1319,49 @@ export type UserUncheckedCreateWithoutAssignedNetworksInput = {
 export type UserCreateOrConnectWithoutAssignedNetworksInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutAssignedNetworksInput, Prisma.UserUncheckedCreateWithoutAssignedNetworksInput>
+}
+
+export type UserCreateWithoutCreatedNetworksInput = {
+  id?: string
+  username: string
+  email: string
+  password: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdCompanies?: Prisma.CompanyCreateNestedManyWithoutCreatedByInput
+  assignedEquipments?: Prisma.EquipmentCreateNestedManyWithoutAssignedToUserInput
+  assignedMaintenances?: Prisma.MaintenanceCreateNestedManyWithoutAssignedToUserInput
+  assignedNetworks?: Prisma.NetworkCreateNestedManyWithoutAssignedToUserInput
+  person?: Prisma.PersonCreateNestedOneWithoutUserInput
+  ticketsSentBy?: Prisma.TicketCreateNestedManyWithoutSendByInput
+  ticketsSentTo?: Prisma.TicketCreateNestedManyWithoutSendToInput
+  company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
+}
+
+export type UserUncheckedCreateWithoutCreatedNetworksInput = {
+  id?: string
+  username: string
+  email: string
+  password: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  companyId?: string | null
+  createdCompanies?: Prisma.CompanyUncheckedCreateNestedManyWithoutCreatedByInput
+  assignedEquipments?: Prisma.EquipmentUncheckedCreateNestedManyWithoutAssignedToUserInput
+  assignedMaintenances?: Prisma.MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput
+  assignedNetworks?: Prisma.NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput
+  person?: Prisma.PersonUncheckedCreateNestedOneWithoutUserInput
+  ticketsSentBy?: Prisma.TicketUncheckedCreateNestedManyWithoutSendByInput
+  ticketsSentTo?: Prisma.TicketUncheckedCreateNestedManyWithoutSendToInput
+}
+
+export type UserCreateOrConnectWithoutCreatedNetworksInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedNetworksInput, Prisma.UserUncheckedCreateWithoutCreatedNetworksInput>
 }
 
 export type UserUpsertWithoutAssignedNetworksInput = {
@@ -1293,6 +1387,7 @@ export type UserUpdateWithoutAssignedNetworksInput = {
   createdCompanies?: Prisma.CompanyUpdateManyWithoutCreatedByNestedInput
   assignedEquipments?: Prisma.EquipmentUpdateManyWithoutAssignedToUserNestedInput
   assignedMaintenances?: Prisma.MaintenanceUpdateManyWithoutAssignedToUserNestedInput
+  createdNetworks?: Prisma.NetworkUpdateManyWithoutCreatedByNestedInput
   person?: Prisma.PersonUpdateOneWithoutUserNestedInput
   ticketsSentBy?: Prisma.TicketUpdateManyWithoutSendByNestedInput
   ticketsSentTo?: Prisma.TicketUpdateManyWithoutSendToNestedInput
@@ -1312,6 +1407,56 @@ export type UserUncheckedUpdateWithoutAssignedNetworksInput = {
   createdCompanies?: Prisma.CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
   assignedEquipments?: Prisma.EquipmentUncheckedUpdateManyWithoutAssignedToUserNestedInput
   assignedMaintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  createdNetworks?: Prisma.NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
+  person?: Prisma.PersonUncheckedUpdateOneWithoutUserNestedInput
+  ticketsSentBy?: Prisma.TicketUncheckedUpdateManyWithoutSendByNestedInput
+  ticketsSentTo?: Prisma.TicketUncheckedUpdateManyWithoutSendToNestedInput
+}
+
+export type UserUpsertWithoutCreatedNetworksInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedNetworksInput, Prisma.UserUncheckedUpdateWithoutCreatedNetworksInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedNetworksInput, Prisma.UserUncheckedCreateWithoutCreatedNetworksInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedNetworksInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedNetworksInput, Prisma.UserUncheckedUpdateWithoutCreatedNetworksInput>
+}
+
+export type UserUpdateWithoutCreatedNetworksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdCompanies?: Prisma.CompanyUpdateManyWithoutCreatedByNestedInput
+  assignedEquipments?: Prisma.EquipmentUpdateManyWithoutAssignedToUserNestedInput
+  assignedMaintenances?: Prisma.MaintenanceUpdateManyWithoutAssignedToUserNestedInput
+  assignedNetworks?: Prisma.NetworkUpdateManyWithoutAssignedToUserNestedInput
+  person?: Prisma.PersonUpdateOneWithoutUserNestedInput
+  ticketsSentBy?: Prisma.TicketUpdateManyWithoutSendByNestedInput
+  ticketsSentTo?: Prisma.TicketUpdateManyWithoutSendToNestedInput
+  company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedNetworksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdCompanies?: Prisma.CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignedEquipments?: Prisma.EquipmentUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  assignedMaintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  assignedNetworks?: Prisma.NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput
   person?: Prisma.PersonUncheckedUpdateOneWithoutUserNestedInput
   ticketsSentBy?: Prisma.TicketUncheckedUpdateManyWithoutSendByNestedInput
   ticketsSentTo?: Prisma.TicketUncheckedUpdateManyWithoutSendToNestedInput
@@ -1341,6 +1486,7 @@ export type UserUpdateWithoutCompanyInput = {
   assignedEquipments?: Prisma.EquipmentUpdateManyWithoutAssignedToUserNestedInput
   assignedMaintenances?: Prisma.MaintenanceUpdateManyWithoutAssignedToUserNestedInput
   assignedNetworks?: Prisma.NetworkUpdateManyWithoutAssignedToUserNestedInput
+  createdNetworks?: Prisma.NetworkUpdateManyWithoutCreatedByNestedInput
   person?: Prisma.PersonUpdateOneWithoutUserNestedInput
   ticketsSentBy?: Prisma.TicketUpdateManyWithoutSendByNestedInput
   ticketsSentTo?: Prisma.TicketUpdateManyWithoutSendToNestedInput
@@ -1359,6 +1505,7 @@ export type UserUncheckedUpdateWithoutCompanyInput = {
   assignedEquipments?: Prisma.EquipmentUncheckedUpdateManyWithoutAssignedToUserNestedInput
   assignedMaintenances?: Prisma.MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput
   assignedNetworks?: Prisma.NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  createdNetworks?: Prisma.NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
   person?: Prisma.PersonUncheckedUpdateOneWithoutUserNestedInput
   ticketsSentBy?: Prisma.TicketUncheckedUpdateManyWithoutSendByNestedInput
   ticketsSentTo?: Prisma.TicketUncheckedUpdateManyWithoutSendToNestedInput
@@ -1385,6 +1532,7 @@ export type UserCountOutputType = {
   assignedEquipments: number
   assignedMaintenances: number
   assignedNetworks: number
+  createdNetworks: number
   ticketsSentBy: number
   ticketsSentTo: number
 }
@@ -1394,6 +1542,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   assignedEquipments?: boolean | UserCountOutputTypeCountAssignedEquipmentsArgs
   assignedMaintenances?: boolean | UserCountOutputTypeCountAssignedMaintenancesArgs
   assignedNetworks?: boolean | UserCountOutputTypeCountAssignedNetworksArgs
+  createdNetworks?: boolean | UserCountOutputTypeCountCreatedNetworksArgs
   ticketsSentBy?: boolean | UserCountOutputTypeCountTicketsSentByArgs
   ticketsSentTo?: boolean | UserCountOutputTypeCountTicketsSentToArgs
 }
@@ -1439,6 +1588,13 @@ export type UserCountOutputTypeCountAssignedNetworksArgs<ExtArgs extends runtime
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountCreatedNetworksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NetworkWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountTicketsSentByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.TicketWhereInput
 }
@@ -1465,6 +1621,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   assignedEquipments?: boolean | Prisma.User$assignedEquipmentsArgs<ExtArgs>
   assignedMaintenances?: boolean | Prisma.User$assignedMaintenancesArgs<ExtArgs>
   assignedNetworks?: boolean | Prisma.User$assignedNetworksArgs<ExtArgs>
+  createdNetworks?: boolean | Prisma.User$createdNetworksArgs<ExtArgs>
   person?: boolean | Prisma.User$personArgs<ExtArgs>
   ticketsSentBy?: boolean | Prisma.User$ticketsSentByArgs<ExtArgs>
   ticketsSentTo?: boolean | Prisma.User$ticketsSentToArgs<ExtArgs>
@@ -1516,6 +1673,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   assignedEquipments?: boolean | Prisma.User$assignedEquipmentsArgs<ExtArgs>
   assignedMaintenances?: boolean | Prisma.User$assignedMaintenancesArgs<ExtArgs>
   assignedNetworks?: boolean | Prisma.User$assignedNetworksArgs<ExtArgs>
+  createdNetworks?: boolean | Prisma.User$createdNetworksArgs<ExtArgs>
   person?: boolean | Prisma.User$personArgs<ExtArgs>
   ticketsSentBy?: boolean | Prisma.User$ticketsSentByArgs<ExtArgs>
   ticketsSentTo?: boolean | Prisma.User$ticketsSentToArgs<ExtArgs>
@@ -1536,6 +1694,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     assignedEquipments: Prisma.$EquipmentPayload<ExtArgs>[]
     assignedMaintenances: Prisma.$MaintenancePayload<ExtArgs>[]
     assignedNetworks: Prisma.$NetworkPayload<ExtArgs>[]
+    createdNetworks: Prisma.$NetworkPayload<ExtArgs>[]
     person: Prisma.$PersonPayload<ExtArgs> | null
     ticketsSentBy: Prisma.$TicketPayload<ExtArgs>[]
     ticketsSentTo: Prisma.$TicketPayload<ExtArgs>[]
@@ -1949,6 +2108,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   assignedEquipments<T extends Prisma.User$assignedEquipmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignedEquipmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EquipmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   assignedMaintenances<T extends Prisma.User$assignedMaintenancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignedMaintenancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MaintenancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   assignedNetworks<T extends Prisma.User$assignedNetworksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignedNetworksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NetworkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdNetworks<T extends Prisma.User$createdNetworksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdNetworksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NetworkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   person<T extends Prisma.User$personArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$personArgs<ExtArgs>>): Prisma.Prisma__PersonClient<runtime.Types.Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   ticketsSentBy<T extends Prisma.User$ticketsSentByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ticketsSentByArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ticketsSentTo<T extends Prisma.User$ticketsSentToArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ticketsSentToArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2462,6 +2622,30 @@ export type User$assignedMaintenancesArgs<ExtArgs extends runtime.Types.Extensio
  * User.assignedNetworks
  */
 export type User$assignedNetworksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Network
+   */
+  select?: Prisma.NetworkSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Network
+   */
+  omit?: Prisma.NetworkOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NetworkInclude<ExtArgs> | null
+  where?: Prisma.NetworkWhereInput
+  orderBy?: Prisma.NetworkOrderByWithRelationInput | Prisma.NetworkOrderByWithRelationInput[]
+  cursor?: Prisma.NetworkWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NetworkScalarFieldEnum | Prisma.NetworkScalarFieldEnum[]
+}
+
+/**
+ * User.createdNetworks
+ */
+export type User$createdNetworksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Network
    */
