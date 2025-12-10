@@ -12,7 +12,7 @@ export class CompanyController {
      */
     async Create(req: Request, res: Response) {
         try {
-            const { name, address, phone, email, createdByUserId } = req.body;
+            const { name, address, phone, email, ruc, logoUrl, createdByUserId } = req.body;
 
             // Validate that the company name is provided
             if (!name) {
@@ -29,6 +29,8 @@ export class CompanyController {
                     address,
                     phone,
                     email,
+                    ruc,
+                    logoUrl,
                     isActive: true,
                     ...(createdByUserId && {
                         createdBy: {
@@ -46,6 +48,7 @@ export class CompanyController {
                 if (error.meta?.target) {
                     if (error.meta.target.includes('name')) errorMessage = 'El nombre de la compañía ya existe.';
                     if (error.meta.target.includes('code')) errorMessage = 'El código de la compañía ya existe.';
+                    if (error.meta.target.includes('ruc')) errorMessage = 'El RUC de la compañía ya existe.';
                 }
                 return res.status(409).json({ error: errorMessage });
             }
@@ -122,7 +125,7 @@ export class CompanyController {
     async Edit(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
-            const { name, address, phone, email, isActive, createdByUserId } = req.body;
+            const { name, address, phone, email, ruc, logoUrl, isActive, createdByUserId } = req.body;
 
             const updatedCompany = await prisma.company.update({
                 where: { id },
@@ -131,6 +134,8 @@ export class CompanyController {
                     address,
                     phone,
                     email,
+                    ruc,
+                    logoUrl,
                     isActive,
                     ...(createdByUserId && {
                         createdBy: {
@@ -147,10 +152,11 @@ export class CompanyController {
                 return res.status(404).json({ error: 'Compañía no encontrada para actualizar.' });
             }
             if (error.code === 'P2002') {
-                let errorMessage = 'Ya existe una compañía con el nombre o código proporcionado.';
+                let errorMessage = 'Ya existe una compañía con el nombre, código o RUC proporcionado.';
                 if (error.meta?.target) {
                     if (error.meta.target.includes('name')) errorMessage = 'El nombre de la compañía ya existe.';
                     if (error.meta.target.includes('code')) errorMessage = 'El código de la compañía ya existe.';
+                    if (error.meta.target.includes('ruc')) errorMessage = 'El RUC de la compañía ya existe.';
                 }
                 return res.status(409).json({ error: errorMessage });
             }

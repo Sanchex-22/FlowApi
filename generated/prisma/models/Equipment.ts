@@ -46,6 +46,7 @@ export type EquipmentMinAggregateOutputType = {
   acquisitionDate: Date | null
   warrantyDetails: string | null
   qrCode: string | null
+  invoiceUrl: string | null
   cost: runtime.Decimal | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -67,6 +68,7 @@ export type EquipmentMaxAggregateOutputType = {
   acquisitionDate: Date | null
   warrantyDetails: string | null
   qrCode: string | null
+  invoiceUrl: string | null
   cost: runtime.Decimal | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -88,6 +90,7 @@ export type EquipmentCountAggregateOutputType = {
   acquisitionDate: number
   warrantyDetails: number
   qrCode: number
+  invoiceUrl: number
   cost: number
   createdAt: number
   updatedAt: number
@@ -119,6 +122,7 @@ export type EquipmentMinAggregateInputType = {
   acquisitionDate?: true
   warrantyDetails?: true
   qrCode?: true
+  invoiceUrl?: true
   cost?: true
   createdAt?: true
   updatedAt?: true
@@ -140,6 +144,7 @@ export type EquipmentMaxAggregateInputType = {
   acquisitionDate?: true
   warrantyDetails?: true
   qrCode?: true
+  invoiceUrl?: true
   cost?: true
   createdAt?: true
   updatedAt?: true
@@ -161,6 +166,7 @@ export type EquipmentCountAggregateInputType = {
   acquisitionDate?: true
   warrantyDetails?: true
   qrCode?: true
+  invoiceUrl?: true
   cost?: true
   createdAt?: true
   updatedAt?: true
@@ -269,6 +275,7 @@ export type EquipmentGroupByOutputType = {
   acquisitionDate: Date | null
   warrantyDetails: string | null
   qrCode: string | null
+  invoiceUrl: string | null
   cost: runtime.Decimal | null
   createdAt: Date
   updatedAt: Date
@@ -313,6 +320,7 @@ export type EquipmentWhereInput = {
   acquisitionDate?: Prisma.DateTimeNullableFilter<"Equipment"> | Date | string | null
   warrantyDetails?: Prisma.StringNullableFilter<"Equipment"> | string | null
   qrCode?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  invoiceUrl?: Prisma.StringNullableFilter<"Equipment"> | string | null
   cost?: Prisma.DecimalNullableFilter<"Equipment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
@@ -338,6 +346,7 @@ export type EquipmentOrderByWithRelationInput = {
   acquisitionDate?: Prisma.SortOrderInput | Prisma.SortOrder
   warrantyDetails?: Prisma.SortOrderInput | Prisma.SortOrder
   qrCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  invoiceUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   cost?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -366,6 +375,7 @@ export type EquipmentWhereUniqueInput = Prisma.AtLeast<{
   acquisitionDate?: Prisma.DateTimeNullableFilter<"Equipment"> | Date | string | null
   warrantyDetails?: Prisma.StringNullableFilter<"Equipment"> | string | null
   qrCode?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  invoiceUrl?: Prisma.StringNullableFilter<"Equipment"> | string | null
   cost?: Prisma.DecimalNullableFilter<"Equipment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
@@ -391,6 +401,7 @@ export type EquipmentOrderByWithAggregationInput = {
   acquisitionDate?: Prisma.SortOrderInput | Prisma.SortOrder
   warrantyDetails?: Prisma.SortOrderInput | Prisma.SortOrder
   qrCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  invoiceUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   cost?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -420,6 +431,7 @@ export type EquipmentScalarWhereWithAggregatesInput = {
   acquisitionDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Equipment"> | Date | string | null
   warrantyDetails?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
   qrCode?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
+  invoiceUrl?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
   cost?: Prisma.DecimalNullableWithAggregatesFilter<"Equipment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Equipment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Equipment"> | Date | string
@@ -441,6 +453,7 @@ export type EquipmentCreateInput = {
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
+  invoiceUrl?: string | null
   cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -464,6 +477,7 @@ export type EquipmentUncheckedCreateInput = {
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
+  invoiceUrl?: string | null
   cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -487,6 +501,7 @@ export type EquipmentUpdateInput = {
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -510,6 +525,7 @@ export type EquipmentUncheckedUpdateInput = {
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -533,6 +549,7 @@ export type EquipmentCreateManyInput = {
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
+  invoiceUrl?: string | null
   cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -554,6 +571,7 @@ export type EquipmentUpdateManyMutationInput = {
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -573,6 +591,7 @@ export type EquipmentUncheckedUpdateManyInput = {
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -604,6 +623,7 @@ export type EquipmentCountOrderByAggregateInput = {
   acquisitionDate?: Prisma.SortOrder
   warrantyDetails?: Prisma.SortOrder
   qrCode?: Prisma.SortOrder
+  invoiceUrl?: Prisma.SortOrder
   cost?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -629,6 +649,7 @@ export type EquipmentMaxOrderByAggregateInput = {
   acquisitionDate?: Prisma.SortOrder
   warrantyDetails?: Prisma.SortOrder
   qrCode?: Prisma.SortOrder
+  invoiceUrl?: Prisma.SortOrder
   cost?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -650,6 +671,7 @@ export type EquipmentMinOrderByAggregateInput = {
   acquisitionDate?: Prisma.SortOrder
   warrantyDetails?: Prisma.SortOrder
   qrCode?: Prisma.SortOrder
+  invoiceUrl?: Prisma.SortOrder
   cost?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -811,6 +833,7 @@ export type EquipmentCreateWithoutAssignedToUserInput = {
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
+  invoiceUrl?: string | null
   cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -833,6 +856,7 @@ export type EquipmentUncheckedCreateWithoutAssignedToUserInput = {
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
+  invoiceUrl?: string | null
   cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -884,6 +908,7 @@ export type EquipmentScalarWhereInput = {
   acquisitionDate?: Prisma.DateTimeNullableFilter<"Equipment"> | Date | string | null
   warrantyDetails?: Prisma.StringNullableFilter<"Equipment"> | string | null
   qrCode?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  invoiceUrl?: Prisma.StringNullableFilter<"Equipment"> | string | null
   cost?: Prisma.DecimalNullableFilter<"Equipment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
@@ -905,6 +930,7 @@ export type EquipmentCreateWithoutCompanyInput = {
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
+  invoiceUrl?: string | null
   cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -927,6 +953,7 @@ export type EquipmentUncheckedCreateWithoutCompanyInput = {
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
+  invoiceUrl?: string | null
   cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -975,6 +1002,7 @@ export type EquipmentCreateWithoutMaintenancesInput = {
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
+  invoiceUrl?: string | null
   cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -997,6 +1025,7 @@ export type EquipmentUncheckedCreateWithoutMaintenancesInput = {
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
+  invoiceUrl?: string | null
   cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1035,6 +1064,7 @@ export type EquipmentUpdateWithoutMaintenancesInput = {
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1057,6 +1087,7 @@ export type EquipmentUncheckedUpdateWithoutMaintenancesInput = {
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1079,6 +1110,7 @@ export type EquipmentCreateWithoutDocumentsInput = {
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
+  invoiceUrl?: string | null
   cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1101,6 +1133,7 @@ export type EquipmentUncheckedCreateWithoutDocumentsInput = {
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
+  invoiceUrl?: string | null
   cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1139,6 +1172,7 @@ export type EquipmentUpdateWithoutDocumentsInput = {
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1161,6 +1195,7 @@ export type EquipmentUncheckedUpdateWithoutDocumentsInput = {
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1183,6 +1218,7 @@ export type EquipmentCreateManyAssignedToUserInput = {
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
+  invoiceUrl?: string | null
   cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1203,6 +1239,7 @@ export type EquipmentUpdateWithoutAssignedToUserInput = {
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1225,6 +1262,7 @@ export type EquipmentUncheckedUpdateWithoutAssignedToUserInput = {
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1247,6 +1285,7 @@ export type EquipmentUncheckedUpdateManyWithoutAssignedToUserInput = {
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1267,6 +1306,7 @@ export type EquipmentCreateManyCompanyInput = {
   acquisitionDate?: Date | string | null
   warrantyDetails?: string | null
   qrCode?: string | null
+  invoiceUrl?: string | null
   cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1287,6 +1327,7 @@ export type EquipmentUpdateWithoutCompanyInput = {
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1309,6 +1350,7 @@ export type EquipmentUncheckedUpdateWithoutCompanyInput = {
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1331,6 +1373,7 @@ export type EquipmentUncheckedUpdateManyWithoutCompanyInput = {
   acquisitionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   warrantyDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1391,6 +1434,7 @@ export type EquipmentSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   acquisitionDate?: boolean
   warrantyDetails?: boolean
   qrCode?: boolean
+  invoiceUrl?: boolean
   cost?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1417,6 +1461,7 @@ export type EquipmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   acquisitionDate?: boolean
   warrantyDetails?: boolean
   qrCode?: boolean
+  invoiceUrl?: boolean
   cost?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1440,6 +1485,7 @@ export type EquipmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   acquisitionDate?: boolean
   warrantyDetails?: boolean
   qrCode?: boolean
+  invoiceUrl?: boolean
   cost?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1463,6 +1509,7 @@ export type EquipmentSelectScalar = {
   acquisitionDate?: boolean
   warrantyDetails?: boolean
   qrCode?: boolean
+  invoiceUrl?: boolean
   cost?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1472,7 +1519,7 @@ export type EquipmentSelectScalar = {
   operatingSystem?: boolean
 }
 
-export type EquipmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "brand" | "model" | "serialNumber" | "plateNumber" | "location" | "status" | "acquisitionDate" | "warrantyDetails" | "qrCode" | "cost" | "createdAt" | "updatedAt" | "companyId" | "assignedToUserId" | "endUser" | "operatingSystem", ExtArgs["result"]["equipment"]>
+export type EquipmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "brand" | "model" | "serialNumber" | "plateNumber" | "location" | "status" | "acquisitionDate" | "warrantyDetails" | "qrCode" | "invoiceUrl" | "cost" | "createdAt" | "updatedAt" | "companyId" | "assignedToUserId" | "endUser" | "operatingSystem", ExtArgs["result"]["equipment"]>
 export type EquipmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   documents?: boolean | Prisma.Equipment$documentsArgs<ExtArgs>
   assignedToUser?: boolean | Prisma.Equipment$assignedToUserArgs<ExtArgs>
@@ -1509,6 +1556,7 @@ export type $EquipmentPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     acquisitionDate: Date | null
     warrantyDetails: string | null
     qrCode: string | null
+    invoiceUrl: string | null
     cost: runtime.Decimal | null
     createdAt: Date
     updatedAt: Date
@@ -1954,6 +2002,7 @@ export interface EquipmentFieldRefs {
   readonly acquisitionDate: Prisma.FieldRef<"Equipment", 'DateTime'>
   readonly warrantyDetails: Prisma.FieldRef<"Equipment", 'String'>
   readonly qrCode: Prisma.FieldRef<"Equipment", 'String'>
+  readonly invoiceUrl: Prisma.FieldRef<"Equipment", 'String'>
   readonly cost: Prisma.FieldRef<"Equipment", 'Decimal'>
   readonly createdAt: Prisma.FieldRef<"Equipment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Equipment", 'DateTime'>
