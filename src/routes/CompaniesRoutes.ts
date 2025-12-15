@@ -11,7 +11,7 @@ CompaniesRouter.post('/:id/disassociate-users', companyController.disassociateUs
 
 // GET routes (específicas primero)
 CompaniesRouter.get('/all', companyController.getAll.bind(companyController));
-CompaniesRouter.get('/my-companies', companyController.getMyCompanies.bind(companyController));
+CompaniesRouter.get('/:id/my-companies', companyController.getMyCompanies.bind(companyController));
 
 // ✅ RUTA ESPECÍFICA PARA DEPARTAMENTOS (debe ir ANTES de /:id)
 CompaniesRouter.get('/departments/by-code/:companyCode', companyController.getDepartmentsByCompanyCode.bind(companyController));

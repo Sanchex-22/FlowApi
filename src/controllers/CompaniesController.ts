@@ -173,7 +173,7 @@ export class CompanyController {
     async get(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
-            
+
             const company = await prisma.company.findUnique({
                 where: { id },
                 include: {
@@ -274,72 +274,73 @@ export class CompanyController {
      * @param req Express Request with authenticated user
      * @param res Express Response
      */
-    async getMyCompanies(req: Request, res: Response, next: NextFunction) {
-        try {
-            const userRole = (req as any).user?.role;
-            const userCompanyId = (req as any).user?.companyId;
+async getMyCompanies(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { id: userId } = req.params
 
-            let companies;
-
-            if (userRole === 'SUPER_ADMIN') {
-                // Super admin sees all companies
-                companies = await prisma.company.findMany({
-                    include: {
-                        _count: {
-                            select: {
-                                users: true,
-                                equipments: true,
-                                licenses: true,
-                                documents: true,
-                                maintenances: true,
-                                departments: true,
-                            }
-                        },
-                        departments: {
-                            select: {
-                                id: true,
-                                name: true,
-                                isActive: true,
-                            },
-                        },
-                    },
-                    orderBy: { name: 'asc' },
-                });
-            } else if (userCompanyId) {
-                // Other roles see only their company
-                companies = await prisma.company.findMany({
-                    where: { id: userCompanyId },
-                    include: {
-                        _count: {
-                            select: {
-                                users: true,
-                                equipments: true,
-                                licenses: true,
-                                documents: true,
-                                maintenances: true,
-                                departments: true,
-                            }
-                        },
-                        departments: {
-                            select: {
-                                id: true,
-                                name: true,
-                                isActive: true,
-                            },
-                        },
-                    },
-                });
-            } else {
-                return res.status(403).json({ error: 'Usuario no asociado a ninguna compañía.' });
-            }
-
-            res.json(companies);
-        } catch (error: any) {
-            console.error('Error al obtener compañías del usuario:', error);
-            res.status(500).json({ error: 'Error interno del servidor.' });
-            next(error);
-        }
+    if (!userId) {
+      return res.status(400).json({ error: 'ID de usuario es requerido.' })
     }
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, role: true, companyId: true },
+    })
+
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado.' })
+    }
+
+    let companies = []
+
+    // 🔥 SUPER ADMIN → TODAS las compañías
+    if (user.role === 'SUPER_ADMIN') {
+      companies = await prisma.company.findMany({
+        include: {
+          _count: {
+            select: {
+              users: true,
+              equipments: true,
+              licenses: true,
+              documents: true,
+              maintenances: true,
+            },
+          },
+        },
+        orderBy: { name: 'asc' },
+      })
+    } 
+    // 👤 OTROS ROLES → SOLO su compañía asociada
+    else {
+      if (!user.companyId) {
+        return res.status(200).json([])
+      }
+
+      companies = await prisma.company.findMany({
+        where: { id: user.companyId },
+        include: {
+          _count: {
+            select: {
+              users: true,
+              equipments: true,
+              licenses: true,
+              documents: true,
+              maintenances: true,
+            },
+          },
+        },
+        orderBy: { name: 'asc' },
+      })
+    }
+
+    return res.json(companies)
+  } catch (error) {
+    console.error('Error al obtener compañías del usuario:', error)
+    next(error)
+  }
+}
+
+
 
     /**
      * Gets all departments of a company by company code
@@ -376,7 +377,7 @@ export class CompanyController {
 
             if (!company) {
                 console.log(`Compañía con código '${companyCode}' no encontrada`);
-                return res.status(404).json({ 
+                return res.status(404).json({
                     error: `Compañía con código '${companyCode}' no encontrada.`,
                     receivedCode: companyCode,
                 });
@@ -384,8 +385,8 @@ export class CompanyController {
 
             if (company.departments.length === 0) {
                 console.log(`Compañía '${companyCode}' no tiene departamentos`);
-                return res.status(404).json({ 
-                    error: `Compañía con código '${companyCode}' no tiene departamentos.` 
+                return res.status(404).json({
+                    error: `Compañía con código '${companyCode}' no tiene departamentos.`
                 });
             }
 
@@ -393,9 +394,9 @@ export class CompanyController {
 
         } catch (error: any) {
             console.error('Error fetching departments by company code:', error);
-            res.status(500).json({ 
+            res.status(500).json({
                 error: 'Error interno del servidor al obtener los departamentos de la compañía.',
-                details: error.message 
+                details: error.message
             });
         }
     }
