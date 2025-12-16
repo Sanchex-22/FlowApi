@@ -9,9 +9,7 @@ import { EquipmentStatus, MaintenanceStatus } from '../../generated/prisma/enums
 export class DashboardController {
 
     async getDashboardData(req: Request, res: Response) {
-        // En una aplicación real, el companyId vendría de la sesión del usuario o de un parámetro de la URL.
-        // Para este ejemplo, usaremos un ID hardcodeado. Deberías encontrar el ID de "Empresa Principal S.A.".
-        const { companyId } = req.params; // o req.user.companyId;
+        const { companyId } = req.params;
 
         if (!companyId) {
             return res.status(400).json({ message: 'El ID de la compañía es requerido.' });
@@ -60,21 +58,40 @@ export class DashboardController {
                 where: { companyId, status: EquipmentStatus.ACTIVE, createdAt: { lt: startOfCurrentMonth } },
             });
 
-            // Usuarios Activos
-            const activeUsersCurrent = await prisma.user.count({ where: { companyId, isActive: true } });
+            // Usuarios Activos - Usando la relación many-to-many
+            const activeUsersCurrent = await prisma.user.count({
+                where: {
+                    companies: {
+                        some: {
+                            companyId: companyId,
+                        },
+                    },
+                    isActive: true,
+                },
+            });
             const activeUsersPrevious = await prisma.user.count({
-                where: { companyId, isActive: true, createdAt: { lt: startOfCurrentMonth } },
+                where: {
+                    companies: {
+                        some: {
+                            companyId: companyId,
+                        },
+                    },
+                    isActive: true,
+                    createdAt: { lt: startOfCurrentMonth },
+                },
             });
 
             // --- 3. Datos para el Inventario por Categoría ---
 
-            const laptopsCount = await prisma.equipment.count({ where: { companyId, type: { equals: 'Laptop', mode: 'insensitive' } } });
-            const desktopsCount = await prisma.equipment.count({ where: { companyId, type: { equals: 'Desktop', mode: 'insensitive' } } });
-            const mobilesCount = await prisma.equipment.count({ where: { companyId, type: { equals: 'Móvil', mode: 'insensitive' } } });
-            // Para impresoras y networking, consultamos el modelo Network
-            // const printersCount = await prisma.network.count({ where: { companyId, deviceType: 'PRINTER' } });
-            // const networkingCount = await prisma.network.count({ where: { companyId, deviceType: { not: 'PRINTER' } } });
-
+            const laptopsCount = await prisma.equipment.count({ 
+                where: { companyId, type: { equals: 'Laptop', mode: 'insensitive' } } 
+            });
+            const desktopsCount = await prisma.equipment.count({ 
+                where: { companyId, type: { equals: 'Desktop', mode: 'insensitive' } } 
+            });
+            const mobilesCount = await prisma.equipment.count({ 
+                where: { companyId, type: { equals: 'Móvil', mode: 'insensitive' } } 
+            });
 
             // --- 4. Datos para la Actividad Reciente ---
 
@@ -144,13 +161,11 @@ export class DashboardController {
                 }))
             ]
                 .sort((a, b) => {
-                    const dateA = a.date ?? new Date(0); // fecha antigua por defecto
+                    const dateA = a.date ?? new Date(0);
                     const dateB = b.date ?? new Date(0);
                     return dateB.getTime() - dateA.getTime();
                 })
-                // Ordenamos por fecha
                 .slice(0, 5); // Tomamos los 5 más recientes en total
-
 
             // --- 5. Ensamblar la Respuesta Final ---
             const dashboardData = {
@@ -176,8 +191,6 @@ export class DashboardController {
                     { name: 'Laptops', count: laptopsCount },
                     { name: 'Desktops', count: desktopsCount },
                     { name: 'Móviles', count: mobilesCount },
-                    // { name: 'Impresoras', count: printersCount },
-                    // { name: 'Networking', count: networkingCount },
                 ],
                 recentActivity,
             };
@@ -188,6 +201,5 @@ export class DashboardController {
             console.error("Error al obtener los datos del dashboard:", error);
             res.status(500).json({ message: 'Error interno del servidor.' });
         }
-    };
-
+    }
 }

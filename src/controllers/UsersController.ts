@@ -19,7 +19,6 @@ export class UserController {
     targetUserId: string,
     action: 'edit' | 'delete'
   ): Promise<{ allowed: boolean; error?: string }> {
-    // Obtener usuario que hace la solicitud
     const requestingUser = await prisma.user.findUnique({
       where: { id: requestingUserId },
     });
@@ -28,12 +27,10 @@ export class UserController {
       return { allowed: false, error: 'Usuario no autenticado.' };
     }
 
-    // Si es super admin, permitir todo
     if (requestingUser.role === 'SUPER_ADMIN') {
       return { allowed: true };
     }
 
-    // Obtener usuario a modificar
     const targetUser = await prisma.user.findUnique({
       where: { id: targetUserId },
     });
@@ -42,12 +39,10 @@ export class UserController {
       return { allowed: false, error: 'Usuario objetivo no encontrado.' };
     }
 
-    // No permitir que un usuario se modifique a sí mismo (excepto datos propios)
     if (requestingUserId === targetUserId && action === 'delete') {
       return { allowed: false, error: 'No puedes eliminar tu propia cuenta.' };
     }
 
-    // Comparar jerarquía de roles
     const requestingRoleLevel = ROLE_HIERARCHY[requestingUser.role] || 0;
     const targetRoleLevel = ROLE_HIERARCHY[targetUser.role] || 0;
 
@@ -89,15 +84,18 @@ export class UserController {
       position,
     } = req.body;
 
-    // Obtener usuario autenticado desde el request (asumiendo middleware de autenticación)
     const requestingUserId = (req as any).userId;
 
     if (!username || !email || !password) {
-      return res.status(400).json({ error: 'Username, email y password son obligatorios.' });
+      return res.status(400).json({
+        error: 'Username, email y password son obligatorios.',
+      });
     }
 
     if (!companyId) {
-      return res.status(400).json({ error: 'El campo companyId es obligatorio.' });
+      return res.status(400).json({
+        error: 'El campo companyId es obligatorio.',
+      });
     }
 
     try {
@@ -108,7 +106,6 @@ export class UserController {
           'dummy-id',
           'edit'
         );
-
         if (!permissionCheck.allowed && !requestingUserId) {
           return res.status(403).json({
             error: 'No tienes permisos para asignar roles elevados.',
@@ -125,7 +122,11 @@ export class UserController {
           email,
           password: hashedPassword,
           role: role || 'USER',
-          companyId,
+          companies: {
+            create: {
+              companyId: companyId,
+            },
+          },
           person: {
             create: {
               firstName,
@@ -133,9 +134,7 @@ export class UserController {
               fullName: `${firstName || ''} ${lastName || ''}`.trim(),
               contactEmail,
               phoneNumber,
-              department: departmentId
-                ? { connect: { id: departmentId } }
-                : undefined,
+              departmentId: departmentId || null,
               position,
               userCode: newUserCode,
             },
@@ -147,6 +146,11 @@ export class UserController {
               department: true,
             },
           },
+          companies: {
+            include: {
+              company: true,
+            },
+          },
         },
       });
 
@@ -155,10 +159,13 @@ export class UserController {
       if (error.code === 'P2002') {
         let errorMessage = 'Username, email o userCode ya existen.';
         if (error.meta?.target) {
-          if (error.meta.target.includes('username')) errorMessage = 'El username ya existe.';
-          if (error.meta.target.includes('email')) errorMessage = 'El email ya existe.';
+          if (error.meta.target.includes('username'))
+            errorMessage = 'El username ya existe.';
+          if (error.meta.target.includes('email'))
+            errorMessage = 'El email ya existe.';
           if (error.meta.target.includes('userCode'))
-            errorMessage = 'El userCode generado ya existe. Por favor, inténtelo de nuevo.';
+            errorMessage =
+              'El userCode generado ya existe. Por favor, inténtelo de nuevo.';
           if (error.meta.target.includes('contactEmail'))
             errorMessage = 'El email de contacto ya existe.';
           if (error.meta.target.includes('fullName'))
@@ -166,7 +173,6 @@ export class UserController {
         }
         return res.status(409).json({ error: errorMessage });
       }
-
       console.error('Error creating user:', error);
       return res.status(500).json({
         error: 'Error al crear el usuario.',
@@ -180,20 +186,17 @@ export class UserController {
     const requestingUserId = (req as any).userId;
 
     try {
-      // Validar permisos
       if (requestingUserId) {
         const permissionCheck = await this.validateRolePermission(
           requestingUserId,
           id,
           'delete'
         );
-
         if (!permissionCheck.allowed) {
           return res.status(403).json({ error: permissionCheck.error });
         }
       }
 
-      // Validar que no sea el último SUPER_ADMIN
       const userToDelete = await prisma.user.findUnique({
         where: { id },
       });
@@ -207,11 +210,6 @@ export class UserController {
           });
         }
       }
-
-      // Eliminar la persona asociada
-      await prisma.person.deleteMany({
-        where: { userId: id },
-      });
 
       const deletedUser = await prisma.user.delete({
         where: { id },
@@ -254,20 +252,17 @@ export class UserController {
     } = req.body;
 
     try {
-      // Validar permisos si intenta cambiar rol o desactivar
       if (requestingUserId && (role || isActive === false)) {
         const permissionCheck = await this.validateRolePermission(
           requestingUserId,
           id,
           'edit'
         );
-
         if (!permissionCheck.allowed) {
           return res.status(403).json({ error: permissionCheck.error });
         }
       }
 
-      // Si intenta cambiar el rol del último SUPER_ADMIN
       const userToEdit = await prisma.user.findUnique({
         where: { id },
       });
@@ -286,18 +281,31 @@ export class UserController {
         }
       }
 
-      // Preparar datos para actualizar el usuario
       const userDataToUpdate: any = {};
-
       if (username !== undefined) userDataToUpdate.username = username;
       if (email !== undefined) userDataToUpdate.email = email;
       if (role !== undefined) userDataToUpdate.role = role;
       if (isActive !== undefined) userDataToUpdate.isActive = isActive;
-      if (companyId !== undefined) userDataToUpdate.companyId = companyId;
 
-      // Si se proporciona una nueva contraseña, hashearla
       if (password && password.trim()) {
         userDataToUpdate.password = await bcrypt.hash(password, 10);
+      }
+
+      // Actualizar relación con compañía si se proporciona
+      if (companyId !== undefined) {
+        // Primero eliminar relaciones existentes
+        await prisma.userCompany.deleteMany({
+          where: { userId: id },
+        });
+
+        // Crear nueva relación
+        if (companyId) {
+          userDataToUpdate.companies = {
+            create: {
+              companyId: companyId,
+            },
+          };
+        }
       }
 
       const updatedUser = await prisma.user.update({
@@ -309,10 +317,14 @@ export class UserController {
               department: true,
             },
           },
+          companies: {
+            include: {
+              company: true,
+            },
+          },
         },
       });
 
-      // Actualizar o crear la información de la persona
       if (
         firstName ||
         lastName ||
@@ -328,7 +340,6 @@ export class UserController {
           userId: id,
         };
 
-        // Preparar datos para actualizar
         if (firstName !== undefined) {
           personDataToUpdate.firstName = firstName;
           personDataToCreate.firstName = firstName;
@@ -358,24 +369,19 @@ export class UserController {
           personDataToCreate.userCode = userCode;
         }
 
-        // Construir fullName para ambos
         const fullName = `${
           firstName || updatedUser.person?.firstName || ''
         } ${lastName || updatedUser.person?.lastName || ''}`.trim();
-        
         personDataToUpdate.fullName = fullName;
         personDataToCreate.fullName = fullName;
 
-        // Manejo del departmentId - separado porque no puede usar connect en create
         if (departmentId !== undefined) {
-          // Para update, usar disconnect/connect
           if (departmentId === null || departmentId === '') {
             personDataToUpdate.departmentId = null;
           } else {
             personDataToUpdate.departmentId = departmentId;
           }
-          
-          // Para create, usar directamente departmentId (no connect)
+
           if (departmentId && departmentId !== '') {
             personDataToCreate.departmentId = departmentId;
           } else {
@@ -389,13 +395,17 @@ export class UserController {
           create: personDataToCreate,
         });
 
-        // Obtener el usuario con los datos de persona actualizados
         const userWithUpdatedPerson = await prisma.user.findUnique({
           where: { id },
           include: {
             person: {
               include: {
                 department: true,
+              },
+            },
+            companies: {
+              include: {
+                company: true,
               },
             },
           },
@@ -414,7 +424,8 @@ export class UserController {
         if (error.meta?.target) {
           if (error.meta.target.includes('username'))
             errorMessage = 'El username ya existe.';
-          if (error.meta.target.includes('email')) errorMessage = 'El email ya existe.';
+          if (error.meta.target.includes('email'))
+            errorMessage = 'El email ya existe.';
           if (error.meta.target.includes('userCode'))
             errorMessage = 'El userCode ya existe.';
           if (error.meta.target.includes('contactEmail'))
@@ -443,16 +454,22 @@ export class UserController {
               department: true,
             },
           },
-          company: true,
+          companies: {
+            include: {
+              company: true,
+            },
+          },
           assignedEquipments: true,
           assignedMaintenances: true,
           createdCompanies: true,
           assignedNetworks: true,
         },
       });
+
       if (!user) {
         return res.status(404).json({ error: 'Usuario no encontrado.' });
       }
+
       res.status(200).json(user);
     } catch (error: any) {
       console.error('Error fetching user:', error);
@@ -472,7 +489,11 @@ export class UserController {
               department: true,
             },
           },
-          company: true,
+          companies: {
+            include: {
+              company: true,
+            },
+          },
         },
       });
       res.status(200).json(users);
@@ -496,7 +517,11 @@ export class UserController {
               department: true,
             },
           },
-          company: true,
+          companies: {
+            include: {
+              company: true,
+            },
+          },
           assignedEquipments: {
             select: {
               id: true,
@@ -554,7 +579,9 @@ export class UserController {
       res.status(200).json(users);
     } catch (error: any) {
       console.error('Error fetching users with person data:', error);
-      res.status(500).json({ error: 'Error al obtener los usuarios.' });
+      res.status(500).json({
+        error: 'Error al obtener los usuarios.',
+      });
     }
   }
 
@@ -563,23 +590,39 @@ export class UserController {
       const companyId = await prisma.company.findUnique({
         where: { id: req.params.companyCode },
       });
+
       if (!companyId) {
         return res.status(404).json({ error: 'Compañía no encontrada.' });
       }
+
       const users = await prisma.user.findMany({
-        where: { companyId: companyId?.id },
+        where: {
+          companies: {
+            some: {
+              companyId: companyId.id,
+            },
+          },
+        },
         include: {
           person: {
             include: {
               department: true,
             },
           },
+          companies: {
+            include: {
+              company: true,
+            },
+          },
         },
       });
+
       res.status(200).json(users);
     } catch (error: any) {
       console.error('Error fetching users with person data:', error);
-      res.status(500).json({ error: 'Error al obtener los usuarios.' });
+      res.status(500).json({
+        error: 'Error al obtener los usuarios.',
+      });
     }
   }
 }

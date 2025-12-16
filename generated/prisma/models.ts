@@ -10,6 +10,7 @@
  */
 export type * from './models/Ticket.js'
 export type * from './models/User.js'
+export type * from './models/UserCompany.js'
 export type * from './models/Person.js'
 export type * from './models/Company.js'
 export type * from './models/Department.js'

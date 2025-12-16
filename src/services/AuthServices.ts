@@ -10,7 +10,14 @@ interface LoginResponse {
   email: string;
   role: UserRole;
   isActive: boolean;
-  companyId: string | null;
+  companies: Array<{
+    companyId: string;
+    company: {
+      id: string;
+      code: string;
+      name: string;
+    };
+  }>;
 }
 
 export class AuthService {
@@ -31,7 +38,18 @@ export class AuthService {
         password: true,
         role: true,
         isActive: true,
-        companyId: true,
+        companies: {
+          select: {
+            companyId: true,
+            company: {
+              select: {
+                id: true,
+                code: true,
+                name: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -51,11 +69,18 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new Error('Credenciales inválidas.');
     }
+
     const { password, ...userWithoutPassword } = user;
     return userWithoutPassword;
   }
 
-  async register(username: string, email: string, password_plain: string, role: UserRole, companyId?: string): Promise<LoginResponse> {
+  async register(
+    username: string, 
+    email: string, 
+    password_plain: string, 
+    role: UserRole, 
+    companyId?: string
+  ): Promise<LoginResponse> {
     // Validar entrada
     if (!username || !email || !password_plain) {
       throw new Error('Nombre de usuario, email y contraseña son requeridos.');
@@ -83,7 +108,13 @@ export class AuthService {
           email,
           password: hashedPassword,
           role,
-          companyId,
+          ...(companyId && {
+            companies: {
+              create: {
+                companyId: companyId,
+              },
+            },
+          }),
         },
         select: {
           id: true,
@@ -91,7 +122,18 @@ export class AuthService {
           email: true,
           role: true,
           isActive: true,
-          companyId: true,
+          companies: {
+            select: {
+              companyId: true,
+              company: {
+                select: {
+                  id: true,
+                  code: true,
+                  name: true,
+                },
+              },
+            },
+          },
         },
       });
 
@@ -116,8 +158,8 @@ export class AuthService {
   }
 
   // Método útil para obtener datos del usuario sin la contraseña
-  private excludePassword(user: User): LoginResponse {
+  private excludePassword(user: User): Omit<User, 'password'> {
     const { password, ...userWithoutPassword } = user;
-    return userWithoutPassword as LoginResponse;
+    return userWithoutPassword;
   }
 }

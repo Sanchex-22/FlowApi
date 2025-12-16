@@ -386,6 +386,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   Ticket: 'Ticket',
   User: 'User',
+  UserCompany: 'UserCompany',
   Person: 'Person',
   Company: 'Company',
   Department: 'Department',
@@ -411,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "ticket" | "user" | "person" | "company" | "department" | "equipment" | "maintenance" | "document" | "license" | "systemConfig" | "networkProvider" | "network"
+    modelProps: "ticket" | "user" | "userCompany" | "person" | "company" | "department" | "equipment" | "maintenance" | "document" | "license" | "systemConfig" | "networkProvider" | "network"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -560,6 +561,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number
+        }
+      }
+    }
+    UserCompany: {
+      payload: Prisma.$UserCompanyPayload<ExtArgs>
+      fields: Prisma.UserCompanyFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserCompanyFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCompanyPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserCompanyFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCompanyPayload>
+        }
+        findFirst: {
+          args: Prisma.UserCompanyFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCompanyPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserCompanyFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCompanyPayload>
+        }
+        findMany: {
+          args: Prisma.UserCompanyFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCompanyPayload>[]
+        }
+        create: {
+          args: Prisma.UserCompanyCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCompanyPayload>
+        }
+        createMany: {
+          args: Prisma.UserCompanyCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserCompanyCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCompanyPayload>[]
+        }
+        delete: {
+          args: Prisma.UserCompanyDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCompanyPayload>
+        }
+        update: {
+          args: Prisma.UserCompanyUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCompanyPayload>
+        }
+        deleteMany: {
+          args: Prisma.UserCompanyDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserCompanyUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserCompanyUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCompanyPayload>[]
+        }
+        upsert: {
+          args: Prisma.UserCompanyUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCompanyPayload>
+        }
+        aggregate: {
+          args: Prisma.UserCompanyAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserCompany>
+        }
+        groupBy: {
+          args: Prisma.UserCompanyGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserCompanyGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserCompanyCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserCompanyCountAggregateOutputType> | number
         }
       }
     }
@@ -1376,11 +1451,18 @@ export const UserScalarFieldEnum = {
   role: 'role',
   isActive: 'isActive',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  companyId: 'companyId'
+  updatedAt: 'updatedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const UserCompanyScalarFieldEnum = {
+  userId: 'userId',
+  companyId: 'companyId'
+} as const
+
+export type UserCompanyScalarFieldEnum = (typeof UserCompanyScalarFieldEnum)[keyof typeof UserCompanyScalarFieldEnum]
 
 
 export const PersonScalarFieldEnum = {
@@ -1396,7 +1478,8 @@ export const PersonScalarFieldEnum = {
   status: 'status',
   userCode: 'userCode',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  companyId: 'companyId'
 } as const
 
 export type PersonScalarFieldEnum = (typeof PersonScalarFieldEnum)[keyof typeof PersonScalarFieldEnum]
@@ -1893,6 +1976,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   ticket?: Prisma.TicketOmit
   user?: Prisma.UserOmit
+  userCompany?: Prisma.UserCompanyOmit
   person?: Prisma.PersonOmit
   company?: Prisma.CompanyOmit
   department?: Prisma.DepartmentOmit

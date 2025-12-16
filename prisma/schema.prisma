@@ -42,7 +42,8 @@ model User {
   isActive             Boolean       @default(true)
   createdAt            DateTime      @default(now())
   updatedAt            DateTime      @updatedAt
-  companyId            String?
+  // companyId            String?
+  companies UserCompany[]
   createdCompanies     Company[]     @relation("CompanyCreatedBy")
   assignedEquipments   Equipment[]
   assignedMaintenances Maintenance[]
@@ -51,8 +52,18 @@ model User {
   person               Person?
   ticketsSentBy        Ticket[]      @relation("TicketsSentBy")
   ticketsSentTo        Ticket[]      @relation("TicketsSentTo")
-  company              Company?      @relation("CompanyUsers", fields: [companyId], references: [id], onDelete: SetNull)
 }
+
+model UserCompany {
+  userId    String
+  companyId String
+
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@id([userId, companyId])
+}
+
 
 model Person {
   id           String       @id @default(uuid())
@@ -68,6 +79,7 @@ model Person {
   userCode     String       @unique
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
+  companyId        String?  
   department   Department?  @relation(fields: [departmentId], references: [id], onDelete: SetNull)
   user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -93,8 +105,8 @@ model Company {
   maintenances     Maintenance[]     
   networks         Network[]         
   networkProviders NetworkProvider[] 
-  users            User[]            @relation("CompanyUsers")
   tickets          Ticket[]
+  users            UserCompany[]
 }
 
 model Department {

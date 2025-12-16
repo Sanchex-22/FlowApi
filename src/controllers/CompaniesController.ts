@@ -58,7 +58,7 @@ export class CompanyController {
 
     /**
      * Deletes a company and all its related data
-     * Users are automatically disassociated (companyId set to null)
+     * UserCompany relations are automatically deleted (CASCADE)
      * @param req Express Request with company ID in params
      * @param res Express Response
      */
@@ -71,7 +71,11 @@ export class CompanyController {
                 where: { id },
                 include: {
                     users: {
-                        select: { id: true, username: true },
+                        include: {
+                            user: {
+                                select: { id: true, username: true },
+                            },
+                        },
                     },
                 },
             });
@@ -83,13 +87,13 @@ export class CompanyController {
             // Log which users will be disassociated
             console.log(
                 `Eliminando compañía "${company.name}" (${company.code}). ` +
-                `${company.users.length} usuario(s) serán desasociado(s).`
+                `${company.users.length} relación(es) usuario-compañía serán eliminada(s).`
             );
 
             // Delete the company
             // Due to the cascade configuration in schema.prisma:
             // - Departments, Equipment, Licenses, Maintenances, Documents, Networks, NetworkProviders will be DELETED
-            // - Users will be DISASSOCIATED (companyId set to null)
+            // - UserCompany relations will be DELETED (CASCADE)
             await prisma.company.delete({
                 where: { id },
             });
@@ -101,11 +105,11 @@ export class CompanyController {
                     name: company.name,
                     code: company.code,
                 },
-                usersDisassociated: company.users.length,
-                usersDetails: company.users.map(u => ({
-                    id: u.id,
-                    username: u.username,
-                    status: 'Desasociado',
+                userRelationsDeleted: company.users.length,
+                usersDetails: company.users.map(uc => ({
+                    id: uc.user.id,
+                    username: uc.user.username,
+                    status: 'Relación eliminada',
                 })),
             });
         } catch (error: any) {
@@ -178,14 +182,18 @@ export class CompanyController {
                 where: { id },
                 include: {
                     users: {
-                        select: {
-                            id: true,
-                            username: true,
-                            email: true,
-                            person: {
+                        include: {
+                            user: {
                                 select: {
-                                    fullName: true,
-                                    position: true,
+                                    id: true,
+                                    username: true,
+                                    email: true,
+                                    person: {
+                                        select: {
+                                            fullName: true,
+                                            position: true,
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -227,11 +235,6 @@ export class CompanyController {
      */
     async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            // Optional: Filter by user's company if not super admin
-            // const userRole = (req as any).user?.role;
-            // const userId = (req as any).user?.id;
-            // const userCompany = (req as any).user?.companyId;
-
             const companies = await prisma.company.findMany({
                 include: {
                     _count: {
@@ -270,77 +273,89 @@ export class CompanyController {
     /**
      * Gets companies filtered by user role
      * SUPER_ADMIN: sees all companies
-     * ADMIN/USER: sees only their company
+     * ADMIN/USER: sees only their companies
      * @param req Express Request with authenticated user
      * @param res Express Response
      */
-async getMyCompanies(req: Request, res: Response, next: NextFunction) {
-  try {
-    const { id: userId } = req.params
+    async getMyCompanies(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { id: userId } = req.params
 
-    if (!userId) {
-      return res.status(400).json({ error: 'ID de usuario es requerido.' })
+            if (!userId) {
+                return res.status(400).json({ error: 'ID de usuario es requerido.' })
+            }
+
+            const user = await prisma.user.findUnique({
+                where: { id: userId },
+                select: { 
+                    id: true, 
+                    role: true,
+                    companies: {
+                        select: {
+                            companyId: true,
+                        }
+                    }
+                },
+            })
+
+            if (!user) {
+                return res.status(404).json({ error: 'Usuario no encontrado.' })
+            }
+
+            let companies = []
+
+            // 🔥 SUPER ADMIN → TODAS las compañías
+            if (user.role === 'SUPER_ADMIN') {
+                companies = await prisma.company.findMany({
+                    include: {
+                        _count: {
+                            select: {
+                                users: true,
+                                equipments: true,
+                                licenses: true,
+                                documents: true,
+                                maintenances: true,
+                            },
+                        },
+                    },
+                    orderBy: { name: 'asc' },
+                })
+            } 
+            // 👤 OTROS ROLES → SOLO sus compañías asociadas
+            else {
+                if (user.companies.length === 0) {
+                    return res.status(200).json([])
+                }
+
+                const companyIds = user.companies.map(uc => uc.companyId)
+
+                companies = await prisma.company.findMany({
+                    where: { 
+                        id: { 
+                            in: companyIds 
+                        } 
+                    },
+                    include: {
+                        _count: {
+                            select: {
+                                users: true,
+                                equipments: true,
+                                licenses: true,
+                                documents: true,
+                                maintenances: true,
+                            },
+                        },
+                    },
+                    orderBy: { name: 'asc' },
+                })
+            }
+
+            return res.json(companies)
+        } catch (error) {
+            console.error('Error al obtener compañías del usuario:', error)
+            next(error)
+        }
     }
-
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { id: true, role: true, companyId: true },
-    })
-
-    if (!user) {
-      return res.status(404).json({ error: 'Usuario no encontrado.' })
-    }
-
-    let companies = []
-
-    // 🔥 SUPER ADMIN → TODAS las compañías
-    if (user.role === 'SUPER_ADMIN') {
-      companies = await prisma.company.findMany({
-        include: {
-          _count: {
-            select: {
-              users: true,
-              equipments: true,
-              licenses: true,
-              documents: true,
-              maintenances: true,
-            },
-          },
-        },
-        orderBy: { name: 'asc' },
-      })
-    } 
-    // 👤 OTROS ROLES → SOLO su compañía asociada
-    else {
-      if (!user.companyId) {
-        return res.status(200).json([])
-      }
-
-      companies = await prisma.company.findMany({
-        where: { id: user.companyId },
-        include: {
-          _count: {
-            select: {
-              users: true,
-              equipments: true,
-              licenses: true,
-              documents: true,
-              maintenances: true,
-            },
-          },
-        },
-        orderBy: { name: 'asc' },
-      })
-    }
-
-    return res.json(companies)
-  } catch (error) {
-    console.error('Error al obtener compañías del usuario:', error)
-    next(error)
-  }
-}
-
-
 
     /**
      * Gets all departments of a company by company code
@@ -402,7 +417,7 @@ async getMyCompanies(req: Request, res: Response, next: NextFunction) {
     }
 
     /**
-     * Disassociate users from a company (set companyId to null)
+     * Disassociate users from a company (delete UserCompany relations)
      * Useful when you want to remove users without deleting the company
      * @param req Express Request with company ID in params and userIds in body
      * @param res Express Response
@@ -425,25 +440,76 @@ async getMyCompanies(req: Request, res: Response, next: NextFunction) {
                 return res.status(404).json({ error: 'Compañía no encontrada.' });
             }
 
-            // Update users to remove company association
-            const updatedUsers = await prisma.user.updateMany({
+            // Delete UserCompany relations
+            const deletedRelations = await prisma.userCompany.deleteMany({
                 where: {
-                    id: { in: userIds },
-                    companyId: id, // Only update users from this company
-                },
-                data: {
-                    companyId: null,
+                    companyId: id,
+                    userId: { in: userIds },
                 },
             });
 
             res.json({
                 message: 'Usuarios desasociados correctamente',
-                updatedCount: updatedUsers.count,
+                deletedCount: deletedRelations.count,
                 companyId: id,
             });
         } catch (error: any) {
             console.error('Error al desasociar usuarios:', error);
             res.status(500).json({ error: 'Error interno del servidor al desasociar usuarios.' });
+            next(error);
+        }
+    }
+
+    /**
+     * Associate users to a company (create UserCompany relations)
+     * @param req Express Request with company ID in params and userIds in body
+     * @param res Express Response
+     */
+    async associateUsers(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { id } = req.params;
+            const { userIds } = req.body;
+
+            if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+                return res.status(400).json({ error: 'Se requiere un array de IDs de usuarios.' });
+            }
+
+            // Verify company exists
+            const company = await prisma.company.findUnique({
+                where: { id },
+            });
+
+            if (!company) {
+                return res.status(404).json({ error: 'Compañía no encontrada.' });
+            }
+
+            // Create UserCompany relations (skip duplicates)
+            const createdRelations = await prisma.$transaction(
+                userIds.map(userId =>
+                    prisma.userCompany.upsert({
+                        where: {
+                            userId_companyId: {
+                                userId,
+                                companyId: id,
+                            },
+                        },
+                        update: {},
+                        create: {
+                            userId,
+                            companyId: id,
+                        },
+                    })
+                )
+            );
+
+            res.json({
+                message: 'Usuarios asociados correctamente',
+                createdCount: createdRelations.length,
+                companyId: id,
+            });
+        } catch (error: any) {
+            console.error('Error al asociar usuarios:', error);
+            res.status(500).json({ error: 'Error interno del servidor al asociar usuarios.' });
             next(error);
         }
     }
