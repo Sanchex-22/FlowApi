@@ -19,14 +19,16 @@ export class AnnualSoftwareExpenseController {
     return isNaN(n) ? fallback : n
   }
 
-  private parseDate(value: any): Date | null {
-    if (!value) return null
+  private parseDate(value: any): Date {
     const d = new Date(value)
-    return isNaN(d.getTime()) ? null : d
+    if (isNaN(d.getTime())) {
+      throw new Error("Fecha inválida")
+    }
+    return d
   }
 
   // ===============================
-  // Crear
+  // Crear Gasto
   // ===============================
   async create(req: Request, res: Response) {
     try {
@@ -41,47 +43,31 @@ export class AnnualSoftwareExpenseController {
         renewalDate,
         paymentFrequency,
         additionalNotes,
-        assignedUsers,
       } = req.body
 
-      // Obligatorios
       if (
         !applicationName ||
         !provider ||
         !category ||
         !status ||
-        !paymentFrequency
+        !paymentFrequency ||
+        !renewalDate
       ) {
         return res.status(400).json({
           error: "Campos obligatorios faltantes.",
         })
       }
 
-      // Enums
       if (!this.isValidEnum(status, ExpenseStatus)) {
-        return res.status(400).json({
-          error: `Estado inválido: ${status}`,
-        })
+        return res.status(400).json({ error: "Estado inválido." })
       }
 
       if (!this.isValidEnum(category, SoftwareCategory)) {
-        return res.status(400).json({
-          error: `Categoría inválida: ${category}`,
-        })
+        return res.status(400).json({ error: "Categoría inválida." })
       }
 
       if (!this.isValidEnum(paymentFrequency, PaymentFrequency)) {
-        return res.status(400).json({
-          error: `Frecuencia de pago inválida: ${paymentFrequency}`,
-        })
-      }
-
-      // Fecha
-      const parsedDate = this.parseDate(renewalDate)
-      if (!parsedDate) {
-        return res.status(400).json({
-          error: "Fecha de renovación inválida.",
-        })
+        return res.status(400).json({ error: "Frecuencia inválida." })
       }
 
       const expense = await prisma.annualSoftwareExpense.create({
@@ -93,29 +79,31 @@ export class AnnualSoftwareExpenseController {
           annualCost: this.toNumber(annualCost),
           numberOfUsers: this.toNumber(numberOfUsers),
           costPerUser: this.toNumber(costPerUser),
-          renewalDate: parsedDate,
+          renewalDate: this.parseDate(renewalDate),
           paymentFrequency,
           additionalNotes: additionalNotes || null,
-          assignedUsers: assignedUsers || null,
         },
       })
 
       return res.status(201).json(expense)
-    } catch (error) {
+    } catch (error: any) {
       console.error("CREATE AnnualSoftwareExpense:", error)
       return res.status(500).json({
-        error: "Error interno al crear el gasto.",
+        error: error.message || "Error interno al crear el gasto.",
       })
     }
   }
 
   // ===============================
-  // Obtener todos
+  // Obtener todos (con usuarios)
   // ===============================
   async getAll(req: Request, res: Response) {
     try {
       const expenses = await prisma.annualSoftwareExpense.findMany({
         orderBy: { createdAt: "desc" },
+        include: {
+          assignedUsers: true, // ✅ RELACIÓN
+        },
       })
 
       return res.status(200).json(expenses)
@@ -128,19 +116,19 @@ export class AnnualSoftwareExpenseController {
   }
 
   // ===============================
-  // Obtener por ID
+  // Obtener por ID (con usuarios)
   // ===============================
   async getById(req: Request, res: Response) {
     try {
       const { id } = req.params
 
-      if (!id) {
-        return res.status(400).json({ error: "ID inválido." })
-      }
-
       const expense = await prisma.annualSoftwareExpense.findUnique({
         where: { id },
+        include: {
+          assignedUsers: true,
+        },
       })
+
 
       if (!expense) {
         return res.status(404).json({
@@ -158,114 +146,23 @@ export class AnnualSoftwareExpenseController {
   }
 
   // ===============================
-  // Editar
+  // Editar Gasto
   // ===============================
-async edit(req: Request, res: Response) {
-  try {
-    const { id } = req.params
-    const {
-      applicationName,
-      provider,
-      category,
-      status,
-      annualCost,
-      numberOfUsers,
-      costPerUser,
-      renewalDate,
-      paymentFrequency,
-      additionalNotes,
-      assignedUsers,
-    } = req.body
-
-    if (!id) {
-      return res.status(400).json({ error: "ID inválido." })
-    }
-
-    const exists = await prisma.annualSoftwareExpense.findUnique({
-      where: { id },
-    })
-
-    if (!exists) {
-      return res.status(404).json({
-        error: "Gasto anual de software no encontrado.",
-      })
-    }
-
-    if (status && !this.isValidEnum(status, ExpenseStatus)) {
-      return res.status(400).json({ error: `Estado inválido: ${status}` })
-    }
-
-    if (category && !this.isValidEnum(category, SoftwareCategory)) {
-      return res.status(400).json({ error: `Categoría inválida: ${category}` })
-    }
-
-    if (
-      paymentFrequency &&
-      !this.isValidEnum(paymentFrequency, PaymentFrequency)
-    ) {
-      return res.status(400).json({
-        error: "Frecuencia de pago inválida.",
-      })
-    }
-
-    // ✅ FECHA SEGURA PARA PRISMA
-    let parsedDate: Date | undefined = undefined
-    if (renewalDate) {
-      const d = new Date(renewalDate)
-      if (isNaN(d.getTime())) {
-        return res.status(400).json({
-          error: "Fecha de renovación inválida.",
-        })
-      }
-      parsedDate = d
-    }
-
-    const updatedExpense = await prisma.annualSoftwareExpense.update({
-      where: { id },
-      data: {
+  async edit(req: Request, res: Response) {
+    try {
+      const { id } = req.params
+      const {
         applicationName,
         provider,
         category,
         status,
-        annualCost:
-          annualCost !== undefined
-            ? this.toNumber(annualCost)
-            : undefined,
-        numberOfUsers:
-          numberOfUsers !== undefined
-            ? this.toNumber(numberOfUsers)
-            : undefined,
-        costPerUser:
-          costPerUser !== undefined
-            ? this.toNumber(costPerUser)
-            : undefined,
-        renewalDate: parsedDate, // ✅ NUNCA null
+        annualCost,
+        numberOfUsers,
+        costPerUser,
+        renewalDate,
         paymentFrequency,
         additionalNotes,
-        assignedUsers,
-      },
-    })
-
-    return res.status(200).json(updatedExpense)
-  } catch (error) {
-    console.error("EDIT AnnualSoftwareExpense:", error)
-    return res.status(500).json({
-      error: "Error al actualizar el gasto.",
-    })
-  }
-}
-
-
-  // ===============================
-  // Eliminar
-  // ===============================
-  async delete(req: Request, res: Response) {
-    try {
-      const { id } = req.params
-
-      if (!id) {
-        return res.status(400).json({ error: "ID inválido." })
-      }
+      } = req.body
 
       const exists = await prisma.annualSoftwareExpense.findUnique({
         where: { id },
@@ -277,12 +174,73 @@ async edit(req: Request, res: Response) {
         })
       }
 
+      if (status && !this.isValidEnum(status, ExpenseStatus)) {
+        return res.status(400).json({ error: "Estado inválido." })
+      }
+
+      if (category && !this.isValidEnum(category, SoftwareCategory)) {
+        return res.status(400).json({ error: "Categoría inválida." })
+      }
+
+      if (
+        paymentFrequency &&
+        !this.isValidEnum(paymentFrequency, PaymentFrequency)
+      ) {
+        return res.status(400).json({ error: "Frecuencia inválida." })
+      }
+
+      const updatedExpense = await prisma.annualSoftwareExpense.update({
+        where: { id },
+        data: {
+          applicationName,
+          provider,
+          category,
+          status,
+          annualCost:
+            annualCost !== undefined
+              ? this.toNumber(annualCost)
+              : undefined,
+          numberOfUsers:
+            numberOfUsers !== undefined
+              ? this.toNumber(numberOfUsers)
+              : undefined,
+          costPerUser:
+            costPerUser !== undefined
+              ? this.toNumber(costPerUser)
+              : undefined,
+          renewalDate: renewalDate
+            ? this.parseDate(renewalDate)
+            : undefined,
+          paymentFrequency,
+          additionalNotes,
+        },
+        include: {
+          assignedUsers: true,
+        },
+      })
+
+      return res.status(200).json(updatedExpense)
+    } catch (error: any) {
+      console.error("EDIT AnnualSoftwareExpense:", error)
+      return res.status(500).json({
+        error: error.message || "Error al actualizar el gasto.",
+      })
+    }
+  }
+
+  // ===============================
+  // Eliminar Gasto
+  // ===============================
+  async delete(req: Request, res: Response) {
+    try {
+      const { id } = req.params
+
       await prisma.annualSoftwareExpense.delete({
         where: { id },
       })
 
       return res.status(200).json({
-        message: "Gasto anual de software eliminado correctamente.",
+        message: "Gasto anual eliminado correctamente.",
       })
     } catch (error) {
       console.error("DELETE AnnualSoftwareExpense:", error)

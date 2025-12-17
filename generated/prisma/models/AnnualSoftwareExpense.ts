@@ -52,7 +52,6 @@ export type AnnualSoftwareExpenseMinAggregateOutputType = {
   additionalNotes: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  assignedUsers: string | null
 }
 
 export type AnnualSoftwareExpenseMaxAggregateOutputType = {
@@ -69,7 +68,6 @@ export type AnnualSoftwareExpenseMaxAggregateOutputType = {
   additionalNotes: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  assignedUsers: string | null
 }
 
 export type AnnualSoftwareExpenseCountAggregateOutputType = {
@@ -86,7 +84,6 @@ export type AnnualSoftwareExpenseCountAggregateOutputType = {
   additionalNotes: number
   createdAt: number
   updatedAt: number
-  assignedUsers: number
   _all: number
 }
 
@@ -117,7 +114,6 @@ export type AnnualSoftwareExpenseMinAggregateInputType = {
   additionalNotes?: true
   createdAt?: true
   updatedAt?: true
-  assignedUsers?: true
 }
 
 export type AnnualSoftwareExpenseMaxAggregateInputType = {
@@ -134,7 +130,6 @@ export type AnnualSoftwareExpenseMaxAggregateInputType = {
   additionalNotes?: true
   createdAt?: true
   updatedAt?: true
-  assignedUsers?: true
 }
 
 export type AnnualSoftwareExpenseCountAggregateInputType = {
@@ -151,7 +146,6 @@ export type AnnualSoftwareExpenseCountAggregateInputType = {
   additionalNotes?: true
   createdAt?: true
   updatedAt?: true
-  assignedUsers?: true
   _all?: true
 }
 
@@ -255,7 +249,6 @@ export type AnnualSoftwareExpenseGroupByOutputType = {
   additionalNotes: string | null
   createdAt: Date
   updatedAt: Date
-  assignedUsers: string | null
   _count: AnnualSoftwareExpenseCountAggregateOutputType | null
   _avg: AnnualSoftwareExpenseAvgAggregateOutputType | null
   _sum: AnnualSoftwareExpenseSumAggregateOutputType | null
@@ -295,7 +288,7 @@ export type AnnualSoftwareExpenseWhereInput = {
   additionalNotes?: Prisma.StringNullableFilter<"AnnualSoftwareExpense"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AnnualSoftwareExpense"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AnnualSoftwareExpense"> | Date | string
-  assignedUsers?: Prisma.StringNullableFilter<"AnnualSoftwareExpense"> | string | null
+  assignedUsers?: Prisma.AssignedUserListRelationFilter
 }
 
 export type AnnualSoftwareExpenseOrderByWithRelationInput = {
@@ -312,7 +305,7 @@ export type AnnualSoftwareExpenseOrderByWithRelationInput = {
   additionalNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  assignedUsers?: Prisma.SortOrderInput | Prisma.SortOrder
+  assignedUsers?: Prisma.AssignedUserOrderByRelationAggregateInput
 }
 
 export type AnnualSoftwareExpenseWhereUniqueInput = Prisma.AtLeast<{
@@ -332,7 +325,7 @@ export type AnnualSoftwareExpenseWhereUniqueInput = Prisma.AtLeast<{
   additionalNotes?: Prisma.StringNullableFilter<"AnnualSoftwareExpense"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AnnualSoftwareExpense"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AnnualSoftwareExpense"> | Date | string
-  assignedUsers?: Prisma.StringNullableFilter<"AnnualSoftwareExpense"> | string | null
+  assignedUsers?: Prisma.AssignedUserListRelationFilter
 }, "id">
 
 export type AnnualSoftwareExpenseOrderByWithAggregationInput = {
@@ -349,7 +342,6 @@ export type AnnualSoftwareExpenseOrderByWithAggregationInput = {
   additionalNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  assignedUsers?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.AnnualSoftwareExpenseCountOrderByAggregateInput
   _avg?: Prisma.AnnualSoftwareExpenseAvgOrderByAggregateInput
   _max?: Prisma.AnnualSoftwareExpenseMaxOrderByAggregateInput
@@ -374,7 +366,6 @@ export type AnnualSoftwareExpenseScalarWhereWithAggregatesInput = {
   additionalNotes?: Prisma.StringNullableWithAggregatesFilter<"AnnualSoftwareExpense"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AnnualSoftwareExpense"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"AnnualSoftwareExpense"> | Date | string
-  assignedUsers?: Prisma.StringNullableWithAggregatesFilter<"AnnualSoftwareExpense"> | string | null
 }
 
 export type AnnualSoftwareExpenseCreateInput = {
@@ -391,7 +382,7 @@ export type AnnualSoftwareExpenseCreateInput = {
   additionalNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  assignedUsers?: string | null
+  assignedUsers?: Prisma.AssignedUserCreateNestedManyWithoutExpenseInput
 }
 
 export type AnnualSoftwareExpenseUncheckedCreateInput = {
@@ -408,7 +399,7 @@ export type AnnualSoftwareExpenseUncheckedCreateInput = {
   additionalNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  assignedUsers?: string | null
+  assignedUsers?: Prisma.AssignedUserUncheckedCreateNestedManyWithoutExpenseInput
 }
 
 export type AnnualSoftwareExpenseUpdateInput = {
@@ -425,7 +416,7 @@ export type AnnualSoftwareExpenseUpdateInput = {
   additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedUsers?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedUsers?: Prisma.AssignedUserUpdateManyWithoutExpenseNestedInput
 }
 
 export type AnnualSoftwareExpenseUncheckedUpdateInput = {
@@ -442,7 +433,7 @@ export type AnnualSoftwareExpenseUncheckedUpdateInput = {
   additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedUsers?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedUsers?: Prisma.AssignedUserUncheckedUpdateManyWithoutExpenseNestedInput
 }
 
 export type AnnualSoftwareExpenseCreateManyInput = {
@@ -459,7 +450,6 @@ export type AnnualSoftwareExpenseCreateManyInput = {
   additionalNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  assignedUsers?: string | null
 }
 
 export type AnnualSoftwareExpenseUpdateManyMutationInput = {
@@ -476,7 +466,6 @@ export type AnnualSoftwareExpenseUpdateManyMutationInput = {
   additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedUsers?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AnnualSoftwareExpenseUncheckedUpdateManyInput = {
@@ -493,7 +482,6 @@ export type AnnualSoftwareExpenseUncheckedUpdateManyInput = {
   additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedUsers?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AnnualSoftwareExpenseCountOrderByAggregateInput = {
@@ -510,7 +498,6 @@ export type AnnualSoftwareExpenseCountOrderByAggregateInput = {
   additionalNotes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  assignedUsers?: Prisma.SortOrder
 }
 
 export type AnnualSoftwareExpenseAvgOrderByAggregateInput = {
@@ -533,7 +520,6 @@ export type AnnualSoftwareExpenseMaxOrderByAggregateInput = {
   additionalNotes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  assignedUsers?: Prisma.SortOrder
 }
 
 export type AnnualSoftwareExpenseMinOrderByAggregateInput = {
@@ -550,13 +536,17 @@ export type AnnualSoftwareExpenseMinOrderByAggregateInput = {
   additionalNotes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  assignedUsers?: Prisma.SortOrder
 }
 
 export type AnnualSoftwareExpenseSumOrderByAggregateInput = {
   annualCost?: Prisma.SortOrder
   numberOfUsers?: Prisma.SortOrder
   costPerUser?: Prisma.SortOrder
+}
+
+export type AnnualSoftwareExpenseScalarRelationFilter = {
+  is?: Prisma.AnnualSoftwareExpenseWhereInput
+  isNot?: Prisma.AnnualSoftwareExpenseWhereInput
 }
 
 export type EnumSoftwareCategoryFieldUpdateOperationsInput = {
@@ -587,6 +577,129 @@ export type EnumPaymentFrequencyFieldUpdateOperationsInput = {
   set?: $Enums.PaymentFrequency
 }
 
+export type AnnualSoftwareExpenseCreateNestedOneWithoutAssignedUsersInput = {
+  create?: Prisma.XOR<Prisma.AnnualSoftwareExpenseCreateWithoutAssignedUsersInput, Prisma.AnnualSoftwareExpenseUncheckedCreateWithoutAssignedUsersInput>
+  connectOrCreate?: Prisma.AnnualSoftwareExpenseCreateOrConnectWithoutAssignedUsersInput
+  connect?: Prisma.AnnualSoftwareExpenseWhereUniqueInput
+}
+
+export type AnnualSoftwareExpenseUpdateOneRequiredWithoutAssignedUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.AnnualSoftwareExpenseCreateWithoutAssignedUsersInput, Prisma.AnnualSoftwareExpenseUncheckedCreateWithoutAssignedUsersInput>
+  connectOrCreate?: Prisma.AnnualSoftwareExpenseCreateOrConnectWithoutAssignedUsersInput
+  upsert?: Prisma.AnnualSoftwareExpenseUpsertWithoutAssignedUsersInput
+  connect?: Prisma.AnnualSoftwareExpenseWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AnnualSoftwareExpenseUpdateToOneWithWhereWithoutAssignedUsersInput, Prisma.AnnualSoftwareExpenseUpdateWithoutAssignedUsersInput>, Prisma.AnnualSoftwareExpenseUncheckedUpdateWithoutAssignedUsersInput>
+}
+
+export type AnnualSoftwareExpenseCreateWithoutAssignedUsersInput = {
+  id?: string
+  applicationName: string
+  provider: string
+  category: $Enums.SoftwareCategory
+  status: $Enums.ExpenseStatus
+  annualCost: number
+  numberOfUsers: number
+  costPerUser: number
+  renewalDate: Date | string
+  paymentFrequency: $Enums.PaymentFrequency
+  additionalNotes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type AnnualSoftwareExpenseUncheckedCreateWithoutAssignedUsersInput = {
+  id?: string
+  applicationName: string
+  provider: string
+  category: $Enums.SoftwareCategory
+  status: $Enums.ExpenseStatus
+  annualCost: number
+  numberOfUsers: number
+  costPerUser: number
+  renewalDate: Date | string
+  paymentFrequency: $Enums.PaymentFrequency
+  additionalNotes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type AnnualSoftwareExpenseCreateOrConnectWithoutAssignedUsersInput = {
+  where: Prisma.AnnualSoftwareExpenseWhereUniqueInput
+  create: Prisma.XOR<Prisma.AnnualSoftwareExpenseCreateWithoutAssignedUsersInput, Prisma.AnnualSoftwareExpenseUncheckedCreateWithoutAssignedUsersInput>
+}
+
+export type AnnualSoftwareExpenseUpsertWithoutAssignedUsersInput = {
+  update: Prisma.XOR<Prisma.AnnualSoftwareExpenseUpdateWithoutAssignedUsersInput, Prisma.AnnualSoftwareExpenseUncheckedUpdateWithoutAssignedUsersInput>
+  create: Prisma.XOR<Prisma.AnnualSoftwareExpenseCreateWithoutAssignedUsersInput, Prisma.AnnualSoftwareExpenseUncheckedCreateWithoutAssignedUsersInput>
+  where?: Prisma.AnnualSoftwareExpenseWhereInput
+}
+
+export type AnnualSoftwareExpenseUpdateToOneWithWhereWithoutAssignedUsersInput = {
+  where?: Prisma.AnnualSoftwareExpenseWhereInput
+  data: Prisma.XOR<Prisma.AnnualSoftwareExpenseUpdateWithoutAssignedUsersInput, Prisma.AnnualSoftwareExpenseUncheckedUpdateWithoutAssignedUsersInput>
+}
+
+export type AnnualSoftwareExpenseUpdateWithoutAssignedUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationName?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumSoftwareCategoryFieldUpdateOperationsInput | $Enums.SoftwareCategory
+  status?: Prisma.EnumExpenseStatusFieldUpdateOperationsInput | $Enums.ExpenseStatus
+  annualCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  numberOfUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  costPerUser?: Prisma.FloatFieldUpdateOperationsInput | number
+  renewalDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  paymentFrequency?: Prisma.EnumPaymentFrequencyFieldUpdateOperationsInput | $Enums.PaymentFrequency
+  additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AnnualSoftwareExpenseUncheckedUpdateWithoutAssignedUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationName?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumSoftwareCategoryFieldUpdateOperationsInput | $Enums.SoftwareCategory
+  status?: Prisma.EnumExpenseStatusFieldUpdateOperationsInput | $Enums.ExpenseStatus
+  annualCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  numberOfUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  costPerUser?: Prisma.FloatFieldUpdateOperationsInput | number
+  renewalDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  paymentFrequency?: Prisma.EnumPaymentFrequencyFieldUpdateOperationsInput | $Enums.PaymentFrequency
+  additionalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type AnnualSoftwareExpenseCountOutputType
+ */
+
+export type AnnualSoftwareExpenseCountOutputType = {
+  assignedUsers: number
+}
+
+export type AnnualSoftwareExpenseCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  assignedUsers?: boolean | AnnualSoftwareExpenseCountOutputTypeCountAssignedUsersArgs
+}
+
+/**
+ * AnnualSoftwareExpenseCountOutputType without action
+ */
+export type AnnualSoftwareExpenseCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AnnualSoftwareExpenseCountOutputType
+   */
+  select?: Prisma.AnnualSoftwareExpenseCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * AnnualSoftwareExpenseCountOutputType without action
+ */
+export type AnnualSoftwareExpenseCountOutputTypeCountAssignedUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AssignedUserWhereInput
+}
 
 
 export type AnnualSoftwareExpenseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -603,7 +716,8 @@ export type AnnualSoftwareExpenseSelect<ExtArgs extends runtime.Types.Extensions
   additionalNotes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  assignedUsers?: boolean
+  assignedUsers?: boolean | Prisma.AnnualSoftwareExpense$assignedUsersArgs<ExtArgs>
+  _count?: boolean | Prisma.AnnualSoftwareExpenseCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["annualSoftwareExpense"]>
 
 export type AnnualSoftwareExpenseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -620,7 +734,6 @@ export type AnnualSoftwareExpenseSelectCreateManyAndReturn<ExtArgs extends runti
   additionalNotes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  assignedUsers?: boolean
 }, ExtArgs["result"]["annualSoftwareExpense"]>
 
 export type AnnualSoftwareExpenseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -637,7 +750,6 @@ export type AnnualSoftwareExpenseSelectUpdateManyAndReturn<ExtArgs extends runti
   additionalNotes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  assignedUsers?: boolean
 }, ExtArgs["result"]["annualSoftwareExpense"]>
 
 export type AnnualSoftwareExpenseSelectScalar = {
@@ -654,14 +766,21 @@ export type AnnualSoftwareExpenseSelectScalar = {
   additionalNotes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  assignedUsers?: boolean
 }
 
-export type AnnualSoftwareExpenseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "applicationName" | "provider" | "category" | "status" | "annualCost" | "numberOfUsers" | "costPerUser" | "renewalDate" | "paymentFrequency" | "additionalNotes" | "createdAt" | "updatedAt" | "assignedUsers", ExtArgs["result"]["annualSoftwareExpense"]>
+export type AnnualSoftwareExpenseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "applicationName" | "provider" | "category" | "status" | "annualCost" | "numberOfUsers" | "costPerUser" | "renewalDate" | "paymentFrequency" | "additionalNotes" | "createdAt" | "updatedAt", ExtArgs["result"]["annualSoftwareExpense"]>
+export type AnnualSoftwareExpenseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  assignedUsers?: boolean | Prisma.AnnualSoftwareExpense$assignedUsersArgs<ExtArgs>
+  _count?: boolean | Prisma.AnnualSoftwareExpenseCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type AnnualSoftwareExpenseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type AnnualSoftwareExpenseIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $AnnualSoftwareExpensePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "AnnualSoftwareExpense"
-  objects: {}
+  objects: {
+    assignedUsers: Prisma.$AssignedUserPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     applicationName: string
@@ -676,7 +795,6 @@ export type $AnnualSoftwareExpensePayload<ExtArgs extends runtime.Types.Extensio
     additionalNotes: string | null
     createdAt: Date
     updatedAt: Date
-    assignedUsers: string | null
   }, ExtArgs["result"]["annualSoftwareExpense"]>
   composites: {}
 }
@@ -1071,6 +1189,7 @@ readonly fields: AnnualSoftwareExpenseFieldRefs;
  */
 export interface Prisma__AnnualSoftwareExpenseClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  assignedUsers<T extends Prisma.AnnualSoftwareExpense$assignedUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AnnualSoftwareExpense$assignedUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssignedUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1113,7 +1232,6 @@ export interface AnnualSoftwareExpenseFieldRefs {
   readonly additionalNotes: Prisma.FieldRef<"AnnualSoftwareExpense", 'String'>
   readonly createdAt: Prisma.FieldRef<"AnnualSoftwareExpense", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"AnnualSoftwareExpense", 'DateTime'>
-  readonly assignedUsers: Prisma.FieldRef<"AnnualSoftwareExpense", 'String'>
 }
     
 
@@ -1130,6 +1248,10 @@ export type AnnualSoftwareExpenseFindUniqueArgs<ExtArgs extends runtime.Types.Ex
    * Omit specific fields from the AnnualSoftwareExpense
    */
   omit?: Prisma.AnnualSoftwareExpenseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AnnualSoftwareExpenseInclude<ExtArgs> | null
   /**
    * Filter, which AnnualSoftwareExpense to fetch.
    */
@@ -1149,6 +1271,10 @@ export type AnnualSoftwareExpenseFindUniqueOrThrowArgs<ExtArgs extends runtime.T
    */
   omit?: Prisma.AnnualSoftwareExpenseOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AnnualSoftwareExpenseInclude<ExtArgs> | null
+  /**
    * Filter, which AnnualSoftwareExpense to fetch.
    */
   where: Prisma.AnnualSoftwareExpenseWhereUniqueInput
@@ -1166,6 +1292,10 @@ export type AnnualSoftwareExpenseFindFirstArgs<ExtArgs extends runtime.Types.Ext
    * Omit specific fields from the AnnualSoftwareExpense
    */
   omit?: Prisma.AnnualSoftwareExpenseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AnnualSoftwareExpenseInclude<ExtArgs> | null
   /**
    * Filter, which AnnualSoftwareExpense to fetch.
    */
@@ -1215,6 +1345,10 @@ export type AnnualSoftwareExpenseFindFirstOrThrowArgs<ExtArgs extends runtime.Ty
    */
   omit?: Prisma.AnnualSoftwareExpenseOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AnnualSoftwareExpenseInclude<ExtArgs> | null
+  /**
    * Filter, which AnnualSoftwareExpense to fetch.
    */
   where?: Prisma.AnnualSoftwareExpenseWhereInput
@@ -1263,6 +1397,10 @@ export type AnnualSoftwareExpenseFindManyArgs<ExtArgs extends runtime.Types.Exte
    */
   omit?: Prisma.AnnualSoftwareExpenseOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AnnualSoftwareExpenseInclude<ExtArgs> | null
+  /**
    * Filter, which AnnualSoftwareExpenses to fetch.
    */
   where?: Prisma.AnnualSoftwareExpenseWhereInput
@@ -1305,6 +1443,10 @@ export type AnnualSoftwareExpenseCreateArgs<ExtArgs extends runtime.Types.Extens
    * Omit specific fields from the AnnualSoftwareExpense
    */
   omit?: Prisma.AnnualSoftwareExpenseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AnnualSoftwareExpenseInclude<ExtArgs> | null
   /**
    * The data needed to create a AnnualSoftwareExpense.
    */
@@ -1353,6 +1495,10 @@ export type AnnualSoftwareExpenseUpdateArgs<ExtArgs extends runtime.Types.Extens
    * Omit specific fields from the AnnualSoftwareExpense
    */
   omit?: Prisma.AnnualSoftwareExpenseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AnnualSoftwareExpenseInclude<ExtArgs> | null
   /**
    * The data needed to update a AnnualSoftwareExpense.
    */
@@ -1420,6 +1566,10 @@ export type AnnualSoftwareExpenseUpsertArgs<ExtArgs extends runtime.Types.Extens
    */
   omit?: Prisma.AnnualSoftwareExpenseOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AnnualSoftwareExpenseInclude<ExtArgs> | null
+  /**
    * The filter to search for the AnnualSoftwareExpense to update in case it exists.
    */
   where: Prisma.AnnualSoftwareExpenseWhereUniqueInput
@@ -1446,6 +1596,10 @@ export type AnnualSoftwareExpenseDeleteArgs<ExtArgs extends runtime.Types.Extens
    */
   omit?: Prisma.AnnualSoftwareExpenseOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AnnualSoftwareExpenseInclude<ExtArgs> | null
+  /**
    * Filter which AnnualSoftwareExpense to delete.
    */
   where: Prisma.AnnualSoftwareExpenseWhereUniqueInput
@@ -1466,6 +1620,30 @@ export type AnnualSoftwareExpenseDeleteManyArgs<ExtArgs extends runtime.Types.Ex
 }
 
 /**
+ * AnnualSoftwareExpense.assignedUsers
+ */
+export type AnnualSoftwareExpense$assignedUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AssignedUser
+   */
+  select?: Prisma.AssignedUserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AssignedUser
+   */
+  omit?: Prisma.AssignedUserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AssignedUserInclude<ExtArgs> | null
+  where?: Prisma.AssignedUserWhereInput
+  orderBy?: Prisma.AssignedUserOrderByWithRelationInput | Prisma.AssignedUserOrderByWithRelationInput[]
+  cursor?: Prisma.AssignedUserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AssignedUserScalarFieldEnum | Prisma.AssignedUserScalarFieldEnum[]
+}
+
+/**
  * AnnualSoftwareExpense without action
  */
 export type AnnualSoftwareExpenseDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1477,4 +1655,8 @@ export type AnnualSoftwareExpenseDefaultArgs<ExtArgs extends runtime.Types.Exten
    * Omit specific fields from the AnnualSoftwareExpense
    */
   omit?: Prisma.AnnualSoftwareExpenseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AnnualSoftwareExpenseInclude<ExtArgs> | null
 }

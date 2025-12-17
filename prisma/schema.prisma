@@ -256,23 +256,41 @@ model Network {
 }
 
 model AnnualSoftwareExpense {
-  id                String           @id @default(uuid())
-  applicationName   String
-  provider          String
-  category          SoftwareCategory
-  status            ExpenseStatus
-  annualCost        Float
-  numberOfUsers     Int
-  costPerUser       Float
-  renewalDate       DateTime
-  paymentFrequency  PaymentFrequency
-  additionalNotes   String?
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
+  id               String        @id @default(uuid())
+  applicationName  String
+  provider         String
+  category         SoftwareCategory
+  status           ExpenseStatus
+  annualCost       Float
+  numberOfUsers    Int
+  costPerUser      Float
+  renewalDate      DateTime
+  paymentFrequency PaymentFrequency
+  additionalNotes  String?
 
-  // Field to store assigned users.
-  // Will be updated via the dedicated assignment screen.
-  assignedUsers     String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  // ✅ 0..N usuarios asignados
+  assignedUsers    AssignedUser[]
+}
+
+model AssignedUser {
+  id          String   @id @default(uuid())
+
+  // 🔗 Relación (obligatoria del lado del usuario)
+  expenseId   String
+  expense     AnnualSoftwareExpense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+
+  // 🔒 Obligatorios
+  name        String
+  lastName    String
+
+  // 🧩 Opcionales
+  email       String?
+  department  String?
+
+  createdAt   DateTime @default(now())
 }
 
 enum UserRole {

@@ -64,7 +64,8 @@ export const ModelName = {
   SystemConfig: 'SystemConfig',
   NetworkProvider: 'NetworkProvider',
   Network: 'Network',
-  AnnualSoftwareExpense: 'AnnualSoftwareExpense'
+  AnnualSoftwareExpense: 'AnnualSoftwareExpense',
+  AssignedUser: 'AssignedUser'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -326,11 +327,23 @@ export const AnnualSoftwareExpenseScalarFieldEnum = {
   paymentFrequency: 'paymentFrequency',
   additionalNotes: 'additionalNotes',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  assignedUsers: 'assignedUsers'
+  updatedAt: 'updatedAt'
 } as const
 
 export type AnnualSoftwareExpenseScalarFieldEnum = (typeof AnnualSoftwareExpenseScalarFieldEnum)[keyof typeof AnnualSoftwareExpenseScalarFieldEnum]
+
+
+export const AssignedUserScalarFieldEnum = {
+  id: 'id',
+  expenseId: 'expenseId',
+  name: 'name',
+  lastName: 'lastName',
+  email: 'email',
+  department: 'department',
+  createdAt: 'createdAt'
+} as const
+
+export type AssignedUserScalarFieldEnum = (typeof AssignedUserScalarFieldEnum)[keyof typeof AssignedUserScalarFieldEnum]
 
 
 export const SortOrder = {

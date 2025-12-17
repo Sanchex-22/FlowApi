@@ -397,7 +397,8 @@ export const ModelName = {
   SystemConfig: 'SystemConfig',
   NetworkProvider: 'NetworkProvider',
   Network: 'Network',
-  AnnualSoftwareExpense: 'AnnualSoftwareExpense'
+  AnnualSoftwareExpense: 'AnnualSoftwareExpense',
+  AssignedUser: 'AssignedUser'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -413,7 +414,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "ticket" | "user" | "userCompany" | "person" | "company" | "department" | "equipment" | "maintenance" | "document" | "license" | "systemConfig" | "networkProvider" | "network" | "annualSoftwareExpense"
+    modelProps: "ticket" | "user" | "userCompany" | "person" | "company" | "department" | "equipment" | "maintenance" | "document" | "license" | "systemConfig" | "networkProvider" | "network" | "annualSoftwareExpense" | "assignedUser"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1453,6 +1454,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AssignedUser: {
+      payload: Prisma.$AssignedUserPayload<ExtArgs>
+      fields: Prisma.AssignedUserFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AssignedUserFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AssignedUserPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AssignedUserFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AssignedUserPayload>
+        }
+        findFirst: {
+          args: Prisma.AssignedUserFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AssignedUserPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AssignedUserFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AssignedUserPayload>
+        }
+        findMany: {
+          args: Prisma.AssignedUserFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AssignedUserPayload>[]
+        }
+        create: {
+          args: Prisma.AssignedUserCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AssignedUserPayload>
+        }
+        createMany: {
+          args: Prisma.AssignedUserCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AssignedUserCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AssignedUserPayload>[]
+        }
+        delete: {
+          args: Prisma.AssignedUserDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AssignedUserPayload>
+        }
+        update: {
+          args: Prisma.AssignedUserUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AssignedUserPayload>
+        }
+        deleteMany: {
+          args: Prisma.AssignedUserDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AssignedUserUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AssignedUserUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AssignedUserPayload>[]
+        }
+        upsert: {
+          args: Prisma.AssignedUserUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AssignedUserPayload>
+        }
+        aggregate: {
+          args: Prisma.AssignedUserAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAssignedUser>
+        }
+        groupBy: {
+          args: Prisma.AssignedUserGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AssignedUserGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AssignedUserCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AssignedUserCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1735,11 +1810,23 @@ export const AnnualSoftwareExpenseScalarFieldEnum = {
   paymentFrequency: 'paymentFrequency',
   additionalNotes: 'additionalNotes',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  assignedUsers: 'assignedUsers'
+  updatedAt: 'updatedAt'
 } as const
 
 export type AnnualSoftwareExpenseScalarFieldEnum = (typeof AnnualSoftwareExpenseScalarFieldEnum)[keyof typeof AnnualSoftwareExpenseScalarFieldEnum]
+
+
+export const AssignedUserScalarFieldEnum = {
+  id: 'id',
+  expenseId: 'expenseId',
+  name: 'name',
+  lastName: 'lastName',
+  email: 'email',
+  department: 'department',
+  createdAt: 'createdAt'
+} as const
+
+export type AssignedUserScalarFieldEnum = (typeof AssignedUserScalarFieldEnum)[keyof typeof AssignedUserScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2125,6 +2212,7 @@ export type GlobalOmitConfig = {
   networkProvider?: Prisma.NetworkProviderOmit
   network?: Prisma.NetworkOmit
   annualSoftwareExpense?: Prisma.AnnualSoftwareExpenseOmit
+  assignedUser?: Prisma.AssignedUserOmit
 }
 
 /* Types for Logging */

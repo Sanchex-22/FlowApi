@@ -87,3 +87,8 @@ export type Network = Prisma.NetworkModel
  * 
  */
 export type AnnualSoftwareExpense = Prisma.AnnualSoftwareExpenseModel
+/**
+ * Model AssignedUser
+ * 
+ */
+export type AssignedUser = Prisma.AssignedUserModel
