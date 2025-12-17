@@ -396,7 +396,8 @@ export const ModelName = {
   License: 'License',
   SystemConfig: 'SystemConfig',
   NetworkProvider: 'NetworkProvider',
-  Network: 'Network'
+  Network: 'Network',
+  AnnualSoftwareExpense: 'AnnualSoftwareExpense'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -412,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "ticket" | "user" | "userCompany" | "person" | "company" | "department" | "equipment" | "maintenance" | "document" | "license" | "systemConfig" | "networkProvider" | "network"
+    modelProps: "ticket" | "user" | "userCompany" | "person" | "company" | "department" | "equipment" | "maintenance" | "document" | "license" | "systemConfig" | "networkProvider" | "network" | "annualSoftwareExpense"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1378,6 +1379,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AnnualSoftwareExpense: {
+      payload: Prisma.$AnnualSoftwareExpensePayload<ExtArgs>
+      fields: Prisma.AnnualSoftwareExpenseFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AnnualSoftwareExpenseFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnnualSoftwareExpensePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AnnualSoftwareExpenseFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnnualSoftwareExpensePayload>
+        }
+        findFirst: {
+          args: Prisma.AnnualSoftwareExpenseFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnnualSoftwareExpensePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AnnualSoftwareExpenseFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnnualSoftwareExpensePayload>
+        }
+        findMany: {
+          args: Prisma.AnnualSoftwareExpenseFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnnualSoftwareExpensePayload>[]
+        }
+        create: {
+          args: Prisma.AnnualSoftwareExpenseCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnnualSoftwareExpensePayload>
+        }
+        createMany: {
+          args: Prisma.AnnualSoftwareExpenseCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AnnualSoftwareExpenseCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnnualSoftwareExpensePayload>[]
+        }
+        delete: {
+          args: Prisma.AnnualSoftwareExpenseDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnnualSoftwareExpensePayload>
+        }
+        update: {
+          args: Prisma.AnnualSoftwareExpenseUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnnualSoftwareExpensePayload>
+        }
+        deleteMany: {
+          args: Prisma.AnnualSoftwareExpenseDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AnnualSoftwareExpenseUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AnnualSoftwareExpenseUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnnualSoftwareExpensePayload>[]
+        }
+        upsert: {
+          args: Prisma.AnnualSoftwareExpenseUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnnualSoftwareExpensePayload>
+        }
+        aggregate: {
+          args: Prisma.AnnualSoftwareExpenseAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAnnualSoftwareExpense>
+        }
+        groupBy: {
+          args: Prisma.AnnualSoftwareExpenseGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AnnualSoftwareExpenseGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AnnualSoftwareExpenseCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AnnualSoftwareExpenseCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1647,6 +1722,26 @@ export const NetworkScalarFieldEnum = {
 export type NetworkScalarFieldEnum = (typeof NetworkScalarFieldEnum)[keyof typeof NetworkScalarFieldEnum]
 
 
+export const AnnualSoftwareExpenseScalarFieldEnum = {
+  id: 'id',
+  applicationName: 'applicationName',
+  provider: 'provider',
+  category: 'category',
+  status: 'status',
+  annualCost: 'annualCost',
+  numberOfUsers: 'numberOfUsers',
+  costPerUser: 'costPerUser',
+  renewalDate: 'renewalDate',
+  paymentFrequency: 'paymentFrequency',
+  additionalNotes: 'additionalNotes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  assignedUsers: 'assignedUsers'
+} as const
+
+export type AnnualSoftwareExpenseScalarFieldEnum = (typeof AnnualSoftwareExpenseScalarFieldEnum)[keyof typeof AnnualSoftwareExpenseScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1867,6 +1962,34 @@ export type ListEnumNetworkDeviceStatusFieldRefInput<$PrismaModel> = FieldRefInp
 
 
 /**
+ * Reference to a field of type 'SoftwareCategory'
+ */
+export type EnumSoftwareCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SoftwareCategory'>
+    
+
+
+/**
+ * Reference to a field of type 'SoftwareCategory[]'
+ */
+export type ListEnumSoftwareCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SoftwareCategory[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ExpenseStatus'
+ */
+export type EnumExpenseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExpenseStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ExpenseStatus[]'
+ */
+export type ListEnumExpenseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExpenseStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1877,6 +2000,20 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
  * Reference to a field of type 'Float[]'
  */
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PaymentFrequency'
+ */
+export type EnumPaymentFrequencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentFrequency'>
+    
+
+
+/**
+ * Reference to a field of type 'PaymentFrequency[]'
+ */
+export type ListEnumPaymentFrequencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentFrequency[]'>
     
 
 /**
@@ -1987,6 +2124,7 @@ export type GlobalOmitConfig = {
   systemConfig?: Prisma.SystemConfigOmit
   networkProvider?: Prisma.NetworkProviderOmit
   network?: Prisma.NetworkOmit
+  annualSoftwareExpense?: Prisma.AnnualSoftwareExpenseOmit
 }
 
 /* Types for Logging */

@@ -82,3 +82,8 @@ export type NetworkProvider = Prisma.NetworkProviderModel
  * 
  */
 export type Network = Prisma.NetworkModel
+/**
+ * Model AnnualSoftwareExpense
+ * 
+ */
+export type AnnualSoftwareExpense = Prisma.AnnualSoftwareExpenseModel

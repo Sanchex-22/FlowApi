@@ -21,6 +21,7 @@ import ReportsRouter from './routes/ReportRoutes.js';
 import NetworkProvidersRoutes from './routes/networkProvidersRoutes.js';
 import TicketRouter from './routes/TicketRoutes.js';
 import InventoryRouter from './routes/InventoryRoutes.js';
+import ExpenseRoute from './routes/annualSoftwareExpenseRoutes.js';
 
 dotenv.config({ path: '.env' });
 
@@ -80,6 +81,7 @@ app.use('/api/network/providers', NetworkProvidersRoutes);
 app.use('/api/system', SystemRouter);
 app.use('/api/dashboard',DashboardRouter);
 app.use('/api/reports',ReportsRouter);
+app.use('/api/annual-software-expense',ExpenseRoute);
 app.use('/api/companies/tickets',TicketRouter);
 
 // ✔ Aquí sí se permite formidable sin interferencia

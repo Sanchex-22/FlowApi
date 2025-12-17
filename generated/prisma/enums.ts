@@ -112,3 +112,43 @@ export const NetworkDeviceStatus = {
 } as const
 
 export type NetworkDeviceStatus = (typeof NetworkDeviceStatus)[keyof typeof NetworkDeviceStatus]
+
+
+export const ExpenseStatus = {
+  Active: 'Active',
+  Inactive: 'Inactive',
+  Pending: 'Pending',
+  Canceled: 'Canceled',
+  Expired: 'Expired'
+} as const
+
+export type ExpenseStatus = (typeof ExpenseStatus)[keyof typeof ExpenseStatus]
+
+
+export const PaymentFrequency = {
+  Annual: 'Annual',
+  Monthly: 'Monthly',
+  Quarterly: 'Quarterly',
+  SemiAnnual: 'SemiAnnual',
+  OneTime: 'OneTime'
+} as const
+
+export type PaymentFrequency = (typeof PaymentFrequency)[keyof typeof PaymentFrequency]
+
+
+export const SoftwareCategory = {
+  Accounting: 'Accounting',
+  CRM: 'CRM',
+  Antivirus: 'Antivirus',
+  Productivity: 'Productivity',
+  Design: 'Design',
+  Development: 'Development',
+  HRManagement: 'HRManagement',
+  Marketing: 'Marketing',
+  Communication: 'Communication',
+  CloudStorage: 'CloudStorage',
+  OperatingSystem: 'OperatingSystem',
+  Other: 'Other'
+} as const
+
+export type SoftwareCategory = (typeof SoftwareCategory)[keyof typeof SoftwareCategory]

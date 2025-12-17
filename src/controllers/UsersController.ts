@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { prisma } from '../../lib/prisma.js';
 import { generateNextUserCode } from '../../prisma/seed.js';
 
+// Define el orden jerárquico de roles
 const ROLE_HIERARCHY: Record<string, number> = {
   USER: 1,
   ADMIN: 2,
@@ -11,6 +12,7 @@ const ROLE_HIERARCHY: Record<string, number> = {
 };
 
 export class UserController {
+  // Función auxiliar para validar permisos basados en roles
   private async validateRolePermission(
     requestingUserId: string,
     targetUserId: string,
@@ -53,7 +55,10 @@ export class UserController {
     return { allowed: true };
   }
 
-  private async validateSuperAdminExists(excludeUserId?: string): Promise<boolean> {
+  // Función para validar que exista al menos un SUPER_ADMIN
+  private async validateSuperAdminExists(
+    excludeUserId?: string
+  ): Promise<boolean> {
     const superAdminCount = await prisma.user.count({
       where: {
         role: 'SUPER_ADMIN',
@@ -69,7 +74,7 @@ export class UserController {
       email,
       password,
       role,
-      companyIds,
+      companyIds, // Array de IDs de compañías
       firstName,
       lastName,
       contactEmail,
@@ -87,6 +92,7 @@ export class UserController {
       });
     }
 
+    // Validación de compañías asignadas
     if (!companyIds || !Array.isArray(companyIds) || companyIds.length === 0) {
       return res.status(400).json({
         error: 'Debe asignar al menos una compañía al usuario.',
@@ -94,14 +100,20 @@ export class UserController {
     }
 
     try {
+      // Validar permisos solo si se especifica un rol elevado
       if (role && role !== 'USER' && requestingUserId) {
-        const requestingUser = await prisma.user.findUnique({
-          where: { id: requestingUserId }
-        });
-        const requestingUserRoleLevel = ROLE_HIERARCHY[requestingUser?.role || 'USER'] || 0;
+        // La validación de permisos en Create debería usar un 'dummy-id' o validar 
+        // solo el rol del usuario que solicita la creación si no está creando un SUPER_ADMIN
+        const permissionCheck = await this.validateRolePermission(
+          requestingUserId,
+          'dummy-id', // ID temporal para chequear solo el permiso de 'edit' o 'create' de rol
+          'edit'
+        );
+        // Si el usuario no es Super Admin, se valida si tiene nivel para crear el rol solicitado
+        const requestingUserRoleLevel = ROLE_HIERARCHY[(await prisma.user.findUnique({ where: { id: requestingUserId } }))?.role || 'USER'] || 0;
         const targetRoleLevel = ROLE_HIERARCHY[role] || 0;
         
-        if (requestingUserRoleLevel <= targetRoleLevel) {
+        if (!permissionCheck.allowed || requestingUserRoleLevel <= targetRoleLevel) {
           return res.status(403).json({
             error: 'No tienes permisos para asignar el rol especificado.',
           });
@@ -111,6 +123,7 @@ export class UserController {
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUserCode = userCode || await generateNextUserCode();
 
+      // Crear usuario y las relaciones con múltiples compañías (Corrección ya presente)
       const newUser = await prisma.user.create({
         data: {
           username,
@@ -143,7 +156,7 @@ export class UserController {
           },
           companies: {
             include: {
-              company: true,
+              company: true, // ✅ Mapea los detalles de la compañía
             },
           },
         },
@@ -162,6 +175,9 @@ export class UserController {
             errorMessage = 'El userCode ya existe.';
           if (error.meta.target.includes('contactEmail'))
             errorMessage = 'El email de contacto ya existe.';
+          // El 'fullName' check debe ser menos estricto o revisar su unicidad
+          // if (error.meta.target.includes('fullName'))
+          //   errorMessage = 'El nombre completo ya existe.';
         }
         return res.status(409).json({ error: errorMessage });
       }
@@ -197,11 +213,14 @@ export class UserController {
         const superAdminExists = await this.validateSuperAdminExists(id);
         if (!superAdminExists) {
           return res.status(400).json({
-            error: 'No se puede eliminar al último Super Administrador. Debe existir al menos uno.',
+            error:
+              'No se puede eliminar al último Super Administrador. Debe existir al menos uno.',
           });
         }
       }
-
+      
+      // La eliminación en cascada (CASCADE) debe estar configurada en el schema de Prisma 
+      // para eliminar Person y UserCompany, de lo contrario esto podría fallar.
       const deletedUser = await prisma.user.delete({
         where: { id },
       });
@@ -231,7 +250,7 @@ export class UserController {
       password,
       role,
       isActive,
-      companyIds, // ✅ Array de IDs de compañías
+      companyIds, // Array de IDs de compañías
       firstName,
       lastName,
       contactEmail,
@@ -258,19 +277,21 @@ export class UserController {
         where: { id },
       });
 
-      if (!userToEdit) {
-        return res.status(404).json({ error: 'Usuario no encontrado.' });
-      }
-
-      if (role && role !== 'SUPER_ADMIN' && userToEdit?.role === 'SUPER_ADMIN') {
+      // Lógica de validación para el último Super Admin
+      if (
+        role &&
+        role !== 'SUPER_ADMIN' &&
+        userToEdit?.role === 'SUPER_ADMIN'
+      ) {
         const superAdminExists = await this.validateSuperAdminExists(id);
         if (!superAdminExists) {
           return res.status(400).json({
-            error: 'No se puede cambiar el rol del último Super Administrador. Debe existir al menos uno.',
+            error:
+              'No se puede cambiar el rol del último Super Administrador. Debe existir al menos uno.',
           });
         }
       }
-
+      
       const userDataToUpdate: any = {};
       if (username !== undefined) userDataToUpdate.username = username;
       if (email !== undefined) userDataToUpdate.email = email;
@@ -281,14 +302,14 @@ export class UserController {
         userDataToUpdate.password = await bcrypt.hash(password, 10);
       }
 
-      // ✅ CORRECCIÓN: Actualizar compañías usando el array companyIds
+      // Actualizar relaciones con múltiples compañías (Corrección ya presente)
       if (companyIds !== undefined && Array.isArray(companyIds)) {
         // Eliminar todas las relaciones existentes
         await prisma.userCompany.deleteMany({
           where: { userId: id },
         });
 
-        // Crear nuevas relaciones
+        // Crear nuevas relaciones solo si hay compañías
         if (companyIds.length > 0) {
           userDataToUpdate.companies = {
             create: companyIds.map((companyId: string) => ({
@@ -298,7 +319,7 @@ export class UserController {
         }
       }
 
-      // Actualizar usuario
+      // 1. Actualizar datos del Usuario
       const updatedUser = await prisma.user.update({
         where: { id },
         data: userDataToUpdate,
@@ -310,13 +331,13 @@ export class UserController {
           },
           companies: {
             include: {
-              company: true,
+              company: true, // ✅ Mapea los detalles de la compañía
             },
           },
         },
       });
 
-      // Actualizar información personal
+      // 2. Actualizar/Crear información personal (upsert)
       if (
         firstName !== undefined ||
         lastName !== undefined ||
@@ -329,7 +350,8 @@ export class UserController {
       ) {
         const personDataToUpdate: any = {};
         const personDataToCreate: any = { userId: id };
-
+        
+        // Cargar los datos actuales de la persona para calcular fullName
         const currentPerson = updatedUser.person;
 
         if (firstName !== undefined) {
@@ -360,11 +382,12 @@ export class UserController {
           personDataToUpdate.userCode = userCode;
           personDataToCreate.userCode = userCode;
         }
-
+        
+        // Calcular FullName basado en los valores nuevos o existentes
         const newFirstName = personDataToUpdate.firstName ?? currentPerson?.firstName ?? '';
         const newLastName = personDataToUpdate.lastName ?? currentPerson?.lastName ?? '';
+
         const fullName = `${newFirstName} ${newLastName}`.trim();
-        
         personDataToUpdate.fullName = fullName;
         personDataToCreate.fullName = fullName;
 
@@ -380,6 +403,7 @@ export class UserController {
           create: personDataToCreate,
         });
 
+        // Volver a buscar el usuario para incluir la persona actualizada
         const userWithUpdatedPerson = await prisma.user.findUnique({
           where: { id },
           include: {
@@ -390,7 +414,7 @@ export class UserController {
             },
             companies: {
               include: {
-                company: true,
+                company: true, // ✅ Mapea los detalles de la compañía
               },
             },
           },
@@ -415,6 +439,8 @@ export class UserController {
             errorMessage = 'El userCode ya existe.';
           if (error.meta.target.includes('contactEmail'))
             errorMessage = 'El email de contacto ya existe.';
+          // if (error.meta.target.includes('fullName'))
+          //   errorMessage = 'El nombre completo ya existe.';
         }
         return res.status(409).json({ error: errorMessage });
       }
@@ -439,7 +465,7 @@ export class UserController {
           },
           companies: {
             include: {
-              company: true,
+              company: true, // ✅ Mapea los detalles de la compañía
             },
           },
           assignedEquipments: true,
@@ -474,7 +500,7 @@ export class UserController {
           },
           companies: {
             include: {
-              company: true,
+              company: true, // ✅ Mapea los detalles de la compañía
             },
           },
         },
@@ -502,7 +528,7 @@ export class UserController {
           },
           companies: {
             include: {
-              company: true,
+              company: true, // ✅ Mapea los detalles de la compañía
             },
           },
           assignedEquipments: {
@@ -559,7 +585,7 @@ export class UserController {
           },
           companies: {
             include: {
-              company: true,
+              company: true, // ✅ Mapea los detalles de la compañía
             },
           },
         },
@@ -575,8 +601,9 @@ export class UserController {
 
   async getAllUserByCompanyId(req: Request, res: Response) {
     try {
+      // Cambio: La ruta espera el 'companyCode' o 'companyId'
       const company = await prisma.company.findUnique({
-        where: { id: req.params.companyCode },
+        where: { id: req.params.companyCode }, // Asumiendo que companyCode es el ID
       });
 
       if (!company) {
@@ -599,7 +626,7 @@ export class UserController {
           },
           companies: {
             include: {
-              company: true,
+              company: true, // ✅ Mapea los detalles de la compañía
             },
           },
         },

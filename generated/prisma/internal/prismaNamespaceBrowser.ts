@@ -63,7 +63,8 @@ export const ModelName = {
   License: 'License',
   SystemConfig: 'SystemConfig',
   NetworkProvider: 'NetworkProvider',
-  Network: 'Network'
+  Network: 'Network',
+  AnnualSoftwareExpense: 'AnnualSoftwareExpense'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -310,6 +311,26 @@ export const NetworkScalarFieldEnum = {
 } as const
 
 export type NetworkScalarFieldEnum = (typeof NetworkScalarFieldEnum)[keyof typeof NetworkScalarFieldEnum]
+
+
+export const AnnualSoftwareExpenseScalarFieldEnum = {
+  id: 'id',
+  applicationName: 'applicationName',
+  provider: 'provider',
+  category: 'category',
+  status: 'status',
+  annualCost: 'annualCost',
+  numberOfUsers: 'numberOfUsers',
+  costPerUser: 'costPerUser',
+  renewalDate: 'renewalDate',
+  paymentFrequency: 'paymentFrequency',
+  additionalNotes: 'additionalNotes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  assignedUsers: 'assignedUsers'
+} as const
+
+export type AnnualSoftwareExpenseScalarFieldEnum = (typeof AnnualSoftwareExpenseScalarFieldEnum)[keyof typeof AnnualSoftwareExpenseScalarFieldEnum]
 
 
 export const SortOrder = {

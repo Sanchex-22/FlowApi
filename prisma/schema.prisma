@@ -255,6 +255,26 @@ model Network {
   // @@unique([name, companyId])
 }
 
+model AnnualSoftwareExpense {
+  id                String           @id @default(uuid())
+  applicationName   String
+  provider          String
+  category          SoftwareCategory
+  status            ExpenseStatus
+  annualCost        Float
+  numberOfUsers     Int
+  costPerUser       Float
+  renewalDate       DateTime
+  paymentFrequency  PaymentFrequency
+  additionalNotes   String?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  // Field to store assigned users.
+  // Will be updated via the dedicated assignment screen.
+  assignedUsers     String?
+}
+
 enum UserRole {
   USER
   ADMIN
@@ -328,4 +348,35 @@ enum NetworkDeviceStatus {
   MAINTENANCE
   DECOMMISSIONED
   UNKNOWN
+}
+
+enum ExpenseStatus {
+  Active
+  Inactive
+  Pending
+  Canceled
+  Expired
+}
+
+enum PaymentFrequency {
+  Annual
+  Monthly
+  Quarterly
+  SemiAnnual
+  OneTime
+}
+
+enum SoftwareCategory {
+  Accounting      
+  CRM              
+  Antivirus        
+  Productivity     
+  Design          
+  Development      
+  HRManagement     
+  Marketing       
+  Communication   
+  CloudStorage     
+  OperatingSystem  
+  Other            
 }
