@@ -1,10 +1,8 @@
-// src/auth/user.controller.ts
 import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
 import { prisma } from '../../lib/prisma.js';
 import { generateNextUserCode } from '../../prisma/seed.js';
 
-// Define el orden jerárquico de roles
 const ROLE_HIERARCHY: Record<string, number> = {
   USER: 1,
   ADMIN: 2,
@@ -13,7 +11,6 @@ const ROLE_HIERARCHY: Record<string, number> = {
 };
 
 export class UserController {
-  // Función auxiliar para validar permisos basados en roles
   private async validateRolePermission(
     requestingUserId: string,
     targetUserId: string,
@@ -56,10 +53,7 @@ export class UserController {
     return { allowed: true };
   }
 
-  // Función para validar que exista al menos un SUPER_ADMIN
-  private async validateSuperAdminExists(
-    excludeUserId?: string
-  ): Promise<boolean> {
+  private async validateSuperAdminExists(excludeUserId?: string): Promise<boolean> {
     const superAdminCount = await prisma.user.count({
       where: {
         role: 'SUPER_ADMIN',
@@ -75,13 +69,14 @@ export class UserController {
       email,
       password,
       role,
-      companyId,
+      companyIds,
       firstName,
       lastName,
       contactEmail,
       phoneNumber,
       departmentId,
       position,
+      userCode,
     } = req.body;
 
     const requestingUserId = (req as any).userId;
@@ -92,29 +87,29 @@ export class UserController {
       });
     }
 
-    if (!companyId) {
+    if (!companyIds || !Array.isArray(companyIds) || companyIds.length === 0) {
       return res.status(400).json({
-        error: 'El campo companyId es obligatorio.',
+        error: 'Debe asignar al menos una compañía al usuario.',
       });
     }
 
     try {
-      // Validar permisos solo si se especifica un rol elevado
       if (role && role !== 'USER' && requestingUserId) {
-        const permissionCheck = await this.validateRolePermission(
-          requestingUserId,
-          'dummy-id',
-          'edit'
-        );
-        if (!permissionCheck.allowed && !requestingUserId) {
+        const requestingUser = await prisma.user.findUnique({
+          where: { id: requestingUserId }
+        });
+        const requestingUserRoleLevel = ROLE_HIERARCHY[requestingUser?.role || 'USER'] || 0;
+        const targetRoleLevel = ROLE_HIERARCHY[role] || 0;
+        
+        if (requestingUserRoleLevel <= targetRoleLevel) {
           return res.status(403).json({
-            error: 'No tienes permisos para asignar roles elevados.',
+            error: 'No tienes permisos para asignar el rol especificado.',
           });
         }
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
-      const newUserCode = await generateNextUserCode();
+      const newUserCode = userCode || await generateNextUserCode();
 
       const newUser = await prisma.user.create({
         data: {
@@ -123,9 +118,9 @@ export class UserController {
           password: hashedPassword,
           role: role || 'USER',
           companies: {
-            create: {
+            create: companyIds.map((companyId: string) => ({
               companyId: companyId,
-            },
+            })),
           },
           person: {
             create: {
@@ -164,12 +159,9 @@ export class UserController {
           if (error.meta.target.includes('email'))
             errorMessage = 'El email ya existe.';
           if (error.meta.target.includes('userCode'))
-            errorMessage =
-              'El userCode generado ya existe. Por favor, inténtelo de nuevo.';
+            errorMessage = 'El userCode ya existe.';
           if (error.meta.target.includes('contactEmail'))
             errorMessage = 'El email de contacto ya existe.';
-          if (error.meta.target.includes('fullName'))
-            errorMessage = 'El nombre completo ya existe.';
         }
         return res.status(409).json({ error: errorMessage });
       }
@@ -205,8 +197,7 @@ export class UserController {
         const superAdminExists = await this.validateSuperAdminExists(id);
         if (!superAdminExists) {
           return res.status(400).json({
-            error:
-              'No se puede eliminar al último Super Administrador. Debe existir al menos uno.',
+            error: 'No se puede eliminar al último Super Administrador. Debe existir al menos uno.',
           });
         }
       }
@@ -240,7 +231,7 @@ export class UserController {
       password,
       role,
       isActive,
-      companyId,
+      companyIds, // ✅ Array de IDs de compañías
       firstName,
       lastName,
       contactEmail,
@@ -267,16 +258,15 @@ export class UserController {
         where: { id },
       });
 
-      if (
-        role &&
-        role !== 'SUPER_ADMIN' &&
-        userToEdit?.role === 'SUPER_ADMIN'
-      ) {
+      if (!userToEdit) {
+        return res.status(404).json({ error: 'Usuario no encontrado.' });
+      }
+
+      if (role && role !== 'SUPER_ADMIN' && userToEdit?.role === 'SUPER_ADMIN') {
         const superAdminExists = await this.validateSuperAdminExists(id);
         if (!superAdminExists) {
           return res.status(400).json({
-            error:
-              'No se puede cambiar el rol del último Super Administrador. Debe existir al menos uno.',
+            error: 'No se puede cambiar el rol del último Super Administrador. Debe existir al menos uno.',
           });
         }
       }
@@ -291,23 +281,24 @@ export class UserController {
         userDataToUpdate.password = await bcrypt.hash(password, 10);
       }
 
-      // Actualizar relación con compañía si se proporciona
-      if (companyId !== undefined) {
-        // Primero eliminar relaciones existentes
+      // ✅ CORRECCIÓN: Actualizar compañías usando el array companyIds
+      if (companyIds !== undefined && Array.isArray(companyIds)) {
+        // Eliminar todas las relaciones existentes
         await prisma.userCompany.deleteMany({
           where: { userId: id },
         });
 
-        // Crear nueva relación
-        if (companyId) {
+        // Crear nuevas relaciones
+        if (companyIds.length > 0) {
           userDataToUpdate.companies = {
-            create: {
+            create: companyIds.map((companyId: string) => ({
               companyId: companyId,
-            },
+            })),
           };
         }
       }
 
+      // Actualizar usuario
       const updatedUser = await prisma.user.update({
         where: { id },
         data: userDataToUpdate,
@@ -325,20 +316,21 @@ export class UserController {
         },
       });
 
+      // Actualizar información personal
       if (
-        firstName ||
-        lastName ||
-        contactEmail ||
-        phoneNumber ||
+        firstName !== undefined ||
+        lastName !== undefined ||
+        contactEmail !== undefined ||
+        phoneNumber !== undefined ||
         departmentId !== undefined ||
-        position ||
-        status ||
-        userCode
+        position !== undefined ||
+        status !== undefined ||
+        userCode !== undefined
       ) {
         const personDataToUpdate: any = {};
-        const personDataToCreate: any = {
-          userId: id,
-        };
+        const personDataToCreate: any = { userId: id };
+
+        const currentPerson = updatedUser.person;
 
         if (firstName !== undefined) {
           personDataToUpdate.firstName = firstName;
@@ -369,24 +361,17 @@ export class UserController {
           personDataToCreate.userCode = userCode;
         }
 
-        const fullName = `${
-          firstName || updatedUser.person?.firstName || ''
-        } ${lastName || updatedUser.person?.lastName || ''}`.trim();
+        const newFirstName = personDataToUpdate.firstName ?? currentPerson?.firstName ?? '';
+        const newLastName = personDataToUpdate.lastName ?? currentPerson?.lastName ?? '';
+        const fullName = `${newFirstName} ${newLastName}`.trim();
+        
         personDataToUpdate.fullName = fullName;
         personDataToCreate.fullName = fullName;
 
         if (departmentId !== undefined) {
-          if (departmentId === null || departmentId === '') {
-            personDataToUpdate.departmentId = null;
-          } else {
-            personDataToUpdate.departmentId = departmentId;
-          }
-
-          if (departmentId && departmentId !== '') {
-            personDataToCreate.departmentId = departmentId;
-          } else {
-            personDataToCreate.departmentId = null;
-          }
+          const finalDepartmentId = (departmentId === null || departmentId === '') ? null : departmentId;
+          personDataToUpdate.departmentId = finalDepartmentId;
+          personDataToCreate.departmentId = finalDepartmentId;
         }
 
         await prisma.person.upsert({
@@ -430,8 +415,6 @@ export class UserController {
             errorMessage = 'El userCode ya existe.';
           if (error.meta.target.includes('contactEmail'))
             errorMessage = 'El email de contacto ya existe.';
-          if (error.meta.target.includes('fullName'))
-            errorMessage = 'El nombre completo ya existe.';
         }
         return res.status(409).json({ error: errorMessage });
       }
@@ -574,6 +557,11 @@ export class UserController {
               department: true,
             },
           },
+          companies: {
+            include: {
+              company: true,
+            },
+          },
         },
       });
       res.status(200).json(users);
@@ -587,11 +575,11 @@ export class UserController {
 
   async getAllUserByCompanyId(req: Request, res: Response) {
     try {
-      const companyId = await prisma.company.findUnique({
+      const company = await prisma.company.findUnique({
         where: { id: req.params.companyCode },
       });
 
-      if (!companyId) {
+      if (!company) {
         return res.status(404).json({ error: 'Compañía no encontrada.' });
       }
 
@@ -599,7 +587,7 @@ export class UserController {
         where: {
           companies: {
             some: {
-              companyId: companyId.id,
+              companyId: company.id,
             },
           },
         },
