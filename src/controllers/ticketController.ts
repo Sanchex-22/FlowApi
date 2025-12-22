@@ -46,7 +46,7 @@ export class TicketController {
             // Validar que sendById pertenece a la compañía
             if (sendByIdClean) {
                 const sendByUser = await prisma.user.findFirst({
-                    where: { id: sendByIdClean, companyId },
+                    where: { id: sendByIdClean, companies: { some: { companyId } } },
                 });
                 if (!sendByUser) {
                     return res.status(400).json({
@@ -59,7 +59,7 @@ export class TicketController {
             // Validar que sendToId pertenece a la compañía
             if (sendToIdClean) {
                 const sendToUser = await prisma.user.findFirst({
-                    where: { id: sendToIdClean, companyId },
+                    where: { id: sendToIdClean, companies: { some: { companyId } } },
                 });
                 if (!sendToUser) {
                     return res.status(400).json({
@@ -323,7 +323,7 @@ export class TicketController {
                 sendBy,
                 sendTo,
             } = req.body;
-
+            console.log("📥 Datos recibidos para actualizar ticket:", req.body);
             // Verificar que el ticket pertenece a la compañía
             const ticket = await prisma.ticket.findFirst({
                 where: { id, company: { id: companyId } },
@@ -339,7 +339,14 @@ export class TicketController {
             // Validar sendById si se proporciona
             if (sendBy) {
                 const sendByUser = await prisma.user.findFirst({
-                    where: { id: sendBy, companyId },
+                    where: {
+                        id: sendBy,
+                        companies: {
+                            some: {
+                                companyId: companyId,
+                            },
+                        },
+                    }
                 });
                 if (!sendByUser) {
                     return res.status(400).json({
@@ -352,13 +359,20 @@ export class TicketController {
             // Validar sendToId si se proporciona
             if (sendTo) {
                 const sendToUser = await prisma.user.findFirst({
-                    where: { id: sendTo, companyId },
-                });
+                    where: {
+                        id: sendTo,
+                        companies: {
+                            some: {
+                                companyId: companyId,
+                            },
+                        },
+                    },
+                })
+
                 if (!sendToUser) {
                     return res.status(400).json({
-                        ok: false,
-                        message: 'Usuario sendTo no pertenece a esta compañía'
-                    });
+                        error: "El usuario asignado no pertenece a esta compañía",
+                    })
                 }
             }
 
