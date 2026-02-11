@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import { hash } from 'bcryptjs'
 import prisma from '../lib/prisma.js'
-import { UserRole } from '../generated/prisma/enums.js'
+import { UserRole } from '../generated/prisma/index.js'
 
 /* ============================
    HELPERS
@@ -46,13 +46,8 @@ export async function generateNextUserCode(): Promise<string> {
 ============================ */
 
 async function main() {
-  console.log('🚀 Ejecutando seed...\n')
 
   const passwordHash = await hash('Lexus0110', 10)
-
-  /* ============================
-     COMPANIES
-  ============================ */
 
   const companies: Record<string, any> = {}
 

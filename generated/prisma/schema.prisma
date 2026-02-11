@@ -1,0 +1,401 @@
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../generated/prisma"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Ticket {
+  id           String         @id @default(uuid())
+  ticketNumber Int?
+  title        String         @db.VarChar(50)
+  description  String         @db.VarChar(300)
+  img          String?        @db.VarChar(250)
+  comment      String?        @db.VarChar(300)
+  type         TicketType
+  priority     TicketPriority
+  status       TicketStatus
+  startDate    DateTime?
+  endDate      DateTime?
+  requestDays  Int?
+  approvedDays Int?
+  view         Boolean?
+  sendById     String?
+  sendToId     String?
+  companyId    String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  reviewed     Boolean?
+  sendBy       User?          @relation("TicketsSentBy", fields: [sendById], references: [id], onDelete: SetNull)
+  sendTo       User?          @relation("TicketsSentTo", fields: [sendToId], references: [id], onDelete: SetNull)
+  company      Company?       @relation(fields: [companyId], references: [id], onDelete: SetNull)
+}
+
+model User {
+  id                   String        @id @default(uuid())
+  username             String        @unique
+  email                String        @unique
+  password             String
+  role                 UserRole      @default(USER)
+  isActive             Boolean       @default(true)
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  // companyId            String?
+  companies            UserCompany[]
+  createdCompanies     Company[]     @relation("CompanyCreatedBy")
+  assignedEquipments   Equipment[]
+  assignedMaintenances Maintenance[]
+  assignedNetworks     Network[]
+  createdNetworks      Network[]     @relation("NetworkCreatedBy")
+  person               Person?
+  ticketsSentBy        Ticket[]      @relation("TicketsSentBy")
+  ticketsSentTo        Ticket[]      @relation("TicketsSentTo")
+}
+
+model UserCompany {
+  userId    String
+  companyId String
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@id([userId, companyId])
+}
+
+model Person {
+  id           String       @id @default(uuid())
+  userId       String       @unique
+  firstName    String?
+  lastName     String?
+  fullName     String?
+  contactEmail String?
+  phoneNumber  String?
+  departmentId String?
+  position     String?
+  status       PersonStatus @default(Activo)
+  userCode     String       @unique
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  companyId    String?
+  department   Department?  @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Company {
+  id               String            @id @default(uuid())
+  code             String            @unique @default("CO001")
+  name             String            @unique
+  address          String?
+  phone            String?
+  email            String?
+  ruc              String?           @unique
+  logoUrl          String?
+  isActive         Boolean           @default(true)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  createdByUserId  String?
+  createdBy        User?             @relation("CompanyCreatedBy", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  departments      Department[]
+  documents        Document[]
+  equipments       Equipment[]
+  licenses         License[]
+  maintenances     Maintenance[]
+  networks         Network[]
+  networkProviders NetworkProvider[]
+  tickets          Ticket[]
+  users            UserCompany[]
+}
+
+model Department {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  persons     Person[]
+}
+
+model Equipment {
+  id               String          @id @default(uuid())
+  type             String
+  brand            String
+  model            String
+  serialNumber     String          @unique
+  plateNumber      String?         @unique
+  location         String?
+  status           EquipmentStatus @default(ACTIVE)
+  acquisitionDate  DateTime?
+  warrantyDetails  String?
+  qrCode           String?
+  invoiceUrl       String?
+  cost             Decimal?        @default(0.00)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  companyId        String
+  assignedToUserId String?
+  endUser          String?
+  operatingSystem  String?
+  documents        Document[]
+  assignedToUser   User?           @relation(fields: [assignedToUserId], references: [id], onDelete: SetNull)
+  company          Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  maintenances     Maintenance[]
+}
+
+model Maintenance {
+  id               String            @id @default(uuid())
+  title            String
+  description      String?
+  type             MaintenanceType
+  status           MaintenanceStatus @default(SCHEDULED)
+  scheduledDate    DateTime
+  completionDate   DateTime?
+  cost             Decimal?          @default(0.00)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  equipmentId      String
+  assignedToUserId String?
+  companyId        String
+  assignedToUser   User?             @relation(fields: [assignedToUserId], references: [id], onDelete: SetNull)
+  company          Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  equipment        Equipment         @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+}
+
+model Document {
+  id          String     @id @default(uuid())
+  title       String
+  description String?
+  fileUrl     String
+  fileType    String?
+  category    String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  companyId   String
+  equipmentId String?
+  company     Company    @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  equipment   Equipment? @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+}
+
+model License {
+  id             String    @id @default(uuid())
+  softwareName   String
+  licenseKey     String    @unique
+  provider       String?
+  activationDate DateTime
+  expirationDate DateTime?
+  notes          String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  companyId      String
+  company        Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model SystemConfig {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model NetworkProvider {
+  id            String    @id @default(uuid())
+  name          String
+  providerIp    String?
+  dnsGateway    String?
+  speed         String?
+  cost          Decimal?  @default(0.00)
+  notes         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
+  meshDevices   String?
+  switchDevices String?
+  companyId     String
+  networks      Network[]
+  company       Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([name, companyId])
+}
+
+model Network {
+  id               String              @id @default(uuid())
+  name             String
+  status           NetworkDeviceStatus @default(UNKNOWN)
+  location         String?
+  description      String?
+  notes            String?
+  ssid             String?
+  password         String?
+  ip               String?
+  dns              String?
+  gw               String?
+  uploadSpeed      String?
+  downloadSpeed    String?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  companyId        String
+  assignedToUserId String?
+  createdByUserId  String?
+  providerId       String?
+  // No cascada: El usuario no se elimina
+  assignedToUser   User?               @relation(fields: [assignedToUserId], references: [id], onDelete: SetNull)
+  // No cascada: El usuario creador no se elimina
+  createdBy        User?               @relation("NetworkCreatedBy", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  // ✅ CASCADE: Elimina con la compañía
+  company          Company             @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  // ✅ CASCADE: Elimina con el proveedor
+  provider         NetworkProvider?    @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+  // @@unique([name, companyId])
+}
+
+model AnnualSoftwareExpense {
+  id               String           @id @default(uuid())
+  applicationName  String
+  provider         String
+  category         SoftwareCategory
+  status           ExpenseStatus
+  annualCost       Float
+  numberOfUsers    Int
+  costPerUser      Float
+  renewalDate      DateTime
+  paymentFrequency PaymentFrequency
+  additionalNotes  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // ✅ 0..N usuarios asignados
+  assignedUsers AssignedUser[]
+}
+
+model AssignedUser {
+  id String @id @default(uuid())
+
+  // 🔗 Relación (obligatoria del lado del usuario)
+  expenseId String
+  expense   AnnualSoftwareExpense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+
+  // 🔒 Obligatorios
+  name     String
+  lastName String
+
+  // 🧩 Opcionales
+  email      String?
+  department String?
+
+  createdAt DateTime @default(now())
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  MODERATOR
+  SUPER_ADMIN
+}
+
+enum PersonStatus {
+  Activo
+  Inactivo
+}
+
+enum TicketType {
+  vacations
+  permission
+  ticket
+}
+
+enum TicketPriority {
+  urgent
+  high
+  medium
+  low
+  trivial
+}
+
+enum TicketStatus {
+  open
+  pending
+  approved
+  rejected
+  closed
+}
+
+enum EquipmentStatus {
+  ACTIVE
+  IN_MAINTENANCE
+  DISPOSED
+  DAMAGED
+  ASSIGNED
+  STORAGE
+}
+
+enum MaintenanceType {
+  PREVENTIVE
+  CORRECTIVE
+}
+
+enum MaintenanceStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELED
+}
+
+enum NetworkDeviceType {
+  ROUTER
+  SWITCH
+  FIREWALL
+  ACCESS_POINT
+  SERVER
+  PRINTER
+  IP_PHONE
+  CAMERA
+  OTHER
+}
+
+enum NetworkDeviceStatus {
+  ONLINE
+  OFFLINE
+  MAINTENANCE
+  DECOMMISSIONED
+  UNKNOWN
+}
+
+enum ExpenseStatus {
+  Active
+  Inactive
+  Pending
+  Canceled
+  Expired
+}
+
+enum PaymentFrequency {
+  Annual
+  Monthly
+  Quarterly
+  SemiAnnual
+  OneTime
+}
+
+enum SoftwareCategory {
+  Accounting
+  CRM
+  Antivirus
+  Productivity
+  Design
+  Development
+  HRManagement
+  Marketing
+  Communication
+  CloudStorage
+  OperatingSystem
+  Other
+}

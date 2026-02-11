@@ -23,6 +23,7 @@ import TicketRouter from './routes/TicketRoutes.js';
 import InventoryRouter from './routes/InventoryRoutes.js';
 import ExpenseRoute from './routes/annualSoftwareExpenseRoutes.js';
 import AssignedUserRouter from './routes/assignedUsersRoutes.js';
+import DepartmentRouter from './routes/DepartmentRoutes.js';
 
 dotenv.config({ path: '.env' });
 
@@ -73,6 +74,7 @@ app.get('/', (req, res) => {
 app.use('/api/user/auth', AuthRouter);
 app.use('/api/users', UserRouter);
 app.use('/api/companies', CompaniesRouter);
+app.use('/api/departments', DepartmentRouter);
 app.use('/api/devices', EquipmentRouter);
 app.use('/api/maintenances', MaintenanceRouter);
 app.use('/api/documents', DocumentRouter);

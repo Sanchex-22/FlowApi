@@ -1,10 +1,6 @@
 import { Request, Response } from "express"
 import { prisma } from "../../lib/prisma.js"
-import {
-  ExpenseStatus,
-  SoftwareCategory,
-  PaymentFrequency,
-} from "../../generated/prisma/enums.js"
+import { ExpenseStatus, PaymentFrequency, SoftwareCategory } from "../../generated/prisma/index.js"
 
 export class AnnualSoftwareExpenseController {
   // ===============================

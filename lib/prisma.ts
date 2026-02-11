@@ -1,15 +1,17 @@
 // lib/prisma.ts
 import 'dotenv/config'
-import { PrismaClient } from '../generated/prisma/client.js'
+import pg from 'pg'
+import { PrismaClient } from '../generated/prisma/client'
 
+const connectionString = process.env.DATABASE_URL
+
+const pool = new pg.Pool({ connectionString })
 // Singleton de PrismaClient
 const globalForPrisma = global as unknown as { prisma: PrismaClient }
 
 export const prisma =
   globalForPrisma.prisma ||
   new PrismaClient({
-    // Usa la misma variable que en tu test exitoso
-    accelerateUrl: process.env.PRISMA_ACCELERATE_URL || process.env.DATABASE_URL || '',
     log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
   })
 

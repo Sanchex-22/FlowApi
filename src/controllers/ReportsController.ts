@@ -2,7 +2,7 @@
 
 import { Request, Response } from 'express';
 import { prisma } from '../../lib/prisma.js';
-import { MaintenanceStatus } from '../../generated/prisma/enums.js';
+import { MaintenanceStatus } from '../../generated/prisma/index.js';
 
 /**
  * @class ReportController
