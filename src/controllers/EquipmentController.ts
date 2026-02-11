@@ -2,7 +2,7 @@
 import { Request, Response } from 'express';
 import { put, del } from '@vercel/blob';
 import { prisma } from '../../lib/prisma.js';
-import { EquipmentStatus } from '../../generated/prisma/enums.js';
+import { EquipmentStatus } from '../../generated/prisma/index.js';
 
 declare global {
     namespace Express {
