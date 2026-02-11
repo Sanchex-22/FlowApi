@@ -1,7 +1,7 @@
 // src/auth/auth.service.ts
 import bcrypt from 'bcryptjs';
-import { prisma } from '../../lib/prisma.js';
 import { User, UserRole } from '../../generated/prisma/client.js';
+import prisma from '../../lib/prisma.js';
 
 // Tipo para la respuesta de login (sin datos sensibles)
 interface LoginResponse {
