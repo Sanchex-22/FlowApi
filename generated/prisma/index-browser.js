@@ -149,6 +149,9 @@ exports.Prisma.UserScalarFieldEnum = {
   username: 'username',
   email: 'email',
   password: 'password',
+  name: 'name',
+  lastName: 'lastName',
+  department: 'department',
   role: 'role',
   isActive: 'isActive',
   createdAt: 'createdAt',
@@ -184,12 +187,12 @@ exports.Prisma.CompanyScalarFieldEnum = {
   address: 'address',
   phone: 'phone',
   email: 'email',
+  ruc: 'ruc',
+  logoUrl: 'logoUrl',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  createdByUserId: 'createdByUserId',
-  logoUrl: 'logoUrl',
-  ruc: 'ruc'
+  createdByUserId: 'createdByUserId'
 };
 
 exports.Prisma.DepartmentScalarFieldEnum = {
@@ -214,14 +217,14 @@ exports.Prisma.EquipmentScalarFieldEnum = {
   acquisitionDate: 'acquisitionDate',
   warrantyDetails: 'warrantyDetails',
   qrCode: 'qrCode',
+  invoiceUrl: 'invoiceUrl',
   cost: 'cost',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   companyId: 'companyId',
   assignedToUserId: 'assignedToUserId',
   endUser: 'endUser',
-  operatingSystem: 'operatingSystem',
-  invoiceUrl: 'invoiceUrl'
+  operatingSystem: 'operatingSystem'
 };
 
 exports.Prisma.MaintenanceScalarFieldEnum = {
@@ -326,16 +329,6 @@ exports.Prisma.AnnualSoftwareExpenseScalarFieldEnum = {
   additionalNotes: 'additionalNotes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-};
-
-exports.Prisma.AssignedUserScalarFieldEnum = {
-  id: 'id',
-  expenseId: 'expenseId',
-  name: 'name',
-  lastName: 'lastName',
-  email: 'email',
-  department: 'department',
-  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -460,8 +453,7 @@ exports.Prisma.ModelName = {
   SystemConfig: 'SystemConfig',
   NetworkProvider: 'NetworkProvider',
   Network: 'Network',
-  AnnualSoftwareExpense: 'AnnualSoftwareExpense',
-  AssignedUser: 'AssignedUser'
+  AnnualSoftwareExpense: 'AnnualSoftwareExpense'
 };
 
 /**
