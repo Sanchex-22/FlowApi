@@ -74,7 +74,7 @@ export class UserController {
       email,
       password,
       role,
-      companyIds, // Array de IDs de compañías
+      companyIds,
       firstName,
       lastName,
       contactEmail,
@@ -86,44 +86,70 @@ export class UserController {
 
     const requestingUserId = (req as any).userId;
 
-    if (!username || !email || !password) {
-      return res.status(400).json({
-        error: 'Username, email y password son obligatorios.',
-      });
-    }
-
-    // Validación de compañías asignadas
-    if (!companyIds || !Array.isArray(companyIds) || companyIds.length === 0) {
-      return res.status(400).json({
-        error: 'Debe asignar al menos una compañía al usuario.',
-      });
-    }
-
     try {
-      // Validar permisos solo si se especifica un rol elevado
+      // ✅ Validación de campos obligatorios
+      if (!username || !email || !password) {
+        return res.status(400).json({
+          error: 'Username, email y password son obligatorios.',
+        });
+      }
+
+      if (!companyIds || !Array.isArray(companyIds) || companyIds.length === 0) {
+        return res.status(400).json({
+          error: 'Debe asignar al menos una compañía al usuario.',
+        });
+      }
+
+      // ✅ Validación de permisos
       if (role && role !== 'USER' && requestingUserId) {
-        // La validación de permisos en Create debería usar un 'dummy-id' o validar 
-        // solo el rol del usuario que solicita la creación si no está creando un SUPER_ADMIN
-        const permissionCheck = await this.validateRolePermission(
-          requestingUserId,
-          'dummy-id', // ID temporal para chequear solo el permiso de 'edit' o 'create' de rol
-          'edit'
-        );
-        // Si el usuario no es Super Admin, se valida si tiene nivel para crear el rol solicitado
-        const requestingUserRoleLevel = ROLE_HIERARCHY[(await prisma.user.findUnique({ where: { id: requestingUserId } }))?.role || 'USER'] || 0;
+        const requestingUser = await prisma.user.findUnique({
+          where: { id: requestingUserId },
+        });
+
+        if (!requestingUser) {
+          return res.status(403).json({
+            error: 'Usuario no autenticado.',
+          });
+        }
+
+        const requestingUserRoleLevel = ROLE_HIERARCHY[requestingUser.role] || 0;
         const targetRoleLevel = ROLE_HIERARCHY[role] || 0;
-        
-        if (!permissionCheck.allowed || requestingUserRoleLevel <= targetRoleLevel) {
+
+        if (requestingUserRoleLevel <= targetRoleLevel && requestingUser.role !== 'SUPER_ADMIN') {
           return res.status(403).json({
             error: 'No tienes permisos para asignar el rol especificado.',
           });
         }
       }
 
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const newUserCode = userCode || await generateNextUserCode();
+      // ✅ Validar que las compañías existan
+      const companiesExist = await prisma.company.findMany({
+        where: {
+          id: { in: companyIds },
+        },
+      });
 
-      // Crear usuario y las relaciones con múltiples compañías (Corrección ya presente)
+      if (companiesExist.length !== companyIds.length) {
+        return res.status(400).json({
+          error: 'Una o más compañías no existen.',
+        });
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+      let newUserCode = userCode;
+
+      // ✅ Generar código de usuario si no se proporciona
+      if (!newUserCode) {
+        try {
+          newUserCode = await generateNextUserCode();
+        } catch (codeError) {
+          console.error('Error generating user code:', codeError);
+          // Usar un código alternativo si falla
+          newUserCode = `USER_${Date.now()}`;
+        }
+      }
+
+      // ✅ Crear usuario
       const newUser = await prisma.user.create({
         data: {
           username,
@@ -135,19 +161,37 @@ export class UserController {
               companyId: companyId,
             })),
           },
-          person: {
-            create: {
-              firstName,
-              lastName,
-              fullName: `${firstName || ''} ${lastName || ''}`.trim(),
-              contactEmail,
-              phoneNumber,
-              departmentId: departmentId || null,
-              position,
-              userCode: newUserCode,
-            },
-          },
         },
+      });
+
+      // ✅ Crear Person si hay datos personales
+      if (firstName || lastName || contactEmail || phoneNumber || departmentId || position) {
+        await prisma.person.create({
+          data: {
+            userId: newUser.id,
+            firstName: firstName || null,
+            lastName: lastName || null,
+            fullName: `${firstName || ''} ${lastName || ''}`.trim() || null,
+            contactEmail: contactEmail || null,
+            phoneNumber: phoneNumber || null,
+            departmentId: departmentId || null,
+            position: position || null,
+            userCode: newUserCode,
+          },
+        });
+      } else {
+        // ✅ Crear Person mínimo con userCode
+        await prisma.person.create({
+          data: {
+            userId: newUser.id,
+            userCode: newUserCode,
+          },
+        });
+      }
+
+      // ✅ Retornar usuario completo
+      const completeUser = await prisma.user.findUnique({
+        where: { id: newUser.id },
         include: {
           person: {
             include: {
@@ -156,14 +200,16 @@ export class UserController {
           },
           companies: {
             include: {
-              company: true, // ✅ Mapea los detalles de la compañía
+              company: true,
             },
           },
         },
       });
 
-      return res.status(201).json(newUser);
+      return res.status(201).json(completeUser);
     } catch (error: any) {
+      console.error('Error creating user:', error);
+
       if (error.code === 'P2002') {
         let errorMessage = 'Username, email o userCode ya existen.';
         if (error.meta?.target) {
@@ -175,13 +221,10 @@ export class UserController {
             errorMessage = 'El userCode ya existe.';
           if (error.meta.target.includes('contactEmail'))
             errorMessage = 'El email de contacto ya existe.';
-          // El 'fullName' check debe ser menos estricto o revisar su unicidad
-          // if (error.meta.target.includes('fullName'))
-          //   errorMessage = 'El nombre completo ya existe.';
         }
         return res.status(409).json({ error: errorMessage });
       }
-      console.error('Error creating user:', error);
+
       return res.status(500).json({
         error: 'Error al crear el usuario.',
         details: error.message,
@@ -209,7 +252,11 @@ export class UserController {
         where: { id },
       });
 
-      if (userToDelete?.role === 'SUPER_ADMIN') {
+      if (!userToDelete) {
+        return res.status(404).json({ error: 'Usuario no encontrado.' });
+      }
+
+      if (userToDelete.role === 'SUPER_ADMIN') {
         const superAdminExists = await this.validateSuperAdminExists(id);
         if (!superAdminExists) {
           return res.status(400).json({
@@ -218,9 +265,7 @@ export class UserController {
           });
         }
       }
-      
-      // La eliminación en cascada (CASCADE) debe estar configurada en el schema de Prisma 
-      // para eliminar Person y UserCompany, de lo contrario esto podría fallar.
+
       const deletedUser = await prisma.user.delete({
         where: { id },
       });
@@ -230,10 +275,12 @@ export class UserController {
         user: deletedUser,
       });
     } catch (error: any) {
+      console.error('Error deleting user:', error);
+
       if (error.code === 'P2025') {
         return res.status(404).json({ error: 'Usuario no encontrado.' });
       }
-      console.error('Error deleting user:', error);
+
       res.status(500).json({
         error: 'Error al eliminar el usuario.',
         details: error.message,
@@ -250,7 +297,7 @@ export class UserController {
       password,
       role,
       isActive,
-      companyIds, // Array de IDs de compañías
+      companyIds,
       firstName,
       lastName,
       contactEmail,
@@ -262,6 +309,19 @@ export class UserController {
     } = req.body;
 
     try {
+      // ✅ Validar que el usuario a editar existe
+      const userToEdit = await prisma.user.findUnique({
+        where: { id },
+        include: {
+          person: true,
+        },
+      });
+
+      if (!userToEdit) {
+        return res.status(404).json({ error: 'Usuario no encontrado.' });
+      }
+
+      // ✅ Validar permisos
       if (requestingUserId && (role || isActive === false)) {
         const permissionCheck = await this.validateRolePermission(
           requestingUserId,
@@ -273,16 +333,8 @@ export class UserController {
         }
       }
 
-      const userToEdit = await prisma.user.findUnique({
-        where: { id },
-      });
-
-      // Lógica de validación para el último Super Admin
-      if (
-        role &&
-        role !== 'SUPER_ADMIN' &&
-        userToEdit?.role === 'SUPER_ADMIN'
-      ) {
+      // ✅ Validar cambio de rol del último SUPER_ADMIN
+      if (role && role !== 'SUPER_ADMIN' && userToEdit.role === 'SUPER_ADMIN') {
         const superAdminExists = await this.validateSuperAdminExists(id);
         if (!superAdminExists) {
           return res.status(400).json({
@@ -291,8 +343,25 @@ export class UserController {
           });
         }
       }
-      
+
+      // ✅ Validar compañías si se proporcionan
+      if (companyIds && Array.isArray(companyIds) && companyIds.length > 0) {
+        const companiesExist = await prisma.company.findMany({
+          where: {
+            id: { in: companyIds },
+          },
+        });
+
+        if (companiesExist.length !== companyIds.length) {
+          return res.status(400).json({
+            error: 'Una o más compañías no existen.',
+          });
+        }
+      }
+
+      // ✅ Preparar datos a actualizar
       const userDataToUpdate: any = {};
+
       if (username !== undefined) userDataToUpdate.username = username;
       if (email !== undefined) userDataToUpdate.email = email;
       if (role !== undefined) userDataToUpdate.role = role;
@@ -302,14 +371,12 @@ export class UserController {
         userDataToUpdate.password = await bcrypt.hash(password, 10);
       }
 
-      // Actualizar relaciones con múltiples compañías (Corrección ya presente)
+      // ✅ Actualizar compañías
       if (companyIds !== undefined && Array.isArray(companyIds)) {
-        // Eliminar todas las relaciones existentes
         await prisma.userCompany.deleteMany({
           where: { userId: id },
         });
 
-        // Crear nuevas relaciones solo si hay compañías
         if (companyIds.length > 0) {
           userDataToUpdate.companies = {
             create: companyIds.map((companyId: string) => ({
@@ -319,7 +386,7 @@ export class UserController {
         }
       }
 
-      // 1. Actualizar datos del Usuario
+      // ✅ Actualizar usuario
       const updatedUser = await prisma.user.update({
         where: { id },
         data: userDataToUpdate,
@@ -331,13 +398,13 @@ export class UserController {
           },
           companies: {
             include: {
-              company: true, // ✅ Mapea los detalles de la compañía
+              company: true,
             },
           },
         },
       });
 
-      // 2. Actualizar/Crear información personal (upsert)
+      // ✅ Actualizar Person si hay datos
       if (
         firstName !== undefined ||
         lastName !== undefined ||
@@ -349,85 +416,59 @@ export class UserController {
         userCode !== undefined
       ) {
         const personDataToUpdate: any = {};
-        const personDataToCreate: any = { userId: id };
-        
-        // Cargar los datos actuales de la persona para calcular fullName
-        const currentPerson = updatedUser.person;
 
-        if (firstName !== undefined) {
-          personDataToUpdate.firstName = firstName;
-          personDataToCreate.firstName = firstName;
-        }
-        if (lastName !== undefined) {
-          personDataToUpdate.lastName = lastName;
-          personDataToCreate.lastName = lastName;
-        }
-        if (contactEmail !== undefined) {
-          personDataToUpdate.contactEmail = contactEmail;
-          personDataToCreate.contactEmail = contactEmail;
-        }
-        if (phoneNumber !== undefined) {
-          personDataToUpdate.phoneNumber = phoneNumber;
-          personDataToCreate.phoneNumber = phoneNumber;
-        }
-        if (position !== undefined) {
-          personDataToUpdate.position = position;
-          personDataToCreate.position = position;
-        }
-        if (status !== undefined) {
-          personDataToUpdate.status = status;
-          personDataToCreate.status = status;
-        }
-        if (userCode !== undefined) {
-          personDataToUpdate.userCode = userCode;
-          personDataToCreate.userCode = userCode;
-        }
-        
-        // Calcular FullName basado en los valores nuevos o existentes
-        const newFirstName = personDataToUpdate.firstName ?? currentPerson?.firstName ?? '';
-        const newLastName = personDataToUpdate.lastName ?? currentPerson?.lastName ?? '';
-
-        const fullName = `${newFirstName} ${newLastName}`.trim();
-        personDataToUpdate.fullName = fullName;
-        personDataToCreate.fullName = fullName;
-
+        if (firstName !== undefined) personDataToUpdate.firstName = firstName;
+        if (lastName !== undefined) personDataToUpdate.lastName = lastName;
+        if (contactEmail !== undefined) personDataToUpdate.contactEmail = contactEmail;
+        if (phoneNumber !== undefined) personDataToUpdate.phoneNumber = phoneNumber;
+        if (position !== undefined) personDataToUpdate.position = position;
+        if (status !== undefined) personDataToUpdate.status = status;
         if (departmentId !== undefined) {
-          const finalDepartmentId = (departmentId === null || departmentId === '') ? null : departmentId;
-          personDataToUpdate.departmentId = finalDepartmentId;
-          personDataToCreate.departmentId = finalDepartmentId;
+          personDataToUpdate.departmentId = departmentId === null || departmentId === '' ? null : departmentId;
         }
 
+        // ✅ Calcular fullName
+        const newFirstName = personDataToUpdate.firstName ?? userToEdit.person?.firstName ?? '';
+        const newLastName = personDataToUpdate.lastName ?? userToEdit.person?.lastName ?? '';
+        personDataToUpdate.fullName = `${newFirstName} ${newLastName}`.trim() || null;
+
+        // ✅ Upsert Person
         await prisma.person.upsert({
           where: { userId: id },
           update: personDataToUpdate,
-          create: personDataToCreate,
-        });
-
-        // Volver a buscar el usuario para incluir la persona actualizada
-        const userWithUpdatedPerson = await prisma.user.findUnique({
-          where: { id },
-          include: {
-            person: {
-              include: {
-                department: true,
-              },
-            },
-            companies: {
-              include: {
-                company: true, // ✅ Mapea los detalles de la compañía
-              },
-            },
+          create: {
+            userId: id,
+            ...personDataToUpdate,
+            userCode: userCode || `USER_${Date.now()}`,
           },
         });
-
-        return res.status(200).json(userWithUpdatedPerson);
       }
 
-      res.status(200).json(updatedUser);
+      // ✅ Retornar usuario actualizado
+      const finalUser = await prisma.user.findUnique({
+        where: { id },
+        include: {
+          person: {
+            include: {
+              department: true,
+            },
+          },
+          companies: {
+            include: {
+              company: true,
+            },
+          },
+        },
+      });
+
+      return res.status(200).json(finalUser);
     } catch (error: any) {
+      console.error('Error updating user:', error);
+
       if (error.code === 'P2025') {
         return res.status(404).json({ error: 'Usuario no encontrado.' });
       }
+
       if (error.code === 'P2002') {
         let errorMessage = 'Username, email o userCode ya existen.';
         if (error.meta?.target) {
@@ -439,12 +480,10 @@ export class UserController {
             errorMessage = 'El userCode ya existe.';
           if (error.meta.target.includes('contactEmail'))
             errorMessage = 'El email de contacto ya existe.';
-          // if (error.meta.target.includes('fullName'))
-          //   errorMessage = 'El nombre completo ya existe.';
         }
         return res.status(409).json({ error: errorMessage });
       }
-      console.error('Error updating user:', error);
+
       res.status(500).json({
         error: 'Error al actualizar el usuario.',
         details: error.message,
@@ -455,6 +494,7 @@ export class UserController {
   async get(req: Request, res: Response) {
     try {
       const { id } = req.params;
+
       const user = await prisma.user.findUnique({
         where: { id },
         include: {
@@ -465,7 +505,7 @@ export class UserController {
           },
           companies: {
             include: {
-              company: true, // ✅ Mapea los detalles de la compañía
+              company: true,
             },
           },
           assignedEquipments: true,
@@ -500,11 +540,12 @@ export class UserController {
           },
           companies: {
             include: {
-              company: true, // ✅ Mapea los detalles de la compañía
+              company: true,
             },
           },
         },
       });
+
       res.status(200).json(users);
     } catch (error: any) {
       console.error('Error fetching all users:', error);
@@ -518,6 +559,7 @@ export class UserController {
   async getProfile(req: Request, res: Response) {
     try {
       const { id } = req.params;
+
       const user = await prisma.user.findUnique({
         where: { id },
         include: {
@@ -528,7 +570,7 @@ export class UserController {
           },
           companies: {
             include: {
-              company: true, // ✅ Mapea los detalles de la compañía
+              company: true,
             },
           },
           assignedEquipments: {
@@ -585,31 +627,36 @@ export class UserController {
           },
           companies: {
             include: {
-              company: true, // ✅ Mapea los detalles de la compañía
+              company: true,
             },
           },
         },
       });
+
       res.status(200).json(users);
     } catch (error: any) {
       console.error('Error fetching users with person data:', error);
       res.status(500).json({
         error: 'Error al obtener los usuarios.',
+        details: error.message,
       });
     }
   }
 
   async getAllUserByCompanyId(req: Request, res: Response) {
     try {
-      // Cambio: La ruta espera el 'companyCode' o 'companyId'
+      const { companyCode } = req.params;
+
+      // ✅ Buscar compañía por ID
       const company = await prisma.company.findUnique({
-        where: { id: req.params.companyCode }, // Asumiendo que companyCode es el ID
+        where: { id: companyCode },
       });
 
       if (!company) {
         return res.status(404).json({ error: 'Compañía no encontrada.' });
       }
 
+      // ✅ Obtener usuarios de la compañía
       const users = await prisma.user.findMany({
         where: {
           companies: {
@@ -626,7 +673,7 @@ export class UserController {
           },
           companies: {
             include: {
-              company: true, // ✅ Mapea los detalles de la compañía
+              company: true,
             },
           },
         },
@@ -634,9 +681,10 @@ export class UserController {
 
       res.status(200).json(users);
     } catch (error: any) {
-      console.error('Error fetching users with person data:', error);
+      console.error('Error fetching users by company:', error);
       res.status(500).json({
         error: 'Error al obtener los usuarios.',
+        details: error.message,
       });
     }
   }
