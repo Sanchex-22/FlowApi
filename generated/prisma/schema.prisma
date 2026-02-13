@@ -36,24 +36,27 @@ model Ticket {
 }
 
 model User {
-  id                   String        @id @default(uuid())
-  username             String        @unique
-  email                String        @unique
+  id                   String                  @id @default(uuid())
+  username             String                  @unique
+  email                String                  @unique
   password             String
-  role                 UserRole      @default(USER)
-  isActive             Boolean       @default(true)
-  createdAt            DateTime      @default(now())
-  updatedAt            DateTime      @updatedAt
+  name                 String? // ✅ Nombre del usuario
+  lastName             String? // ✅ Apellido del usuario
+  role                 UserRole                @default(USER)
+  isActive             Boolean                 @default(true)
+  createdAt            DateTime                @default(now())
+  updatedAt            DateTime                @updatedAt
   // companyId            String?
   companies            UserCompany[]
-  createdCompanies     Company[]     @relation("CompanyCreatedBy")
+  createdCompanies     Company[]               @relation("CompanyCreatedBy")
   assignedEquipments   Equipment[]
   assignedMaintenances Maintenance[]
   assignedNetworks     Network[]
-  createdNetworks      Network[]     @relation("NetworkCreatedBy")
-  person               Person?
-  ticketsSentBy        Ticket[]      @relation("TicketsSentBy")
-  ticketsSentTo        Ticket[]      @relation("TicketsSentTo")
+  createdNetworks      Network[]               @relation("NetworkCreatedBy")
+  person               Person? // ✅ Relación 1:1 con Person (para sacar department)
+  ticketsSentBy        Ticket[]                @relation("TicketsSentBy")
+  ticketsSentTo        Ticket[]                @relation("TicketsSentTo")
+  assignedExpenses     AnnualSoftwareExpense[] @relation("ExpenseAssignedUsers")
 }
 
 model UserCompany {
@@ -272,26 +275,8 @@ model AnnualSoftwareExpense {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // ✅ 0..N usuarios asignados
-  assignedUsers AssignedUser[]
-}
-
-model AssignedUser {
-  id String @id @default(uuid())
-
-  // 🔗 Relación (obligatoria del lado del usuario)
-  expenseId String
-  expense   AnnualSoftwareExpense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
-
-  // 🔒 Obligatorios
-  name     String
-  lastName String
-
-  // 🧩 Opcionales
-  email      String?
-  department String?
-
-  createdAt DateTime @default(now())
+  // ✅ Relación muchos a muchos con User
+  assignedUsers User[] @relation("ExpenseAssignedUsers")
 }
 
 enum UserRole {

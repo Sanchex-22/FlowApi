@@ -13,7 +13,4 @@ export default defineConfig({
     url: process.env.DATABASE_URL || '',
     shadowDatabaseUrl: process.env.DATABASE_URL || '',
   },
-  enums: {
-    external: ["public.UserRole"],
-  },
 });

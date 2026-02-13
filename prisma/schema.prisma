@@ -40,20 +40,23 @@ model User {
   username             String        @unique
   email                String        @unique
   password             String
+  name                 String?       // ✅ Nombre del usuario
+  lastName             String?       // ✅ Apellido del usuario
   role                 UserRole      @default(USER)
   isActive             Boolean       @default(true)
   createdAt            DateTime      @default(now())
   updatedAt            DateTime      @updatedAt
   // companyId            String?
-  companies UserCompany[]
+  companies            UserCompany[]
   createdCompanies     Company[]     @relation("CompanyCreatedBy")
   assignedEquipments   Equipment[]
   assignedMaintenances Maintenance[]
   assignedNetworks     Network[]
   createdNetworks      Network[]     @relation("NetworkCreatedBy")
-  person               Person?
+  person               Person?       // ✅ Relación 1:1 con Person (para sacar department)
   ticketsSentBy        Ticket[]      @relation("TicketsSentBy")
   ticketsSentTo        Ticket[]      @relation("TicketsSentTo")
+  assignedExpenses     AnnualSoftwareExpense[] @relation("ExpenseAssignedUsers")
 }
 
 model UserCompany {
@@ -66,12 +69,11 @@ model UserCompany {
   @@id([userId, companyId])
 }
 
-
 model Person {
   id           String       @id @default(uuid())
   userId       String       @unique
   firstName    String?
-  lastName    String?
+  lastName     String?
   fullName     String?
   contactEmail String?
   phoneNumber  String?
@@ -81,7 +83,7 @@ model Person {
   userCode     String       @unique
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
-  companyId        String?  
+  companyId    String?  
   department   Department?  @relation(fields: [departmentId], references: [id], onDelete: SetNull)
   user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -273,26 +275,8 @@ model AnnualSoftwareExpense {
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
 
-  // ✅ 0..N usuarios asignados
-  assignedUsers    AssignedUser[]
-}
-
-model AssignedUser {
-  id          String   @id @default(uuid())
-
-  // 🔗 Relación (obligatoria del lado del usuario)
-  expenseId   String
-  expense     AnnualSoftwareExpense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
-
-  // 🔒 Obligatorios
-  name        String
-  lastName    String
-
-  // 🧩 Opcionales
-  email       String?
-  department  String?
-
-  createdAt   DateTime @default(now())
+  // ✅ Relación muchos a muchos con User
+  assignedUsers    User[]        @relation("ExpenseAssignedUsers")
 }
 
 enum UserRole {

@@ -114,7 +114,7 @@ async function main() {
     where: {
       OR: [
         { email: superAdminEmail },
-        { username: 'superadmin' }
+        { username: 'Carlos Sanchez' }
       ]
     },
     include: { person: true },
@@ -125,7 +125,7 @@ async function main() {
 
     const newSuperAdmin = await prisma.user.create({
       data: {
-        username: 'superadmin',
+        username: 'Carlos Sanchez',
         email: superAdminEmail,
         password: passwordHash,
         role: UserRole.SUPER_ADMIN,
