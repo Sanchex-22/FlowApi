@@ -2,6 +2,7 @@ import 'dotenv/config'
 import { hash } from 'bcryptjs'
 import prisma from '../lib/prisma.js'
 import { UserRole } from '../generated/prisma/index.js'
+import { AdminConfig } from '../src/config/adminConfig.js'
 
 /* ============================
    HELPERS
@@ -47,7 +48,15 @@ export async function generateNextUserCode(): Promise<string> {
 
 async function main() {
 
-  const passwordHash = await hash('Lexus0110', 10)
+  console.log('🌱 Iniciando actualización de base de datos (Modo Idempotente)...')
+
+  if (!AdminConfig?.Email || !AdminConfig?.Password) {
+    throw new Error('ADMIN_EMAIL y ADMIN_PASSWORD deben estar definidos en el entorno.')
+  }
+
+  const superAdminEmail = String(AdminConfig?.Email).toLowerCase()
+  const superAdminName = String(AdminConfig?.Name+' '+AdminConfig?.LastName).toLowerCase()
+  const passwordHash = await hash(String(AdminConfig?.Password), 10)
 
   const companies: Record<string, any> = {}
 
@@ -108,13 +117,11 @@ async function main() {
      SUPER ADMIN
   ============================ */
 
-  const superAdminEmail = 'david@intermaritime.org'
-
   let superAdmin = await prisma.user.findFirst({
     where: {
       OR: [
         { email: superAdminEmail },
-        { username: 'Carlos Sanchez' }
+        { username: superAdminName }
       ]
     },
     include: { person: true },
@@ -125,7 +132,7 @@ async function main() {
 
     const newSuperAdmin = await prisma.user.create({
       data: {
-        username: 'Carlos Sanchez',
+        username: superAdminName,
         email: superAdminEmail,
         password: passwordHash,
         role: UserRole.SUPER_ADMIN,
@@ -133,9 +140,9 @@ async function main() {
 
         person: {
           create: {
-            firstName: 'Carlos',
-            lastName: 'Sanchez',
-            fullName: 'Carlos Sanchez',
+            firstName: AdminConfig?.Name || 'Carlos',
+            lastName: AdminConfig?.LastName || 'Sanchez',
+            fullName: superAdminName,
             contactEmail: superAdminEmail,
             status: 'Activo',
             userCode,

@@ -40,9 +40,6 @@ model User {
   username             String        @unique
   email                String        @unique
   password             String
-  name                 String?       // ✅ Nombre del usuario
-  lastName             String?       // ✅ Apellido del usuario
-  department           String?       // ✅ NUEVO: Departamento del usuario
   role                 UserRole      @default(USER)
   isActive             Boolean       @default(true)
   createdAt            DateTime      @default(now())
