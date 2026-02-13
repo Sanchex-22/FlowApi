@@ -1,12 +1,12 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  provider      = "prisma-client-js"
+  output        = "../generated/prisma"
   binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
   provider = "postgresql"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 model Ticket {
@@ -30,9 +30,9 @@ model Ticket {
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   reviewed     Boolean?
-  sendBy       User?          @relation("TicketsSentBy", fields: [sendById], references: [id], onDelete: SetNull)
-  sendTo       User?          @relation("TicketsSentTo", fields: [sendToId], references: [id], onDelete: SetNull)
-  company      Company?       @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  company      Company?       @relation(fields: [companyId], references: [id])
+  sendBy       User?          @relation("TicketsSentBy", fields: [sendById], references: [id])
+  sendTo       User?          @relation("TicketsSentTo", fields: [sendToId], references: [id])
 }
 
 model User {
@@ -40,31 +40,26 @@ model User {
   username             String        @unique
   email                String        @unique
   password             String
-  name                 String?       // ✅ Nombre del usuario
-  lastName             String?       // ✅ Apellido del usuario
   role                 UserRole      @default(USER)
   isActive             Boolean       @default(true)
   createdAt            DateTime      @default(now())
   updatedAt            DateTime      @updatedAt
-  // companyId            String?
-  companies            UserCompany[]
   createdCompanies     Company[]     @relation("CompanyCreatedBy")
   assignedEquipments   Equipment[]
   assignedMaintenances Maintenance[]
   assignedNetworks     Network[]
   createdNetworks      Network[]     @relation("NetworkCreatedBy")
-  person               Person?       // ✅ Relación 1:1 con Person (para sacar department)
+  person               Person?
   ticketsSentBy        Ticket[]      @relation("TicketsSentBy")
   ticketsSentTo        Ticket[]      @relation("TicketsSentTo")
-  assignedExpenses     AnnualSoftwareExpense[] @relation("ExpenseAssignedUsers")
+  companies            UserCompany[]
 }
 
 model UserCompany {
   userId    String
   companyId String
-
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, companyId])
 }
@@ -83,8 +78,8 @@ model Person {
   userCode     String       @unique
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
-  companyId    String?  
-  department   Department?  @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  companyId    String?
+  department   Department?  @relation(fields: [departmentId], references: [id])
   user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -95,20 +90,20 @@ model Company {
   address          String?
   phone            String?
   email            String?
-  ruc              String?           @unique
-  logoUrl          String?
   isActive         Boolean           @default(true)
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   createdByUserId  String?
-  createdBy        User?             @relation("CompanyCreatedBy", fields: [createdByUserId], references: [id], onDelete: SetNull)
-  departments      Department[]      
-  documents        Document[]        
-  equipments       Equipment[]       
-  licenses         License[]         
-  maintenances     Maintenance[]     
-  networks         Network[]         
-  networkProviders NetworkProvider[] 
+  logoUrl          String?
+  ruc              String?           @unique
+  createdBy        User?             @relation("CompanyCreatedBy", fields: [createdByUserId], references: [id])
+  departments      Department[]
+  documents        Document[]
+  equipments       Equipment[]
+  licenses         License[]
+  maintenances     Maintenance[]
+  networks         Network[]
+  networkProviders NetworkProvider[]
   tickets          Ticket[]
   users            UserCompany[]
 }
@@ -137,7 +132,6 @@ model Equipment {
   acquisitionDate  DateTime?
   warrantyDetails  String?
   qrCode           String?
-  invoiceUrl       String?
   cost             Decimal?        @default(0.00)
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
@@ -145,10 +139,11 @@ model Equipment {
   assignedToUserId String?
   endUser          String?
   operatingSystem  String?
-  documents        Document[]      
-  assignedToUser   User?           @relation(fields: [assignedToUserId], references: [id], onDelete: SetNull)
+  invoiceUrl       String?
+  documents        Document[]
+  assignedToUser   User?           @relation(fields: [assignedToUserId], references: [id])
   company          Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  maintenances     Maintenance[]   
+  maintenances     Maintenance[]
 }
 
 model Maintenance {
@@ -165,7 +160,7 @@ model Maintenance {
   equipmentId      String
   assignedToUserId String?
   companyId        String
-  assignedToUser   User?             @relation(fields: [assignedToUserId], references: [id], onDelete: SetNull)
+  assignedToUser   User?             @relation(fields: [assignedToUserId], references: [id])
   company          Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
   equipment        Equipment         @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
 }
@@ -228,39 +223,33 @@ model NetworkProvider {
 }
 
 model Network {
-  id                String              @id @default(uuid())
-  name              String
-  status            NetworkDeviceStatus @default(UNKNOWN)
-  location          String?
-  description       String?
-  notes             String?
-  ssid              String?
-  password          String?
-  ip                String?
-  dns               String?
-  gw                String?
-  uploadSpeed       String?
-  downloadSpeed     String?
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  companyId         String
-  assignedToUserId  String?
-  createdByUserId   String?
-  providerId        String?
-  // No cascada: El usuario no se elimina
-  assignedToUser    User?               @relation(fields: [assignedToUserId], references: [id], onDelete: SetNull)
-  // No cascada: El usuario creador no se elimina
-  createdBy         User?               @relation("NetworkCreatedBy", fields: [createdByUserId], references: [id], onDelete: SetNull)
-  // ✅ CASCADE: Elimina con la compañía
-  company           Company             @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  // ✅ CASCADE: Elimina con el proveedor
-  provider          NetworkProvider?    @relation(fields: [providerId], references: [id], onDelete: Cascade)
-
-  // @@unique([name, companyId])
+  id               String              @id @default(uuid())
+  name             String
+  status           NetworkDeviceStatus @default(UNKNOWN)
+  location         String?
+  description      String?
+  notes            String?
+  ssid             String?
+  password         String?
+  ip               String?
+  dns              String?
+  gw               String?
+  uploadSpeed      String?
+  downloadSpeed    String?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  companyId        String
+  assignedToUserId String?
+  createdByUserId  String?
+  providerId       String?
+  assignedToUser   User?               @relation(fields: [assignedToUserId], references: [id])
+  company          Company             @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  createdBy        User?               @relation("NetworkCreatedBy", fields: [createdByUserId], references: [id])
+  provider         NetworkProvider?    @relation(fields: [providerId], references: [id], onDelete: Cascade)
 }
 
 model AnnualSoftwareExpense {
-  id               String        @id @default(uuid())
+  id               String           @id @default(uuid())
   applicationName  String
   provider         String
   category         SoftwareCategory
@@ -271,12 +260,20 @@ model AnnualSoftwareExpense {
   renewalDate      DateTime
   paymentFrequency PaymentFrequency
   additionalNotes  String?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  AssignedUser     AssignedUser[]
+}
 
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
-
-  // ✅ Relación muchos a muchos con User
-  assignedUsers    User[]        @relation("ExpenseAssignedUsers")
+model AssignedUser {
+  id                    String                @id
+  expenseId             String
+  name                  String
+  lastName              String
+  email                 String?
+  department            String?
+  createdAt             DateTime              @default(now())
+  AnnualSoftwareExpense AnnualSoftwareExpense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
 }
 
 enum UserRole {
@@ -371,16 +368,16 @@ enum PaymentFrequency {
 }
 
 enum SoftwareCategory {
-  Accounting      
-  CRM              
-  Antivirus        
-  Productivity     
-  Design          
-  Development      
-  HRManagement     
-  Marketing       
-  Communication   
-  CloudStorage     
-  OperatingSystem  
-  Other            
+  Accounting
+  CRM
+  Antivirus
+  Productivity
+  Design
+  Development
+  HRManagement
+  Marketing
+  Communication
+  CloudStorage
+  OperatingSystem
+  Other
 }
