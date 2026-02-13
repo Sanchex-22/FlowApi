@@ -2,7 +2,7 @@
 // import { AnnualSoftwareExpenseController } from '../controllers/AnnualSoftwareExpenseController.js' // Ya está
 
 import { Router } from "express"
-import { AnnualSoftwareExpenseController } from "../controllers/AnnualSoftwareExpenseController"
+import { AnnualSoftwareExpenseController } from "../controllers/AnnualSoftwareExpenseController.js"
 
 const ExpenseRoute = Router()
 const controller = new AnnualSoftwareExpenseController()
