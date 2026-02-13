@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
-import prisma from "../../lib/prisma"
-import { ExpenseStatus, PaymentFrequency, SoftwareCategory, UserRole } from "../../generated/prisma"
+import prisma from "../../lib/prisma.js"
+import { ExpenseStatus, PaymentFrequency, SoftwareCategory, UserRole } from "../../generated/prisma/index.js"
 
 export class AnnualSoftwareExpenseController {
   // ===============================
