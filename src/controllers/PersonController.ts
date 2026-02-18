@@ -238,14 +238,14 @@ export class PersonController {
     }
   }
 
-  async Edit(req: Request, res: Response) {
+async Edit(req: Request, res: Response) {
     try {
       const { id } = req.params;
       const {
         firstName, lastName, contactEmail, phoneNumber,
         departmentId, position, status,
-        userId,    // Posible cambio de usuario
-        companyId  // Posible cambio de compañía (transferencia de empleado)
+        userId,
+        companyId
       } = req.body;
 
       // 1. Obtener persona actual
@@ -258,7 +258,6 @@ export class PersonController {
 
       // 2. Lógica de Coherencia (Solo si hay usuario y compañía definidos)
       if (finalUserId && finalCompanyId) {
-        // Verificar si el usuario tiene acceso a la compañía final
         const userCompanyRelation = await prisma.userCompany.findUnique({
           where: {
             userId_companyId: {
@@ -269,13 +268,9 @@ export class PersonController {
         });
 
         if (!userCompanyRelation) {
-          // OPCIÓN AUTOMÁTICA: Dar acceso al usuario a la nueva compañía
           await prisma.userCompany.create({
             data: { userId: finalUserId, companyId: finalCompanyId }
           });
-
-          // OPCIÓN ESTRICTA:
-          // return res.status(400).json({ error: 'El usuario no pertenece a la compañía destino.' });
         }
       }
 
@@ -288,7 +283,10 @@ export class PersonController {
         const l = lastName ?? currentPerson.lastName ?? '';
         updateData.fullName = `${f} ${l}`.trim();
       }
-      // ... resto de campos simples ...
+      if (contactEmail !== undefined) updateData.contactEmail = contactEmail;
+      if (phoneNumber !== undefined) updateData.phoneNumber = phoneNumber;
+      if (position !== undefined) updateData.position = position;
+      if (status !== undefined) updateData.status = status;
       if (companyId !== undefined) updateData.companyId = companyId;
       if (userId !== undefined) updateData.userId = userId;
       if (departmentId !== undefined) updateData.departmentId = departmentId;
@@ -297,7 +295,7 @@ export class PersonController {
       const updatedPerson = await prisma.person.update({
         where: { id },
         data: updateData,
-        include: { user: true, company: true }
+        include: { user: true, department: true } // ✅ Corregido: company -> department
       });
 
       res.status(200).json(updatedPerson);
