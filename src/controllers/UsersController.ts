@@ -75,6 +75,7 @@ export class UserController {
       password,
       role,
       companyIds,
+      // 👇 Datos de Person — todos opcionales
       firstName,
       lastName,
       contactEmail,
@@ -82,6 +83,8 @@ export class UserController {
       departmentId,
       position,
       userCode,
+      // 👇 Flag que decide si crear Person o no
+      createPerson,
     } = req.body;
 
     const requestingUserId = (req as any).userId;
@@ -100,22 +103,23 @@ export class UserController {
         });
       }
 
-      // ✅ Validación de permisos
+      // ✅ Validación de permisos de rol
       if (role && role !== 'USER' && requestingUserId) {
         const requestingUser = await prisma.user.findUnique({
           where: { id: requestingUserId },
         });
 
         if (!requestingUser) {
-          return res.status(403).json({
-            error: 'Usuario no autenticado.',
-          });
+          return res.status(403).json({ error: 'Usuario no autenticado.' });
         }
 
         const requestingUserRoleLevel = ROLE_HIERARCHY[requestingUser.role] || 0;
         const targetRoleLevel = ROLE_HIERARCHY[role] || 0;
 
-        if (requestingUserRoleLevel <= targetRoleLevel && requestingUser.role !== 'SUPER_ADMIN') {
+        if (
+          requestingUserRoleLevel <= targetRoleLevel &&
+          requestingUser.role !== 'SUPER_ADMIN'
+        ) {
           return res.status(403).json({
             error: 'No tienes permisos para asignar el rol especificado.',
           });
@@ -124,15 +128,11 @@ export class UserController {
 
       // ✅ Validar que las compañías existan
       const companiesExist = await prisma.company.findMany({
-        where: {
-          id: { in: companyIds },
-        },
+        where: { id: { in: companyIds } },
       });
 
       if (companiesExist.length !== companyIds.length) {
-        return res.status(400).json({
-          error: 'Una o más compañías no existen.',
-        });
+        return res.status(400).json({ error: 'Una o más compañías no existen.' });
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -144,7 +144,6 @@ export class UserController {
           newUserCode = await generateNextUserCode();
         } catch (codeError) {
           console.error('Error generating user code:', codeError);
-          // Usar un código alternativo si falla
           newUserCode = `USER_${Date.now()}`;
         }
       }
@@ -164,8 +163,17 @@ export class UserController {
         },
       });
 
-      // ✅ Crear Person si hay datos personales
-      if (firstName || lastName || contactEmail || phoneNumber || departmentId || position) {
+      // ✅ Verificar si hay datos de Person o si el front pidió crearla
+      const hasPersonData =
+        firstName ||
+        lastName ||
+        contactEmail ||
+        phoneNumber ||
+        departmentId ||
+        position;
+
+      // 👇 Solo se crea Person si el usuario lo decidió desde el front
+      if (createPerson === true || hasPersonData) {
         await prisma.person.create({
           data: {
             userId: newUser.id,
@@ -179,29 +187,18 @@ export class UserController {
             userCode: newUserCode,
           },
         });
-      } else {
-        // ✅ Crear Person mínimo con userCode
-        await prisma.person.create({
-          data: {
-            userId: newUser.id,
-            userCode: newUserCode,
-          },
-        });
       }
+      // Si createPerson === false y no hay datos → NO se crea Person
 
       // ✅ Retornar usuario completo
       const completeUser = await prisma.user.findUnique({
         where: { id: newUser.id },
         include: {
           person: {
-            include: {
-              department: true,
-            },
+            include: { department: true },
           },
           companies: {
-            include: {
-              company: true,
-            },
+            include: { company: true },
           },
         },
       });
@@ -248,9 +245,7 @@ export class UserController {
         }
       }
 
-      const userToDelete = await prisma.user.findUnique({
-        where: { id },
-      });
+      const userToDelete = await prisma.user.findUnique({ where: { id } });
 
       if (!userToDelete) {
         return res.status(404).json({ error: 'Usuario no encontrado.' });
@@ -266,9 +261,7 @@ export class UserController {
         }
       }
 
-      const deletedUser = await prisma.user.delete({
-        where: { id },
-      });
+      const deletedUser = await prisma.user.delete({ where: { id } });
 
       res.status(200).json({
         message: 'Usuario eliminado exitosamente.',
@@ -298,6 +291,7 @@ export class UserController {
       role,
       isActive,
       companyIds,
+      // 👇 Datos de Person — todos opcionales
       firstName,
       lastName,
       contactEmail,
@@ -306,15 +300,15 @@ export class UserController {
       position,
       status,
       userCode,
+      // 👇 Flag para controlar si se crea/actualiza Person
+      updatePerson,
     } = req.body;
 
     try {
       // ✅ Validar que el usuario a editar existe
       const userToEdit = await prisma.user.findUnique({
         where: { id },
-        include: {
-          person: true,
-        },
+        include: { person: true },
       });
 
       if (!userToEdit) {
@@ -347,19 +341,15 @@ export class UserController {
       // ✅ Validar compañías si se proporcionan
       if (companyIds && Array.isArray(companyIds) && companyIds.length > 0) {
         const companiesExist = await prisma.company.findMany({
-          where: {
-            id: { in: companyIds },
-          },
+          where: { id: { in: companyIds } },
         });
 
         if (companiesExist.length !== companyIds.length) {
-          return res.status(400).json({
-            error: 'Una o más compañías no existen.',
-          });
+          return res.status(400).json({ error: 'Una o más compañías no existen.' });
         }
       }
 
-      // ✅ Preparar datos a actualizar
+      // ✅ Preparar datos a actualizar del User
       const userDataToUpdate: any = {};
 
       if (username !== undefined) userDataToUpdate.username = username;
@@ -373,9 +363,7 @@ export class UserController {
 
       // ✅ Actualizar compañías
       if (companyIds !== undefined && Array.isArray(companyIds)) {
-        await prisma.userCompany.deleteMany({
-          where: { userId: id },
-        });
+        await prisma.userCompany.deleteMany({ where: { userId: id } });
 
         if (companyIds.length > 0) {
           userDataToUpdate.companies = {
@@ -387,25 +375,14 @@ export class UserController {
       }
 
       // ✅ Actualizar usuario
-      const updatedUser = await prisma.user.update({
+      await prisma.user.update({
         where: { id },
         data: userDataToUpdate,
-        include: {
-          person: {
-            include: {
-              department: true,
-            },
-          },
-          companies: {
-            include: {
-              company: true,
-            },
-          },
-        },
       });
 
-      // ✅ Actualizar Person si hay datos
-      if (
+      // ✅ Solo actualizar/crear Person si el front lo indica con updatePerson: true
+      // o si hay datos de Person en el body
+      const hasPersonData =
         firstName !== undefined ||
         lastName !== undefined ||
         contactEmail !== undefined ||
@@ -413,8 +390,9 @@ export class UserController {
         departmentId !== undefined ||
         position !== undefined ||
         status !== undefined ||
-        userCode !== undefined
-      ) {
+        userCode !== undefined;
+
+      if (updatePerson === true || hasPersonData) {
         const personDataToUpdate: any = {};
 
         if (firstName !== undefined) personDataToUpdate.firstName = firstName;
@@ -424,13 +402,17 @@ export class UserController {
         if (position !== undefined) personDataToUpdate.position = position;
         if (status !== undefined) personDataToUpdate.status = status;
         if (departmentId !== undefined) {
-          personDataToUpdate.departmentId = departmentId === null || departmentId === '' ? null : departmentId;
+          personDataToUpdate.departmentId =
+            departmentId === null || departmentId === '' ? null : departmentId;
         }
 
         // ✅ Calcular fullName
-        const newFirstName = personDataToUpdate.firstName ?? userToEdit.person?.firstName ?? '';
-        const newLastName = personDataToUpdate.lastName ?? userToEdit.person?.lastName ?? '';
-        personDataToUpdate.fullName = `${newFirstName} ${newLastName}`.trim() || null;
+        const newFirstName =
+          personDataToUpdate.firstName ?? userToEdit.person?.firstName ?? '';
+        const newLastName =
+          personDataToUpdate.lastName ?? userToEdit.person?.lastName ?? '';
+        personDataToUpdate.fullName =
+          `${newFirstName} ${newLastName}`.trim() || null;
 
         // ✅ Upsert Person
         await prisma.person.upsert({
@@ -443,20 +425,17 @@ export class UserController {
           },
         });
       }
+      // Si updatePerson === false y no hay datos → NO se toca Person
 
       // ✅ Retornar usuario actualizado
       const finalUser = await prisma.user.findUnique({
         where: { id },
         include: {
           person: {
-            include: {
-              department: true,
-            },
+            include: { department: true },
           },
           companies: {
-            include: {
-              company: true,
-            },
+            include: { company: true },
           },
         },
       });
@@ -499,14 +478,10 @@ export class UserController {
         where: { id },
         include: {
           person: {
-            include: {
-              department: true,
-            },
+            include: { department: true },
           },
           companies: {
-            include: {
-              company: true,
-            },
+            include: { company: true },
           },
           assignedEquipments: true,
           assignedMaintenances: true,
@@ -534,14 +509,10 @@ export class UserController {
       const users = await prisma.user.findMany({
         include: {
           person: {
-            include: {
-              department: true,
-            },
+            include: { department: true },
           },
           companies: {
-            include: {
-              company: true,
-            },
+            include: { company: true },
           },
         },
       });
@@ -564,14 +535,10 @@ export class UserController {
         where: { id },
         include: {
           person: {
-            include: {
-              department: true,
-            },
+            include: { department: true },
           },
           companies: {
-            include: {
-              company: true,
-            },
+            include: { company: true },
           },
           assignedEquipments: {
             select: {
@@ -621,14 +588,10 @@ export class UserController {
       const users = await prisma.user.findMany({
         include: {
           person: {
-            include: {
-              department: true,
-            },
+            include: { department: true },
           },
           companies: {
-            include: {
-              company: true,
-            },
+            include: { company: true },
           },
         },
       });
@@ -647,7 +610,6 @@ export class UserController {
     try {
       const { companyCode } = req.params;
 
-      // ✅ Buscar compañía por ID
       const company = await prisma.company.findUnique({
         where: { id: companyCode },
       });
@@ -656,25 +618,18 @@ export class UserController {
         return res.status(404).json({ error: 'Compañía no encontrada.' });
       }
 
-      // ✅ Obtener usuarios de la compañía
       const users = await prisma.user.findMany({
         where: {
           companies: {
-            some: {
-              companyId: company.id,
-            },
+            some: { companyId: company.id },
           },
         },
         include: {
           person: {
-            include: {
-              department: true,
-            },
+            include: { department: true },
           },
           companies: {
-            include: {
-              company: true,
-            },
+            include: { company: true },
           },
         },
       });
