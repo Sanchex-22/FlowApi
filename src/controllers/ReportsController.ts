@@ -19,10 +19,10 @@ export class ReportController {
       orderBy: { type: 'asc' },
       include: {
         company: { select: { name: true } },
-        assignedToUser: {
+        assignedToPerson: {
           select: {
-            username: true,
-            person: { select: { fullName: true } },
+            fullName: true,
+            department: { select: { name: true } },
           },
         },
       },
@@ -61,23 +61,19 @@ export class ReportController {
     return this.prisma.equipment.findMany({
       where: {
         companyId,
-        assignedToUserId: { not: null },
+        assignedToPersonId: { not: null },
       },
       orderBy: {
-        assignedToUser: {
-          person: {
-            department: { name: 'asc' },
-          },
+        assignedToPerson: {
+
+          department: { name: 'asc' },
         },
       },
       include: {
-        assignedToUser: {
+        assignedToPerson: {
           select: {
-            username: true,
-            email: true,
-            person: {
-              include: { department: true },
-            },
+            fullName: true,
+            department: { select: { name: true } },
           },
         },
       },
