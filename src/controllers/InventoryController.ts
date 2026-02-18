@@ -334,7 +334,7 @@ export class InventoryController {
             const inventory = await prisma.equipment.findMany({
                 where: { companyId: company.id },
                 include: {
-                    assignedToUser: true,
+                    assignedToPerson: true,
                     maintenances: true,
                     documents: true,
                 },
@@ -356,7 +356,7 @@ export class InventoryController {
             const inventory = await prisma.equipment.findMany({
                 include: {
                     company: true,
-                    assignedToUser: true,
+                    assignedToPerson: true,
                     maintenances: true,
                     documents: true,
                 },

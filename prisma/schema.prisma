@@ -47,7 +47,6 @@ model User {
   // companyId            String?
   companies            UserCompany[]
   createdCompanies     Company[]     @relation("CompanyCreatedBy")
-  assignedEquipments   Equipment[]
   assignedMaintenances Maintenance[]
   assignedNetworks     Network[]
   createdNetworks      Network[]     @relation("NetworkCreatedBy")
@@ -86,6 +85,7 @@ model Person {
   
   // ✅ NUEVO: Relación muchos a muchos con AnnualSoftwareExpense
   assignedExpenses AnnualSoftwareExpense[] @relation("ExpenseAssignedPersons")
+  assignedEquipments Equipment[]             @relation("EquipmentAssignedPerson")
 }
 
 model Company {
@@ -126,29 +126,29 @@ model Department {
 }
 
 model Equipment {
-  id               String          @id @default(uuid())
-  type             String
-  brand            String
-  model            String
-  serialNumber     String          @unique
-  plateNumber      String?         @unique
-  location         String?
-  status           EquipmentStatus @default(ACTIVE)
-  acquisitionDate  DateTime?
-  warrantyDetails  String?
-  qrCode           String?
-  invoiceUrl       String?
-  cost             Decimal?        @default(0.00)
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
-  companyId        String
-  assignedToUserId String?
-  endUser          String?
-  operatingSystem  String?
-  documents        Document[]      
-  assignedToUser   User?           @relation(fields: [assignedToUserId], references: [id], onDelete: SetNull)
-  company          Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  maintenances     Maintenance[]   
+  id                 String          @id @default(uuid())
+  type               String
+  brand              String
+  model              String
+  serialNumber       String          @unique
+  plateNumber        String?         @unique
+  location           String?
+  status             EquipmentStatus @default(ACTIVE)
+  acquisitionDate    DateTime?
+  warrantyDetails    String?
+  qrCode             String?
+  invoiceUrl         String?
+  cost               Decimal?        @default(0.00)
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  companyId          String
+  assignedToPersonId String?         // ✅ Cambiado de assignedToUserId
+  endUser            String?
+  operatingSystem    String?
+  documents          Document[]
+  assignedToPerson   Person?         @relation("EquipmentAssignedPerson", fields: [assignedToPersonId], references: [id], onDelete: SetNull) // ✅ Cambiado
+  company            Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  maintenances       Maintenance[]
 }
 
 model Maintenance {

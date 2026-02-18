@@ -3,9 +3,6 @@ import { subMonths, startOfMonth } from 'date-fns';
 import { prisma } from '../../lib/prisma.js';
 import { EquipmentStatus, MaintenanceStatus } from '../../generated/prisma/index.js';
 
-/**
- * Agrega los datos para el dashboard principal de una compañía.
- */
 export class DashboardController {
 
     async getDashboardData(req: Request, res: Response) {
@@ -16,29 +13,23 @@ export class DashboardController {
         }
 
         try {
-            // --- 1. Definición de Rangos de Fechas para comparativas ---
             const today = new Date();
             const startOfCurrentMonth = startOfMonth(today);
             const startOfPreviousMonth = startOfMonth(subMonths(today, 1));
 
-            // --- 2. Cálculos para las Tarjetas de KPIs ---
-
-            // Función auxiliar para calcular el cambio porcentual
             const calculatePercentageChange = (current: number, previous: number): number => {
-                if (previous === 0) {
-                    return current > 0 ? 100 : 0; // Evitar división por cero
-                }
+                if (previous === 0) return current > 0 ? 100 : 0;
                 const change = ((current - previous) / previous) * 100;
-                return parseFloat(change.toFixed(2)); // Redondear a 2 decimales
+                return parseFloat(change.toFixed(2));
             };
 
-            // Total de Equipos
+            // --- KPIs ---
+
             const totalEquipmentsCurrent = await prisma.equipment.count({ where: { companyId } });
             const totalEquipmentsPrevious = await prisma.equipment.count({
                 where: { companyId, createdAt: { lt: startOfCurrentMonth } },
             });
 
-            // Mantenimientos Pendientes (SCHEDULED o IN_PROGRESS)
             const pendingMaintenancesCurrent = await prisma.maintenance.count({
                 where: { companyId, status: { in: [MaintenanceStatus.SCHEDULED, MaintenanceStatus.IN_PROGRESS] } },
             });
@@ -50,7 +41,6 @@ export class DashboardController {
                 },
             });
 
-            // Equipos Activos
             const activeEquipmentsCurrent = await prisma.equipment.count({
                 where: { companyId, status: EquipmentStatus.ACTIVE },
             });
@@ -58,44 +48,34 @@ export class DashboardController {
                 where: { companyId, status: EquipmentStatus.ACTIVE, createdAt: { lt: startOfCurrentMonth } },
             });
 
-            // Usuarios Activos - Usando la relación many-to-many
             const activeUsersCurrent = await prisma.user.count({
                 where: {
-                    companies: {
-                        some: {
-                            companyId: companyId,
-                        },
-                    },
+                    companies: { some: { companyId } },
                     isActive: true,
                 },
             });
             const activeUsersPrevious = await prisma.user.count({
                 where: {
-                    companies: {
-                        some: {
-                            companyId: companyId,
-                        },
-                    },
+                    companies: { some: { companyId } },
                     isActive: true,
                     createdAt: { lt: startOfCurrentMonth },
                 },
             });
 
-            // --- 3. Datos para el Inventario por Categoría ---
+            // --- Inventario por Categoría ---
 
-            const laptopsCount = await prisma.equipment.count({ 
-                where: { companyId, type: { equals: 'Laptop', mode: 'insensitive' } } 
+            const laptopsCount = await prisma.equipment.count({
+                where: { companyId, type: { equals: 'Laptop', mode: 'insensitive' } }
             });
-            const desktopsCount = await prisma.equipment.count({ 
-                where: { companyId, type: { equals: 'Desktop', mode: 'insensitive' } } 
+            const desktopsCount = await prisma.equipment.count({
+                where: { companyId, type: { equals: 'Desktop', mode: 'insensitive' } }
             });
-            const mobilesCount = await prisma.equipment.count({ 
-                where: { companyId, type: { equals: 'Móvil', mode: 'insensitive' } } 
+            const mobilesCount = await prisma.equipment.count({
+                where: { companyId, type: { equals: 'Móvil', mode: 'insensitive' } }
             });
 
-            // --- 4. Datos para la Actividad Reciente ---
+            // --- Actividad Reciente ---
 
-            // Obtenemos los últimos 5 eventos de diferentes tipos
             const completedMaintenances = await prisma.maintenance.findMany({
                 where: { companyId, status: MaintenanceStatus.COMPLETED },
                 orderBy: { completionDate: 'desc' },
@@ -116,24 +96,20 @@ export class DashboardController {
                 include: { equipment: true },
             });
 
+            // ✅ Cambiado: assignedToPersonId y assignedToPerson en lugar de assignedToUserId/assignedToUser
             const assignedEquipments = await prisma.equipment.findMany({
-                where: { companyId, assignedToUserId: { not: null } },
+                where: { companyId, assignedToPersonId: { not: null } },
                 orderBy: { updatedAt: 'desc' },
                 take: 5,
                 include: {
-                    assignedToUser: {
+                    assignedToPerson: {
                         include: {
-                            person: {
-                                include: {
-                                    department: true
-                                }
-                            }
+                            department: true,
                         }
                     }
                 },
             });
 
-            // Mapeamos y combinamos todas las actividades en un solo array
             const recentActivity = [
                 ...completedMaintenances.map(m => ({
                     type: 'Mantenimiento completado',
@@ -153,9 +129,10 @@ export class DashboardController {
                     date: m.createdAt,
                     icon: 'warning',
                 })),
+                // ✅ Cambiado: assignedToPerson en lugar de assignedToUser.person
                 ...assignedEquipments.map(e => ({
-                    type: `${e.type} asignada a ${e.assignedToUser?.person?.fullName || 'usuario'}`,
-                    description: `Departamento: ${e.assignedToUser?.person?.department?.name || 'No especificado'}`,
+                    type: `${e.type} asignada a ${e.assignedToPerson?.fullName || 'persona'}`,
+                    description: `Departamento: ${e.assignedToPerson?.department?.name || 'No especificado'}`,
                     date: e.updatedAt,
                     icon: 'user',
                 }))
@@ -165,9 +142,9 @@ export class DashboardController {
                     const dateB = b.date ?? new Date(0);
                     return dateB.getTime() - dateA.getTime();
                 })
-                .slice(0, 5); // Tomamos los 5 más recientes en total
+                .slice(0, 5);
 
-            // --- 5. Ensamblar la Respuesta Final ---
+            // --- Respuesta Final ---
             const dashboardData = {
                 kpi: {
                     totalEquipments: {

@@ -2248,7 +2248,6 @@ export namespace Prisma {
   export type UserCountOutputType = {
     companies: number
     createdCompanies: number
-    assignedEquipments: number
     assignedMaintenances: number
     assignedNetworks: number
     createdNetworks: number
@@ -2259,7 +2258,6 @@ export namespace Prisma {
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     companies?: boolean | UserCountOutputTypeCountCompaniesArgs
     createdCompanies?: boolean | UserCountOutputTypeCountCreatedCompaniesArgs
-    assignedEquipments?: boolean | UserCountOutputTypeCountAssignedEquipmentsArgs
     assignedMaintenances?: boolean | UserCountOutputTypeCountAssignedMaintenancesArgs
     assignedNetworks?: boolean | UserCountOutputTypeCountAssignedNetworksArgs
     createdNetworks?: boolean | UserCountOutputTypeCountCreatedNetworksArgs
@@ -2290,13 +2288,6 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountCreatedCompaniesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CompanyWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountAssignedEquipmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: EquipmentWhereInput
   }
 
   /**
@@ -2341,10 +2332,12 @@ export namespace Prisma {
 
   export type PersonCountOutputType = {
     assignedExpenses: number
+    assignedEquipments: number
   }
 
   export type PersonCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     assignedExpenses?: boolean | PersonCountOutputTypeCountAssignedExpensesArgs
+    assignedEquipments?: boolean | PersonCountOutputTypeCountAssignedEquipmentsArgs
   }
 
   // Custom InputTypes
@@ -2363,6 +2356,13 @@ export namespace Prisma {
    */
   export type PersonCountOutputTypeCountAssignedExpensesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AnnualSoftwareExpenseWhereInput
+  }
+
+  /**
+   * PersonCountOutputType without action
+   */
+  export type PersonCountOutputTypeCountAssignedEquipmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EquipmentWhereInput
   }
 
 
@@ -4164,7 +4164,6 @@ export namespace Prisma {
     updatedAt?: boolean
     companies?: boolean | User$companiesArgs<ExtArgs>
     createdCompanies?: boolean | User$createdCompaniesArgs<ExtArgs>
-    assignedEquipments?: boolean | User$assignedEquipmentsArgs<ExtArgs>
     assignedMaintenances?: boolean | User$assignedMaintenancesArgs<ExtArgs>
     assignedNetworks?: boolean | User$assignedNetworksArgs<ExtArgs>
     createdNetworks?: boolean | User$createdNetworksArgs<ExtArgs>
@@ -4211,7 +4210,6 @@ export namespace Prisma {
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     companies?: boolean | User$companiesArgs<ExtArgs>
     createdCompanies?: boolean | User$createdCompaniesArgs<ExtArgs>
-    assignedEquipments?: boolean | User$assignedEquipmentsArgs<ExtArgs>
     assignedMaintenances?: boolean | User$assignedMaintenancesArgs<ExtArgs>
     assignedNetworks?: boolean | User$assignedNetworksArgs<ExtArgs>
     createdNetworks?: boolean | User$createdNetworksArgs<ExtArgs>
@@ -4228,7 +4226,6 @@ export namespace Prisma {
     objects: {
       companies: Prisma.$UserCompanyPayload<ExtArgs>[]
       createdCompanies: Prisma.$CompanyPayload<ExtArgs>[]
-      assignedEquipments: Prisma.$EquipmentPayload<ExtArgs>[]
       assignedMaintenances: Prisma.$MaintenancePayload<ExtArgs>[]
       assignedNetworks: Prisma.$NetworkPayload<ExtArgs>[]
       createdNetworks: Prisma.$NetworkPayload<ExtArgs>[]
@@ -4641,7 +4638,6 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     companies<T extends User$companiesArgs<ExtArgs> = {}>(args?: Subset<T, User$companiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserCompanyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     createdCompanies<T extends User$createdCompaniesArgs<ExtArgs> = {}>(args?: Subset<T, User$createdCompaniesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    assignedEquipments<T extends User$assignedEquipmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$assignedEquipmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EquipmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     assignedMaintenances<T extends User$assignedMaintenancesArgs<ExtArgs> = {}>(args?: Subset<T, User$assignedMaintenancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaintenancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     assignedNetworks<T extends User$assignedNetworksArgs<ExtArgs> = {}>(args?: Subset<T, User$assignedNetworksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NetworkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     createdNetworks<T extends User$createdNetworksArgs<ExtArgs> = {}>(args?: Subset<T, User$createdNetworksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NetworkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -5118,30 +5114,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CompanyScalarFieldEnum | CompanyScalarFieldEnum[]
-  }
-
-  /**
-   * User.assignedEquipments
-   */
-  export type User$assignedEquipmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Equipment
-     */
-    select?: EquipmentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Equipment
-     */
-    omit?: EquipmentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: EquipmentInclude<ExtArgs> | null
-    where?: EquipmentWhereInput
-    orderBy?: EquipmentOrderByWithRelationInput | EquipmentOrderByWithRelationInput[]
-    cursor?: EquipmentWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: EquipmentScalarFieldEnum | EquipmentScalarFieldEnum[]
   }
 
   /**
@@ -6568,6 +6540,7 @@ export namespace Prisma {
     department?: boolean | Person$departmentArgs<ExtArgs>
     user?: boolean | Person$userArgs<ExtArgs>
     assignedExpenses?: boolean | Person$assignedExpensesArgs<ExtArgs>
+    assignedEquipments?: boolean | Person$assignedEquipmentsArgs<ExtArgs>
     _count?: boolean | PersonCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["person"]>
 
@@ -6631,6 +6604,7 @@ export namespace Prisma {
     department?: boolean | Person$departmentArgs<ExtArgs>
     user?: boolean | Person$userArgs<ExtArgs>
     assignedExpenses?: boolean | Person$assignedExpensesArgs<ExtArgs>
+    assignedEquipments?: boolean | Person$assignedEquipmentsArgs<ExtArgs>
     _count?: boolean | PersonCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PersonIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6648,6 +6622,7 @@ export namespace Prisma {
       department: Prisma.$DepartmentPayload<ExtArgs> | null
       user: Prisma.$UserPayload<ExtArgs> | null
       assignedExpenses: Prisma.$AnnualSoftwareExpensePayload<ExtArgs>[]
+      assignedEquipments: Prisma.$EquipmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7061,6 +7036,7 @@ export namespace Prisma {
     department<T extends Person$departmentArgs<ExtArgs> = {}>(args?: Subset<T, Person$departmentArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     user<T extends Person$userArgs<ExtArgs> = {}>(args?: Subset<T, Person$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     assignedExpenses<T extends Person$assignedExpensesArgs<ExtArgs> = {}>(args?: Subset<T, Person$assignedExpensesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnnualSoftwareExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    assignedEquipments<T extends Person$assignedEquipmentsArgs<ExtArgs> = {}>(args?: Subset<T, Person$assignedEquipmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EquipmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7559,6 +7535,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AnnualSoftwareExpenseScalarFieldEnum | AnnualSoftwareExpenseScalarFieldEnum[]
+  }
+
+  /**
+   * Person.assignedEquipments
+   */
+  export type Person$assignedEquipmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Equipment
+     */
+    select?: EquipmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Equipment
+     */
+    omit?: EquipmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EquipmentInclude<ExtArgs> | null
+    where?: EquipmentWhereInput
+    orderBy?: EquipmentOrderByWithRelationInput | EquipmentOrderByWithRelationInput[]
+    cursor?: EquipmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EquipmentScalarFieldEnum | EquipmentScalarFieldEnum[]
   }
 
   /**
@@ -10153,7 +10153,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     companyId: string | null
-    assignedToUserId: string | null
+    assignedToPersonId: string | null
     endUser: string | null
     operatingSystem: string | null
   }
@@ -10175,7 +10175,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     companyId: string | null
-    assignedToUserId: string | null
+    assignedToPersonId: string | null
     endUser: string | null
     operatingSystem: string | null
   }
@@ -10197,7 +10197,7 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     companyId: number
-    assignedToUserId: number
+    assignedToPersonId: number
     endUser: number
     operatingSystem: number
     _all: number
@@ -10229,7 +10229,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     companyId?: true
-    assignedToUserId?: true
+    assignedToPersonId?: true
     endUser?: true
     operatingSystem?: true
   }
@@ -10251,7 +10251,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     companyId?: true
-    assignedToUserId?: true
+    assignedToPersonId?: true
     endUser?: true
     operatingSystem?: true
   }
@@ -10273,7 +10273,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     companyId?: true
-    assignedToUserId?: true
+    assignedToPersonId?: true
     endUser?: true
     operatingSystem?: true
     _all?: true
@@ -10382,7 +10382,7 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     companyId: string
-    assignedToUserId: string | null
+    assignedToPersonId: string | null
     endUser: string | null
     operatingSystem: string | null
     _count: EquipmentCountAggregateOutputType | null
@@ -10423,11 +10423,11 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     companyId?: boolean
-    assignedToUserId?: boolean
+    assignedToPersonId?: boolean
     endUser?: boolean
     operatingSystem?: boolean
     documents?: boolean | Equipment$documentsArgs<ExtArgs>
-    assignedToUser?: boolean | Equipment$assignedToUserArgs<ExtArgs>
+    assignedToPerson?: boolean | Equipment$assignedToPersonArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     maintenances?: boolean | Equipment$maintenancesArgs<ExtArgs>
     _count?: boolean | EquipmentCountOutputTypeDefaultArgs<ExtArgs>
@@ -10450,10 +10450,10 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     companyId?: boolean
-    assignedToUserId?: boolean
+    assignedToPersonId?: boolean
     endUser?: boolean
     operatingSystem?: boolean
-    assignedToUser?: boolean | Equipment$assignedToUserArgs<ExtArgs>
+    assignedToPerson?: boolean | Equipment$assignedToPersonArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["equipment"]>
 
@@ -10474,10 +10474,10 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     companyId?: boolean
-    assignedToUserId?: boolean
+    assignedToPersonId?: boolean
     endUser?: boolean
     operatingSystem?: boolean
-    assignedToUser?: boolean | Equipment$assignedToUserArgs<ExtArgs>
+    assignedToPerson?: boolean | Equipment$assignedToPersonArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["equipment"]>
 
@@ -10498,25 +10498,25 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     companyId?: boolean
-    assignedToUserId?: boolean
+    assignedToPersonId?: boolean
     endUser?: boolean
     operatingSystem?: boolean
   }
 
-  export type EquipmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "brand" | "model" | "serialNumber" | "plateNumber" | "location" | "status" | "acquisitionDate" | "warrantyDetails" | "qrCode" | "invoiceUrl" | "cost" | "createdAt" | "updatedAt" | "companyId" | "assignedToUserId" | "endUser" | "operatingSystem", ExtArgs["result"]["equipment"]>
+  export type EquipmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "brand" | "model" | "serialNumber" | "plateNumber" | "location" | "status" | "acquisitionDate" | "warrantyDetails" | "qrCode" | "invoiceUrl" | "cost" | "createdAt" | "updatedAt" | "companyId" | "assignedToPersonId" | "endUser" | "operatingSystem", ExtArgs["result"]["equipment"]>
   export type EquipmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     documents?: boolean | Equipment$documentsArgs<ExtArgs>
-    assignedToUser?: boolean | Equipment$assignedToUserArgs<ExtArgs>
+    assignedToPerson?: boolean | Equipment$assignedToPersonArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     maintenances?: boolean | Equipment$maintenancesArgs<ExtArgs>
     _count?: boolean | EquipmentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EquipmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    assignedToUser?: boolean | Equipment$assignedToUserArgs<ExtArgs>
+    assignedToPerson?: boolean | Equipment$assignedToPersonArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
   }
   export type EquipmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    assignedToUser?: boolean | Equipment$assignedToUserArgs<ExtArgs>
+    assignedToPerson?: boolean | Equipment$assignedToPersonArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
   }
 
@@ -10524,7 +10524,7 @@ export namespace Prisma {
     name: "Equipment"
     objects: {
       documents: Prisma.$DocumentPayload<ExtArgs>[]
-      assignedToUser: Prisma.$UserPayload<ExtArgs> | null
+      assignedToPerson: Prisma.$PersonPayload<ExtArgs> | null
       company: Prisma.$CompanyPayload<ExtArgs>
       maintenances: Prisma.$MaintenancePayload<ExtArgs>[]
     }
@@ -10545,7 +10545,7 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       companyId: string
-      assignedToUserId: string | null
+      assignedToPersonId: string | null
       endUser: string | null
       operatingSystem: string | null
     }, ExtArgs["result"]["equipment"]>
@@ -10943,7 +10943,7 @@ export namespace Prisma {
   export interface Prisma__EquipmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     documents<T extends Equipment$documentsArgs<ExtArgs> = {}>(args?: Subset<T, Equipment$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    assignedToUser<T extends Equipment$assignedToUserArgs<ExtArgs> = {}>(args?: Subset<T, Equipment$assignedToUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    assignedToPerson<T extends Equipment$assignedToPersonArgs<ExtArgs> = {}>(args?: Subset<T, Equipment$assignedToPersonArgs<ExtArgs>>): Prisma__PersonClient<$Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     company<T extends CompanyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CompanyDefaultArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     maintenances<T extends Equipment$maintenancesArgs<ExtArgs> = {}>(args?: Subset<T, Equipment$maintenancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaintenancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -10991,7 +10991,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Equipment", 'DateTime'>
     readonly updatedAt: FieldRef<"Equipment", 'DateTime'>
     readonly companyId: FieldRef<"Equipment", 'String'>
-    readonly assignedToUserId: FieldRef<"Equipment", 'String'>
+    readonly assignedToPersonId: FieldRef<"Equipment", 'String'>
     readonly endUser: FieldRef<"Equipment", 'String'>
     readonly operatingSystem: FieldRef<"Equipment", 'String'>
   }
@@ -11414,22 +11414,22 @@ export namespace Prisma {
   }
 
   /**
-   * Equipment.assignedToUser
+   * Equipment.assignedToPerson
    */
-  export type Equipment$assignedToUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Equipment$assignedToPersonArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the User
+     * Select specific fields to fetch from the Person
      */
-    select?: UserSelect<ExtArgs> | null
+    select?: PersonSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the User
+     * Omit specific fields from the Person
      */
-    omit?: UserOmit<ExtArgs> | null
+    omit?: PersonOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
+    include?: PersonInclude<ExtArgs> | null
+    where?: PersonWhereInput
   }
 
   /**
@@ -19867,7 +19867,7 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     companyId: 'companyId',
-    assignedToUserId: 'assignedToUserId',
+    assignedToPersonId: 'assignedToPersonId',
     endUser: 'endUser',
     operatingSystem: 'operatingSystem'
   };
@@ -20429,7 +20429,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
     companies?: UserCompanyListRelationFilter
     createdCompanies?: CompanyListRelationFilter
-    assignedEquipments?: EquipmentListRelationFilter
     assignedMaintenances?: MaintenanceListRelationFilter
     assignedNetworks?: NetworkListRelationFilter
     createdNetworks?: NetworkListRelationFilter
@@ -20449,7 +20448,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
     companies?: UserCompanyOrderByRelationAggregateInput
     createdCompanies?: CompanyOrderByRelationAggregateInput
-    assignedEquipments?: EquipmentOrderByRelationAggregateInput
     assignedMaintenances?: MaintenanceOrderByRelationAggregateInput
     assignedNetworks?: NetworkOrderByRelationAggregateInput
     createdNetworks?: NetworkOrderByRelationAggregateInput
@@ -20472,7 +20470,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
     companies?: UserCompanyListRelationFilter
     createdCompanies?: CompanyListRelationFilter
-    assignedEquipments?: EquipmentListRelationFilter
     assignedMaintenances?: MaintenanceListRelationFilter
     assignedNetworks?: NetworkListRelationFilter
     createdNetworks?: NetworkListRelationFilter
@@ -20574,6 +20571,7 @@ export namespace Prisma {
     department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     assignedExpenses?: AnnualSoftwareExpenseListRelationFilter
+    assignedEquipments?: EquipmentListRelationFilter
   }
 
   export type PersonOrderByWithRelationInput = {
@@ -20594,6 +20592,7 @@ export namespace Prisma {
     department?: DepartmentOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
     assignedExpenses?: AnnualSoftwareExpenseOrderByRelationAggregateInput
+    assignedEquipments?: EquipmentOrderByRelationAggregateInput
   }
 
   export type PersonWhereUniqueInput = Prisma.AtLeast<{
@@ -20617,6 +20616,7 @@ export namespace Prisma {
     department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     assignedExpenses?: AnnualSoftwareExpenseListRelationFilter
+    assignedEquipments?: EquipmentListRelationFilter
   }, "id" | "userId" | "userCode">
 
   export type PersonOrderByWithAggregationInput = {
@@ -20864,11 +20864,11 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Equipment"> | Date | string
     updatedAt?: DateTimeFilter<"Equipment"> | Date | string
     companyId?: StringFilter<"Equipment"> | string
-    assignedToUserId?: StringNullableFilter<"Equipment"> | string | null
+    assignedToPersonId?: StringNullableFilter<"Equipment"> | string | null
     endUser?: StringNullableFilter<"Equipment"> | string | null
     operatingSystem?: StringNullableFilter<"Equipment"> | string | null
     documents?: DocumentListRelationFilter
-    assignedToUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    assignedToPerson?: XOR<PersonNullableScalarRelationFilter, PersonWhereInput> | null
     company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
     maintenances?: MaintenanceListRelationFilter
   }
@@ -20890,11 +20890,11 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     companyId?: SortOrder
-    assignedToUserId?: SortOrderInput | SortOrder
+    assignedToPersonId?: SortOrderInput | SortOrder
     endUser?: SortOrderInput | SortOrder
     operatingSystem?: SortOrderInput | SortOrder
     documents?: DocumentOrderByRelationAggregateInput
-    assignedToUser?: UserOrderByWithRelationInput
+    assignedToPerson?: PersonOrderByWithRelationInput
     company?: CompanyOrderByWithRelationInput
     maintenances?: MaintenanceOrderByRelationAggregateInput
   }
@@ -20919,11 +20919,11 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Equipment"> | Date | string
     updatedAt?: DateTimeFilter<"Equipment"> | Date | string
     companyId?: StringFilter<"Equipment"> | string
-    assignedToUserId?: StringNullableFilter<"Equipment"> | string | null
+    assignedToPersonId?: StringNullableFilter<"Equipment"> | string | null
     endUser?: StringNullableFilter<"Equipment"> | string | null
     operatingSystem?: StringNullableFilter<"Equipment"> | string | null
     documents?: DocumentListRelationFilter
-    assignedToUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    assignedToPerson?: XOR<PersonNullableScalarRelationFilter, PersonWhereInput> | null
     company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
     maintenances?: MaintenanceListRelationFilter
   }, "id" | "serialNumber" | "plateNumber">
@@ -20945,7 +20945,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     companyId?: SortOrder
-    assignedToUserId?: SortOrderInput | SortOrder
+    assignedToPersonId?: SortOrderInput | SortOrder
     endUser?: SortOrderInput | SortOrder
     operatingSystem?: SortOrderInput | SortOrder
     _count?: EquipmentCountOrderByAggregateInput
@@ -20975,7 +20975,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Equipment"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Equipment"> | Date | string
     companyId?: StringWithAggregatesFilter<"Equipment"> | string
-    assignedToUserId?: StringNullableWithAggregatesFilter<"Equipment"> | string | null
+    assignedToPersonId?: StringNullableWithAggregatesFilter<"Equipment"> | string | null
     endUser?: StringNullableWithAggregatesFilter<"Equipment"> | string | null
     operatingSystem?: StringNullableWithAggregatesFilter<"Equipment"> | string | null
   }
@@ -21799,7 +21799,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     companies?: UserCompanyCreateNestedManyWithoutUserInput
     createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
-    assignedEquipments?: EquipmentCreateNestedManyWithoutAssignedToUserInput
     assignedMaintenances?: MaintenanceCreateNestedManyWithoutAssignedToUserInput
     assignedNetworks?: NetworkCreateNestedManyWithoutAssignedToUserInput
     createdNetworks?: NetworkCreateNestedManyWithoutCreatedByInput
@@ -21819,7 +21818,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     companies?: UserCompanyUncheckedCreateNestedManyWithoutUserInput
     createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
-    assignedEquipments?: EquipmentUncheckedCreateNestedManyWithoutAssignedToUserInput
     assignedMaintenances?: MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput
     assignedNetworks?: NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput
     createdNetworks?: NetworkUncheckedCreateNestedManyWithoutCreatedByInput
@@ -21839,7 +21837,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companies?: UserCompanyUpdateManyWithoutUserNestedInput
     createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
-    assignedEquipments?: EquipmentUpdateManyWithoutAssignedToUserNestedInput
     assignedMaintenances?: MaintenanceUpdateManyWithoutAssignedToUserNestedInput
     assignedNetworks?: NetworkUpdateManyWithoutAssignedToUserNestedInput
     createdNetworks?: NetworkUpdateManyWithoutCreatedByNestedInput
@@ -21859,7 +21856,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companies?: UserCompanyUncheckedUpdateManyWithoutUserNestedInput
     createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
-    assignedEquipments?: EquipmentUncheckedUpdateManyWithoutAssignedToUserNestedInput
     assignedMaintenances?: MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput
     assignedNetworks?: NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput
     createdNetworks?: NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -21951,6 +21947,7 @@ export namespace Prisma {
     department?: DepartmentCreateNestedOneWithoutPersonsInput
     user?: UserCreateNestedOneWithoutPersonInput
     assignedExpenses?: AnnualSoftwareExpenseCreateNestedManyWithoutAssignedPersonsInput
+    assignedEquipments?: EquipmentCreateNestedManyWithoutAssignedToPersonInput
   }
 
   export type PersonUncheckedCreateInput = {
@@ -21969,6 +21966,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     companyId?: string | null
     assignedExpenses?: AnnualSoftwareExpenseUncheckedCreateNestedManyWithoutAssignedPersonsInput
+    assignedEquipments?: EquipmentUncheckedCreateNestedManyWithoutAssignedToPersonInput
   }
 
   export type PersonUpdateInput = {
@@ -21987,6 +21985,7 @@ export namespace Prisma {
     department?: DepartmentUpdateOneWithoutPersonsNestedInput
     user?: UserUpdateOneWithoutPersonNestedInput
     assignedExpenses?: AnnualSoftwareExpenseUpdateManyWithoutAssignedPersonsNestedInput
+    assignedEquipments?: EquipmentUpdateManyWithoutAssignedToPersonNestedInput
   }
 
   export type PersonUncheckedUpdateInput = {
@@ -22005,6 +22004,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     assignedExpenses?: AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedPersonsNestedInput
+    assignedEquipments?: EquipmentUncheckedUpdateManyWithoutAssignedToPersonNestedInput
   }
 
   export type PersonCreateManyInput = {
@@ -22288,7 +22288,7 @@ export namespace Prisma {
     endUser?: string | null
     operatingSystem?: string | null
     documents?: DocumentCreateNestedManyWithoutEquipmentInput
-    assignedToUser?: UserCreateNestedOneWithoutAssignedEquipmentsInput
+    assignedToPerson?: PersonCreateNestedOneWithoutAssignedEquipmentsInput
     company: CompanyCreateNestedOneWithoutEquipmentsInput
     maintenances?: MaintenanceCreateNestedManyWithoutEquipmentInput
   }
@@ -22310,7 +22310,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     companyId: string
-    assignedToUserId?: string | null
+    assignedToPersonId?: string | null
     endUser?: string | null
     operatingSystem?: string | null
     documents?: DocumentUncheckedCreateNestedManyWithoutEquipmentInput
@@ -22336,7 +22336,7 @@ export namespace Prisma {
     endUser?: NullableStringFieldUpdateOperationsInput | string | null
     operatingSystem?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: DocumentUpdateManyWithoutEquipmentNestedInput
-    assignedToUser?: UserUpdateOneWithoutAssignedEquipmentsNestedInput
+    assignedToPerson?: PersonUpdateOneWithoutAssignedEquipmentsNestedInput
     company?: CompanyUpdateOneRequiredWithoutEquipmentsNestedInput
     maintenances?: MaintenanceUpdateManyWithoutEquipmentNestedInput
   }
@@ -22358,7 +22358,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: StringFieldUpdateOperationsInput | string
-    assignedToUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedToPersonId?: NullableStringFieldUpdateOperationsInput | string | null
     endUser?: NullableStringFieldUpdateOperationsInput | string | null
     operatingSystem?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: DocumentUncheckedUpdateManyWithoutEquipmentNestedInput
@@ -22382,7 +22382,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     companyId: string
-    assignedToUserId?: string | null
+    assignedToPersonId?: string | null
     endUser?: string | null
     operatingSystem?: string | null
   }
@@ -22424,7 +22424,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: StringFieldUpdateOperationsInput | string
-    assignedToUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedToPersonId?: NullableStringFieldUpdateOperationsInput | string | null
     endUser?: NullableStringFieldUpdateOperationsInput | string | null
     operatingSystem?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -23481,12 +23481,6 @@ export namespace Prisma {
     none?: CompanyWhereInput
   }
 
-  export type EquipmentListRelationFilter = {
-    every?: EquipmentWhereInput
-    some?: EquipmentWhereInput
-    none?: EquipmentWhereInput
-  }
-
   export type MaintenanceListRelationFilter = {
     every?: MaintenanceWhereInput
     some?: MaintenanceWhereInput
@@ -23515,10 +23509,6 @@ export namespace Prisma {
   }
 
   export type CompanyOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type EquipmentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -23633,7 +23623,17 @@ export namespace Prisma {
     none?: AnnualSoftwareExpenseWhereInput
   }
 
+  export type EquipmentListRelationFilter = {
+    every?: EquipmentWhereInput
+    some?: EquipmentWhereInput
+    none?: EquipmentWhereInput
+  }
+
   export type AnnualSoftwareExpenseOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EquipmentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -23858,7 +23858,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     companyId?: SortOrder
-    assignedToUserId?: SortOrder
+    assignedToPersonId?: SortOrder
     endUser?: SortOrder
     operatingSystem?: SortOrder
   }
@@ -23884,7 +23884,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     companyId?: SortOrder
-    assignedToUserId?: SortOrder
+    assignedToPersonId?: SortOrder
     endUser?: SortOrder
     operatingSystem?: SortOrder
   }
@@ -23906,7 +23906,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     companyId?: SortOrder
-    assignedToUserId?: SortOrder
+    assignedToPersonId?: SortOrder
     endUser?: SortOrder
     operatingSystem?: SortOrder
   }
@@ -24559,13 +24559,6 @@ export namespace Prisma {
     connect?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
   }
 
-  export type EquipmentCreateNestedManyWithoutAssignedToUserInput = {
-    create?: XOR<EquipmentCreateWithoutAssignedToUserInput, EquipmentUncheckedCreateWithoutAssignedToUserInput> | EquipmentCreateWithoutAssignedToUserInput[] | EquipmentUncheckedCreateWithoutAssignedToUserInput[]
-    connectOrCreate?: EquipmentCreateOrConnectWithoutAssignedToUserInput | EquipmentCreateOrConnectWithoutAssignedToUserInput[]
-    createMany?: EquipmentCreateManyAssignedToUserInputEnvelope
-    connect?: EquipmentWhereUniqueInput | EquipmentWhereUniqueInput[]
-  }
-
   export type MaintenanceCreateNestedManyWithoutAssignedToUserInput = {
     create?: XOR<MaintenanceCreateWithoutAssignedToUserInput, MaintenanceUncheckedCreateWithoutAssignedToUserInput> | MaintenanceCreateWithoutAssignedToUserInput[] | MaintenanceUncheckedCreateWithoutAssignedToUserInput[]
     connectOrCreate?: MaintenanceCreateOrConnectWithoutAssignedToUserInput | MaintenanceCreateOrConnectWithoutAssignedToUserInput[]
@@ -24619,13 +24612,6 @@ export namespace Prisma {
     connectOrCreate?: CompanyCreateOrConnectWithoutCreatedByInput | CompanyCreateOrConnectWithoutCreatedByInput[]
     createMany?: CompanyCreateManyCreatedByInputEnvelope
     connect?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
-  }
-
-  export type EquipmentUncheckedCreateNestedManyWithoutAssignedToUserInput = {
-    create?: XOR<EquipmentCreateWithoutAssignedToUserInput, EquipmentUncheckedCreateWithoutAssignedToUserInput> | EquipmentCreateWithoutAssignedToUserInput[] | EquipmentUncheckedCreateWithoutAssignedToUserInput[]
-    connectOrCreate?: EquipmentCreateOrConnectWithoutAssignedToUserInput | EquipmentCreateOrConnectWithoutAssignedToUserInput[]
-    createMany?: EquipmentCreateManyAssignedToUserInputEnvelope
-    connect?: EquipmentWhereUniqueInput | EquipmentWhereUniqueInput[]
   }
 
   export type MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput = {
@@ -24703,20 +24689,6 @@ export namespace Prisma {
     update?: CompanyUpdateWithWhereUniqueWithoutCreatedByInput | CompanyUpdateWithWhereUniqueWithoutCreatedByInput[]
     updateMany?: CompanyUpdateManyWithWhereWithoutCreatedByInput | CompanyUpdateManyWithWhereWithoutCreatedByInput[]
     deleteMany?: CompanyScalarWhereInput | CompanyScalarWhereInput[]
-  }
-
-  export type EquipmentUpdateManyWithoutAssignedToUserNestedInput = {
-    create?: XOR<EquipmentCreateWithoutAssignedToUserInput, EquipmentUncheckedCreateWithoutAssignedToUserInput> | EquipmentCreateWithoutAssignedToUserInput[] | EquipmentUncheckedCreateWithoutAssignedToUserInput[]
-    connectOrCreate?: EquipmentCreateOrConnectWithoutAssignedToUserInput | EquipmentCreateOrConnectWithoutAssignedToUserInput[]
-    upsert?: EquipmentUpsertWithWhereUniqueWithoutAssignedToUserInput | EquipmentUpsertWithWhereUniqueWithoutAssignedToUserInput[]
-    createMany?: EquipmentCreateManyAssignedToUserInputEnvelope
-    set?: EquipmentWhereUniqueInput | EquipmentWhereUniqueInput[]
-    disconnect?: EquipmentWhereUniqueInput | EquipmentWhereUniqueInput[]
-    delete?: EquipmentWhereUniqueInput | EquipmentWhereUniqueInput[]
-    connect?: EquipmentWhereUniqueInput | EquipmentWhereUniqueInput[]
-    update?: EquipmentUpdateWithWhereUniqueWithoutAssignedToUserInput | EquipmentUpdateWithWhereUniqueWithoutAssignedToUserInput[]
-    updateMany?: EquipmentUpdateManyWithWhereWithoutAssignedToUserInput | EquipmentUpdateManyWithWhereWithoutAssignedToUserInput[]
-    deleteMany?: EquipmentScalarWhereInput | EquipmentScalarWhereInput[]
   }
 
   export type MaintenanceUpdateManyWithoutAssignedToUserNestedInput = {
@@ -24825,20 +24797,6 @@ export namespace Prisma {
     update?: CompanyUpdateWithWhereUniqueWithoutCreatedByInput | CompanyUpdateWithWhereUniqueWithoutCreatedByInput[]
     updateMany?: CompanyUpdateManyWithWhereWithoutCreatedByInput | CompanyUpdateManyWithWhereWithoutCreatedByInput[]
     deleteMany?: CompanyScalarWhereInput | CompanyScalarWhereInput[]
-  }
-
-  export type EquipmentUncheckedUpdateManyWithoutAssignedToUserNestedInput = {
-    create?: XOR<EquipmentCreateWithoutAssignedToUserInput, EquipmentUncheckedCreateWithoutAssignedToUserInput> | EquipmentCreateWithoutAssignedToUserInput[] | EquipmentUncheckedCreateWithoutAssignedToUserInput[]
-    connectOrCreate?: EquipmentCreateOrConnectWithoutAssignedToUserInput | EquipmentCreateOrConnectWithoutAssignedToUserInput[]
-    upsert?: EquipmentUpsertWithWhereUniqueWithoutAssignedToUserInput | EquipmentUpsertWithWhereUniqueWithoutAssignedToUserInput[]
-    createMany?: EquipmentCreateManyAssignedToUserInputEnvelope
-    set?: EquipmentWhereUniqueInput | EquipmentWhereUniqueInput[]
-    disconnect?: EquipmentWhereUniqueInput | EquipmentWhereUniqueInput[]
-    delete?: EquipmentWhereUniqueInput | EquipmentWhereUniqueInput[]
-    connect?: EquipmentWhereUniqueInput | EquipmentWhereUniqueInput[]
-    update?: EquipmentUpdateWithWhereUniqueWithoutAssignedToUserInput | EquipmentUpdateWithWhereUniqueWithoutAssignedToUserInput[]
-    updateMany?: EquipmentUpdateManyWithWhereWithoutAssignedToUserInput | EquipmentUpdateManyWithWhereWithoutAssignedToUserInput[]
-    deleteMany?: EquipmentScalarWhereInput | EquipmentScalarWhereInput[]
   }
 
   export type MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput = {
@@ -24967,10 +24925,24 @@ export namespace Prisma {
     connect?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
   }
 
+  export type EquipmentCreateNestedManyWithoutAssignedToPersonInput = {
+    create?: XOR<EquipmentCreateWithoutAssignedToPersonInput, EquipmentUncheckedCreateWithoutAssignedToPersonInput> | EquipmentCreateWithoutAssignedToPersonInput[] | EquipmentUncheckedCreateWithoutAssignedToPersonInput[]
+    connectOrCreate?: EquipmentCreateOrConnectWithoutAssignedToPersonInput | EquipmentCreateOrConnectWithoutAssignedToPersonInput[]
+    createMany?: EquipmentCreateManyAssignedToPersonInputEnvelope
+    connect?: EquipmentWhereUniqueInput | EquipmentWhereUniqueInput[]
+  }
+
   export type AnnualSoftwareExpenseUncheckedCreateNestedManyWithoutAssignedPersonsInput = {
     create?: XOR<AnnualSoftwareExpenseCreateWithoutAssignedPersonsInput, AnnualSoftwareExpenseUncheckedCreateWithoutAssignedPersonsInput> | AnnualSoftwareExpenseCreateWithoutAssignedPersonsInput[] | AnnualSoftwareExpenseUncheckedCreateWithoutAssignedPersonsInput[]
     connectOrCreate?: AnnualSoftwareExpenseCreateOrConnectWithoutAssignedPersonsInput | AnnualSoftwareExpenseCreateOrConnectWithoutAssignedPersonsInput[]
     connect?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
+  }
+
+  export type EquipmentUncheckedCreateNestedManyWithoutAssignedToPersonInput = {
+    create?: XOR<EquipmentCreateWithoutAssignedToPersonInput, EquipmentUncheckedCreateWithoutAssignedToPersonInput> | EquipmentCreateWithoutAssignedToPersonInput[] | EquipmentUncheckedCreateWithoutAssignedToPersonInput[]
+    connectOrCreate?: EquipmentCreateOrConnectWithoutAssignedToPersonInput | EquipmentCreateOrConnectWithoutAssignedToPersonInput[]
+    createMany?: EquipmentCreateManyAssignedToPersonInputEnvelope
+    connect?: EquipmentWhereUniqueInput | EquipmentWhereUniqueInput[]
   }
 
   export type EnumPersonStatusFieldUpdateOperationsInput = {
@@ -25010,6 +24982,20 @@ export namespace Prisma {
     deleteMany?: AnnualSoftwareExpenseScalarWhereInput | AnnualSoftwareExpenseScalarWhereInput[]
   }
 
+  export type EquipmentUpdateManyWithoutAssignedToPersonNestedInput = {
+    create?: XOR<EquipmentCreateWithoutAssignedToPersonInput, EquipmentUncheckedCreateWithoutAssignedToPersonInput> | EquipmentCreateWithoutAssignedToPersonInput[] | EquipmentUncheckedCreateWithoutAssignedToPersonInput[]
+    connectOrCreate?: EquipmentCreateOrConnectWithoutAssignedToPersonInput | EquipmentCreateOrConnectWithoutAssignedToPersonInput[]
+    upsert?: EquipmentUpsertWithWhereUniqueWithoutAssignedToPersonInput | EquipmentUpsertWithWhereUniqueWithoutAssignedToPersonInput[]
+    createMany?: EquipmentCreateManyAssignedToPersonInputEnvelope
+    set?: EquipmentWhereUniqueInput | EquipmentWhereUniqueInput[]
+    disconnect?: EquipmentWhereUniqueInput | EquipmentWhereUniqueInput[]
+    delete?: EquipmentWhereUniqueInput | EquipmentWhereUniqueInput[]
+    connect?: EquipmentWhereUniqueInput | EquipmentWhereUniqueInput[]
+    update?: EquipmentUpdateWithWhereUniqueWithoutAssignedToPersonInput | EquipmentUpdateWithWhereUniqueWithoutAssignedToPersonInput[]
+    updateMany?: EquipmentUpdateManyWithWhereWithoutAssignedToPersonInput | EquipmentUpdateManyWithWhereWithoutAssignedToPersonInput[]
+    deleteMany?: EquipmentScalarWhereInput | EquipmentScalarWhereInput[]
+  }
+
   export type AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedPersonsNestedInput = {
     create?: XOR<AnnualSoftwareExpenseCreateWithoutAssignedPersonsInput, AnnualSoftwareExpenseUncheckedCreateWithoutAssignedPersonsInput> | AnnualSoftwareExpenseCreateWithoutAssignedPersonsInput[] | AnnualSoftwareExpenseUncheckedCreateWithoutAssignedPersonsInput[]
     connectOrCreate?: AnnualSoftwareExpenseCreateOrConnectWithoutAssignedPersonsInput | AnnualSoftwareExpenseCreateOrConnectWithoutAssignedPersonsInput[]
@@ -25021,6 +25007,20 @@ export namespace Prisma {
     update?: AnnualSoftwareExpenseUpdateWithWhereUniqueWithoutAssignedPersonsInput | AnnualSoftwareExpenseUpdateWithWhereUniqueWithoutAssignedPersonsInput[]
     updateMany?: AnnualSoftwareExpenseUpdateManyWithWhereWithoutAssignedPersonsInput | AnnualSoftwareExpenseUpdateManyWithWhereWithoutAssignedPersonsInput[]
     deleteMany?: AnnualSoftwareExpenseScalarWhereInput | AnnualSoftwareExpenseScalarWhereInput[]
+  }
+
+  export type EquipmentUncheckedUpdateManyWithoutAssignedToPersonNestedInput = {
+    create?: XOR<EquipmentCreateWithoutAssignedToPersonInput, EquipmentUncheckedCreateWithoutAssignedToPersonInput> | EquipmentCreateWithoutAssignedToPersonInput[] | EquipmentUncheckedCreateWithoutAssignedToPersonInput[]
+    connectOrCreate?: EquipmentCreateOrConnectWithoutAssignedToPersonInput | EquipmentCreateOrConnectWithoutAssignedToPersonInput[]
+    upsert?: EquipmentUpsertWithWhereUniqueWithoutAssignedToPersonInput | EquipmentUpsertWithWhereUniqueWithoutAssignedToPersonInput[]
+    createMany?: EquipmentCreateManyAssignedToPersonInputEnvelope
+    set?: EquipmentWhereUniqueInput | EquipmentWhereUniqueInput[]
+    disconnect?: EquipmentWhereUniqueInput | EquipmentWhereUniqueInput[]
+    delete?: EquipmentWhereUniqueInput | EquipmentWhereUniqueInput[]
+    connect?: EquipmentWhereUniqueInput | EquipmentWhereUniqueInput[]
+    update?: EquipmentUpdateWithWhereUniqueWithoutAssignedToPersonInput | EquipmentUpdateWithWhereUniqueWithoutAssignedToPersonInput[]
+    updateMany?: EquipmentUpdateManyWithWhereWithoutAssignedToPersonInput | EquipmentUpdateManyWithWhereWithoutAssignedToPersonInput[]
+    deleteMany?: EquipmentScalarWhereInput | EquipmentScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutCreatedCompaniesInput = {
@@ -25480,10 +25480,10 @@ export namespace Prisma {
     connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
   }
 
-  export type UserCreateNestedOneWithoutAssignedEquipmentsInput = {
-    create?: XOR<UserCreateWithoutAssignedEquipmentsInput, UserUncheckedCreateWithoutAssignedEquipmentsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutAssignedEquipmentsInput
-    connect?: UserWhereUniqueInput
+  export type PersonCreateNestedOneWithoutAssignedEquipmentsInput = {
+    create?: XOR<PersonCreateWithoutAssignedEquipmentsInput, PersonUncheckedCreateWithoutAssignedEquipmentsInput>
+    connectOrCreate?: PersonCreateOrConnectWithoutAssignedEquipmentsInput
+    connect?: PersonWhereUniqueInput
   }
 
   export type CompanyCreateNestedOneWithoutEquipmentsInput = {
@@ -25539,14 +25539,14 @@ export namespace Prisma {
     deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
   }
 
-  export type UserUpdateOneWithoutAssignedEquipmentsNestedInput = {
-    create?: XOR<UserCreateWithoutAssignedEquipmentsInput, UserUncheckedCreateWithoutAssignedEquipmentsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutAssignedEquipmentsInput
-    upsert?: UserUpsertWithoutAssignedEquipmentsInput
-    disconnect?: UserWhereInput | boolean
-    delete?: UserWhereInput | boolean
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAssignedEquipmentsInput, UserUpdateWithoutAssignedEquipmentsInput>, UserUncheckedUpdateWithoutAssignedEquipmentsInput>
+  export type PersonUpdateOneWithoutAssignedEquipmentsNestedInput = {
+    create?: XOR<PersonCreateWithoutAssignedEquipmentsInput, PersonUncheckedCreateWithoutAssignedEquipmentsInput>
+    connectOrCreate?: PersonCreateOrConnectWithoutAssignedEquipmentsInput
+    upsert?: PersonUpsertWithoutAssignedEquipmentsInput
+    disconnect?: PersonWhereInput | boolean
+    delete?: PersonWhereInput | boolean
+    connect?: PersonWhereUniqueInput
+    update?: XOR<XOR<PersonUpdateToOneWithWhereWithoutAssignedEquipmentsInput, PersonUpdateWithoutAssignedEquipmentsInput>, PersonUncheckedUpdateWithoutAssignedEquipmentsInput>
   }
 
   export type CompanyUpdateOneRequiredWithoutEquipmentsNestedInput = {
@@ -26355,7 +26355,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     companies?: UserCompanyCreateNestedManyWithoutUserInput
     createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
-    assignedEquipments?: EquipmentCreateNestedManyWithoutAssignedToUserInput
     assignedMaintenances?: MaintenanceCreateNestedManyWithoutAssignedToUserInput
     assignedNetworks?: NetworkCreateNestedManyWithoutAssignedToUserInput
     createdNetworks?: NetworkCreateNestedManyWithoutCreatedByInput
@@ -26374,7 +26373,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     companies?: UserCompanyUncheckedCreateNestedManyWithoutUserInput
     createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
-    assignedEquipments?: EquipmentUncheckedCreateNestedManyWithoutAssignedToUserInput
     assignedMaintenances?: MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput
     assignedNetworks?: NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput
     createdNetworks?: NetworkUncheckedCreateNestedManyWithoutCreatedByInput
@@ -26398,7 +26396,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     companies?: UserCompanyCreateNestedManyWithoutUserInput
     createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
-    assignedEquipments?: EquipmentCreateNestedManyWithoutAssignedToUserInput
     assignedMaintenances?: MaintenanceCreateNestedManyWithoutAssignedToUserInput
     assignedNetworks?: NetworkCreateNestedManyWithoutAssignedToUserInput
     createdNetworks?: NetworkCreateNestedManyWithoutCreatedByInput
@@ -26417,7 +26414,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     companies?: UserCompanyUncheckedCreateNestedManyWithoutUserInput
     createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
-    assignedEquipments?: EquipmentUncheckedCreateNestedManyWithoutAssignedToUserInput
     assignedMaintenances?: MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput
     assignedNetworks?: NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput
     createdNetworks?: NetworkUncheckedCreateNestedManyWithoutCreatedByInput
@@ -26503,7 +26499,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companies?: UserCompanyUpdateManyWithoutUserNestedInput
     createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
-    assignedEquipments?: EquipmentUpdateManyWithoutAssignedToUserNestedInput
     assignedMaintenances?: MaintenanceUpdateManyWithoutAssignedToUserNestedInput
     assignedNetworks?: NetworkUpdateManyWithoutAssignedToUserNestedInput
     createdNetworks?: NetworkUpdateManyWithoutCreatedByNestedInput
@@ -26522,7 +26517,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companies?: UserCompanyUncheckedUpdateManyWithoutUserNestedInput
     createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
-    assignedEquipments?: EquipmentUncheckedUpdateManyWithoutAssignedToUserNestedInput
     assignedMaintenances?: MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput
     assignedNetworks?: NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput
     createdNetworks?: NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -26552,7 +26546,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companies?: UserCompanyUpdateManyWithoutUserNestedInput
     createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
-    assignedEquipments?: EquipmentUpdateManyWithoutAssignedToUserNestedInput
     assignedMaintenances?: MaintenanceUpdateManyWithoutAssignedToUserNestedInput
     assignedNetworks?: NetworkUpdateManyWithoutAssignedToUserNestedInput
     createdNetworks?: NetworkUpdateManyWithoutCreatedByNestedInput
@@ -26571,7 +26564,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companies?: UserCompanyUncheckedUpdateManyWithoutUserNestedInput
     createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
-    assignedEquipments?: EquipmentUncheckedUpdateManyWithoutAssignedToUserNestedInput
     assignedMaintenances?: MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput
     assignedNetworks?: NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput
     createdNetworks?: NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -26707,62 +26699,6 @@ export namespace Prisma {
 
   export type CompanyCreateManyCreatedByInputEnvelope = {
     data: CompanyCreateManyCreatedByInput | CompanyCreateManyCreatedByInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type EquipmentCreateWithoutAssignedToUserInput = {
-    id?: string
-    type: string
-    brand: string
-    model: string
-    serialNumber: string
-    plateNumber?: string | null
-    location?: string | null
-    status?: $Enums.EquipmentStatus
-    acquisitionDate?: Date | string | null
-    warrantyDetails?: string | null
-    qrCode?: string | null
-    invoiceUrl?: string | null
-    cost?: Decimal | DecimalJsLike | number | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    endUser?: string | null
-    operatingSystem?: string | null
-    documents?: DocumentCreateNestedManyWithoutEquipmentInput
-    company: CompanyCreateNestedOneWithoutEquipmentsInput
-    maintenances?: MaintenanceCreateNestedManyWithoutEquipmentInput
-  }
-
-  export type EquipmentUncheckedCreateWithoutAssignedToUserInput = {
-    id?: string
-    type: string
-    brand: string
-    model: string
-    serialNumber: string
-    plateNumber?: string | null
-    location?: string | null
-    status?: $Enums.EquipmentStatus
-    acquisitionDate?: Date | string | null
-    warrantyDetails?: string | null
-    qrCode?: string | null
-    invoiceUrl?: string | null
-    cost?: Decimal | DecimalJsLike | number | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    companyId: string
-    endUser?: string | null
-    operatingSystem?: string | null
-    documents?: DocumentUncheckedCreateNestedManyWithoutEquipmentInput
-    maintenances?: MaintenanceUncheckedCreateNestedManyWithoutEquipmentInput
-  }
-
-  export type EquipmentCreateOrConnectWithoutAssignedToUserInput = {
-    where: EquipmentWhereUniqueInput
-    create: XOR<EquipmentCreateWithoutAssignedToUserInput, EquipmentUncheckedCreateWithoutAssignedToUserInput>
-  }
-
-  export type EquipmentCreateManyAssignedToUserInputEnvelope = {
-    data: EquipmentCreateManyAssignedToUserInput | EquipmentCreateManyAssignedToUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -26925,6 +26861,7 @@ export namespace Prisma {
     companyId?: string | null
     department?: DepartmentCreateNestedOneWithoutPersonsInput
     assignedExpenses?: AnnualSoftwareExpenseCreateNestedManyWithoutAssignedPersonsInput
+    assignedEquipments?: EquipmentCreateNestedManyWithoutAssignedToPersonInput
   }
 
   export type PersonUncheckedCreateWithoutUserInput = {
@@ -26942,6 +26879,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     companyId?: string | null
     assignedExpenses?: AnnualSoftwareExpenseUncheckedCreateNestedManyWithoutAssignedPersonsInput
+    assignedEquipments?: EquipmentUncheckedCreateNestedManyWithoutAssignedToPersonInput
   }
 
   export type PersonCreateOrConnectWithoutUserInput = {
@@ -27115,47 +27053,6 @@ export namespace Prisma {
     createdByUserId?: StringNullableFilter<"Company"> | string | null
   }
 
-  export type EquipmentUpsertWithWhereUniqueWithoutAssignedToUserInput = {
-    where: EquipmentWhereUniqueInput
-    update: XOR<EquipmentUpdateWithoutAssignedToUserInput, EquipmentUncheckedUpdateWithoutAssignedToUserInput>
-    create: XOR<EquipmentCreateWithoutAssignedToUserInput, EquipmentUncheckedCreateWithoutAssignedToUserInput>
-  }
-
-  export type EquipmentUpdateWithWhereUniqueWithoutAssignedToUserInput = {
-    where: EquipmentWhereUniqueInput
-    data: XOR<EquipmentUpdateWithoutAssignedToUserInput, EquipmentUncheckedUpdateWithoutAssignedToUserInput>
-  }
-
-  export type EquipmentUpdateManyWithWhereWithoutAssignedToUserInput = {
-    where: EquipmentScalarWhereInput
-    data: XOR<EquipmentUpdateManyMutationInput, EquipmentUncheckedUpdateManyWithoutAssignedToUserInput>
-  }
-
-  export type EquipmentScalarWhereInput = {
-    AND?: EquipmentScalarWhereInput | EquipmentScalarWhereInput[]
-    OR?: EquipmentScalarWhereInput[]
-    NOT?: EquipmentScalarWhereInput | EquipmentScalarWhereInput[]
-    id?: StringFilter<"Equipment"> | string
-    type?: StringFilter<"Equipment"> | string
-    brand?: StringFilter<"Equipment"> | string
-    model?: StringFilter<"Equipment"> | string
-    serialNumber?: StringFilter<"Equipment"> | string
-    plateNumber?: StringNullableFilter<"Equipment"> | string | null
-    location?: StringNullableFilter<"Equipment"> | string | null
-    status?: EnumEquipmentStatusFilter<"Equipment"> | $Enums.EquipmentStatus
-    acquisitionDate?: DateTimeNullableFilter<"Equipment"> | Date | string | null
-    warrantyDetails?: StringNullableFilter<"Equipment"> | string | null
-    qrCode?: StringNullableFilter<"Equipment"> | string | null
-    invoiceUrl?: StringNullableFilter<"Equipment"> | string | null
-    cost?: DecimalNullableFilter<"Equipment"> | Decimal | DecimalJsLike | number | string | null
-    createdAt?: DateTimeFilter<"Equipment"> | Date | string
-    updatedAt?: DateTimeFilter<"Equipment"> | Date | string
-    companyId?: StringFilter<"Equipment"> | string
-    assignedToUserId?: StringNullableFilter<"Equipment"> | string | null
-    endUser?: StringNullableFilter<"Equipment"> | string | null
-    operatingSystem?: StringNullableFilter<"Equipment"> | string | null
-  }
-
   export type MaintenanceUpsertWithWhereUniqueWithoutAssignedToUserInput = {
     where: MaintenanceWhereUniqueInput
     update: XOR<MaintenanceUpdateWithoutAssignedToUserInput, MaintenanceUncheckedUpdateWithoutAssignedToUserInput>
@@ -27274,6 +27171,7 @@ export namespace Prisma {
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     department?: DepartmentUpdateOneWithoutPersonsNestedInput
     assignedExpenses?: AnnualSoftwareExpenseUpdateManyWithoutAssignedPersonsNestedInput
+    assignedEquipments?: EquipmentUpdateManyWithoutAssignedToPersonNestedInput
   }
 
   export type PersonUncheckedUpdateWithoutUserInput = {
@@ -27291,6 +27189,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     assignedExpenses?: AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedPersonsNestedInput
+    assignedEquipments?: EquipmentUncheckedUpdateManyWithoutAssignedToPersonNestedInput
   }
 
   export type TicketUpsertWithWhereUniqueWithoutSendByInput = {
@@ -27361,7 +27260,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
-    assignedEquipments?: EquipmentCreateNestedManyWithoutAssignedToUserInput
     assignedMaintenances?: MaintenanceCreateNestedManyWithoutAssignedToUserInput
     assignedNetworks?: NetworkCreateNestedManyWithoutAssignedToUserInput
     createdNetworks?: NetworkCreateNestedManyWithoutCreatedByInput
@@ -27380,7 +27278,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
-    assignedEquipments?: EquipmentUncheckedCreateNestedManyWithoutAssignedToUserInput
     assignedMaintenances?: MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput
     assignedNetworks?: NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput
     createdNetworks?: NetworkUncheckedCreateNestedManyWithoutCreatedByInput
@@ -27466,7 +27363,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
-    assignedEquipments?: EquipmentUpdateManyWithoutAssignedToUserNestedInput
     assignedMaintenances?: MaintenanceUpdateManyWithoutAssignedToUserNestedInput
     assignedNetworks?: NetworkUpdateManyWithoutAssignedToUserNestedInput
     createdNetworks?: NetworkUpdateManyWithoutCreatedByNestedInput
@@ -27485,7 +27381,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
-    assignedEquipments?: EquipmentUncheckedUpdateManyWithoutAssignedToUserNestedInput
     assignedMaintenances?: MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput
     assignedNetworks?: NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput
     createdNetworks?: NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -27587,7 +27482,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     companies?: UserCompanyCreateNestedManyWithoutUserInput
     createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
-    assignedEquipments?: EquipmentCreateNestedManyWithoutAssignedToUserInput
     assignedMaintenances?: MaintenanceCreateNestedManyWithoutAssignedToUserInput
     assignedNetworks?: NetworkCreateNestedManyWithoutAssignedToUserInput
     createdNetworks?: NetworkCreateNestedManyWithoutCreatedByInput
@@ -27606,7 +27500,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     companies?: UserCompanyUncheckedCreateNestedManyWithoutUserInput
     createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
-    assignedEquipments?: EquipmentUncheckedCreateNestedManyWithoutAssignedToUserInput
     assignedMaintenances?: MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput
     assignedNetworks?: NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput
     createdNetworks?: NetworkUncheckedCreateNestedManyWithoutCreatedByInput
@@ -27654,6 +27547,62 @@ export namespace Prisma {
   export type AnnualSoftwareExpenseCreateOrConnectWithoutAssignedPersonsInput = {
     where: AnnualSoftwareExpenseWhereUniqueInput
     create: XOR<AnnualSoftwareExpenseCreateWithoutAssignedPersonsInput, AnnualSoftwareExpenseUncheckedCreateWithoutAssignedPersonsInput>
+  }
+
+  export type EquipmentCreateWithoutAssignedToPersonInput = {
+    id?: string
+    type: string
+    brand: string
+    model: string
+    serialNumber: string
+    plateNumber?: string | null
+    location?: string | null
+    status?: $Enums.EquipmentStatus
+    acquisitionDate?: Date | string | null
+    warrantyDetails?: string | null
+    qrCode?: string | null
+    invoiceUrl?: string | null
+    cost?: Decimal | DecimalJsLike | number | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    endUser?: string | null
+    operatingSystem?: string | null
+    documents?: DocumentCreateNestedManyWithoutEquipmentInput
+    company: CompanyCreateNestedOneWithoutEquipmentsInput
+    maintenances?: MaintenanceCreateNestedManyWithoutEquipmentInput
+  }
+
+  export type EquipmentUncheckedCreateWithoutAssignedToPersonInput = {
+    id?: string
+    type: string
+    brand: string
+    model: string
+    serialNumber: string
+    plateNumber?: string | null
+    location?: string | null
+    status?: $Enums.EquipmentStatus
+    acquisitionDate?: Date | string | null
+    warrantyDetails?: string | null
+    qrCode?: string | null
+    invoiceUrl?: string | null
+    cost?: Decimal | DecimalJsLike | number | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    companyId: string
+    endUser?: string | null
+    operatingSystem?: string | null
+    documents?: DocumentUncheckedCreateNestedManyWithoutEquipmentInput
+    maintenances?: MaintenanceUncheckedCreateNestedManyWithoutEquipmentInput
+  }
+
+  export type EquipmentCreateOrConnectWithoutAssignedToPersonInput = {
+    where: EquipmentWhereUniqueInput
+    create: XOR<EquipmentCreateWithoutAssignedToPersonInput, EquipmentUncheckedCreateWithoutAssignedToPersonInput>
+  }
+
+  export type EquipmentCreateManyAssignedToPersonInputEnvelope = {
+    data: EquipmentCreateManyAssignedToPersonInput | EquipmentCreateManyAssignedToPersonInput[]
+    skipDuplicates?: boolean
   }
 
   export type DepartmentUpsertWithoutPersonsInput = {
@@ -27709,7 +27658,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companies?: UserCompanyUpdateManyWithoutUserNestedInput
     createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
-    assignedEquipments?: EquipmentUpdateManyWithoutAssignedToUserNestedInput
     assignedMaintenances?: MaintenanceUpdateManyWithoutAssignedToUserNestedInput
     assignedNetworks?: NetworkUpdateManyWithoutAssignedToUserNestedInput
     createdNetworks?: NetworkUpdateManyWithoutCreatedByNestedInput
@@ -27728,7 +27676,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companies?: UserCompanyUncheckedUpdateManyWithoutUserNestedInput
     createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
-    assignedEquipments?: EquipmentUncheckedUpdateManyWithoutAssignedToUserNestedInput
     assignedMaintenances?: MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput
     assignedNetworks?: NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput
     createdNetworks?: NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -27771,6 +27718,47 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"AnnualSoftwareExpense"> | Date | string
   }
 
+  export type EquipmentUpsertWithWhereUniqueWithoutAssignedToPersonInput = {
+    where: EquipmentWhereUniqueInput
+    update: XOR<EquipmentUpdateWithoutAssignedToPersonInput, EquipmentUncheckedUpdateWithoutAssignedToPersonInput>
+    create: XOR<EquipmentCreateWithoutAssignedToPersonInput, EquipmentUncheckedCreateWithoutAssignedToPersonInput>
+  }
+
+  export type EquipmentUpdateWithWhereUniqueWithoutAssignedToPersonInput = {
+    where: EquipmentWhereUniqueInput
+    data: XOR<EquipmentUpdateWithoutAssignedToPersonInput, EquipmentUncheckedUpdateWithoutAssignedToPersonInput>
+  }
+
+  export type EquipmentUpdateManyWithWhereWithoutAssignedToPersonInput = {
+    where: EquipmentScalarWhereInput
+    data: XOR<EquipmentUpdateManyMutationInput, EquipmentUncheckedUpdateManyWithoutAssignedToPersonInput>
+  }
+
+  export type EquipmentScalarWhereInput = {
+    AND?: EquipmentScalarWhereInput | EquipmentScalarWhereInput[]
+    OR?: EquipmentScalarWhereInput[]
+    NOT?: EquipmentScalarWhereInput | EquipmentScalarWhereInput[]
+    id?: StringFilter<"Equipment"> | string
+    type?: StringFilter<"Equipment"> | string
+    brand?: StringFilter<"Equipment"> | string
+    model?: StringFilter<"Equipment"> | string
+    serialNumber?: StringFilter<"Equipment"> | string
+    plateNumber?: StringNullableFilter<"Equipment"> | string | null
+    location?: StringNullableFilter<"Equipment"> | string | null
+    status?: EnumEquipmentStatusFilter<"Equipment"> | $Enums.EquipmentStatus
+    acquisitionDate?: DateTimeNullableFilter<"Equipment"> | Date | string | null
+    warrantyDetails?: StringNullableFilter<"Equipment"> | string | null
+    qrCode?: StringNullableFilter<"Equipment"> | string | null
+    invoiceUrl?: StringNullableFilter<"Equipment"> | string | null
+    cost?: DecimalNullableFilter<"Equipment"> | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFilter<"Equipment"> | Date | string
+    updatedAt?: DateTimeFilter<"Equipment"> | Date | string
+    companyId?: StringFilter<"Equipment"> | string
+    assignedToPersonId?: StringNullableFilter<"Equipment"> | string | null
+    endUser?: StringNullableFilter<"Equipment"> | string | null
+    operatingSystem?: StringNullableFilter<"Equipment"> | string | null
+  }
+
   export type UserCreateWithoutCreatedCompaniesInput = {
     id?: string
     username: string
@@ -27781,7 +27769,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     companies?: UserCompanyCreateNestedManyWithoutUserInput
-    assignedEquipments?: EquipmentCreateNestedManyWithoutAssignedToUserInput
     assignedMaintenances?: MaintenanceCreateNestedManyWithoutAssignedToUserInput
     assignedNetworks?: NetworkCreateNestedManyWithoutAssignedToUserInput
     createdNetworks?: NetworkCreateNestedManyWithoutCreatedByInput
@@ -27800,7 +27787,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     companies?: UserCompanyUncheckedCreateNestedManyWithoutUserInput
-    assignedEquipments?: EquipmentUncheckedCreateNestedManyWithoutAssignedToUserInput
     assignedMaintenances?: MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput
     assignedNetworks?: NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput
     createdNetworks?: NetworkUncheckedCreateNestedManyWithoutCreatedByInput
@@ -27897,7 +27883,7 @@ export namespace Prisma {
     endUser?: string | null
     operatingSystem?: string | null
     documents?: DocumentCreateNestedManyWithoutEquipmentInput
-    assignedToUser?: UserCreateNestedOneWithoutAssignedEquipmentsInput
+    assignedToPerson?: PersonCreateNestedOneWithoutAssignedEquipmentsInput
     maintenances?: MaintenanceCreateNestedManyWithoutEquipmentInput
   }
 
@@ -27917,7 +27903,7 @@ export namespace Prisma {
     cost?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    assignedToUserId?: string | null
+    assignedToPersonId?: string | null
     endUser?: string | null
     operatingSystem?: string | null
     documents?: DocumentUncheckedCreateNestedManyWithoutEquipmentInput
@@ -28193,7 +28179,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companies?: UserCompanyUpdateManyWithoutUserNestedInput
-    assignedEquipments?: EquipmentUpdateManyWithoutAssignedToUserNestedInput
     assignedMaintenances?: MaintenanceUpdateManyWithoutAssignedToUserNestedInput
     assignedNetworks?: NetworkUpdateManyWithoutAssignedToUserNestedInput
     createdNetworks?: NetworkUpdateManyWithoutCreatedByNestedInput
@@ -28212,7 +28197,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companies?: UserCompanyUncheckedUpdateManyWithoutUserNestedInput
-    assignedEquipments?: EquipmentUncheckedUpdateManyWithoutAssignedToUserNestedInput
     assignedMaintenances?: MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput
     assignedNetworks?: NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput
     createdNetworks?: NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -28494,6 +28478,7 @@ export namespace Prisma {
     companyId?: string | null
     user?: UserCreateNestedOneWithoutPersonInput
     assignedExpenses?: AnnualSoftwareExpenseCreateNestedManyWithoutAssignedPersonsInput
+    assignedEquipments?: EquipmentCreateNestedManyWithoutAssignedToPersonInput
   }
 
   export type PersonUncheckedCreateWithoutDepartmentInput = {
@@ -28511,6 +28496,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     companyId?: string | null
     assignedExpenses?: AnnualSoftwareExpenseUncheckedCreateNestedManyWithoutAssignedPersonsInput
+    assignedEquipments?: EquipmentUncheckedCreateNestedManyWithoutAssignedToPersonInput
   }
 
   export type PersonCreateOrConnectWithoutDepartmentInput = {
@@ -28650,47 +28636,45 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type UserCreateWithoutAssignedEquipmentsInput = {
+  export type PersonCreateWithoutAssignedEquipmentsInput = {
     id?: string
-    username: string
-    email: string
-    password: string
-    role?: $Enums.UserRole
-    isActive?: boolean
+    firstName?: string | null
+    lastName?: string | null
+    fullName?: string | null
+    contactEmail?: string | null
+    phoneNumber?: string | null
+    position?: string | null
+    status?: $Enums.PersonStatus
+    userCode: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    companies?: UserCompanyCreateNestedManyWithoutUserInput
-    createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
-    assignedMaintenances?: MaintenanceCreateNestedManyWithoutAssignedToUserInput
-    assignedNetworks?: NetworkCreateNestedManyWithoutAssignedToUserInput
-    createdNetworks?: NetworkCreateNestedManyWithoutCreatedByInput
-    person?: PersonCreateNestedOneWithoutUserInput
-    ticketsSentBy?: TicketCreateNestedManyWithoutSendByInput
-    ticketsSentTo?: TicketCreateNestedManyWithoutSendToInput
+    companyId?: string | null
+    department?: DepartmentCreateNestedOneWithoutPersonsInput
+    user?: UserCreateNestedOneWithoutPersonInput
+    assignedExpenses?: AnnualSoftwareExpenseCreateNestedManyWithoutAssignedPersonsInput
   }
 
-  export type UserUncheckedCreateWithoutAssignedEquipmentsInput = {
+  export type PersonUncheckedCreateWithoutAssignedEquipmentsInput = {
     id?: string
-    username: string
-    email: string
-    password: string
-    role?: $Enums.UserRole
-    isActive?: boolean
+    userId?: string | null
+    firstName?: string | null
+    lastName?: string | null
+    fullName?: string | null
+    contactEmail?: string | null
+    phoneNumber?: string | null
+    departmentId?: string | null
+    position?: string | null
+    status?: $Enums.PersonStatus
+    userCode: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    companies?: UserCompanyUncheckedCreateNestedManyWithoutUserInput
-    createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
-    assignedMaintenances?: MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput
-    assignedNetworks?: NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput
-    createdNetworks?: NetworkUncheckedCreateNestedManyWithoutCreatedByInput
-    person?: PersonUncheckedCreateNestedOneWithoutUserInput
-    ticketsSentBy?: TicketUncheckedCreateNestedManyWithoutSendByInput
-    ticketsSentTo?: TicketUncheckedCreateNestedManyWithoutSendToInput
+    companyId?: string | null
+    assignedExpenses?: AnnualSoftwareExpenseUncheckedCreateNestedManyWithoutAssignedPersonsInput
   }
 
-  export type UserCreateOrConnectWithoutAssignedEquipmentsInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutAssignedEquipmentsInput, UserUncheckedCreateWithoutAssignedEquipmentsInput>
+  export type PersonCreateOrConnectWithoutAssignedEquipmentsInput = {
+    where: PersonWhereUniqueInput
+    create: XOR<PersonCreateWithoutAssignedEquipmentsInput, PersonUncheckedCreateWithoutAssignedEquipmentsInput>
   }
 
   export type CompanyCreateWithoutEquipmentsInput = {
@@ -28800,53 +28784,51 @@ export namespace Prisma {
     data: XOR<DocumentUpdateManyMutationInput, DocumentUncheckedUpdateManyWithoutEquipmentInput>
   }
 
-  export type UserUpsertWithoutAssignedEquipmentsInput = {
-    update: XOR<UserUpdateWithoutAssignedEquipmentsInput, UserUncheckedUpdateWithoutAssignedEquipmentsInput>
-    create: XOR<UserCreateWithoutAssignedEquipmentsInput, UserUncheckedCreateWithoutAssignedEquipmentsInput>
-    where?: UserWhereInput
+  export type PersonUpsertWithoutAssignedEquipmentsInput = {
+    update: XOR<PersonUpdateWithoutAssignedEquipmentsInput, PersonUncheckedUpdateWithoutAssignedEquipmentsInput>
+    create: XOR<PersonCreateWithoutAssignedEquipmentsInput, PersonUncheckedCreateWithoutAssignedEquipmentsInput>
+    where?: PersonWhereInput
   }
 
-  export type UserUpdateToOneWithWhereWithoutAssignedEquipmentsInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutAssignedEquipmentsInput, UserUncheckedUpdateWithoutAssignedEquipmentsInput>
+  export type PersonUpdateToOneWithWhereWithoutAssignedEquipmentsInput = {
+    where?: PersonWhereInput
+    data: XOR<PersonUpdateWithoutAssignedEquipmentsInput, PersonUncheckedUpdateWithoutAssignedEquipmentsInput>
   }
 
-  export type UserUpdateWithoutAssignedEquipmentsInput = {
+  export type PersonUpdateWithoutAssignedEquipmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    isActive?: BoolFieldUpdateOperationsInput | boolean
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    contactEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumPersonStatusFieldUpdateOperationsInput | $Enums.PersonStatus
+    userCode?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    companies?: UserCompanyUpdateManyWithoutUserNestedInput
-    createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
-    assignedMaintenances?: MaintenanceUpdateManyWithoutAssignedToUserNestedInput
-    assignedNetworks?: NetworkUpdateManyWithoutAssignedToUserNestedInput
-    createdNetworks?: NetworkUpdateManyWithoutCreatedByNestedInput
-    person?: PersonUpdateOneWithoutUserNestedInput
-    ticketsSentBy?: TicketUpdateManyWithoutSendByNestedInput
-    ticketsSentTo?: TicketUpdateManyWithoutSendToNestedInput
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: DepartmentUpdateOneWithoutPersonsNestedInput
+    user?: UserUpdateOneWithoutPersonNestedInput
+    assignedExpenses?: AnnualSoftwareExpenseUpdateManyWithoutAssignedPersonsNestedInput
   }
 
-  export type UserUncheckedUpdateWithoutAssignedEquipmentsInput = {
+  export type PersonUncheckedUpdateWithoutAssignedEquipmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    isActive?: BoolFieldUpdateOperationsInput | boolean
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    contactEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumPersonStatusFieldUpdateOperationsInput | $Enums.PersonStatus
+    userCode?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    companies?: UserCompanyUncheckedUpdateManyWithoutUserNestedInput
-    createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
-    assignedMaintenances?: MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput
-    assignedNetworks?: NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput
-    createdNetworks?: NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
-    person?: PersonUncheckedUpdateOneWithoutUserNestedInput
-    ticketsSentBy?: TicketUncheckedUpdateManyWithoutSendByNestedInput
-    ticketsSentTo?: TicketUncheckedUpdateManyWithoutSendToNestedInput
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedExpenses?: AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedPersonsNestedInput
   }
 
   export type CompanyUpsertWithoutEquipmentsInput = {
@@ -28933,7 +28915,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     companies?: UserCompanyCreateNestedManyWithoutUserInput
     createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
-    assignedEquipments?: EquipmentCreateNestedManyWithoutAssignedToUserInput
     assignedNetworks?: NetworkCreateNestedManyWithoutAssignedToUserInput
     createdNetworks?: NetworkCreateNestedManyWithoutCreatedByInput
     person?: PersonCreateNestedOneWithoutUserInput
@@ -28952,7 +28933,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     companies?: UserCompanyUncheckedCreateNestedManyWithoutUserInput
     createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
-    assignedEquipments?: EquipmentUncheckedCreateNestedManyWithoutAssignedToUserInput
     assignedNetworks?: NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput
     createdNetworks?: NetworkUncheckedCreateNestedManyWithoutCreatedByInput
     person?: PersonUncheckedCreateNestedOneWithoutUserInput
@@ -29035,7 +29015,7 @@ export namespace Prisma {
     endUser?: string | null
     operatingSystem?: string | null
     documents?: DocumentCreateNestedManyWithoutEquipmentInput
-    assignedToUser?: UserCreateNestedOneWithoutAssignedEquipmentsInput
+    assignedToPerson?: PersonCreateNestedOneWithoutAssignedEquipmentsInput
     company: CompanyCreateNestedOneWithoutEquipmentsInput
   }
 
@@ -29056,7 +29036,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     companyId: string
-    assignedToUserId?: string | null
+    assignedToPersonId?: string | null
     endUser?: string | null
     operatingSystem?: string | null
     documents?: DocumentUncheckedCreateNestedManyWithoutEquipmentInput
@@ -29089,7 +29069,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companies?: UserCompanyUpdateManyWithoutUserNestedInput
     createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
-    assignedEquipments?: EquipmentUpdateManyWithoutAssignedToUserNestedInput
     assignedNetworks?: NetworkUpdateManyWithoutAssignedToUserNestedInput
     createdNetworks?: NetworkUpdateManyWithoutCreatedByNestedInput
     person?: PersonUpdateOneWithoutUserNestedInput
@@ -29108,7 +29087,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companies?: UserCompanyUncheckedUpdateManyWithoutUserNestedInput
     createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
-    assignedEquipments?: EquipmentUncheckedUpdateManyWithoutAssignedToUserNestedInput
     assignedNetworks?: NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput
     createdNetworks?: NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
     person?: PersonUncheckedUpdateOneWithoutUserNestedInput
@@ -29203,7 +29181,7 @@ export namespace Prisma {
     endUser?: NullableStringFieldUpdateOperationsInput | string | null
     operatingSystem?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: DocumentUpdateManyWithoutEquipmentNestedInput
-    assignedToUser?: UserUpdateOneWithoutAssignedEquipmentsNestedInput
+    assignedToPerson?: PersonUpdateOneWithoutAssignedEquipmentsNestedInput
     company?: CompanyUpdateOneRequiredWithoutEquipmentsNestedInput
   }
 
@@ -29224,7 +29202,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: StringFieldUpdateOperationsInput | string
-    assignedToUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedToPersonId?: NullableStringFieldUpdateOperationsInput | string | null
     endUser?: NullableStringFieldUpdateOperationsInput | string | null
     operatingSystem?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: DocumentUncheckedUpdateManyWithoutEquipmentNestedInput
@@ -29299,7 +29277,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     endUser?: string | null
     operatingSystem?: string | null
-    assignedToUser?: UserCreateNestedOneWithoutAssignedEquipmentsInput
+    assignedToPerson?: PersonCreateNestedOneWithoutAssignedEquipmentsInput
     company: CompanyCreateNestedOneWithoutEquipmentsInput
     maintenances?: MaintenanceCreateNestedManyWithoutEquipmentInput
   }
@@ -29321,7 +29299,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     companyId: string
-    assignedToUserId?: string | null
+    assignedToPersonId?: string | null
     endUser?: string | null
     operatingSystem?: string | null
     maintenances?: MaintenanceUncheckedCreateNestedManyWithoutEquipmentInput
@@ -29418,7 +29396,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endUser?: NullableStringFieldUpdateOperationsInput | string | null
     operatingSystem?: NullableStringFieldUpdateOperationsInput | string | null
-    assignedToUser?: UserUpdateOneWithoutAssignedEquipmentsNestedInput
+    assignedToPerson?: PersonUpdateOneWithoutAssignedEquipmentsNestedInput
     company?: CompanyUpdateOneRequiredWithoutEquipmentsNestedInput
     maintenances?: MaintenanceUpdateManyWithoutEquipmentNestedInput
   }
@@ -29440,7 +29418,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: StringFieldUpdateOperationsInput | string
-    assignedToUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedToPersonId?: NullableStringFieldUpdateOperationsInput | string | null
     endUser?: NullableStringFieldUpdateOperationsInput | string | null
     operatingSystem?: NullableStringFieldUpdateOperationsInput | string | null
     maintenances?: MaintenanceUncheckedUpdateManyWithoutEquipmentNestedInput
@@ -29741,7 +29719,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     companies?: UserCompanyCreateNestedManyWithoutUserInput
     createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
-    assignedEquipments?: EquipmentCreateNestedManyWithoutAssignedToUserInput
     assignedMaintenances?: MaintenanceCreateNestedManyWithoutAssignedToUserInput
     createdNetworks?: NetworkCreateNestedManyWithoutCreatedByInput
     person?: PersonCreateNestedOneWithoutUserInput
@@ -29760,7 +29737,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     companies?: UserCompanyUncheckedCreateNestedManyWithoutUserInput
     createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
-    assignedEquipments?: EquipmentUncheckedCreateNestedManyWithoutAssignedToUserInput
     assignedMaintenances?: MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput
     createdNetworks?: NetworkUncheckedCreateNestedManyWithoutCreatedByInput
     person?: PersonUncheckedCreateNestedOneWithoutUserInput
@@ -29784,7 +29760,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     companies?: UserCompanyCreateNestedManyWithoutUserInput
     createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
-    assignedEquipments?: EquipmentCreateNestedManyWithoutAssignedToUserInput
     assignedMaintenances?: MaintenanceCreateNestedManyWithoutAssignedToUserInput
     assignedNetworks?: NetworkCreateNestedManyWithoutAssignedToUserInput
     person?: PersonCreateNestedOneWithoutUserInput
@@ -29803,7 +29778,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     companies?: UserCompanyUncheckedCreateNestedManyWithoutUserInput
     createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
-    assignedEquipments?: EquipmentUncheckedCreateNestedManyWithoutAssignedToUserInput
     assignedMaintenances?: MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput
     assignedNetworks?: NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput
     person?: PersonUncheckedCreateNestedOneWithoutUserInput
@@ -29924,7 +29898,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companies?: UserCompanyUpdateManyWithoutUserNestedInput
     createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
-    assignedEquipments?: EquipmentUpdateManyWithoutAssignedToUserNestedInput
     assignedMaintenances?: MaintenanceUpdateManyWithoutAssignedToUserNestedInput
     createdNetworks?: NetworkUpdateManyWithoutCreatedByNestedInput
     person?: PersonUpdateOneWithoutUserNestedInput
@@ -29943,7 +29916,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companies?: UserCompanyUncheckedUpdateManyWithoutUserNestedInput
     createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
-    assignedEquipments?: EquipmentUncheckedUpdateManyWithoutAssignedToUserNestedInput
     assignedMaintenances?: MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput
     createdNetworks?: NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
     person?: PersonUncheckedUpdateOneWithoutUserNestedInput
@@ -29973,7 +29945,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companies?: UserCompanyUpdateManyWithoutUserNestedInput
     createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
-    assignedEquipments?: EquipmentUpdateManyWithoutAssignedToUserNestedInput
     assignedMaintenances?: MaintenanceUpdateManyWithoutAssignedToUserNestedInput
     assignedNetworks?: NetworkUpdateManyWithoutAssignedToUserNestedInput
     person?: PersonUpdateOneWithoutUserNestedInput
@@ -29992,7 +29963,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companies?: UserCompanyUncheckedUpdateManyWithoutUserNestedInput
     createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
-    assignedEquipments?: EquipmentUncheckedUpdateManyWithoutAssignedToUserNestedInput
     assignedMaintenances?: MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput
     assignedNetworks?: NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput
     person?: PersonUncheckedUpdateOneWithoutUserNestedInput
@@ -30113,6 +30083,7 @@ export namespace Prisma {
     companyId?: string | null
     department?: DepartmentCreateNestedOneWithoutPersonsInput
     user?: UserCreateNestedOneWithoutPersonInput
+    assignedEquipments?: EquipmentCreateNestedManyWithoutAssignedToPersonInput
   }
 
   export type PersonUncheckedCreateWithoutAssignedExpensesInput = {
@@ -30130,6 +30101,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     companyId?: string | null
+    assignedEquipments?: EquipmentUncheckedCreateNestedManyWithoutAssignedToPersonInput
   }
 
   export type PersonCreateOrConnectWithoutAssignedExpensesInput = {
@@ -30169,27 +30141,6 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-  }
-
-  export type EquipmentCreateManyAssignedToUserInput = {
-    id?: string
-    type: string
-    brand: string
-    model: string
-    serialNumber: string
-    plateNumber?: string | null
-    location?: string | null
-    status?: $Enums.EquipmentStatus
-    acquisitionDate?: Date | string | null
-    warrantyDetails?: string | null
-    qrCode?: string | null
-    invoiceUrl?: string | null
-    cost?: Decimal | DecimalJsLike | number | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    companyId: string
-    endUser?: string | null
-    operatingSystem?: string | null
   }
 
   export type MaintenanceCreateManyAssignedToUserInput = {
@@ -30363,73 +30314,6 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type EquipmentUpdateWithoutAssignedToUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    model?: StringFieldUpdateOperationsInput | string
-    serialNumber?: StringFieldUpdateOperationsInput | string
-    plateNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
-    acquisitionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    warrantyDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    qrCode?: NullableStringFieldUpdateOperationsInput | string | null
-    invoiceUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    cost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    endUser?: NullableStringFieldUpdateOperationsInput | string | null
-    operatingSystem?: NullableStringFieldUpdateOperationsInput | string | null
-    documents?: DocumentUpdateManyWithoutEquipmentNestedInput
-    company?: CompanyUpdateOneRequiredWithoutEquipmentsNestedInput
-    maintenances?: MaintenanceUpdateManyWithoutEquipmentNestedInput
-  }
-
-  export type EquipmentUncheckedUpdateWithoutAssignedToUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    model?: StringFieldUpdateOperationsInput | string
-    serialNumber?: StringFieldUpdateOperationsInput | string
-    plateNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
-    acquisitionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    warrantyDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    qrCode?: NullableStringFieldUpdateOperationsInput | string | null
-    invoiceUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    cost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    companyId?: StringFieldUpdateOperationsInput | string
-    endUser?: NullableStringFieldUpdateOperationsInput | string | null
-    operatingSystem?: NullableStringFieldUpdateOperationsInput | string | null
-    documents?: DocumentUncheckedUpdateManyWithoutEquipmentNestedInput
-    maintenances?: MaintenanceUncheckedUpdateManyWithoutEquipmentNestedInput
-  }
-
-  export type EquipmentUncheckedUpdateManyWithoutAssignedToUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    model?: StringFieldUpdateOperationsInput | string
-    serialNumber?: StringFieldUpdateOperationsInput | string
-    plateNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
-    acquisitionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    warrantyDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    qrCode?: NullableStringFieldUpdateOperationsInput | string | null
-    invoiceUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    cost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    companyId?: StringFieldUpdateOperationsInput | string
-    endUser?: NullableStringFieldUpdateOperationsInput | string | null
-    operatingSystem?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type MaintenanceUpdateWithoutAssignedToUserInput = {
@@ -30735,6 +30619,27 @@ export namespace Prisma {
     reviewed?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
+  export type EquipmentCreateManyAssignedToPersonInput = {
+    id?: string
+    type: string
+    brand: string
+    model: string
+    serialNumber: string
+    plateNumber?: string | null
+    location?: string | null
+    status?: $Enums.EquipmentStatus
+    acquisitionDate?: Date | string | null
+    warrantyDetails?: string | null
+    qrCode?: string | null
+    invoiceUrl?: string | null
+    cost?: Decimal | DecimalJsLike | number | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    companyId: string
+    endUser?: string | null
+    operatingSystem?: string | null
+  }
+
   export type AnnualSoftwareExpenseUpdateWithoutAssignedPersonsInput = {
     id?: StringFieldUpdateOperationsInput | string
     applicationName?: StringFieldUpdateOperationsInput | string
@@ -30783,6 +30688,73 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type EquipmentUpdateWithoutAssignedToPersonInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    model?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    plateNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+    acquisitionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    warrantyDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    qrCode?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    cost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endUser?: NullableStringFieldUpdateOperationsInput | string | null
+    operatingSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: DocumentUpdateManyWithoutEquipmentNestedInput
+    company?: CompanyUpdateOneRequiredWithoutEquipmentsNestedInput
+    maintenances?: MaintenanceUpdateManyWithoutEquipmentNestedInput
+  }
+
+  export type EquipmentUncheckedUpdateWithoutAssignedToPersonInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    model?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    plateNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+    acquisitionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    warrantyDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    qrCode?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    cost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: StringFieldUpdateOperationsInput | string
+    endUser?: NullableStringFieldUpdateOperationsInput | string | null
+    operatingSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: DocumentUncheckedUpdateManyWithoutEquipmentNestedInput
+    maintenances?: MaintenanceUncheckedUpdateManyWithoutEquipmentNestedInput
+  }
+
+  export type EquipmentUncheckedUpdateManyWithoutAssignedToPersonInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    model?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    plateNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+    acquisitionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    warrantyDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    qrCode?: NullableStringFieldUpdateOperationsInput | string | null
+    invoiceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    cost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: StringFieldUpdateOperationsInput | string
+    endUser?: NullableStringFieldUpdateOperationsInput | string | null
+    operatingSystem?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type DepartmentCreateManyCompanyInput = {
     id?: string
     name: string
@@ -30820,7 +30792,7 @@ export namespace Prisma {
     cost?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    assignedToUserId?: string | null
+    assignedToPersonId?: string | null
     endUser?: string | null
     operatingSystem?: string | null
   }
@@ -30997,7 +30969,7 @@ export namespace Prisma {
     endUser?: NullableStringFieldUpdateOperationsInput | string | null
     operatingSystem?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: DocumentUpdateManyWithoutEquipmentNestedInput
-    assignedToUser?: UserUpdateOneWithoutAssignedEquipmentsNestedInput
+    assignedToPerson?: PersonUpdateOneWithoutAssignedEquipmentsNestedInput
     maintenances?: MaintenanceUpdateManyWithoutEquipmentNestedInput
   }
 
@@ -31017,7 +30989,7 @@ export namespace Prisma {
     cost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignedToUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedToPersonId?: NullableStringFieldUpdateOperationsInput | string | null
     endUser?: NullableStringFieldUpdateOperationsInput | string | null
     operatingSystem?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: DocumentUncheckedUpdateManyWithoutEquipmentNestedInput
@@ -31040,7 +31012,7 @@ export namespace Prisma {
     cost?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignedToUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedToPersonId?: NullableStringFieldUpdateOperationsInput | string | null
     endUser?: NullableStringFieldUpdateOperationsInput | string | null
     operatingSystem?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -31342,6 +31314,7 @@ export namespace Prisma {
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneWithoutPersonNestedInput
     assignedExpenses?: AnnualSoftwareExpenseUpdateManyWithoutAssignedPersonsNestedInput
+    assignedEquipments?: EquipmentUpdateManyWithoutAssignedToPersonNestedInput
   }
 
   export type PersonUncheckedUpdateWithoutDepartmentInput = {
@@ -31359,6 +31332,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     assignedExpenses?: AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedPersonsNestedInput
+    assignedEquipments?: EquipmentUncheckedUpdateManyWithoutAssignedToPersonNestedInput
   }
 
   export type PersonUncheckedUpdateManyWithoutDepartmentInput = {
@@ -31584,6 +31558,7 @@ export namespace Prisma {
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     department?: DepartmentUpdateOneWithoutPersonsNestedInput
     user?: UserUpdateOneWithoutPersonNestedInput
+    assignedEquipments?: EquipmentUpdateManyWithoutAssignedToPersonNestedInput
   }
 
   export type PersonUncheckedUpdateWithoutAssignedExpensesInput = {
@@ -31601,6 +31576,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedEquipments?: EquipmentUncheckedUpdateManyWithoutAssignedToPersonNestedInput
   }
 
   export type PersonUncheckedUpdateManyWithoutAssignedExpensesInput = {

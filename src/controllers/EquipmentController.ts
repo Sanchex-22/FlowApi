@@ -1,4 +1,3 @@
-// src/equipment/equipment.controller.ts
 import { Request, Response } from 'express';
 import { put, del } from '@vercel/blob';
 import { prisma } from '../../lib/prisma.js';
@@ -12,16 +11,25 @@ declare global {
     }
 }
 
-// Valores válidos de EquipmentStatus según el schema
 const VALID_EQUIPMENT_STATUS = ['ACTIVE', 'IN_MAINTENANCE', 'DISPOSED', 'DAMAGED', 'ASSIGNED', 'STORAGE'] as const;
+
+// ✅ Include reutilizable
+const equipmentInclude = {
+    company: { select: { id: true, name: true, code: true } },
+    assignedToPerson: {
+        select: {
+            id: true,
+            fullName: true,
+            firstName: true,
+            lastName: true,
+            contactEmail: true,
+            position: true,
+        }
+    },
+};
 
 export class EquipmentController {
 
-    /**
-     * Creates a new equipment record.
-     * @param req Express Request. Expects { type, brand, model, serialNumber, plateNumber?, location?, status?, acquisitionDate?, warrantyDetails?, qrCode?, invoiceUrl?, cost?, companyId, assignedToUserId?, endUser?, operatingSystem? } in the body.
-     * @param res Express Response.
-     */
     async Create(req: Request, res: Response) {
         try {
             const {
@@ -38,14 +46,14 @@ export class EquipmentController {
                 qrCode,
                 invoiceUrl,
                 companyId,
-                assignedToUserId,
+                assignedToPersonId, // ✅ Cambiado
                 endUser,
                 operatingSystem
             } = req.body;
 
             if (!type || !brand || !model || !serialNumber || !companyId) {
-                return res.status(400).json({ 
-                    error: 'Faltan campos obligatorios: tipo, marca, modelo, número de serie e ID de compañía.' 
+                return res.status(400).json({
+                    error: 'Faltan campos obligatorios: tipo, marca, modelo, número de serie e ID de compañía.'
                 });
             }
 
@@ -64,14 +72,11 @@ export class EquipmentController {
                     qrCode: qrCode || null,
                     invoiceUrl: invoiceUrl || null,
                     company: { connect: { id: companyId } },
-                    ...(assignedToUserId && { assignedToUser: { connect: { id: assignedToUserId } } }),
+                    ...(assignedToPersonId && { assignedToPerson: { connect: { id: assignedToPersonId } } }), // ✅ Cambiado
                     endUser: endUser || null,
                     operatingSystem: operatingSystem || null,
                 },
-                include: {
-                    company: { select: { id: true, name: true, code: true } },
-                    assignedToUser: { select: { id: true, username: true, email: true, person: { select: { fullName: true } } } },
-                }
+                include: equipmentInclude,
             });
 
             res.status(201).json(newEquipment);
@@ -81,25 +86,21 @@ export class EquipmentController {
                 return res.status(409).json({ error: 'Ya existe un equipo con este número de serie o número de placa.' });
             }
             if (error.code === 'P2025') {
-                return res.status(400).json({ error: 'La compañía o el usuario asignado no existen.' });
+                return res.status(400).json({ error: 'La compañía o la persona asignada no existen.' });
             }
             res.status(500).json({ error: 'Error interno del servidor al crear el equipo.' });
         }
     }
 
-    /**
-     * Uploads an invoice file to Vercel Blob
-     */
     async uploadInvoice(req: Request, res: Response) {
         try {
             const { equipmentId } = req.params;
             const file = req.file;
-            console.log('Received file:', file);
+
             if (!file) {
                 return res.status(400).json({ error: 'No se ha subido ningún archivo.' });
             }
 
-            // Verify equipment exists
             const equipment = await prisma.equipment.findUnique({
                 where: { id: equipmentId },
             });
@@ -108,7 +109,6 @@ export class EquipmentController {
                 return res.status(404).json({ error: 'Equipo no encontrado.' });
             }
 
-            // Delete old invoice if exists
             if (equipment.invoiceUrl) {
                 try {
                     await del(equipment.invoiceUrl);
@@ -117,21 +117,16 @@ export class EquipmentController {
                 }
             }
 
-            // Upload new invoice to Vercel Blob
             const filename = `equipment/${equipmentId}/${Date.now()}-${file.originalname}`;
             const blob = await put(filename, file.buffer, {
                 access: 'public',
                 contentType: file.mimetype,
             });
 
-            // Update equipment with new invoice URL
             const updatedEquipment = await prisma.equipment.update({
                 where: { id: equipmentId },
                 data: { invoiceUrl: blob.url },
-                include: {
-                    company: { select: { id: true, name: true } },
-                    assignedToUser: { select: { id: true, username: true, email: true } },
-                }
+                include: equipmentInclude,
             });
 
             res.json({
@@ -145,11 +140,6 @@ export class EquipmentController {
         }
     }
 
-    /**
-     * Deletes an equipment record by its ID.
-     * @param req Express Request. Expects the equipment ID in req.params.
-     * @param res Express Response.
-     */
     async Delete(req: Request, res: Response) {
         try {
             const { id } = req.params;
@@ -162,7 +152,6 @@ export class EquipmentController {
                 return res.status(404).json({ error: 'Equipo no encontrado.' });
             }
 
-            // Delete invoice from Vercel Blob if exists
             if (equipment.invoiceUrl) {
                 try {
                     await del(equipment.invoiceUrl);
@@ -182,19 +171,14 @@ export class EquipmentController {
                 return res.status(404).json({ error: 'Equipo no encontrado.' });
             }
             if (error.code === 'P2003') {
-                return res.status(409).json({ 
-                    error: 'No se puede eliminar el equipo porque tiene registros de mantenimiento asociados.' 
+                return res.status(409).json({
+                    error: 'No se puede eliminar el equipo porque tiene registros de mantenimiento asociados.'
                 });
             }
             res.status(500).json({ error: 'Error interno del servidor al eliminar el equipo.' });
         }
     }
 
-    /**
-     * Edits an existing equipment record by its ID.
-     * @param req Express Request. Expects the ID in req.params and the data to update in req.body.
-     * @param res Express Response.
-     */
     async Edit(req: Request, res: Response) {
         try {
             const { id } = req.params;
@@ -212,7 +196,7 @@ export class EquipmentController {
                 qrCode,
                 invoiceUrl,
                 companyId,
-                assignedToUserId,
+                assignedToPersonId, // ✅ Cambiado
                 endUser,
                 operatingSystem
             } = req.body;
@@ -233,14 +217,16 @@ export class EquipmentController {
                     ...(qrCode !== undefined && { qrCode }),
                     ...(invoiceUrl !== undefined && { invoiceUrl }),
                     ...(companyId && { company: { connect: { id: companyId } } }),
-                    ...(assignedToUserId && { assignedToUser: { connect: { id: assignedToUserId } } }),
+                    // ✅ Cambiado: soporta asignar y desasignar
+                    ...(assignedToPersonId !== undefined && {
+                        assignedToPerson: assignedToPersonId
+                            ? { connect: { id: assignedToPersonId } }
+                            : { disconnect: true }
+                    }),
                     ...(endUser !== undefined && { endUser }),
                     ...(operatingSystem !== undefined && { operatingSystem }),
                 },
-                include: {
-                    company: { select: { id: true, name: true, code: true } },
-                    assignedToUser: { select: { id: true, username: true, email: true, person: { select: { fullName: true } } } },
-                }
+                include: equipmentInclude,
             });
 
             res.json(updatedEquipment);
@@ -256,21 +242,13 @@ export class EquipmentController {
         }
     }
 
-    /**
-     * Gets an equipment record by its ID.
-     * @param req Express Request. Expects the equipment ID in req.params.
-     * @param res Express Response.
-     */
     async get(req: Request, res: Response) {
         try {
             const { id } = req.params;
             const equipment = await prisma.equipment.findUnique({
                 where: { id },
                 include: {
-                    company: { select: { id: true, name: true, code: true } },
-                    assignedToUser: {
-                        select: { id: true, username: true, email: true, person: { select: { fullName: true } } }
-                    },
+                    ...equipmentInclude,
                     maintenances: {
                         select: { id: true, title: true, type: true, status: true, scheduledDate: true },
                         orderBy: { scheduledDate: 'desc' }
@@ -291,17 +269,11 @@ export class EquipmentController {
         }
     }
 
-    /**
-     * Gets all equipment records.
-     * @param req Express Request.
-     * @param res Express Response.
-     */
     async getAll(req: Request, res: Response) {
         try {
             const equipment = await prisma.equipment.findMany({
                 include: {
-                    company: { select: { id: true, name: true, code: true } },
-                    assignedToUser: { select: { id: true, username: true, person: { select: { fullName: true } } } },
+                    ...equipmentInclude,
                     _count: {
                         select: {
                             maintenances: true,
@@ -318,9 +290,6 @@ export class EquipmentController {
         }
     }
 
-    /**
-     * Gets equipment by company ID
-     */
     async getEquipmentByCompanyCode(req: Request, res: Response): Promise<void> {
         const { companyId } = req.params;
 
@@ -337,8 +306,7 @@ export class EquipmentController {
             const inventory = await prisma.equipment.findMany({
                 where: { companyId: company.id },
                 include: {
-                    company: { select: { id: true, name: true, code: true } },
-                    assignedToUser: { select: { id: true, username: true, email: true } },
+                    ...equipmentInclude,
                     maintenances: {
                         select: { id: true, title: true, type: true, status: true }
                     },
@@ -359,5 +327,4 @@ export class EquipmentController {
             res.status(500).json({ message: 'Error al obtener el inventario', error: error.message });
         }
     }
-
 }
