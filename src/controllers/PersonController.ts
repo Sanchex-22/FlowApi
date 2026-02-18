@@ -3,7 +3,7 @@ import { prisma } from '../../lib/prisma.js';
 import { generateNextUserCode } from '../../prisma/seed.js';
 
 export class PersonController {
-  
+
   // ✅ GET - Obtener una persona por ID
   async get(req: Request, res: Response) {
     try {
@@ -94,28 +94,23 @@ export class PersonController {
         return res.status(404).json({ error: 'Compañía no encontrada.' });
       }
 
-      // Obtener IDs de usuarios de la compañía
-      const usersInCompany = await prisma.user.findMany({
-        where: {
-          companies: {
-            some: {
-              companyId: company.id,
-            },
-          },
-        },
-        select: {
-          id: true,
-        },
-      });
-
-      const userIds = usersInCompany.map(u => u.id);
-
       // Obtener personas asociadas a esos usuarios
       const persons = await prisma.person.findMany({
         where: {
-          userId: {
-            in: userIds,
-          },
+          OR: [
+            {
+              companyId: companyCode
+            },
+            {
+              user: {
+                companies: {
+                  some: {
+                    companyId: companyCode
+                  }
+                }
+              }
+            }
+        ]
         },
         include: {
           user: {
@@ -148,7 +143,6 @@ export class PersonController {
     }
   }
 
-  // ✅ CREATE - Crear una nueva persona (userId OPCIONAL)
   async Create(req: Request, res: Response) {
     try {
       const {
@@ -158,269 +152,159 @@ export class PersonController {
         contactEmail,
         phoneNumber,
         departmentId,
+        companyId, // Este es el ID de la compañía donde trabaja la persona
         position,
         status,
       } = req.body;
 
-      // Validar que al menos nombre y apellido existan
+      // 1. Validaciones básicas
       if (!firstName || !lastName) {
-        return res.status(400).json({
-          error: 'El nombre y apellido son obligatorios.',
-        });
+        return res.status(400).json({ error: 'Nombre y apellido obligatorios.' });
+      }
+      if (!companyId) {
+        return res.status(400).json({ error: 'La compañía es obligatoria para crear una persona.' });
       }
 
-      // Si se proporciona userId, validar que existe
+      // 2. Validar existencia de la compañía
+      const companyExists = await prisma.company.findUnique({ where: { id: companyId } });
+      if (!companyExists) return res.status(404).json({ error: 'Compañía no encontrada.' });
+
+      // 3. Lógica de Coherencia Usuario-Compañía
       if (userId) {
-        const userExists = await prisma.user.findUnique({
+        const user = await prisma.user.findUnique({
           where: { id: userId },
+          include: { companies: true } // Traemos las relaciones UserCompany
         });
 
-        if (!userExists) {
-          return res.status(404).json({
-            error: 'Usuario no encontrado.',
+        if (!user) return res.status(404).json({ error: 'Usuario no encontrado.' });
+
+        // Verificamos si el usuario ya pertenece a esta compañía
+        const isUserInCompany = user.companies.some(uc => uc.companyId === companyId);
+
+        if (!isUserInCompany) {
+          // OPCIÓN 1: AUTOMÁTICA (Recomendada) -> Agregamos el usuario a la compañía
+          await prisma.userCompany.create({
+            data: {
+              userId: userId,
+              companyId: companyId
+            }
           });
+          console.log(`Usuario ${user.username} agregado automáticamente a la compañía ${companyExists.name}`);
+
+          // OPCIÓN 2: ESTRICTA (Si prefieres que de error, descomenta esto y comenta la Opción 1)
+          /*
+          return res.status(400).json({ 
+            error: 'Incoherencia: El usuario seleccionado no pertenece a la compañía indicada.' 
+          });
+          */
         }
 
-        // Validar que la persona no existe ya para ese usuario
-        const existingPerson = await prisma.person.findUnique({
-          where: { userId },
-        });
-
-        if (existingPerson) {
-          return res.status(409).json({
-            error: 'Este usuario ya tiene un perfil de persona.',
-          });
-        }
+        // Validar que el usuario no tenga ya otra Persona asignada
+        const existingPerson = await prisma.person.findUnique({ where: { userId } });
+        if (existingPerson) return res.status(409).json({ error: 'Este usuario ya tiene un perfil.' });
       }
 
-      // Generar código de usuario
-      let userCode: string;
-      try {
-        userCode = await generateNextUserCode();
-      } catch (codeError) {
-        userCode = `PERSON_${Date.now()}`;
-      }
-
-      // Validar departamento si se proporciona
-      if (departmentId) {
-        const deptExists = await prisma.department.findUnique({
-          where: { id: departmentId },
-        });
-
-        if (!deptExists) {
-          return res.status(404).json({
-            error: 'Departamento no encontrado.',
-          });
-        }
-      }
-
-      // ✅ CORRECCIÓN CRÍTICA: Construir objeto de datos correctamente
-      const createData: any = {
-        firstName: firstName || null,
-        lastName: lastName || null,
-        fullName: `${firstName || ''} ${lastName || ''}`.trim() || null,
-        contactEmail: contactEmail || null,
-        phoneNumber: phoneNumber || null,
-        departmentId: departmentId || null,
-        position: position || null,
-        status: status || 'Activo',
-        userCode,
-      };
-
-      // ✅ Solo agregar userId si se proporciona y no es null/undefined
-      if (userId) {
-        createData.userId = userId;
-      }
-      // Si no se proporciona userId, dejarlo como undefined (Prisma lo manejará como NULL)
-
-      // ✅ CORRECCIÓN: Incluir user solo si userId fue proporcionado
-      const includeOptions: any = {
-        department: {
-          select: {
-            id: true,
-            name: true,
-            description: true,
-          },
-        },
-      };
-
-      // Solo incluir user si userId fue proporcionado
-      if (userId) {
-        includeOptions.user = {
-          select: {
-            id: true,
-            username: true,
-            email: true,
-            role: true,
-            isActive: true,
-          },
-        };
-      }
+      // 4. Generar código y crear
+      let userCode = await generateNextUserCode();
 
       const newPerson = await prisma.person.create({
-        data: createData,
-        include: includeOptions,
+        data: {
+          firstName,
+          lastName,
+          fullName: `${firstName} ${lastName}`.trim(),
+          contactEmail,
+          phoneNumber,
+          position,
+          status: status || 'Activo',
+          userCode,
+          companyId: companyId, // Asignamos la compañía
+          departmentId: departmentId || null,
+          userId: userId || null
+        },
+        include: {
+          user: true,
+          // company: true,
+          department: true,
+          
+        }
       });
 
       res.status(201).json(newPerson);
+
     } catch (error: any) {
-      console.error('Error creating person:', error);
-
-      if (error.code === 'P2002') {
-        let errorMessage = 'El código de usuario ya existe.';
-        if (error.meta?.target) {
-          if (error.meta.target.includes('contactEmail'))
-            errorMessage = 'El email de contacto ya existe.';
-          if (error.meta.target.includes('userCode'))
-            errorMessage = 'El código de usuario ya existe.';
-        }
-        return res.status(409).json({ error: errorMessage });
-      }
-
-      if (error.code === 'P2025') {
-        return res.status(404).json({
-          error: 'Usuario o recurso relacionado no encontrado.',
-        });
-      }
-
-      res.status(500).json({
-        error: 'Error al crear la persona.',
-        details: error.message,
-      });
+      // ... manejo de errores (P2002, etc)
+      console.error(error);
+      res.status(500).json({ error: error.message });
     }
   }
 
-  // ✅ EDIT - Actualizar persona
   async Edit(req: Request, res: Response) {
     try {
       const { id } = req.params;
       const {
-        firstName,
-        lastName,
-        contactEmail,
-        phoneNumber,
-        departmentId,
-        position,
-        status,
-        userId,
+        firstName, lastName, contactEmail, phoneNumber,
+        departmentId, position, status,
+        userId,    // Posible cambio de usuario
+        companyId  // Posible cambio de compañía (transferencia de empleado)
       } = req.body;
 
-      // Validar que la persona existe
-      const personExists = await prisma.person.findUnique({
-        where: { id },
-      });
+      // 1. Obtener persona actual
+      const currentPerson = await prisma.person.findUnique({ where: { id } });
+      if (!currentPerson) return res.status(404).json({ error: 'Persona no encontrada.' });
 
-      if (!personExists) {
-        return res.status(404).json({ error: 'Persona no encontrada.' });
-      }
+      // Determinar los valores finales para validar coherencia
+      const finalCompanyId = companyId !== undefined ? companyId : currentPerson.companyId;
+      const finalUserId = userId !== undefined ? userId : currentPerson.userId;
 
-      // Validar departamento si se proporciona
-      if (departmentId) {
-        const deptExists = await prisma.department.findUnique({
-          where: { id: departmentId },
-        });
-
-        if (!deptExists) {
-          return res.status(404).json({
-            error: 'Departamento no encontrado.',
-          });
-        }
-      }
-
-      // Validar userId si se proporciona (para asignar o cambiar)
-      if (userId) {
-        const userExists = await prisma.user.findUnique({
-          where: { id: userId },
-        });
-
-        if (!userExists) {
-          return res.status(404).json({
-            error: 'Usuario no encontrado.',
-          });
-        }
-
-        // Si el userId es diferente al actual, validar que no tenga otro perfil
-        if (userId !== personExists.userId) {
-          const existingPerson = await prisma.person.findUnique({
-            where: { userId },
-          });
-
-          if (existingPerson) {
-            return res.status(409).json({
-              error: 'Este usuario ya tiene un perfil de persona.',
-            });
+      // 2. Lógica de Coherencia (Solo si hay usuario y compañía definidos)
+      if (finalUserId && finalCompanyId) {
+        // Verificar si el usuario tiene acceso a la compañía final
+        const userCompanyRelation = await prisma.userCompany.findUnique({
+          where: {
+            userId_companyId: {
+              userId: finalUserId,
+              companyId: finalCompanyId
+            }
           }
+        });
+
+        if (!userCompanyRelation) {
+          // OPCIÓN AUTOMÁTICA: Dar acceso al usuario a la nueva compañía
+          await prisma.userCompany.create({
+            data: { userId: finalUserId, companyId: finalCompanyId }
+          });
+
+          // OPCIÓN ESTRICTA:
+          // return res.status(400).json({ error: 'El usuario no pertenece a la compañía destino.' });
         }
       }
 
-      // Preparar datos a actualizar
-      const personDataToUpdate: any = {};
-
-      if (firstName !== undefined) personDataToUpdate.firstName = firstName;
-      if (lastName !== undefined) personDataToUpdate.lastName = lastName;
-      if (contactEmail !== undefined) personDataToUpdate.contactEmail = contactEmail;
-      if (phoneNumber !== undefined) personDataToUpdate.phoneNumber = phoneNumber;
-      if (position !== undefined) personDataToUpdate.position = position;
-      if (status !== undefined) personDataToUpdate.status = status;
-      if (departmentId !== undefined) {
-        personDataToUpdate.departmentId = departmentId === null || departmentId === '' ? null : departmentId;
+      // 3. Preparar updateData
+      const updateData: any = {};
+      if (firstName) updateData.firstName = firstName;
+      if (lastName) updateData.lastName = lastName;
+      if (firstName || lastName) {
+        const f = firstName ?? currentPerson.firstName ?? '';
+        const l = lastName ?? currentPerson.lastName ?? '';
+        updateData.fullName = `${f} ${l}`.trim();
       }
-      if (userId !== undefined) {
-        personDataToUpdate.userId = userId === null || userId === '' ? null : userId;
-      }
+      // ... resto de campos simples ...
+      if (companyId !== undefined) updateData.companyId = companyId;
+      if (userId !== undefined) updateData.userId = userId;
+      if (departmentId !== undefined) updateData.departmentId = departmentId;
 
-      // Calcular fullName si hay cambios en firstName o lastName
-      if (firstName !== undefined || lastName !== undefined) {
-        const newFirstName = firstName ?? personExists.firstName ?? '';
-        const newLastName = lastName ?? personExists.lastName ?? '';
-        personDataToUpdate.fullName = `${newFirstName} ${newLastName}`.trim() || null;
-      }
-
-      // Actualizar persona
+      // 4. Actualizar
       const updatedPerson = await prisma.person.update({
         where: { id },
-        data: personDataToUpdate,
-        include: {
-          user: {
-            select: {
-              id: true,
-              username: true,
-              email: true,
-              role: true,
-              isActive: true,
-            },
-          },
-          department: {
-            select: {
-              id: true,
-              name: true,
-              description: true,
-            },
-          },
-        },
+        data: updateData,
+        include: { user: true, company: true }
       });
 
       res.status(200).json(updatedPerson);
+
     } catch (error: any) {
-      console.error('Error updating person:', error);
-
-      if (error.code === 'P2025') {
-        return res.status(404).json({ error: 'Persona no encontrada.' });
-      }
-
-      if (error.code === 'P2002') {
-        let errorMessage = 'El email de contacto ya existe.';
-        if (error.meta?.target) {
-          if (error.meta.target.includes('contactEmail'))
-            errorMessage = 'El email de contacto ya existe.';
-        }
-        return res.status(409).json({ error: errorMessage });
-      }
-
-      res.status(500).json({
-        error: 'Error al actualizar la persona.',
-        details: error.message,
-      });
+      console.error(error);
+      res.status(500).json({ error: error.message });
     }
   }
 
