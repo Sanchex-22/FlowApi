@@ -2254,7 +2254,6 @@ export namespace Prisma {
     createdNetworks: number
     ticketsSentBy: number
     ticketsSentTo: number
-    assignedExpenses: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2266,7 +2265,6 @@ export namespace Prisma {
     createdNetworks?: boolean | UserCountOutputTypeCountCreatedNetworksArgs
     ticketsSentBy?: boolean | UserCountOutputTypeCountTicketsSentByArgs
     ticketsSentTo?: boolean | UserCountOutputTypeCountTicketsSentToArgs
-    assignedExpenses?: boolean | UserCountOutputTypeCountAssignedExpensesArgs
   }
 
   // Custom InputTypes
@@ -2336,10 +2334,34 @@ export namespace Prisma {
     where?: TicketWhereInput
   }
 
+
   /**
-   * UserCountOutputType without action
+   * Count Type PersonCountOutputType
    */
-  export type UserCountOutputTypeCountAssignedExpensesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+
+  export type PersonCountOutputType = {
+    assignedExpenses: number
+  }
+
+  export type PersonCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    assignedExpenses?: boolean | PersonCountOutputTypeCountAssignedExpensesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * PersonCountOutputType without action
+   */
+  export type PersonCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonCountOutputType
+     */
+    select?: PersonCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * PersonCountOutputType without action
+   */
+  export type PersonCountOutputTypeCountAssignedExpensesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AnnualSoftwareExpenseWhereInput
   }
 
@@ -2554,11 +2576,11 @@ export namespace Prisma {
    */
 
   export type AnnualSoftwareExpenseCountOutputType = {
-    assignedUsers: number
+    assignedPersons: number
   }
 
   export type AnnualSoftwareExpenseCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    assignedUsers?: boolean | AnnualSoftwareExpenseCountOutputTypeCountAssignedUsersArgs
+    assignedPersons?: boolean | AnnualSoftwareExpenseCountOutputTypeCountAssignedPersonsArgs
   }
 
   // Custom InputTypes
@@ -2575,8 +2597,8 @@ export namespace Prisma {
   /**
    * AnnualSoftwareExpenseCountOutputType without action
    */
-  export type AnnualSoftwareExpenseCountOutputTypeCountAssignedUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserWhereInput
+  export type AnnualSoftwareExpenseCountOutputTypeCountAssignedPersonsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PersonWhereInput
   }
 
 
@@ -4149,7 +4171,6 @@ export namespace Prisma {
     person?: boolean | User$personArgs<ExtArgs>
     ticketsSentBy?: boolean | User$ticketsSentByArgs<ExtArgs>
     ticketsSentTo?: boolean | User$ticketsSentToArgs<ExtArgs>
-    assignedExpenses?: boolean | User$assignedExpensesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -4197,7 +4218,6 @@ export namespace Prisma {
     person?: boolean | User$personArgs<ExtArgs>
     ticketsSentBy?: boolean | User$ticketsSentByArgs<ExtArgs>
     ticketsSentTo?: boolean | User$ticketsSentToArgs<ExtArgs>
-    assignedExpenses?: boolean | User$assignedExpensesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4215,7 +4235,6 @@ export namespace Prisma {
       person: Prisma.$PersonPayload<ExtArgs> | null
       ticketsSentBy: Prisma.$TicketPayload<ExtArgs>[]
       ticketsSentTo: Prisma.$TicketPayload<ExtArgs>[]
-      assignedExpenses: Prisma.$AnnualSoftwareExpensePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4629,7 +4648,6 @@ export namespace Prisma {
     person<T extends User$personArgs<ExtArgs> = {}>(args?: Subset<T, User$personArgs<ExtArgs>>): Prisma__PersonClient<$Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     ticketsSentBy<T extends User$ticketsSentByArgs<ExtArgs> = {}>(args?: Subset<T, User$ticketsSentByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ticketsSentTo<T extends User$ticketsSentToArgs<ExtArgs> = {}>(args?: Subset<T, User$ticketsSentToArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    assignedExpenses<T extends User$assignedExpensesArgs<ExtArgs> = {}>(args?: Subset<T, User$assignedExpensesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnnualSoftwareExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5263,30 +5281,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: TicketScalarFieldEnum | TicketScalarFieldEnum[]
-  }
-
-  /**
-   * User.assignedExpenses
-   */
-  export type User$assignedExpensesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AnnualSoftwareExpense
-     */
-    select?: AnnualSoftwareExpenseSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AnnualSoftwareExpense
-     */
-    omit?: AnnualSoftwareExpenseOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AnnualSoftwareExpenseInclude<ExtArgs> | null
-    where?: AnnualSoftwareExpenseWhereInput
-    orderBy?: AnnualSoftwareExpenseOrderByWithRelationInput | AnnualSoftwareExpenseOrderByWithRelationInput[]
-    cursor?: AnnualSoftwareExpenseWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: AnnualSoftwareExpenseScalarFieldEnum | AnnualSoftwareExpenseScalarFieldEnum[]
   }
 
   /**
@@ -6524,7 +6518,7 @@ export namespace Prisma {
 
   export type PersonGroupByOutputType = {
     id: string
-    userId: string
+    userId: string | null
     firstName: string | null
     lastName: string | null
     fullName: string | null
@@ -6572,7 +6566,9 @@ export namespace Prisma {
     updatedAt?: boolean
     companyId?: boolean
     department?: boolean | Person$departmentArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | Person$userArgs<ExtArgs>
+    assignedExpenses?: boolean | Person$assignedExpensesArgs<ExtArgs>
+    _count?: boolean | PersonCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["person"]>
 
   export type PersonSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6591,7 +6587,7 @@ export namespace Prisma {
     updatedAt?: boolean
     companyId?: boolean
     department?: boolean | Person$departmentArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | Person$userArgs<ExtArgs>
   }, ExtArgs["result"]["person"]>
 
   export type PersonSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6610,7 +6606,7 @@ export namespace Prisma {
     updatedAt?: boolean
     companyId?: boolean
     department?: boolean | Person$departmentArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | Person$userArgs<ExtArgs>
   }, ExtArgs["result"]["person"]>
 
   export type PersonSelectScalar = {
@@ -6633,26 +6629,29 @@ export namespace Prisma {
   export type PersonOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "firstName" | "lastName" | "fullName" | "contactEmail" | "phoneNumber" | "departmentId" | "position" | "status" | "userCode" | "createdAt" | "updatedAt" | "companyId", ExtArgs["result"]["person"]>
   export type PersonInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     department?: boolean | Person$departmentArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | Person$userArgs<ExtArgs>
+    assignedExpenses?: boolean | Person$assignedExpensesArgs<ExtArgs>
+    _count?: boolean | PersonCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PersonIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     department?: boolean | Person$departmentArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | Person$userArgs<ExtArgs>
   }
   export type PersonIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     department?: boolean | Person$departmentArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | Person$userArgs<ExtArgs>
   }
 
   export type $PersonPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Person"
     objects: {
       department: Prisma.$DepartmentPayload<ExtArgs> | null
-      user: Prisma.$UserPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs> | null
+      assignedExpenses: Prisma.$AnnualSoftwareExpensePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      userId: string
+      userId: string | null
       firstName: string | null
       lastName: string | null
       fullName: string | null
@@ -7060,7 +7059,8 @@ export namespace Prisma {
   export interface Prisma__PersonClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     department<T extends Person$departmentArgs<ExtArgs> = {}>(args?: Subset<T, Person$departmentArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends Person$userArgs<ExtArgs> = {}>(args?: Subset<T, Person$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    assignedExpenses<T extends Person$assignedExpensesArgs<ExtArgs> = {}>(args?: Subset<T, Person$assignedExpensesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnnualSoftwareExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7516,6 +7516,49 @@ export namespace Prisma {
      */
     include?: DepartmentInclude<ExtArgs> | null
     where?: DepartmentWhereInput
+  }
+
+  /**
+   * Person.user
+   */
+  export type Person$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Person.assignedExpenses
+   */
+  export type Person$assignedExpensesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AnnualSoftwareExpense
+     */
+    select?: AnnualSoftwareExpenseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AnnualSoftwareExpense
+     */
+    omit?: AnnualSoftwareExpenseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnnualSoftwareExpenseInclude<ExtArgs> | null
+    where?: AnnualSoftwareExpenseWhereInput
+    orderBy?: AnnualSoftwareExpenseOrderByWithRelationInput | AnnualSoftwareExpenseOrderByWithRelationInput[]
+    cursor?: AnnualSoftwareExpenseWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AnnualSoftwareExpenseScalarFieldEnum | AnnualSoftwareExpenseScalarFieldEnum[]
   }
 
   /**
@@ -18748,7 +18791,7 @@ export namespace Prisma {
     additionalNotes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    assignedUsers?: boolean | AnnualSoftwareExpense$assignedUsersArgs<ExtArgs>
+    assignedPersons?: boolean | AnnualSoftwareExpense$assignedPersonsArgs<ExtArgs>
     _count?: boolean | AnnualSoftwareExpenseCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["annualSoftwareExpense"]>
 
@@ -18802,7 +18845,7 @@ export namespace Prisma {
 
   export type AnnualSoftwareExpenseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "applicationName" | "provider" | "category" | "status" | "annualCost" | "numberOfUsers" | "costPerUser" | "renewalDate" | "paymentFrequency" | "additionalNotes" | "createdAt" | "updatedAt", ExtArgs["result"]["annualSoftwareExpense"]>
   export type AnnualSoftwareExpenseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    assignedUsers?: boolean | AnnualSoftwareExpense$assignedUsersArgs<ExtArgs>
+    assignedPersons?: boolean | AnnualSoftwareExpense$assignedPersonsArgs<ExtArgs>
     _count?: boolean | AnnualSoftwareExpenseCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type AnnualSoftwareExpenseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -18811,7 +18854,7 @@ export namespace Prisma {
   export type $AnnualSoftwareExpensePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "AnnualSoftwareExpense"
     objects: {
-      assignedUsers: Prisma.$UserPayload<ExtArgs>[]
+      assignedPersons: Prisma.$PersonPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -19221,7 +19264,7 @@ export namespace Prisma {
    */
   export interface Prisma__AnnualSoftwareExpenseClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    assignedUsers<T extends AnnualSoftwareExpense$assignedUsersArgs<ExtArgs> = {}>(args?: Subset<T, AnnualSoftwareExpense$assignedUsersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    assignedPersons<T extends AnnualSoftwareExpense$assignedPersonsArgs<ExtArgs> = {}>(args?: Subset<T, AnnualSoftwareExpense$assignedPersonsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -19652,27 +19695,27 @@ export namespace Prisma {
   }
 
   /**
-   * AnnualSoftwareExpense.assignedUsers
+   * AnnualSoftwareExpense.assignedPersons
    */
-  export type AnnualSoftwareExpense$assignedUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AnnualSoftwareExpense$assignedPersonsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the User
+     * Select specific fields to fetch from the Person
      */
-    select?: UserSelect<ExtArgs> | null
+    select?: PersonSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the User
+     * Omit specific fields from the Person
      */
-    omit?: UserOmit<ExtArgs> | null
+    omit?: PersonOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
-    cursor?: UserWhereUniqueInput
+    include?: PersonInclude<ExtArgs> | null
+    where?: PersonWhereInput
+    orderBy?: PersonOrderByWithRelationInput | PersonOrderByWithRelationInput[]
+    cursor?: PersonWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+    distinct?: PersonScalarFieldEnum | PersonScalarFieldEnum[]
   }
 
   /**
@@ -20393,7 +20436,6 @@ export namespace Prisma {
     person?: XOR<PersonNullableScalarRelationFilter, PersonWhereInput> | null
     ticketsSentBy?: TicketListRelationFilter
     ticketsSentTo?: TicketListRelationFilter
-    assignedExpenses?: AnnualSoftwareExpenseListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -20414,7 +20456,6 @@ export namespace Prisma {
     person?: PersonOrderByWithRelationInput
     ticketsSentBy?: TicketOrderByRelationAggregateInput
     ticketsSentTo?: TicketOrderByRelationAggregateInput
-    assignedExpenses?: AnnualSoftwareExpenseOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -20438,7 +20479,6 @@ export namespace Prisma {
     person?: XOR<PersonNullableScalarRelationFilter, PersonWhereInput> | null
     ticketsSentBy?: TicketListRelationFilter
     ticketsSentTo?: TicketListRelationFilter
-    assignedExpenses?: AnnualSoftwareExpenseListRelationFilter
   }, "id" | "username" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -20518,7 +20558,7 @@ export namespace Prisma {
     OR?: PersonWhereInput[]
     NOT?: PersonWhereInput | PersonWhereInput[]
     id?: StringFilter<"Person"> | string
-    userId?: StringFilter<"Person"> | string
+    userId?: StringNullableFilter<"Person"> | string | null
     firstName?: StringNullableFilter<"Person"> | string | null
     lastName?: StringNullableFilter<"Person"> | string | null
     fullName?: StringNullableFilter<"Person"> | string | null
@@ -20532,12 +20572,13 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Person"> | Date | string
     companyId?: StringNullableFilter<"Person"> | string | null
     department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    assignedExpenses?: AnnualSoftwareExpenseListRelationFilter
   }
 
   export type PersonOrderByWithRelationInput = {
     id?: SortOrder
-    userId?: SortOrder
+    userId?: SortOrderInput | SortOrder
     firstName?: SortOrderInput | SortOrder
     lastName?: SortOrderInput | SortOrder
     fullName?: SortOrderInput | SortOrder
@@ -20552,6 +20593,7 @@ export namespace Prisma {
     companyId?: SortOrderInput | SortOrder
     department?: DepartmentOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
+    assignedExpenses?: AnnualSoftwareExpenseOrderByRelationAggregateInput
   }
 
   export type PersonWhereUniqueInput = Prisma.AtLeast<{
@@ -20573,12 +20615,13 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Person"> | Date | string
     companyId?: StringNullableFilter<"Person"> | string | null
     department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    assignedExpenses?: AnnualSoftwareExpenseListRelationFilter
   }, "id" | "userId" | "userCode">
 
   export type PersonOrderByWithAggregationInput = {
     id?: SortOrder
-    userId?: SortOrder
+    userId?: SortOrderInput | SortOrder
     firstName?: SortOrderInput | SortOrder
     lastName?: SortOrderInput | SortOrder
     fullName?: SortOrderInput | SortOrder
@@ -20601,7 +20644,7 @@ export namespace Prisma {
     OR?: PersonScalarWhereWithAggregatesInput[]
     NOT?: PersonScalarWhereWithAggregatesInput | PersonScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Person"> | string
-    userId?: StringWithAggregatesFilter<"Person"> | string
+    userId?: StringNullableWithAggregatesFilter<"Person"> | string | null
     firstName?: StringNullableWithAggregatesFilter<"Person"> | string | null
     lastName?: StringNullableWithAggregatesFilter<"Person"> | string | null
     fullName?: StringNullableWithAggregatesFilter<"Person"> | string | null
@@ -21507,7 +21550,7 @@ export namespace Prisma {
     additionalNotes?: StringNullableFilter<"AnnualSoftwareExpense"> | string | null
     createdAt?: DateTimeFilter<"AnnualSoftwareExpense"> | Date | string
     updatedAt?: DateTimeFilter<"AnnualSoftwareExpense"> | Date | string
-    assignedUsers?: UserListRelationFilter
+    assignedPersons?: PersonListRelationFilter
   }
 
   export type AnnualSoftwareExpenseOrderByWithRelationInput = {
@@ -21524,7 +21567,7 @@ export namespace Prisma {
     additionalNotes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    assignedUsers?: UserOrderByRelationAggregateInput
+    assignedPersons?: PersonOrderByRelationAggregateInput
   }
 
   export type AnnualSoftwareExpenseWhereUniqueInput = Prisma.AtLeast<{
@@ -21544,7 +21587,7 @@ export namespace Prisma {
     additionalNotes?: StringNullableFilter<"AnnualSoftwareExpense"> | string | null
     createdAt?: DateTimeFilter<"AnnualSoftwareExpense"> | Date | string
     updatedAt?: DateTimeFilter<"AnnualSoftwareExpense"> | Date | string
-    assignedUsers?: UserListRelationFilter
+    assignedPersons?: PersonListRelationFilter
   }, "id">
 
   export type AnnualSoftwareExpenseOrderByWithAggregationInput = {
@@ -21763,7 +21806,6 @@ export namespace Prisma {
     person?: PersonCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketCreateNestedManyWithoutSendToInput
-    assignedExpenses?: AnnualSoftwareExpenseCreateNestedManyWithoutAssignedUsersInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -21784,7 +21826,6 @@ export namespace Prisma {
     person?: PersonUncheckedCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketUncheckedCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketUncheckedCreateNestedManyWithoutSendToInput
-    assignedExpenses?: AnnualSoftwareExpenseUncheckedCreateNestedManyWithoutAssignedUsersInput
   }
 
   export type UserUpdateInput = {
@@ -21805,7 +21846,6 @@ export namespace Prisma {
     person?: PersonUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUpdateManyWithoutSendToNestedInput
-    assignedExpenses?: AnnualSoftwareExpenseUpdateManyWithoutAssignedUsersNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -21826,7 +21866,6 @@ export namespace Prisma {
     person?: PersonUncheckedUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUncheckedUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUncheckedUpdateManyWithoutSendToNestedInput
-    assignedExpenses?: AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedUsersNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -21910,12 +21949,13 @@ export namespace Prisma {
     updatedAt?: Date | string
     companyId?: string | null
     department?: DepartmentCreateNestedOneWithoutPersonsInput
-    user: UserCreateNestedOneWithoutPersonInput
+    user?: UserCreateNestedOneWithoutPersonInput
+    assignedExpenses?: AnnualSoftwareExpenseCreateNestedManyWithoutAssignedPersonsInput
   }
 
   export type PersonUncheckedCreateInput = {
     id?: string
-    userId: string
+    userId?: string | null
     firstName?: string | null
     lastName?: string | null
     fullName?: string | null
@@ -21928,6 +21968,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     companyId?: string | null
+    assignedExpenses?: AnnualSoftwareExpenseUncheckedCreateNestedManyWithoutAssignedPersonsInput
   }
 
   export type PersonUpdateInput = {
@@ -21944,12 +21985,13 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     department?: DepartmentUpdateOneWithoutPersonsNestedInput
-    user?: UserUpdateOneRequiredWithoutPersonNestedInput
+    user?: UserUpdateOneWithoutPersonNestedInput
+    assignedExpenses?: AnnualSoftwareExpenseUpdateManyWithoutAssignedPersonsNestedInput
   }
 
   export type PersonUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21962,11 +22004,12 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedExpenses?: AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedPersonsNestedInput
   }
 
   export type PersonCreateManyInput = {
     id?: string
-    userId: string
+    userId?: string | null
     firstName?: string | null
     lastName?: string | null
     fullName?: string | null
@@ -21998,7 +22041,7 @@ export namespace Prisma {
 
   export type PersonUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -23009,7 +23052,7 @@ export namespace Prisma {
     additionalNotes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    assignedUsers?: UserCreateNestedManyWithoutAssignedExpensesInput
+    assignedPersons?: PersonCreateNestedManyWithoutAssignedExpensesInput
   }
 
   export type AnnualSoftwareExpenseUncheckedCreateInput = {
@@ -23026,7 +23069,7 @@ export namespace Prisma {
     additionalNotes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    assignedUsers?: UserUncheckedCreateNestedManyWithoutAssignedExpensesInput
+    assignedPersons?: PersonUncheckedCreateNestedManyWithoutAssignedExpensesInput
   }
 
   export type AnnualSoftwareExpenseUpdateInput = {
@@ -23043,7 +23086,7 @@ export namespace Prisma {
     additionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignedUsers?: UserUpdateManyWithoutAssignedExpensesNestedInput
+    assignedPersons?: PersonUpdateManyWithoutAssignedExpensesNestedInput
   }
 
   export type AnnualSoftwareExpenseUncheckedUpdateInput = {
@@ -23060,7 +23103,7 @@ export namespace Prisma {
     additionalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignedUsers?: UserUncheckedUpdateManyWithoutAssignedExpensesNestedInput
+    assignedPersons?: PersonUncheckedUpdateManyWithoutAssignedExpensesNestedInput
   }
 
   export type AnnualSoftwareExpenseCreateManyInput = {
@@ -23467,12 +23510,6 @@ export namespace Prisma {
     none?: TicketWhereInput
   }
 
-  export type AnnualSoftwareExpenseListRelationFilter = {
-    every?: AnnualSoftwareExpenseWhereInput
-    some?: AnnualSoftwareExpenseWhereInput
-    none?: AnnualSoftwareExpenseWhereInput
-  }
-
   export type UserCompanyOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -23494,10 +23531,6 @@ export namespace Prisma {
   }
 
   export type TicketOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type AnnualSoftwareExpenseOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -23592,6 +23625,16 @@ export namespace Prisma {
   export type DepartmentNullableScalarRelationFilter = {
     is?: DepartmentWhereInput | null
     isNot?: DepartmentWhereInput | null
+  }
+
+  export type AnnualSoftwareExpenseListRelationFilter = {
+    every?: AnnualSoftwareExpenseWhereInput
+    some?: AnnualSoftwareExpenseWhereInput
+    none?: AnnualSoftwareExpenseWhereInput
+  }
+
+  export type AnnualSoftwareExpenseOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type PersonCountOrderByAggregateInput = {
@@ -24292,16 +24335,6 @@ export namespace Prisma {
     not?: NestedEnumPaymentFrequencyFilter<$PrismaModel> | $Enums.PaymentFrequency
   }
 
-  export type UserListRelationFilter = {
-    every?: UserWhereInput
-    some?: UserWhereInput
-    none?: UserWhereInput
-  }
-
-  export type UserOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type AnnualSoftwareExpenseCountOrderByAggregateInput = {
     id?: SortOrder
     applicationName?: SortOrder
@@ -24574,12 +24607,6 @@ export namespace Prisma {
     connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
   }
 
-  export type AnnualSoftwareExpenseCreateNestedManyWithoutAssignedUsersInput = {
-    create?: XOR<AnnualSoftwareExpenseCreateWithoutAssignedUsersInput, AnnualSoftwareExpenseUncheckedCreateWithoutAssignedUsersInput> | AnnualSoftwareExpenseCreateWithoutAssignedUsersInput[] | AnnualSoftwareExpenseUncheckedCreateWithoutAssignedUsersInput[]
-    connectOrCreate?: AnnualSoftwareExpenseCreateOrConnectWithoutAssignedUsersInput | AnnualSoftwareExpenseCreateOrConnectWithoutAssignedUsersInput[]
-    connect?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
-  }
-
   export type UserCompanyUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<UserCompanyCreateWithoutUserInput, UserCompanyUncheckedCreateWithoutUserInput> | UserCompanyCreateWithoutUserInput[] | UserCompanyUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserCompanyCreateOrConnectWithoutUserInput | UserCompanyCreateOrConnectWithoutUserInput[]
@@ -24640,12 +24667,6 @@ export namespace Prisma {
     connectOrCreate?: TicketCreateOrConnectWithoutSendToInput | TicketCreateOrConnectWithoutSendToInput[]
     createMany?: TicketCreateManySendToInputEnvelope
     connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
-  }
-
-  export type AnnualSoftwareExpenseUncheckedCreateNestedManyWithoutAssignedUsersInput = {
-    create?: XOR<AnnualSoftwareExpenseCreateWithoutAssignedUsersInput, AnnualSoftwareExpenseUncheckedCreateWithoutAssignedUsersInput> | AnnualSoftwareExpenseCreateWithoutAssignedUsersInput[] | AnnualSoftwareExpenseUncheckedCreateWithoutAssignedUsersInput[]
-    connectOrCreate?: AnnualSoftwareExpenseCreateOrConnectWithoutAssignedUsersInput | AnnualSoftwareExpenseCreateOrConnectWithoutAssignedUsersInput[]
-    connect?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
   }
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
@@ -24778,19 +24799,6 @@ export namespace Prisma {
     deleteMany?: TicketScalarWhereInput | TicketScalarWhereInput[]
   }
 
-  export type AnnualSoftwareExpenseUpdateManyWithoutAssignedUsersNestedInput = {
-    create?: XOR<AnnualSoftwareExpenseCreateWithoutAssignedUsersInput, AnnualSoftwareExpenseUncheckedCreateWithoutAssignedUsersInput> | AnnualSoftwareExpenseCreateWithoutAssignedUsersInput[] | AnnualSoftwareExpenseUncheckedCreateWithoutAssignedUsersInput[]
-    connectOrCreate?: AnnualSoftwareExpenseCreateOrConnectWithoutAssignedUsersInput | AnnualSoftwareExpenseCreateOrConnectWithoutAssignedUsersInput[]
-    upsert?: AnnualSoftwareExpenseUpsertWithWhereUniqueWithoutAssignedUsersInput | AnnualSoftwareExpenseUpsertWithWhereUniqueWithoutAssignedUsersInput[]
-    set?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
-    disconnect?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
-    delete?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
-    connect?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
-    update?: AnnualSoftwareExpenseUpdateWithWhereUniqueWithoutAssignedUsersInput | AnnualSoftwareExpenseUpdateWithWhereUniqueWithoutAssignedUsersInput[]
-    updateMany?: AnnualSoftwareExpenseUpdateManyWithWhereWithoutAssignedUsersInput | AnnualSoftwareExpenseUpdateManyWithWhereWithoutAssignedUsersInput[]
-    deleteMany?: AnnualSoftwareExpenseScalarWhereInput | AnnualSoftwareExpenseScalarWhereInput[]
-  }
-
   export type UserCompanyUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<UserCompanyCreateWithoutUserInput, UserCompanyUncheckedCreateWithoutUserInput> | UserCompanyCreateWithoutUserInput[] | UserCompanyUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserCompanyCreateOrConnectWithoutUserInput | UserCompanyCreateOrConnectWithoutUserInput[]
@@ -24913,19 +24921,6 @@ export namespace Prisma {
     deleteMany?: TicketScalarWhereInput | TicketScalarWhereInput[]
   }
 
-  export type AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedUsersNestedInput = {
-    create?: XOR<AnnualSoftwareExpenseCreateWithoutAssignedUsersInput, AnnualSoftwareExpenseUncheckedCreateWithoutAssignedUsersInput> | AnnualSoftwareExpenseCreateWithoutAssignedUsersInput[] | AnnualSoftwareExpenseUncheckedCreateWithoutAssignedUsersInput[]
-    connectOrCreate?: AnnualSoftwareExpenseCreateOrConnectWithoutAssignedUsersInput | AnnualSoftwareExpenseCreateOrConnectWithoutAssignedUsersInput[]
-    upsert?: AnnualSoftwareExpenseUpsertWithWhereUniqueWithoutAssignedUsersInput | AnnualSoftwareExpenseUpsertWithWhereUniqueWithoutAssignedUsersInput[]
-    set?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
-    disconnect?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
-    delete?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
-    connect?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
-    update?: AnnualSoftwareExpenseUpdateWithWhereUniqueWithoutAssignedUsersInput | AnnualSoftwareExpenseUpdateWithWhereUniqueWithoutAssignedUsersInput[]
-    updateMany?: AnnualSoftwareExpenseUpdateManyWithWhereWithoutAssignedUsersInput | AnnualSoftwareExpenseUpdateManyWithWhereWithoutAssignedUsersInput[]
-    deleteMany?: AnnualSoftwareExpenseScalarWhereInput | AnnualSoftwareExpenseScalarWhereInput[]
-  }
-
   export type UserCreateNestedOneWithoutCompaniesInput = {
     create?: XOR<UserCreateWithoutCompaniesInput, UserUncheckedCreateWithoutCompaniesInput>
     connectOrCreate?: UserCreateOrConnectWithoutCompaniesInput
@@ -24966,6 +24961,18 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type AnnualSoftwareExpenseCreateNestedManyWithoutAssignedPersonsInput = {
+    create?: XOR<AnnualSoftwareExpenseCreateWithoutAssignedPersonsInput, AnnualSoftwareExpenseUncheckedCreateWithoutAssignedPersonsInput> | AnnualSoftwareExpenseCreateWithoutAssignedPersonsInput[] | AnnualSoftwareExpenseUncheckedCreateWithoutAssignedPersonsInput[]
+    connectOrCreate?: AnnualSoftwareExpenseCreateOrConnectWithoutAssignedPersonsInput | AnnualSoftwareExpenseCreateOrConnectWithoutAssignedPersonsInput[]
+    connect?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
+  }
+
+  export type AnnualSoftwareExpenseUncheckedCreateNestedManyWithoutAssignedPersonsInput = {
+    create?: XOR<AnnualSoftwareExpenseCreateWithoutAssignedPersonsInput, AnnualSoftwareExpenseUncheckedCreateWithoutAssignedPersonsInput> | AnnualSoftwareExpenseCreateWithoutAssignedPersonsInput[] | AnnualSoftwareExpenseUncheckedCreateWithoutAssignedPersonsInput[]
+    connectOrCreate?: AnnualSoftwareExpenseCreateOrConnectWithoutAssignedPersonsInput | AnnualSoftwareExpenseCreateOrConnectWithoutAssignedPersonsInput[]
+    connect?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
+  }
+
   export type EnumPersonStatusFieldUpdateOperationsInput = {
     set?: $Enums.PersonStatus
   }
@@ -24980,12 +24987,40 @@ export namespace Prisma {
     update?: XOR<XOR<DepartmentUpdateToOneWithWhereWithoutPersonsInput, DepartmentUpdateWithoutPersonsInput>, DepartmentUncheckedUpdateWithoutPersonsInput>
   }
 
-  export type UserUpdateOneRequiredWithoutPersonNestedInput = {
+  export type UserUpdateOneWithoutPersonNestedInput = {
     create?: XOR<UserCreateWithoutPersonInput, UserUncheckedCreateWithoutPersonInput>
     connectOrCreate?: UserCreateOrConnectWithoutPersonInput
     upsert?: UserUpsertWithoutPersonInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPersonInput, UserUpdateWithoutPersonInput>, UserUncheckedUpdateWithoutPersonInput>
+  }
+
+  export type AnnualSoftwareExpenseUpdateManyWithoutAssignedPersonsNestedInput = {
+    create?: XOR<AnnualSoftwareExpenseCreateWithoutAssignedPersonsInput, AnnualSoftwareExpenseUncheckedCreateWithoutAssignedPersonsInput> | AnnualSoftwareExpenseCreateWithoutAssignedPersonsInput[] | AnnualSoftwareExpenseUncheckedCreateWithoutAssignedPersonsInput[]
+    connectOrCreate?: AnnualSoftwareExpenseCreateOrConnectWithoutAssignedPersonsInput | AnnualSoftwareExpenseCreateOrConnectWithoutAssignedPersonsInput[]
+    upsert?: AnnualSoftwareExpenseUpsertWithWhereUniqueWithoutAssignedPersonsInput | AnnualSoftwareExpenseUpsertWithWhereUniqueWithoutAssignedPersonsInput[]
+    set?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
+    disconnect?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
+    delete?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
+    connect?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
+    update?: AnnualSoftwareExpenseUpdateWithWhereUniqueWithoutAssignedPersonsInput | AnnualSoftwareExpenseUpdateWithWhereUniqueWithoutAssignedPersonsInput[]
+    updateMany?: AnnualSoftwareExpenseUpdateManyWithWhereWithoutAssignedPersonsInput | AnnualSoftwareExpenseUpdateManyWithWhereWithoutAssignedPersonsInput[]
+    deleteMany?: AnnualSoftwareExpenseScalarWhereInput | AnnualSoftwareExpenseScalarWhereInput[]
+  }
+
+  export type AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedPersonsNestedInput = {
+    create?: XOR<AnnualSoftwareExpenseCreateWithoutAssignedPersonsInput, AnnualSoftwareExpenseUncheckedCreateWithoutAssignedPersonsInput> | AnnualSoftwareExpenseCreateWithoutAssignedPersonsInput[] | AnnualSoftwareExpenseUncheckedCreateWithoutAssignedPersonsInput[]
+    connectOrCreate?: AnnualSoftwareExpenseCreateOrConnectWithoutAssignedPersonsInput | AnnualSoftwareExpenseCreateOrConnectWithoutAssignedPersonsInput[]
+    upsert?: AnnualSoftwareExpenseUpsertWithWhereUniqueWithoutAssignedPersonsInput | AnnualSoftwareExpenseUpsertWithWhereUniqueWithoutAssignedPersonsInput[]
+    set?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
+    disconnect?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
+    delete?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
+    connect?: AnnualSoftwareExpenseWhereUniqueInput | AnnualSoftwareExpenseWhereUniqueInput[]
+    update?: AnnualSoftwareExpenseUpdateWithWhereUniqueWithoutAssignedPersonsInput | AnnualSoftwareExpenseUpdateWithWhereUniqueWithoutAssignedPersonsInput[]
+    updateMany?: AnnualSoftwareExpenseUpdateManyWithWhereWithoutAssignedPersonsInput | AnnualSoftwareExpenseUpdateManyWithWhereWithoutAssignedPersonsInput[]
+    deleteMany?: AnnualSoftwareExpenseScalarWhereInput | AnnualSoftwareExpenseScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutCreatedCompaniesInput = {
@@ -25782,16 +25817,16 @@ export namespace Prisma {
     update?: XOR<XOR<NetworkProviderUpdateToOneWithWhereWithoutNetworksInput, NetworkProviderUpdateWithoutNetworksInput>, NetworkProviderUncheckedUpdateWithoutNetworksInput>
   }
 
-  export type UserCreateNestedManyWithoutAssignedExpensesInput = {
-    create?: XOR<UserCreateWithoutAssignedExpensesInput, UserUncheckedCreateWithoutAssignedExpensesInput> | UserCreateWithoutAssignedExpensesInput[] | UserUncheckedCreateWithoutAssignedExpensesInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutAssignedExpensesInput | UserCreateOrConnectWithoutAssignedExpensesInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  export type PersonCreateNestedManyWithoutAssignedExpensesInput = {
+    create?: XOR<PersonCreateWithoutAssignedExpensesInput, PersonUncheckedCreateWithoutAssignedExpensesInput> | PersonCreateWithoutAssignedExpensesInput[] | PersonUncheckedCreateWithoutAssignedExpensesInput[]
+    connectOrCreate?: PersonCreateOrConnectWithoutAssignedExpensesInput | PersonCreateOrConnectWithoutAssignedExpensesInput[]
+    connect?: PersonWhereUniqueInput | PersonWhereUniqueInput[]
   }
 
-  export type UserUncheckedCreateNestedManyWithoutAssignedExpensesInput = {
-    create?: XOR<UserCreateWithoutAssignedExpensesInput, UserUncheckedCreateWithoutAssignedExpensesInput> | UserCreateWithoutAssignedExpensesInput[] | UserUncheckedCreateWithoutAssignedExpensesInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutAssignedExpensesInput | UserCreateOrConnectWithoutAssignedExpensesInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  export type PersonUncheckedCreateNestedManyWithoutAssignedExpensesInput = {
+    create?: XOR<PersonCreateWithoutAssignedExpensesInput, PersonUncheckedCreateWithoutAssignedExpensesInput> | PersonCreateWithoutAssignedExpensesInput[] | PersonUncheckedCreateWithoutAssignedExpensesInput[]
+    connectOrCreate?: PersonCreateOrConnectWithoutAssignedExpensesInput | PersonCreateOrConnectWithoutAssignedExpensesInput[]
+    connect?: PersonWhereUniqueInput | PersonWhereUniqueInput[]
   }
 
   export type EnumSoftwareCategoryFieldUpdateOperationsInput = {
@@ -25822,30 +25857,30 @@ export namespace Prisma {
     set?: $Enums.PaymentFrequency
   }
 
-  export type UserUpdateManyWithoutAssignedExpensesNestedInput = {
-    create?: XOR<UserCreateWithoutAssignedExpensesInput, UserUncheckedCreateWithoutAssignedExpensesInput> | UserCreateWithoutAssignedExpensesInput[] | UserUncheckedCreateWithoutAssignedExpensesInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutAssignedExpensesInput | UserCreateOrConnectWithoutAssignedExpensesInput[]
-    upsert?: UserUpsertWithWhereUniqueWithoutAssignedExpensesInput | UserUpsertWithWhereUniqueWithoutAssignedExpensesInput[]
-    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    update?: UserUpdateWithWhereUniqueWithoutAssignedExpensesInput | UserUpdateWithWhereUniqueWithoutAssignedExpensesInput[]
-    updateMany?: UserUpdateManyWithWhereWithoutAssignedExpensesInput | UserUpdateManyWithWhereWithoutAssignedExpensesInput[]
-    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  export type PersonUpdateManyWithoutAssignedExpensesNestedInput = {
+    create?: XOR<PersonCreateWithoutAssignedExpensesInput, PersonUncheckedCreateWithoutAssignedExpensesInput> | PersonCreateWithoutAssignedExpensesInput[] | PersonUncheckedCreateWithoutAssignedExpensesInput[]
+    connectOrCreate?: PersonCreateOrConnectWithoutAssignedExpensesInput | PersonCreateOrConnectWithoutAssignedExpensesInput[]
+    upsert?: PersonUpsertWithWhereUniqueWithoutAssignedExpensesInput | PersonUpsertWithWhereUniqueWithoutAssignedExpensesInput[]
+    set?: PersonWhereUniqueInput | PersonWhereUniqueInput[]
+    disconnect?: PersonWhereUniqueInput | PersonWhereUniqueInput[]
+    delete?: PersonWhereUniqueInput | PersonWhereUniqueInput[]
+    connect?: PersonWhereUniqueInput | PersonWhereUniqueInput[]
+    update?: PersonUpdateWithWhereUniqueWithoutAssignedExpensesInput | PersonUpdateWithWhereUniqueWithoutAssignedExpensesInput[]
+    updateMany?: PersonUpdateManyWithWhereWithoutAssignedExpensesInput | PersonUpdateManyWithWhereWithoutAssignedExpensesInput[]
+    deleteMany?: PersonScalarWhereInput | PersonScalarWhereInput[]
   }
 
-  export type UserUncheckedUpdateManyWithoutAssignedExpensesNestedInput = {
-    create?: XOR<UserCreateWithoutAssignedExpensesInput, UserUncheckedCreateWithoutAssignedExpensesInput> | UserCreateWithoutAssignedExpensesInput[] | UserUncheckedCreateWithoutAssignedExpensesInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutAssignedExpensesInput | UserCreateOrConnectWithoutAssignedExpensesInput[]
-    upsert?: UserUpsertWithWhereUniqueWithoutAssignedExpensesInput | UserUpsertWithWhereUniqueWithoutAssignedExpensesInput[]
-    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    update?: UserUpdateWithWhereUniqueWithoutAssignedExpensesInput | UserUpdateWithWhereUniqueWithoutAssignedExpensesInput[]
-    updateMany?: UserUpdateManyWithWhereWithoutAssignedExpensesInput | UserUpdateManyWithWhereWithoutAssignedExpensesInput[]
-    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  export type PersonUncheckedUpdateManyWithoutAssignedExpensesNestedInput = {
+    create?: XOR<PersonCreateWithoutAssignedExpensesInput, PersonUncheckedCreateWithoutAssignedExpensesInput> | PersonCreateWithoutAssignedExpensesInput[] | PersonUncheckedCreateWithoutAssignedExpensesInput[]
+    connectOrCreate?: PersonCreateOrConnectWithoutAssignedExpensesInput | PersonCreateOrConnectWithoutAssignedExpensesInput[]
+    upsert?: PersonUpsertWithWhereUniqueWithoutAssignedExpensesInput | PersonUpsertWithWhereUniqueWithoutAssignedExpensesInput[]
+    set?: PersonWhereUniqueInput | PersonWhereUniqueInput[]
+    disconnect?: PersonWhereUniqueInput | PersonWhereUniqueInput[]
+    delete?: PersonWhereUniqueInput | PersonWhereUniqueInput[]
+    connect?: PersonWhereUniqueInput | PersonWhereUniqueInput[]
+    update?: PersonUpdateWithWhereUniqueWithoutAssignedExpensesInput | PersonUpdateWithWhereUniqueWithoutAssignedExpensesInput[]
+    updateMany?: PersonUpdateManyWithWhereWithoutAssignedExpensesInput | PersonUpdateManyWithWhereWithoutAssignedExpensesInput[]
+    deleteMany?: PersonScalarWhereInput | PersonScalarWhereInput[]
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -26326,7 +26361,6 @@ export namespace Prisma {
     createdNetworks?: NetworkCreateNestedManyWithoutCreatedByInput
     person?: PersonCreateNestedOneWithoutUserInput
     ticketsSentTo?: TicketCreateNestedManyWithoutSendToInput
-    assignedExpenses?: AnnualSoftwareExpenseCreateNestedManyWithoutAssignedUsersInput
   }
 
   export type UserUncheckedCreateWithoutTicketsSentByInput = {
@@ -26346,7 +26380,6 @@ export namespace Prisma {
     createdNetworks?: NetworkUncheckedCreateNestedManyWithoutCreatedByInput
     person?: PersonUncheckedCreateNestedOneWithoutUserInput
     ticketsSentTo?: TicketUncheckedCreateNestedManyWithoutSendToInput
-    assignedExpenses?: AnnualSoftwareExpenseUncheckedCreateNestedManyWithoutAssignedUsersInput
   }
 
   export type UserCreateOrConnectWithoutTicketsSentByInput = {
@@ -26371,7 +26404,6 @@ export namespace Prisma {
     createdNetworks?: NetworkCreateNestedManyWithoutCreatedByInput
     person?: PersonCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketCreateNestedManyWithoutSendByInput
-    assignedExpenses?: AnnualSoftwareExpenseCreateNestedManyWithoutAssignedUsersInput
   }
 
   export type UserUncheckedCreateWithoutTicketsSentToInput = {
@@ -26391,7 +26423,6 @@ export namespace Prisma {
     createdNetworks?: NetworkUncheckedCreateNestedManyWithoutCreatedByInput
     person?: PersonUncheckedCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketUncheckedCreateNestedManyWithoutSendByInput
-    assignedExpenses?: AnnualSoftwareExpenseUncheckedCreateNestedManyWithoutAssignedUsersInput
   }
 
   export type UserCreateOrConnectWithoutTicketsSentToInput = {
@@ -26478,7 +26509,6 @@ export namespace Prisma {
     createdNetworks?: NetworkUpdateManyWithoutCreatedByNestedInput
     person?: PersonUpdateOneWithoutUserNestedInput
     ticketsSentTo?: TicketUpdateManyWithoutSendToNestedInput
-    assignedExpenses?: AnnualSoftwareExpenseUpdateManyWithoutAssignedUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTicketsSentByInput = {
@@ -26498,7 +26528,6 @@ export namespace Prisma {
     createdNetworks?: NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
     person?: PersonUncheckedUpdateOneWithoutUserNestedInput
     ticketsSentTo?: TicketUncheckedUpdateManyWithoutSendToNestedInput
-    assignedExpenses?: AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedUsersNestedInput
   }
 
   export type UserUpsertWithoutTicketsSentToInput = {
@@ -26529,7 +26558,6 @@ export namespace Prisma {
     createdNetworks?: NetworkUpdateManyWithoutCreatedByNestedInput
     person?: PersonUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUpdateManyWithoutSendByNestedInput
-    assignedExpenses?: AnnualSoftwareExpenseUpdateManyWithoutAssignedUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTicketsSentToInput = {
@@ -26549,7 +26577,6 @@ export namespace Prisma {
     createdNetworks?: NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
     person?: PersonUncheckedUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUncheckedUpdateManyWithoutSendByNestedInput
-    assignedExpenses?: AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedUsersNestedInput
   }
 
   export type CompanyUpsertWithoutTicketsInput = {
@@ -26897,6 +26924,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     companyId?: string | null
     department?: DepartmentCreateNestedOneWithoutPersonsInput
+    assignedExpenses?: AnnualSoftwareExpenseCreateNestedManyWithoutAssignedPersonsInput
   }
 
   export type PersonUncheckedCreateWithoutUserInput = {
@@ -26913,6 +26941,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     companyId?: string | null
+    assignedExpenses?: AnnualSoftwareExpenseUncheckedCreateNestedManyWithoutAssignedPersonsInput
   }
 
   export type PersonCreateOrConnectWithoutUserInput = {
@@ -27026,43 +27055,6 @@ export namespace Prisma {
   export type TicketCreateManySendToInputEnvelope = {
     data: TicketCreateManySendToInput | TicketCreateManySendToInput[]
     skipDuplicates?: boolean
-  }
-
-  export type AnnualSoftwareExpenseCreateWithoutAssignedUsersInput = {
-    id?: string
-    applicationName: string
-    provider: string
-    category: $Enums.SoftwareCategory
-    status: $Enums.ExpenseStatus
-    annualCost: number
-    numberOfUsers: number
-    costPerUser: number
-    renewalDate: Date | string
-    paymentFrequency: $Enums.PaymentFrequency
-    additionalNotes?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type AnnualSoftwareExpenseUncheckedCreateWithoutAssignedUsersInput = {
-    id?: string
-    applicationName: string
-    provider: string
-    category: $Enums.SoftwareCategory
-    status: $Enums.ExpenseStatus
-    annualCost: number
-    numberOfUsers: number
-    costPerUser: number
-    renewalDate: Date | string
-    paymentFrequency: $Enums.PaymentFrequency
-    additionalNotes?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type AnnualSoftwareExpenseCreateOrConnectWithoutAssignedUsersInput = {
-    where: AnnualSoftwareExpenseWhereUniqueInput
-    create: XOR<AnnualSoftwareExpenseCreateWithoutAssignedUsersInput, AnnualSoftwareExpenseUncheckedCreateWithoutAssignedUsersInput>
   }
 
   export type UserCompanyUpsertWithWhereUniqueWithoutUserInput = {
@@ -27281,6 +27273,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     department?: DepartmentUpdateOneWithoutPersonsNestedInput
+    assignedExpenses?: AnnualSoftwareExpenseUpdateManyWithoutAssignedPersonsNestedInput
   }
 
   export type PersonUncheckedUpdateWithoutUserInput = {
@@ -27297,6 +27290,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedExpenses?: AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedPersonsNestedInput
   }
 
   export type TicketUpsertWithWhereUniqueWithoutSendByInput = {
@@ -27357,41 +27351,6 @@ export namespace Prisma {
     data: XOR<TicketUpdateManyMutationInput, TicketUncheckedUpdateManyWithoutSendToInput>
   }
 
-  export type AnnualSoftwareExpenseUpsertWithWhereUniqueWithoutAssignedUsersInput = {
-    where: AnnualSoftwareExpenseWhereUniqueInput
-    update: XOR<AnnualSoftwareExpenseUpdateWithoutAssignedUsersInput, AnnualSoftwareExpenseUncheckedUpdateWithoutAssignedUsersInput>
-    create: XOR<AnnualSoftwareExpenseCreateWithoutAssignedUsersInput, AnnualSoftwareExpenseUncheckedCreateWithoutAssignedUsersInput>
-  }
-
-  export type AnnualSoftwareExpenseUpdateWithWhereUniqueWithoutAssignedUsersInput = {
-    where: AnnualSoftwareExpenseWhereUniqueInput
-    data: XOR<AnnualSoftwareExpenseUpdateWithoutAssignedUsersInput, AnnualSoftwareExpenseUncheckedUpdateWithoutAssignedUsersInput>
-  }
-
-  export type AnnualSoftwareExpenseUpdateManyWithWhereWithoutAssignedUsersInput = {
-    where: AnnualSoftwareExpenseScalarWhereInput
-    data: XOR<AnnualSoftwareExpenseUpdateManyMutationInput, AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedUsersInput>
-  }
-
-  export type AnnualSoftwareExpenseScalarWhereInput = {
-    AND?: AnnualSoftwareExpenseScalarWhereInput | AnnualSoftwareExpenseScalarWhereInput[]
-    OR?: AnnualSoftwareExpenseScalarWhereInput[]
-    NOT?: AnnualSoftwareExpenseScalarWhereInput | AnnualSoftwareExpenseScalarWhereInput[]
-    id?: StringFilter<"AnnualSoftwareExpense"> | string
-    applicationName?: StringFilter<"AnnualSoftwareExpense"> | string
-    provider?: StringFilter<"AnnualSoftwareExpense"> | string
-    category?: EnumSoftwareCategoryFilter<"AnnualSoftwareExpense"> | $Enums.SoftwareCategory
-    status?: EnumExpenseStatusFilter<"AnnualSoftwareExpense"> | $Enums.ExpenseStatus
-    annualCost?: FloatFilter<"AnnualSoftwareExpense"> | number
-    numberOfUsers?: IntFilter<"AnnualSoftwareExpense"> | number
-    costPerUser?: FloatFilter<"AnnualSoftwareExpense"> | number
-    renewalDate?: DateTimeFilter<"AnnualSoftwareExpense"> | Date | string
-    paymentFrequency?: EnumPaymentFrequencyFilter<"AnnualSoftwareExpense"> | $Enums.PaymentFrequency
-    additionalNotes?: StringNullableFilter<"AnnualSoftwareExpense"> | string | null
-    createdAt?: DateTimeFilter<"AnnualSoftwareExpense"> | Date | string
-    updatedAt?: DateTimeFilter<"AnnualSoftwareExpense"> | Date | string
-  }
-
   export type UserCreateWithoutCompaniesInput = {
     id?: string
     username: string
@@ -27409,7 +27368,6 @@ export namespace Prisma {
     person?: PersonCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketCreateNestedManyWithoutSendToInput
-    assignedExpenses?: AnnualSoftwareExpenseCreateNestedManyWithoutAssignedUsersInput
   }
 
   export type UserUncheckedCreateWithoutCompaniesInput = {
@@ -27429,7 +27387,6 @@ export namespace Prisma {
     person?: PersonUncheckedCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketUncheckedCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketUncheckedCreateNestedManyWithoutSendToInput
-    assignedExpenses?: AnnualSoftwareExpenseUncheckedCreateNestedManyWithoutAssignedUsersInput
   }
 
   export type UserCreateOrConnectWithoutCompaniesInput = {
@@ -27516,7 +27473,6 @@ export namespace Prisma {
     person?: PersonUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUpdateManyWithoutSendToNestedInput
-    assignedExpenses?: AnnualSoftwareExpenseUpdateManyWithoutAssignedUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCompaniesInput = {
@@ -27536,7 +27492,6 @@ export namespace Prisma {
     person?: PersonUncheckedUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUncheckedUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUncheckedUpdateManyWithoutSendToNestedInput
-    assignedExpenses?: AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedUsersNestedInput
   }
 
   export type CompanyUpsertWithoutUsersInput = {
@@ -27638,7 +27593,6 @@ export namespace Prisma {
     createdNetworks?: NetworkCreateNestedManyWithoutCreatedByInput
     ticketsSentBy?: TicketCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketCreateNestedManyWithoutSendToInput
-    assignedExpenses?: AnnualSoftwareExpenseCreateNestedManyWithoutAssignedUsersInput
   }
 
   export type UserUncheckedCreateWithoutPersonInput = {
@@ -27658,12 +27612,48 @@ export namespace Prisma {
     createdNetworks?: NetworkUncheckedCreateNestedManyWithoutCreatedByInput
     ticketsSentBy?: TicketUncheckedCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketUncheckedCreateNestedManyWithoutSendToInput
-    assignedExpenses?: AnnualSoftwareExpenseUncheckedCreateNestedManyWithoutAssignedUsersInput
   }
 
   export type UserCreateOrConnectWithoutPersonInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutPersonInput, UserUncheckedCreateWithoutPersonInput>
+  }
+
+  export type AnnualSoftwareExpenseCreateWithoutAssignedPersonsInput = {
+    id?: string
+    applicationName: string
+    provider: string
+    category: $Enums.SoftwareCategory
+    status: $Enums.ExpenseStatus
+    annualCost: number
+    numberOfUsers: number
+    costPerUser: number
+    renewalDate: Date | string
+    paymentFrequency: $Enums.PaymentFrequency
+    additionalNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AnnualSoftwareExpenseUncheckedCreateWithoutAssignedPersonsInput = {
+    id?: string
+    applicationName: string
+    provider: string
+    category: $Enums.SoftwareCategory
+    status: $Enums.ExpenseStatus
+    annualCost: number
+    numberOfUsers: number
+    costPerUser: number
+    renewalDate: Date | string
+    paymentFrequency: $Enums.PaymentFrequency
+    additionalNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AnnualSoftwareExpenseCreateOrConnectWithoutAssignedPersonsInput = {
+    where: AnnualSoftwareExpenseWhereUniqueInput
+    create: XOR<AnnualSoftwareExpenseCreateWithoutAssignedPersonsInput, AnnualSoftwareExpenseUncheckedCreateWithoutAssignedPersonsInput>
   }
 
   export type DepartmentUpsertWithoutPersonsInput = {
@@ -27725,7 +27715,6 @@ export namespace Prisma {
     createdNetworks?: NetworkUpdateManyWithoutCreatedByNestedInput
     ticketsSentBy?: TicketUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUpdateManyWithoutSendToNestedInput
-    assignedExpenses?: AnnualSoftwareExpenseUpdateManyWithoutAssignedUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPersonInput = {
@@ -27745,7 +27734,41 @@ export namespace Prisma {
     createdNetworks?: NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
     ticketsSentBy?: TicketUncheckedUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUncheckedUpdateManyWithoutSendToNestedInput
-    assignedExpenses?: AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedUsersNestedInput
+  }
+
+  export type AnnualSoftwareExpenseUpsertWithWhereUniqueWithoutAssignedPersonsInput = {
+    where: AnnualSoftwareExpenseWhereUniqueInput
+    update: XOR<AnnualSoftwareExpenseUpdateWithoutAssignedPersonsInput, AnnualSoftwareExpenseUncheckedUpdateWithoutAssignedPersonsInput>
+    create: XOR<AnnualSoftwareExpenseCreateWithoutAssignedPersonsInput, AnnualSoftwareExpenseUncheckedCreateWithoutAssignedPersonsInput>
+  }
+
+  export type AnnualSoftwareExpenseUpdateWithWhereUniqueWithoutAssignedPersonsInput = {
+    where: AnnualSoftwareExpenseWhereUniqueInput
+    data: XOR<AnnualSoftwareExpenseUpdateWithoutAssignedPersonsInput, AnnualSoftwareExpenseUncheckedUpdateWithoutAssignedPersonsInput>
+  }
+
+  export type AnnualSoftwareExpenseUpdateManyWithWhereWithoutAssignedPersonsInput = {
+    where: AnnualSoftwareExpenseScalarWhereInput
+    data: XOR<AnnualSoftwareExpenseUpdateManyMutationInput, AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedPersonsInput>
+  }
+
+  export type AnnualSoftwareExpenseScalarWhereInput = {
+    AND?: AnnualSoftwareExpenseScalarWhereInput | AnnualSoftwareExpenseScalarWhereInput[]
+    OR?: AnnualSoftwareExpenseScalarWhereInput[]
+    NOT?: AnnualSoftwareExpenseScalarWhereInput | AnnualSoftwareExpenseScalarWhereInput[]
+    id?: StringFilter<"AnnualSoftwareExpense"> | string
+    applicationName?: StringFilter<"AnnualSoftwareExpense"> | string
+    provider?: StringFilter<"AnnualSoftwareExpense"> | string
+    category?: EnumSoftwareCategoryFilter<"AnnualSoftwareExpense"> | $Enums.SoftwareCategory
+    status?: EnumExpenseStatusFilter<"AnnualSoftwareExpense"> | $Enums.ExpenseStatus
+    annualCost?: FloatFilter<"AnnualSoftwareExpense"> | number
+    numberOfUsers?: IntFilter<"AnnualSoftwareExpense"> | number
+    costPerUser?: FloatFilter<"AnnualSoftwareExpense"> | number
+    renewalDate?: DateTimeFilter<"AnnualSoftwareExpense"> | Date | string
+    paymentFrequency?: EnumPaymentFrequencyFilter<"AnnualSoftwareExpense"> | $Enums.PaymentFrequency
+    additionalNotes?: StringNullableFilter<"AnnualSoftwareExpense"> | string | null
+    createdAt?: DateTimeFilter<"AnnualSoftwareExpense"> | Date | string
+    updatedAt?: DateTimeFilter<"AnnualSoftwareExpense"> | Date | string
   }
 
   export type UserCreateWithoutCreatedCompaniesInput = {
@@ -27765,7 +27788,6 @@ export namespace Prisma {
     person?: PersonCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketCreateNestedManyWithoutSendToInput
-    assignedExpenses?: AnnualSoftwareExpenseCreateNestedManyWithoutAssignedUsersInput
   }
 
   export type UserUncheckedCreateWithoutCreatedCompaniesInput = {
@@ -27785,7 +27807,6 @@ export namespace Prisma {
     person?: PersonUncheckedCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketUncheckedCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketUncheckedCreateNestedManyWithoutSendToInput
-    assignedExpenses?: AnnualSoftwareExpenseUncheckedCreateNestedManyWithoutAssignedUsersInput
   }
 
   export type UserCreateOrConnectWithoutCreatedCompaniesInput = {
@@ -28179,7 +28200,6 @@ export namespace Prisma {
     person?: PersonUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUpdateManyWithoutSendToNestedInput
-    assignedExpenses?: AnnualSoftwareExpenseUpdateManyWithoutAssignedUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedCompaniesInput = {
@@ -28199,7 +28219,6 @@ export namespace Prisma {
     person?: PersonUncheckedUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUncheckedUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUncheckedUpdateManyWithoutSendToNestedInput
-    assignedExpenses?: AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedUsersNestedInput
   }
 
   export type DepartmentUpsertWithWhereUniqueWithoutCompanyInput = {
@@ -28473,12 +28492,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     companyId?: string | null
-    user: UserCreateNestedOneWithoutPersonInput
+    user?: UserCreateNestedOneWithoutPersonInput
+    assignedExpenses?: AnnualSoftwareExpenseCreateNestedManyWithoutAssignedPersonsInput
   }
 
   export type PersonUncheckedCreateWithoutDepartmentInput = {
     id?: string
-    userId: string
+    userId?: string | null
     firstName?: string | null
     lastName?: string | null
     fullName?: string | null
@@ -28490,6 +28510,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     companyId?: string | null
+    assignedExpenses?: AnnualSoftwareExpenseUncheckedCreateNestedManyWithoutAssignedPersonsInput
   }
 
   export type PersonCreateOrConnectWithoutDepartmentInput = {
@@ -28580,7 +28601,7 @@ export namespace Prisma {
     OR?: PersonScalarWhereInput[]
     NOT?: PersonScalarWhereInput | PersonScalarWhereInput[]
     id?: StringFilter<"Person"> | string
-    userId?: StringFilter<"Person"> | string
+    userId?: StringNullableFilter<"Person"> | string | null
     firstName?: StringNullableFilter<"Person"> | string | null
     lastName?: StringNullableFilter<"Person"> | string | null
     fullName?: StringNullableFilter<"Person"> | string | null
@@ -28646,7 +28667,6 @@ export namespace Prisma {
     person?: PersonCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketCreateNestedManyWithoutSendToInput
-    assignedExpenses?: AnnualSoftwareExpenseCreateNestedManyWithoutAssignedUsersInput
   }
 
   export type UserUncheckedCreateWithoutAssignedEquipmentsInput = {
@@ -28666,7 +28686,6 @@ export namespace Prisma {
     person?: PersonUncheckedCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketUncheckedCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketUncheckedCreateNestedManyWithoutSendToInput
-    assignedExpenses?: AnnualSoftwareExpenseUncheckedCreateNestedManyWithoutAssignedUsersInput
   }
 
   export type UserCreateOrConnectWithoutAssignedEquipmentsInput = {
@@ -28809,7 +28828,6 @@ export namespace Prisma {
     person?: PersonUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUpdateManyWithoutSendToNestedInput
-    assignedExpenses?: AnnualSoftwareExpenseUpdateManyWithoutAssignedUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedEquipmentsInput = {
@@ -28829,7 +28847,6 @@ export namespace Prisma {
     person?: PersonUncheckedUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUncheckedUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUncheckedUpdateManyWithoutSendToNestedInput
-    assignedExpenses?: AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedUsersNestedInput
   }
 
   export type CompanyUpsertWithoutEquipmentsInput = {
@@ -28922,7 +28939,6 @@ export namespace Prisma {
     person?: PersonCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketCreateNestedManyWithoutSendToInput
-    assignedExpenses?: AnnualSoftwareExpenseCreateNestedManyWithoutAssignedUsersInput
   }
 
   export type UserUncheckedCreateWithoutAssignedMaintenancesInput = {
@@ -28942,7 +28958,6 @@ export namespace Prisma {
     person?: PersonUncheckedCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketUncheckedCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketUncheckedCreateNestedManyWithoutSendToInput
-    assignedExpenses?: AnnualSoftwareExpenseUncheckedCreateNestedManyWithoutAssignedUsersInput
   }
 
   export type UserCreateOrConnectWithoutAssignedMaintenancesInput = {
@@ -29080,7 +29095,6 @@ export namespace Prisma {
     person?: PersonUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUpdateManyWithoutSendToNestedInput
-    assignedExpenses?: AnnualSoftwareExpenseUpdateManyWithoutAssignedUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedMaintenancesInput = {
@@ -29100,7 +29114,6 @@ export namespace Prisma {
     person?: PersonUncheckedUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUncheckedUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUncheckedUpdateManyWithoutSendToNestedInput
-    assignedExpenses?: AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedUsersNestedInput
   }
 
   export type CompanyUpsertWithoutMaintenancesInput = {
@@ -29734,7 +29747,6 @@ export namespace Prisma {
     person?: PersonCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketCreateNestedManyWithoutSendToInput
-    assignedExpenses?: AnnualSoftwareExpenseCreateNestedManyWithoutAssignedUsersInput
   }
 
   export type UserUncheckedCreateWithoutAssignedNetworksInput = {
@@ -29754,7 +29766,6 @@ export namespace Prisma {
     person?: PersonUncheckedCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketUncheckedCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketUncheckedCreateNestedManyWithoutSendToInput
-    assignedExpenses?: AnnualSoftwareExpenseUncheckedCreateNestedManyWithoutAssignedUsersInput
   }
 
   export type UserCreateOrConnectWithoutAssignedNetworksInput = {
@@ -29779,7 +29790,6 @@ export namespace Prisma {
     person?: PersonCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketCreateNestedManyWithoutSendToInput
-    assignedExpenses?: AnnualSoftwareExpenseCreateNestedManyWithoutAssignedUsersInput
   }
 
   export type UserUncheckedCreateWithoutCreatedNetworksInput = {
@@ -29799,7 +29809,6 @@ export namespace Prisma {
     person?: PersonUncheckedCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketUncheckedCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketUncheckedCreateNestedManyWithoutSendToInput
-    assignedExpenses?: AnnualSoftwareExpenseUncheckedCreateNestedManyWithoutAssignedUsersInput
   }
 
   export type UserCreateOrConnectWithoutCreatedNetworksInput = {
@@ -29921,7 +29930,6 @@ export namespace Prisma {
     person?: PersonUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUpdateManyWithoutSendToNestedInput
-    assignedExpenses?: AnnualSoftwareExpenseUpdateManyWithoutAssignedUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedNetworksInput = {
@@ -29941,7 +29949,6 @@ export namespace Prisma {
     person?: PersonUncheckedUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUncheckedUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUncheckedUpdateManyWithoutSendToNestedInput
-    assignedExpenses?: AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedUsersNestedInput
   }
 
   export type UserUpsertWithoutCreatedNetworksInput = {
@@ -29972,7 +29979,6 @@ export namespace Prisma {
     person?: PersonUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUpdateManyWithoutSendToNestedInput
-    assignedExpenses?: AnnualSoftwareExpenseUpdateManyWithoutAssignedUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedNetworksInput = {
@@ -29992,7 +29998,6 @@ export namespace Prisma {
     person?: PersonUncheckedUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUncheckedUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUncheckedUpdateManyWithoutSendToNestedInput
-    assignedExpenses?: AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedUsersNestedInput
   }
 
   export type CompanyUpsertWithoutNetworksInput = {
@@ -30093,79 +30098,59 @@ export namespace Prisma {
     companyId?: StringFieldUpdateOperationsInput | string
   }
 
-  export type UserCreateWithoutAssignedExpensesInput = {
+  export type PersonCreateWithoutAssignedExpensesInput = {
     id?: string
-    username: string
-    email: string
-    password: string
-    role?: $Enums.UserRole
-    isActive?: boolean
+    firstName?: string | null
+    lastName?: string | null
+    fullName?: string | null
+    contactEmail?: string | null
+    phoneNumber?: string | null
+    position?: string | null
+    status?: $Enums.PersonStatus
+    userCode: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    companies?: UserCompanyCreateNestedManyWithoutUserInput
-    createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
-    assignedEquipments?: EquipmentCreateNestedManyWithoutAssignedToUserInput
-    assignedMaintenances?: MaintenanceCreateNestedManyWithoutAssignedToUserInput
-    assignedNetworks?: NetworkCreateNestedManyWithoutAssignedToUserInput
-    createdNetworks?: NetworkCreateNestedManyWithoutCreatedByInput
-    person?: PersonCreateNestedOneWithoutUserInput
-    ticketsSentBy?: TicketCreateNestedManyWithoutSendByInput
-    ticketsSentTo?: TicketCreateNestedManyWithoutSendToInput
+    companyId?: string | null
+    department?: DepartmentCreateNestedOneWithoutPersonsInput
+    user?: UserCreateNestedOneWithoutPersonInput
   }
 
-  export type UserUncheckedCreateWithoutAssignedExpensesInput = {
+  export type PersonUncheckedCreateWithoutAssignedExpensesInput = {
     id?: string
-    username: string
-    email: string
-    password: string
-    role?: $Enums.UserRole
-    isActive?: boolean
+    userId?: string | null
+    firstName?: string | null
+    lastName?: string | null
+    fullName?: string | null
+    contactEmail?: string | null
+    phoneNumber?: string | null
+    departmentId?: string | null
+    position?: string | null
+    status?: $Enums.PersonStatus
+    userCode: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    companies?: UserCompanyUncheckedCreateNestedManyWithoutUserInput
-    createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
-    assignedEquipments?: EquipmentUncheckedCreateNestedManyWithoutAssignedToUserInput
-    assignedMaintenances?: MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput
-    assignedNetworks?: NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput
-    createdNetworks?: NetworkUncheckedCreateNestedManyWithoutCreatedByInput
-    person?: PersonUncheckedCreateNestedOneWithoutUserInput
-    ticketsSentBy?: TicketUncheckedCreateNestedManyWithoutSendByInput
-    ticketsSentTo?: TicketUncheckedCreateNestedManyWithoutSendToInput
+    companyId?: string | null
   }
 
-  export type UserCreateOrConnectWithoutAssignedExpensesInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutAssignedExpensesInput, UserUncheckedCreateWithoutAssignedExpensesInput>
+  export type PersonCreateOrConnectWithoutAssignedExpensesInput = {
+    where: PersonWhereUniqueInput
+    create: XOR<PersonCreateWithoutAssignedExpensesInput, PersonUncheckedCreateWithoutAssignedExpensesInput>
   }
 
-  export type UserUpsertWithWhereUniqueWithoutAssignedExpensesInput = {
-    where: UserWhereUniqueInput
-    update: XOR<UserUpdateWithoutAssignedExpensesInput, UserUncheckedUpdateWithoutAssignedExpensesInput>
-    create: XOR<UserCreateWithoutAssignedExpensesInput, UserUncheckedCreateWithoutAssignedExpensesInput>
+  export type PersonUpsertWithWhereUniqueWithoutAssignedExpensesInput = {
+    where: PersonWhereUniqueInput
+    update: XOR<PersonUpdateWithoutAssignedExpensesInput, PersonUncheckedUpdateWithoutAssignedExpensesInput>
+    create: XOR<PersonCreateWithoutAssignedExpensesInput, PersonUncheckedCreateWithoutAssignedExpensesInput>
   }
 
-  export type UserUpdateWithWhereUniqueWithoutAssignedExpensesInput = {
-    where: UserWhereUniqueInput
-    data: XOR<UserUpdateWithoutAssignedExpensesInput, UserUncheckedUpdateWithoutAssignedExpensesInput>
+  export type PersonUpdateWithWhereUniqueWithoutAssignedExpensesInput = {
+    where: PersonWhereUniqueInput
+    data: XOR<PersonUpdateWithoutAssignedExpensesInput, PersonUncheckedUpdateWithoutAssignedExpensesInput>
   }
 
-  export type UserUpdateManyWithWhereWithoutAssignedExpensesInput = {
-    where: UserScalarWhereInput
-    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutAssignedExpensesInput>
-  }
-
-  export type UserScalarWhereInput = {
-    AND?: UserScalarWhereInput | UserScalarWhereInput[]
-    OR?: UserScalarWhereInput[]
-    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
-    id?: StringFilter<"User"> | string
-    username?: StringFilter<"User"> | string
-    email?: StringFilter<"User"> | string
-    password?: StringFilter<"User"> | string
-    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
-    isActive?: BoolFilter<"User"> | boolean
-    createdAt?: DateTimeFilter<"User"> | Date | string
-    updatedAt?: DateTimeFilter<"User"> | Date | string
+  export type PersonUpdateManyWithWhereWithoutAssignedExpensesInput = {
+    where: PersonScalarWhereInput
+    data: XOR<PersonUpdateManyMutationInput, PersonUncheckedUpdateManyWithoutAssignedExpensesInput>
   }
 
   export type UserCompanyCreateManyUserInput = {
@@ -30750,7 +30735,7 @@ export namespace Prisma {
     reviewed?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
-  export type AnnualSoftwareExpenseUpdateWithoutAssignedUsersInput = {
+  export type AnnualSoftwareExpenseUpdateWithoutAssignedPersonsInput = {
     id?: StringFieldUpdateOperationsInput | string
     applicationName?: StringFieldUpdateOperationsInput | string
     provider?: StringFieldUpdateOperationsInput | string
@@ -30766,7 +30751,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AnnualSoftwareExpenseUncheckedUpdateWithoutAssignedUsersInput = {
+  export type AnnualSoftwareExpenseUncheckedUpdateWithoutAssignedPersonsInput = {
     id?: StringFieldUpdateOperationsInput | string
     applicationName?: StringFieldUpdateOperationsInput | string
     provider?: StringFieldUpdateOperationsInput | string
@@ -30782,7 +30767,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedUsersInput = {
+  export type AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedPersonsInput = {
     id?: StringFieldUpdateOperationsInput | string
     applicationName?: StringFieldUpdateOperationsInput | string
     provider?: StringFieldUpdateOperationsInput | string
@@ -31328,7 +31313,7 @@ export namespace Prisma {
 
   export type PersonCreateManyDepartmentInput = {
     id?: string
-    userId: string
+    userId?: string | null
     firstName?: string | null
     lastName?: string | null
     fullName?: string | null
@@ -31355,12 +31340,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
-    user?: UserUpdateOneRequiredWithoutPersonNestedInput
+    user?: UserUpdateOneWithoutPersonNestedInput
+    assignedExpenses?: AnnualSoftwareExpenseUpdateManyWithoutAssignedPersonsNestedInput
   }
 
   export type PersonUncheckedUpdateWithoutDepartmentInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -31372,11 +31358,12 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedExpenses?: AnnualSoftwareExpenseUncheckedUpdateManyWithoutAssignedPersonsNestedInput
   }
 
   export type PersonUncheckedUpdateManyWithoutDepartmentInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -31582,55 +31569,55 @@ export namespace Prisma {
     createdByUserId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type UserUpdateWithoutAssignedExpensesInput = {
+  export type PersonUpdateWithoutAssignedExpensesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    isActive?: BoolFieldUpdateOperationsInput | boolean
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    contactEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumPersonStatusFieldUpdateOperationsInput | $Enums.PersonStatus
+    userCode?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    companies?: UserCompanyUpdateManyWithoutUserNestedInput
-    createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
-    assignedEquipments?: EquipmentUpdateManyWithoutAssignedToUserNestedInput
-    assignedMaintenances?: MaintenanceUpdateManyWithoutAssignedToUserNestedInput
-    assignedNetworks?: NetworkUpdateManyWithoutAssignedToUserNestedInput
-    createdNetworks?: NetworkUpdateManyWithoutCreatedByNestedInput
-    person?: PersonUpdateOneWithoutUserNestedInput
-    ticketsSentBy?: TicketUpdateManyWithoutSendByNestedInput
-    ticketsSentTo?: TicketUpdateManyWithoutSendToNestedInput
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: DepartmentUpdateOneWithoutPersonsNestedInput
+    user?: UserUpdateOneWithoutPersonNestedInput
   }
 
-  export type UserUncheckedUpdateWithoutAssignedExpensesInput = {
+  export type PersonUncheckedUpdateWithoutAssignedExpensesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    isActive?: BoolFieldUpdateOperationsInput | boolean
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    contactEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumPersonStatusFieldUpdateOperationsInput | $Enums.PersonStatus
+    userCode?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    companies?: UserCompanyUncheckedUpdateManyWithoutUserNestedInput
-    createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
-    assignedEquipments?: EquipmentUncheckedUpdateManyWithoutAssignedToUserNestedInput
-    assignedMaintenances?: MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput
-    assignedNetworks?: NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput
-    createdNetworks?: NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
-    person?: PersonUncheckedUpdateOneWithoutUserNestedInput
-    ticketsSentBy?: TicketUncheckedUpdateManyWithoutSendByNestedInput
-    ticketsSentTo?: TicketUncheckedUpdateManyWithoutSendToNestedInput
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type UserUncheckedUpdateManyWithoutAssignedExpensesInput = {
+  export type PersonUncheckedUpdateManyWithoutAssignedExpensesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    isActive?: BoolFieldUpdateOperationsInput | boolean
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    contactEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumPersonStatusFieldUpdateOperationsInput | $Enums.PersonStatus
+    userCode?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
 

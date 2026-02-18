@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import prisma from "../../lib/prisma.js"
-import { ExpenseStatus, PaymentFrequency, SoftwareCategory, UserRole } from "../../generated/prisma/index.js"
+import { ExpenseStatus, PaymentFrequency, SoftwareCategory } from "../../generated/prisma/index.js"
 
 export class AnnualSoftwareExpenseController {
   // ===============================
@@ -26,7 +26,7 @@ export class AnnualSoftwareExpenseController {
   private async recalculateExpenseCosts(expenseId: string) {
     const expense = await prisma.annualSoftwareExpense.findUnique({
       where: { id: expenseId },
-      include: { assignedUsers: true },
+      include: { assignedPersons: true },
     })
 
     if (!expense) {
@@ -35,7 +35,7 @@ export class AnnualSoftwareExpenseController {
       )
     }
 
-    const newNumberOfUsers = expense.assignedUsers.length
+    const newNumberOfUsers = expense.assignedPersons.length
     const newAnnualCost = expense.annualCost
 
     const newCostPerUser =
@@ -66,7 +66,7 @@ export class AnnualSoftwareExpenseController {
         renewalDate,
         paymentFrequency,
         additionalNotes,
-        assignedUserIds,
+        assignedPersonIds,
       } = req.body
 
       if (
@@ -107,20 +107,24 @@ export class AnnualSoftwareExpenseController {
           paymentFrequency,
           additionalNotes: additionalNotes || null,
 
-          assignedUsers: assignedUserIds?.length
+          // ✅ MODIFICADO: Conectar a Person en lugar de User
+          assignedPersons: assignedPersonIds?.length
             ? {
-                connect: assignedUserIds.map((id: string) => ({ id })),
+                connect: assignedPersonIds.map((id: string) => ({ id })),
               }
             : undefined,
         },
         include: {
-          assignedUsers: {
+          assignedPersons: {
             include: {
-              person: {
-                include: {
-                  department: true, // ✅ INCLUIR DEPARTMENT desde Person
-                },
-              },
+              department: true,
+              user: {
+                select: {
+                  id: true,
+                  username: true,
+                  email: true,
+                }
+              }
             },
           },
         },
@@ -143,13 +147,17 @@ export class AnnualSoftwareExpenseController {
       const expenses = await prisma.annualSoftwareExpense.findMany({
         orderBy: { createdAt: "desc" },
         include: {
-          assignedUsers: {
+          // ✅ MODIFICADO: Incluir assignedPersons en lugar de assignedUsers
+          assignedPersons: {
             include: {
-              person: {
-                include: {
-                  department: true, // ✅ INCLUIR DEPARTMENT desde Person
-                },
-              },
+              department: true,
+              user: {
+                select: {
+                  id: true,
+                  username: true,
+                  email: true,
+                }
+              }
             },
           },
         },
@@ -174,13 +182,17 @@ export class AnnualSoftwareExpenseController {
       const expense = await prisma.annualSoftwareExpense.findUnique({
         where: { id },
         include: {
-          assignedUsers: {
+          // ✅ MODIFICADO: Incluir assignedPersons en lugar de assignedUsers
+          assignedPersons: {
             include: {
-              person: {
-                include: {
-                  department: true, // ✅ INCLUIR DEPARTMENT desde Person
-                },
-              },
+              department: true,
+              user: {
+                select: {
+                  id: true,
+                  username: true,
+                  email: true,
+                }
+              }
             },
           },
         },
@@ -216,7 +228,7 @@ export class AnnualSoftwareExpenseController {
         renewalDate,
         paymentFrequency,
         additionalNotes,
-        assignedUserIds,
+        assignedPersonIds,
       } = req.body
 
       const exists = await prisma.annualSoftwareExpense.findUnique({
@@ -256,21 +268,25 @@ export class AnnualSoftwareExpenseController {
           paymentFrequency,
           additionalNotes,
 
-          assignedUsers:
-            assignedUserIds !== undefined
+          // ✅ MODIFICADO: Conectar a Person en lugar de User
+          assignedPersons:
+            assignedPersonIds !== undefined
               ? {
-                  set: assignedUserIds.map((id: string) => ({ id })),
+                  set: assignedPersonIds.map((id: string) => ({ id })),
                 }
               : undefined,
         },
         include: {
-          assignedUsers: {
+          assignedPersons: {
             include: {
-              person: {
-                include: {
-                  department: true, // ✅ INCLUIR DEPARTMENT desde Person
-                },
-              },
+              department: true,
+              user: {
+                select: {
+                  id: true,
+                  username: true,
+                  email: true,
+                }
+              }
             },
           },
         },
@@ -283,13 +299,16 @@ export class AnnualSoftwareExpenseController {
       const finalExpense = await prisma.annualSoftwareExpense.findUnique({
         where: { id },
         include: {
-          assignedUsers: {
+          assignedPersons: {
             include: {
-              person: {
-                include: {
-                  department: true, // ✅ INCLUIR DEPARTMENT desde Person
-                },
-              },
+              department: true,
+              user: {
+                select: {
+                  id: true,
+                  username: true,
+                  email: true,
+                }
+              }
             },
           },
         },
@@ -327,24 +346,25 @@ export class AnnualSoftwareExpenseController {
   }
 
   // ===============================
-  // Eliminar Usuario Asignado
+  // Eliminar Persona Asignada
   // ===============================
-  async removeAssignedUserFromExpense(req: Request, res: Response) {
+  async removeAssignedPersonFromExpense(req: Request, res: Response) {
     try {
-      const { userId } = req.params
+      const { personId } = req.params
       const { expenseId } = req.body
 
-      if (!expenseId || !userId) {
+      if (!expenseId || !personId) {
         return res.status(400).json({
-          error: "IDs de gasto y usuario son obligatorios para desasignar.",
+          error: "IDs de gasto y persona son obligatorios para desasignar.",
         })
       }
 
       await prisma.annualSoftwareExpense.update({
         where: { id: expenseId },
         data: {
-          assignedUsers: {
-            disconnect: { id: userId },
+          // ✅ MODIFICADO: Desconectar de assignedPersons
+          assignedPersons: {
+            disconnect: { id: personId },
           },
         },
       })
@@ -352,134 +372,148 @@ export class AnnualSoftwareExpenseController {
       await this.recalculateExpenseCosts(expenseId)
 
       return res.status(200).json({
-        message: "Usuario desasignado correctamente.",
+        message: "Persona desasignada correctamente.",
       })
     } catch (error: any) {
-      console.error("REMOVE ASSIGNED USER FROM EXPENSE:", error)
+      console.error("REMOVE ASSIGNED PERSON FROM EXPENSE:", error)
       if (error.code === "P2025") {
         return res.status(404).json({
-          error: "Usuario o Gasto no encontrado para desasignar.",
+          error: "Persona o Gasto no encontrado para desasignar.",
         })
       }
       return res.status(500).json({
-        error: error.message || "Error al desasignar usuario.",
+        error: error.message || "Error al desasignar persona.",
       })
     }
   }
 
   // ===============================
-  // Asignar Usuario Existente
+  // Asignar Persona Existente
   // ===============================
-  async assignExistingUserToExpense(req: Request, res: Response) {
+  async assignExistingPersonToExpense(req: Request, res: Response) {
     try {
       const { expenseId } = req.params
-      const { userId } = req.body
+      const { personId } = req.body
 
-      if (!userId || !expenseId) {
+      if (!personId || !expenseId) {
         return res.status(400).json({
-          error: "IDs de usuario y gasto son obligatorios.",
+          error: "IDs de persona y gasto son obligatorios.",
         })
       }
 
       const existingExpense = await prisma.annualSoftwareExpense.findUnique({
         where: { id: expenseId },
-        include: { assignedUsers: { where: { id: userId } } },
+        include: { assignedPersons: { where: { id: personId } } },
       })
 
-      if ((existingExpense?.assignedUsers ?? []).length > 0) {
+      if ((existingExpense?.assignedPersons ?? []).length > 0) {
         return res.status(409).json({
-          error: "El usuario ya está asignado a este gasto.",
+          error: "La persona ya está asignada a este gasto.",
         })
       }
 
       await prisma.annualSoftwareExpense.update({
         where: { id: expenseId },
         data: {
-          assignedUsers: {
-            connect: { id: userId },
+          // ✅ MODIFICADO: Conectar a assignedPersons
+          assignedPersons: {
+            connect: { id: personId },
           },
         },
       })
 
       await this.recalculateExpenseCosts(expenseId)
 
-      const newlyAssignedUser = await prisma.user.findUnique({
-        where: { id: userId },
+      const newlyAssignedPerson = await prisma.person.findUnique({
+        where: { id: personId },
         include: {
-          person: {
-            include: {
-              department: true, // ✅ INCLUIR DEPARTMENT desde Person
-            },
-          },
+          department: true,
+          user: {
+            select: {
+              id: true,
+              username: true,
+              email: true,
+            }
+          }
         },
       })
 
-      if (!newlyAssignedUser) {
+      if (!newlyAssignedPerson) {
         return res.status(404).json({
-          error: "Usuario asignado no encontrado después de la operación.",
+          error: "Persona asignada no encontrada después de la operación.",
         })
       }
 
-      return res.status(200).json(newlyAssignedUser)
+      return res.status(200).json(newlyAssignedPerson)
     } catch (error: any) {
-      console.error("ASSIGN EXISTING USER TO EXPENSE:", error)
+      console.error("ASSIGN EXISTING PERSON TO EXPENSE:", error)
       if (error.code === "P2025") {
         return res.status(404).json({
-          error: "Usuario o Gasto no encontrado.",
+          error: "Persona o Gasto no encontrado.",
         })
       }
       return res.status(500).json({
-        error: error.message || "Error al asignar usuario existente al gasto.",
+        error: error.message || "Error al asignar persona existente al gasto.",
       })
     }
   }
 
   // ===============================
-  // Crear y Asignar Nuevo Usuario
+  // Crear y Asignar Nueva Persona
   // ===============================
-  async createAndAssignNewUserToExpense(req: Request, res: Response) {
+  async createAndAssignNewPersonToExpense(req: Request, res: Response) {
     try {
       const { expenseId } = req.params
-      const { name, lastName, email, departmentId } = req.body
+      const { firstName, lastName, contactEmail, phoneNumber, departmentId, position } = req.body
 
-      if (!name || !lastName || !expenseId) {
+      if (!firstName || !lastName || !expenseId) {
         return res.status(400).json({
-          error: "Nombre, apellido y ID de gasto son obligatorios.",
+          error: "Nombre, apellido e ID de gasto son obligatorios.",
         })
       }
 
-      // 1. Crear el nuevo usuario
+      // 1. Crear el User primero (necesario para Person)
       const newUser = await prisma.user.create({
         data: {
-          name,
-          lastName,
-          username: `${name.toLowerCase()}.${lastName.toLowerCase()}`,
-          email: email || `${name.toLowerCase()}.${lastName.toLowerCase()}@noemail.com`,
-          password: "default_hashed_password",
-          role: UserRole.USER,
+          username: `${firstName.toLowerCase()}.${lastName.toLowerCase()}`,
+          email: contactEmail || `${firstName.toLowerCase()}.${lastName.toLowerCase()}@noemail.com`,
+          password: "default_hashed_password", // Hash esto en producción
+          role: "USER",
         },
       })
 
-      // 2. Crear Person con departmentId si se proporciona
-      if (departmentId) {
-        await prisma.person.create({
-          data: {
-            userId: newUser.id,
-            firstName: name,
-            lastName: lastName,
-            fullName: `${name} ${lastName}`,
-            departmentId: departmentId,
-            userCode: `USER_${newUser.id.substring(0, 8)}`,
-          },
-        })
-      }
+      // 2. Crear Person vinculado al User
+      const newPerson = await prisma.person.create({
+        data: {
+          userId: newUser.id,
+          firstName,
+          lastName,
+          fullName: `${firstName} ${lastName}`,
+          contactEmail: contactEmail || null,
+          phoneNumber: phoneNumber || null,
+          departmentId: departmentId || null,
+          position: position || null,
+          userCode: `USER_${newUser.id.substring(0, 8)}`,
+          status: "Activo",
+        },
+        include: {
+          department: true,
+          user: {
+            select: {
+              id: true,
+              username: true,
+              email: true,
+            }
+          }
+        },
+      })
 
-      // 3. Conectarlo al gasto
+      // 3. Asignar la Person al Expense
       await prisma.annualSoftwareExpense.update({
         where: { id: expenseId },
         data: {
-          assignedUsers: {
-            connect: { id: newUser.id },
+          assignedPersons: {
+            connect: { id: newPerson.id },
           },
         },
       })
@@ -487,17 +521,11 @@ export class AnnualSoftwareExpenseController {
       // 4. Recalcular costos
       await this.recalculateExpenseCosts(expenseId)
 
-      return res.status(201).json({
-        id: newUser.id,
-        username: newUser.username,
-        name: newUser.name,
-        lastName: newUser.lastName,
-        email: newUser.email,
-      })
+      return res.status(201).json(newPerson)
     } catch (error: any) {
-      console.error("CREATE AND ASSIGN NEW USER TO EXPENSE:", error)
+      console.error("CREATE AND ASSIGN NEW PERSON TO EXPENSE:", error)
       return res.status(500).json({
-        error: error.message || "Error al crear y asignar nuevo usuario.",
+        error: error.message || "Error al crear y asignar nueva persona.",
       })
     }
   }

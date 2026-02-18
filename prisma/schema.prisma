@@ -54,7 +54,6 @@ model User {
   person               Person?
   ticketsSentBy        Ticket[]      @relation("TicketsSentBy")
   ticketsSentTo        Ticket[]      @relation("TicketsSentTo")
-  assignedExpenses     AnnualSoftwareExpense[] @relation("ExpenseAssignedUsers")
 }
 
 model UserCompany {
@@ -69,7 +68,7 @@ model UserCompany {
 
 model Person {
   id           String       @id @default(uuid())
-  userId       String       @unique
+  userId       String?       @unique
   firstName    String?
   lastName     String?
   fullName     String?
@@ -83,7 +82,10 @@ model Person {
   updatedAt    DateTime     @updatedAt
   companyId    String?  
   department   Department?  @relation(fields: [departmentId], references: [id], onDelete: SetNull)
-  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // ✅ NUEVO: Relación muchos a muchos con AnnualSoftwareExpense
+  assignedExpenses AnnualSoftwareExpense[] @relation("ExpenseAssignedPersons")
 }
 
 model Company {
@@ -273,8 +275,8 @@ model AnnualSoftwareExpense {
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
 
-  // ✅ Relación muchos a muchos con User
-  assignedUsers    User[]        @relation("ExpenseAssignedUsers")
+  // ✅ MODIFICADO: Relación muchos a muchos con Person en lugar de User
+  assignedPersons  Person[]      @relation("ExpenseAssignedPersons")
 }
 
 enum UserRole {
