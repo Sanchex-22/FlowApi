@@ -24,6 +24,7 @@ import InventoryRouter from './routes/InventoryRoutes.js';
 import ExpenseRoute from './routes/annualSoftwareExpenseRoutes.js';
 import DepartmentRouter from './routes/DepartmentRoutes.js';
 import PersonRouter from './routes/PersonRoutes.js';
+import AIrouter from './routes/AIRoutes.js';
 
 dotenv.config({ path: '.env' });
 
@@ -87,7 +88,7 @@ app.use('/api/dashboard',DashboardRouter);
 app.use('/api/reports',ReportsRouter);
 app.use('/api/annual-software-expense',ExpenseRoute);
 app.use('/api/companies/tickets',TicketRouter);
-
+app.use('/api/ai', AIrouter);
 // ✔ Aquí sí se permite formidable sin interferencia
 app.use('/api/inventory', InventoryRouter);
 
