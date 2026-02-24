@@ -2,9 +2,15 @@ import { Request, Response } from 'express';
 import { prisma } from '../../lib/prisma.js';
 import { EquipmentStatus, MaintenanceStatus } from '../../generated/prisma/index.js';
 
-// ✅ OpenAI en lugar de OpenRouter
-const AI_MODEL = 'gpt-4o-mini'; // Rápido y barato — también puedes usar 'gpt-4o'
-const OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
+const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
+
+// ✅ Fallback automático — si uno falla, usa el siguiente
+const AI_MODELS = [
+    'google/gemini-2.0-flash-001',
+    'meta-llama/llama-3.1-8b-instruct:free',
+    'deepseek/deepseek-chat:free',
+    'mistralai/mistral-7b-instruct:free',
+];
 
 interface OpenAIResponse {
     choices: {
@@ -18,27 +24,41 @@ const callOpenAI = async (
     messages: { role: string; content: string }[],
     temperature = 0.5
 ): Promise<OpenAIResponse> => {
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = process.env.OPENROUTER_API_KEY;
 
     if (!apiKey) {
-        throw new Error('OPENAI_API_KEY no está configurada en las variables de entorno.');
+        throw new Error('OPENROUTER_API_KEY no está configurada en las variables de entorno.');
     }
 
-    const response = await fetch(OPENAI_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({ model: AI_MODEL, messages, temperature, max_tokens: 1500 }),
-    });
+    for (const model of AI_MODELS) {
+        try {
+            const response = await fetch(OPENROUTER_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`,
+                    'HTTP-Referer': process.env.APP_URL || 'http://localhost:5173',
+                    'X-Title': 'Dashboard AI',
+                },
+                body: JSON.stringify({ model, messages, temperature, max_tokens: 1500 }),
+            });
 
-    if (!response.ok) {
-        const err = await response.json();
-        throw new Error(`OpenAI error: ${JSON.stringify(err)}`);
+            if (!response.ok) {
+                const err = await response.json() as any;
+                console.warn(`⚠️ Modelo ${model} falló:`, err.error?.message);
+                continue; // Intenta con el siguiente
+            }
+
+            console.log(`✅ Modelo usado: ${model}`);
+            return response.json() as Promise<OpenAIResponse>;
+
+        } catch (err) {
+            console.warn(`⚠️ Error con modelo ${model}, intentando siguiente...`);
+            continue;
+        }
     }
 
-    return response.json() as Promise<OpenAIResponse>;
+    throw new Error('Todos los modelos AI fallaron. Intenta más tarde.');
 };
 
 const cleanAIResponse = (raw: string): string => {
