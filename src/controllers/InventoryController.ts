@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import csvParser from 'csv-parser';
 import formidable from 'formidable';
 import { prisma } from '../../lib/prisma.js';
-
+import { generatePlateNumber, isValidPlateNumber } from './PlateNumberGenerator.js';
 export class InventoryController {
 
     // ============================================
@@ -18,7 +18,7 @@ export class InventoryController {
             brand,
             model,
             serialNumber,
-            plateNumber,
+            plateNumber, // ✅ Puede venir o no
             location,
             cost,
             operatingSystem,
@@ -50,6 +50,21 @@ export class InventoryController {
                 return;
             }
 
+            // ✅ GENERAR PLATE NUMBER AUTOMÁTICAMENTE
+            let finalPlateNumber = plateNumber;
+
+            if (!finalPlateNumber) {
+                console.log('📌 Generando plateNumber automáticamente...');
+                finalPlateNumber = await generatePlateNumber(prisma);
+                console.log(`✅ PlateNumber generado: ${finalPlateNumber}`);
+            } else if (!isValidPlateNumber(finalPlateNumber)) {
+                console.log("❌ Formato de plateNumber inválido:", finalPlateNumber);
+                res.status(400).json({
+                    message: 'El formato del número de placa debe ser IT-XXXXXX (6 caracteres alfanuméricos).'
+                });
+                return;
+            }
+
             console.log("🏗️ Insertando equipo en BD para companyId:", companyId);
 
             const newEquipment = await prisma.equipment.create({
@@ -57,13 +72,13 @@ export class InventoryController {
                     brand: brand ?? "",
                     model: model ?? "",
                     serialNumber,
-                    plateNumber: plateNumber ?? null,
+                    plateNumber: finalPlateNumber, // ✅ Asignar plateNumber generado
                     location: location ?? null,
                     cost: cost ? Number(cost) : 0,
                     operatingSystem: operatingSystem ?? null,
                     endUser: endUser ?? null,
                     type,
-                    companyId, // <- viene de params
+                    companyId,
                 },
             });
 
@@ -95,6 +110,16 @@ export class InventoryController {
 
             if (!company) {
                 res.status(404).json({ message: `Empresa con id ${companyId} no encontrada` });
+                return;
+            }
+
+            // ✅ Validar plateNumber si se intenta cambiar
+            if (updateData.plateNumber !== undefined && 
+                updateData.plateNumber !== null && 
+                !isValidPlateNumber(updateData.plateNumber)) {
+                res.status(400).json({
+                    message: 'El formato del número de placa debe ser IT-XXXXXX (6 caracteres alfanuméricos).'
+                });
                 return;
             }
 
@@ -255,12 +280,16 @@ export class InventoryController {
                                     continue;
                                 }
 
+                                // ✅ GENERAR PLATE NUMBER AUTOMÁTICAMENTE PARA CSV
+                                const generatedPlateNumber = await generatePlateNumber(prisma);
+                                console.log(`✅ PlateNumber generado para fila ${row.originalRow}: ${generatedPlateNumber}`);
+
                                 const record = await prisma.equipment.create({
                                     data: {
                                         brand: row["Marca"] || "",
                                         model: row["Modelo"] || "",
                                         serialNumber: row["Numero de Serie"] || "",
-                                        plateNumber: row["Numero de Placa"] || null,
+                                        plateNumber: generatedPlateNumber, // ✅ Asignar generado
                                         location: row["Ubicacion"] || null,
                                         cost: Number(row["Costos"]) || 0,
                                         operatingSystem: row["Sistema Operativo"] || null,

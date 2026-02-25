@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { put, del } from '@vercel/blob';
 import { prisma } from '../../lib/prisma.js';
 import { EquipmentStatus } from '../../generated/prisma/index.js';
-
+import { generatePlateNumber, isValidPlateNumber } from './PlateNumberGenerator.js'; // ✅ Importar
 declare global {
     namespace Express {
         interface Request {
@@ -37,7 +37,7 @@ export class EquipmentController {
                 brand,
                 model,
                 serialNumber,
-                plateNumber,
+                plateNumber, // ✅ Puede venir o no
                 cost,
                 location,
                 status,
@@ -46,7 +46,7 @@ export class EquipmentController {
                 qrCode,
                 invoiceUrl,
                 companyId,
-                assignedToPersonId, // ✅ Cambiado
+                assignedToPersonId,
                 endUser,
                 operatingSystem
             } = req.body;
@@ -57,13 +57,27 @@ export class EquipmentController {
                 });
             }
 
+            // ✅ GENERAR PLATE NUMBER AUTOMÁTICAMENTE
+            let finalPlateNumber = plateNumber;
+
+            if (!finalPlateNumber) {
+                console.log('📌 Generando plateNumber automáticamente...');
+                finalPlateNumber = await generatePlateNumber(prisma);
+                console.log(`✅ PlateNumber generado: ${finalPlateNumber}`);
+            } else if (!isValidPlateNumber(finalPlateNumber)) {
+                // Si viene un plateNumber pero no tiene formato válido, lo rechazamos
+                return res.status(400).json({
+                    error: 'El formato del número de placa debe ser IT-XXXXXX (6 caracteres alfanuméricos).'
+                });
+            }
+
             const newEquipment = await prisma.equipment.create({
                 data: {
                     type,
                     brand,
                     model,
                     serialNumber,
-                    plateNumber: plateNumber || null,
+                    plateNumber: finalPlateNumber, // ✅ Asignar plateNumber generado
                     cost: cost ? parseFloat(cost) : 0,
                     location: location || null,
                     status: (VALID_EQUIPMENT_STATUS.includes(status) ? status : 'ACTIVE') as EquipmentStatus,
@@ -72,7 +86,7 @@ export class EquipmentController {
                     qrCode: qrCode || null,
                     invoiceUrl: invoiceUrl || null,
                     company: { connect: { id: companyId } },
-                    ...(assignedToPersonId && { assignedToPerson: { connect: { id: assignedToPersonId } } }), // ✅ Cambiado
+                    ...(assignedToPersonId && { assignedToPerson: { connect: { id: assignedToPersonId } } }),
                     endUser: endUser || null,
                     operatingSystem: operatingSystem || null,
                 },
@@ -196,10 +210,35 @@ export class EquipmentController {
                 qrCode,
                 invoiceUrl,
                 companyId,
-                assignedToPersonId, // ✅ Cambiado
+                assignedToPersonId,
                 endUser,
                 operatingSystem
             } = req.body;
+
+            // ✅ Validar plateNumber si se intenta cambiar
+            if (plateNumber !== undefined && plateNumber !== null && !isValidPlateNumber(plateNumber)) {
+                return res.status(400).json({
+                    error: 'El formato del número de placa debe ser IT-XXXXXX (6 caracteres alfanuméricos).'
+                });
+            }
+
+            // ✅ NUEVO: Verificar si el equipo actual tiene plateNumber
+            const currentEquipment = await prisma.equipment.findUnique({
+                where: { id },
+                select: { plateNumber: true }
+            });
+
+            if (!currentEquipment) {
+                return res.status(404).json({ error: 'Equipo no encontrado.' });
+            }
+
+            // ✅ Si no tiene plateNumber, generar uno automáticamente
+            let finalPlateNumber = plateNumber;
+            if (!currentEquipment.plateNumber && !plateNumber) {
+                console.log(`📌 Generando plateNumber automáticamente para equipo ${id}`);
+                finalPlateNumber = await generatePlateNumber(prisma);
+                console.log(`✅ PlateNumber generado: ${finalPlateNumber}`);
+            }
 
             const updatedEquipment = await prisma.equipment.update({
                 where: { id },
@@ -208,7 +247,7 @@ export class EquipmentController {
                     ...(brand && { brand }),
                     ...(model && { model }),
                     ...(serialNumber && { serialNumber }),
-                    ...(plateNumber !== undefined && { plateNumber }),
+                    ...(finalPlateNumber && { plateNumber: finalPlateNumber }), // ✅ Usar plateNumber generado si aplica
                     ...(cost !== undefined && { cost: parseFloat(cost) }),
                     ...(location !== undefined && { location }),
                     ...(status && VALID_EQUIPMENT_STATUS.includes(status) && { status: status as EquipmentStatus }),
@@ -217,7 +256,6 @@ export class EquipmentController {
                     ...(qrCode !== undefined && { qrCode }),
                     ...(invoiceUrl !== undefined && { invoiceUrl }),
                     ...(companyId && { company: { connect: { id: companyId } } }),
-                    // ✅ Cambiado: soporta asignar y desasignar
                     ...(assignedToPersonId !== undefined && {
                         assignedToPerson: assignedToPersonId
                             ? { connect: { id: assignedToPersonId } }
@@ -262,7 +300,55 @@ export class EquipmentController {
             if (!equipment) {
                 return res.status(404).json({ error: 'Equipo no encontrado.' });
             }
-            res.json(equipment);
+
+            // ✅ NUEVO: Si no tiene plateNumber, generar automáticamente
+            if (!equipment.plateNumber) {
+                console.log(`📌 Equipo sin plateNumber detectado: ${id}`);
+                const generatedPlate = await generatePlateNumber(prisma);
+                console.log(`✅ Generando y asignando plateNumber: ${generatedPlate}`);
+                
+                try {
+                    // Guardar el plateNumber generado
+                    const updatedEquipment = await prisma.equipment.update({
+                        where: { id },
+                        data: { plateNumber: generatedPlate },
+                        include: {
+                            ...equipmentInclude,
+                            maintenances: {
+                                select: { id: true, title: true, type: true, status: true, scheduledDate: true },
+                                orderBy: { scheduledDate: 'desc' }
+                            },
+                            documents: {
+                                select: { id: true, title: true, fileType: true }
+                            }
+                        }
+                    });
+                    res.json(updatedEquipment);
+                } catch (updateError: any) {
+                    console.error('Error al guardar plateNumber:', updateError);
+                    // Si hay conflicto (ej: otro proceso generó el mismo), retornar el equipo actual
+                    if (updateError.code === 'P2002') {
+                        const retryEquipment = await prisma.equipment.findUnique({
+                            where: { id },
+                            include: {
+                                ...equipmentInclude,
+                                maintenances: {
+                                    select: { id: true, title: true, type: true, status: true, scheduledDate: true },
+                                    orderBy: { scheduledDate: 'desc' }
+                                },
+                                documents: {
+                                    select: { id: true, title: true, fileType: true }
+                                }
+                            }
+                        });
+                        res.json(retryEquipment);
+                    } else {
+                        throw updateError;
+                    }
+                }
+            } else {
+                res.json(equipment);
+            }
         } catch (error: any) {
             console.error('Error al obtener el equipo:', error);
             res.status(500).json({ error: 'Error interno del servidor al obtener el equipo.' });
