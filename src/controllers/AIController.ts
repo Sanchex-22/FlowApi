@@ -4,7 +4,6 @@ import { EquipmentStatus, MaintenanceStatus } from '../../generated/prisma/index
 
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
-// ✅ Fallback automático — si uno falla, usa el siguiente
 const AI_MODELS = [
     'google/gemini-2.0-flash-001',
     'meta-llama/llama-3.1-8b-instruct:free',
@@ -40,13 +39,13 @@ const callOpenAI = async (
                     'HTTP-Referer': process.env.APP_URL || 'http://localhost:5173',
                     'X-Title': 'Dashboard AI',
                 },
-                body: JSON.stringify({ model, messages, temperature, max_tokens: 1500 }),
+                body: JSON.stringify({ model, messages, temperature, max_tokens: 2000 }),
             });
 
             if (!response.ok) {
                 const err = await response.json() as any;
                 console.warn(`⚠️ Modelo ${model} falló:`, err.error?.message);
-                continue; // Intenta con el siguiente
+                continue;
             }
 
             console.log(`✅ Modelo usado: ${model}`);
@@ -69,49 +68,238 @@ const cleanAIResponse = (raw: string): string => {
 
 export class AIController {
 
-    async generateDashboardInsights(req: Request, res: Response) {
-        console.log('🔹 [AI] Generando insights...');
+    // ✅ NUEVO: Obtener asignaciones detalladas de equipos por persona
+    private async getPersonEquipmentDetails(companyId: string) {
         try {
-            const { companyId } = req.body;
-            if (!companyId) return res.status(400).json({ error: 'Falta companyId.' });
+            const persons = await prisma.person.findMany({
+                where: { companyId },
+                include: {
+                    department: { select: { name: true } },
+                },
+            });
 
+            const personEquipmentMap = new Map<string, any>();
+
+            for (const person of persons) {
+                const equipments = await prisma.equipment.findMany({
+                    where: {
+                        companyId,
+                        assignedToPersonId: person.id,
+                    },
+                });
+
+                personEquipmentMap.set(person.id, {
+                    fullName: person.fullName,
+                    department: person.department?.name || 'Sin departamento',
+                    position: person.position || 'Sin posición',
+                    email: person.email || 'Sin email',
+                    status: person.status,
+                    equipments: equipments.map(eq => ({
+                        type: eq.type,
+                        brand: eq.brand,
+                        model: eq.model,
+                        serialNumber: eq.serialNumber,
+                        plateNumber: eq.plateNumber,
+                        cost: eq.cost,
+                        status: eq.status,
+                    })),
+                    totalEquipmentCount: equipments.length,
+                    totalEquipmentCost: equipments.reduce((sum, eq) => sum + (Number(eq.cost) || 0), 0),
+                    hasLaptop: equipments.some(eq => eq.type?.toLowerCase().includes('laptop')),
+                    hasMonitor: equipments.some(eq => eq.type?.toLowerCase().includes('monitor')),
+                    hasMouse: equipments.some(eq => eq.type?.toLowerCase().includes('mouse')),
+                    hasKeyboard: equipments.some(eq => eq.type?.toLowerCase().includes('keyboard')),
+                });
+            }
+
+            return personEquipmentMap;
+        } catch (error) {
+            console.error('Error obteniendo detalles de equipos por persona:', error);
+            return new Map();
+        }
+    }
+
+    // ✅ MEJORADO: Obtener contexto completo del dashboard con detalles de equipos
+    private async getDashboardContext(companyId: string) {
+        try {
             const [
-                totalEquipment, activeEquipment, inMaintenance,
-                totalPersons, expenses, equipmentGrouped,
+                totalEquipment,
+                activeEquipment,
+                inMaintenance,
+                totalPersons,
+                expenses,
+                equipmentGrouped,
+                equipmentByStatus,
+                allPersons,
+                allEquipment,
+                departments,
             ] = await Promise.all([
                 prisma.equipment.count({ where: { companyId } }),
                 prisma.equipment.count({ where: { companyId, status: EquipmentStatus.ACTIVE } }),
                 prisma.maintenance.count({
                     where: { companyId, status: { in: [MaintenanceStatus.SCHEDULED, MaintenanceStatus.IN_PROGRESS] } },
                 }),
-                prisma.user.count({ where: { companies: { some: { companyId } }, isActive: true } }),
+                prisma.person.count({ where: { companyId } }),
                 prisma.annualSoftwareExpense.findMany({ orderBy: { annualCost: 'desc' }, take: 5 }),
                 prisma.equipment.groupBy({ by: ['type'], where: { companyId }, _count: { type: true } }),
+                prisma.equipment.groupBy({ by: ['status'], where: { companyId }, _count: { status: true } }),
+                prisma.person.findMany({
+                    where: { companyId },
+                    include: {
+                        department: { select: { name: true } },
+                    },
+                }),
+                prisma.equipment.findMany({
+                    where: { companyId },
+                    include: {
+                        assignedToPerson: { select: { fullName: true } },
+                    },
+                }),
+                prisma.department.findMany({
+                    where: { companyId },
+                    include: {
+                        persons: true,
+                    },
+                }),
             ]);
 
+            // ✅ Obtener detalles de equipos por persona
+            const personEquipmentDetails = await this.getPersonEquipmentDetails(companyId);
+
+            // Calcular estadísticas avanzadas
+            const equipmentByPerson = new Map<string, any[]>();
+            allEquipment.forEach(eq => {
+                if (eq.assignedToPersonId) {
+                    if (!equipmentByPerson.has(eq.assignedToPersonId)) {
+                        equipmentByPerson.set(eq.assignedToPersonId, []);
+                    }
+                    equipmentByPerson.get(eq.assignedToPersonId)!.push(eq);
+                }
+            });
+
+            const personsWithEquipment = equipmentByPerson.size;
+            const personsWithoutEquipment = totalPersons - personsWithEquipment;
+
+            // ✅ NUEVO: Construir listado detallado de personas sin dispositivos específicos
+            const personsWithoutMonitor = Array.from(personEquipmentDetails.entries())
+                .filter(([_, details]) => details.equipments.length > 0 && !details.hasMonitor)
+                .map(([_, details]) => `${details.fullName} (${details.equipments.map(e => e.type).join(', ')})`);
+
+            const personsWithoutLaptop = Array.from(personEquipmentDetails.entries())
+                .filter(([_, details]) => details.equipments.length > 0 && !details.hasLaptop)
+                .map(([_, details]) => `${details.fullName} (${details.equipments.map(e => e.type).join(', ')})`);
+
+            const personsWithoutEquipmentList = Array.from(personEquipmentDetails.entries())
+                .filter(([_, details]) => details.equipments.length === 0)
+                .map(([_, details]) => details.fullName);
+
+            // ✅ NUEVO: Top personas por equipos con detalles
+            const topPersons = Array.from(personEquipmentDetails.entries())
+                .map(([_, details]) => ({
+                    name: details.fullName,
+                    count: details.totalEquipmentCount,
+                    cost: details.totalEquipmentCost,
+                    equipments: details.equipments.map(e => `${e.type} (${e.brand} ${e.model})`).join(', '),
+                }))
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 5);
+
+            const totalCost = allEquipment.reduce((sum: number, eq: any) => sum + (Number(eq.cost) || 0), 0);
             const totalExpensesCost = expenses.reduce((sum, item) => sum + item.annualCost, 0);
-            const monthlyCost       = totalExpensesCost / 12;
-            const topExpenseName    = expenses.length > 0 ? expenses[0].applicationName : 'N/A';
-            const equipmentSummary  = equipmentGrouped.map(e => `${e.type}: ${e._count.type}`).join(', ');
 
-            const prompt = `Analiza estos datos de inventario tecnológico:
-- Equipos: ${totalEquipment} (Activos: ${activeEquipment}, Mtto: ${inMaintenance})
-- Usuarios: ${totalPersons}
-- Tipos: ${equipmentSummary || 'Sin datos'}
-- Gasto Software Mensual: $${monthlyCost.toFixed(0)}
-- App más costosa: ${topExpenseName}
+            // Estadísticas por departamento
+            const deptStats = departments.map(dept => ({
+                name: dept.name,
+                personCount: dept.persons.length,
+                equipmentCount: allEquipment.filter(eq => 
+                    allPersons.find(p => p.id === eq.assignedToPersonId)?.departmentId === dept.id
+                ).length,
+                persons: dept.persons.map(p => {
+                    const details = personEquipmentDetails.get(p.id);
+                    return {
+                        name: p.fullName,
+                        equipmentCount: details?.totalEquipmentCount || 0,
+                        equipments: details?.equipments || [],
+                    };
+                }),
+            }));
 
-Responde SOLO con JSON válido. Cada "content" máximo 20 palabras. Sin texto extra:
+            return {
+                totalEquipment,
+                activeEquipment,
+                inMaintenance,
+                totalPersons,
+                personsWithEquipment,
+                personsWithoutEquipment,
+                personsWithoutMonitor,
+                personsWithoutLaptop,
+                personsWithoutEquipmentList,
+                topPersons,
+                totalEquipmentCost: totalCost,
+                totalSoftwareCost: totalExpensesCost,
+                monthlySoftwareCost: totalExpensesCost / 12,
+                equipmentTypes: equipmentGrouped.map(e => `${e.type}: ${e._count.type}`).join(', '),
+                equipmentByStatus: equipmentByStatus.map(e => `${e.status}: ${e._count.status}`).join(', '),
+                softwareExpenses: expenses.map(e => `${e.applicationName}: $${e.annualCost}`).join(', '),
+                departments: deptStats,
+                personEquipmentDetails,
+            };
+        } catch (error) {
+            console.error('Error obteniendo contexto del dashboard:', error);
+            return null;
+        }
+    }
+
+    async generateDashboardInsights(req: Request, res: Response) {
+        console.log('🔹 [AI] Generando insights...');
+        try {
+            const { companyId } = req.body;
+            if (!companyId) return res.status(400).json({ error: 'Falta companyId.' });
+
+            const context = await this.getDashboardContext(companyId);
+            if (!context) {
+                return res.status(500).json({ error: 'No se pudo obtener contexto del dashboard.' });
+            }
+
+            const prompt = `Eres un analista experto en gestión de TI. Analiza estos datos completos de la empresa:
+
+EQUIPOS:
+- Total: ${context.totalEquipment}
+- Activos: ${context.activeEquipment}
+- En Mantenimiento: ${context.inMaintenance}
+- Costo Total: $${context.totalEquipmentCost}
+- Tipos: ${context.equipmentTypes}
+- Estado: ${context.equipmentByStatus}
+
+PERSONAS Y ASIGNACIONES DETALLADAS:
+- Total: ${context.totalPersons}
+- Con Equipos: ${context.personsWithEquipment}
+- Sin Equipos: ${context.personsWithoutEquipment} ${context.personsWithoutEquipmentList.length > 0 ? `(${context.personsWithoutEquipmentList.join(', ')})` : ''}
+- Sin Monitor: ${context.personsWithoutMonitor.length} ${context.personsWithoutMonitor.length > 0 ? `(${context.personsWithoutMonitor.join('; ')})` : ''}
+- Sin Laptop: ${context.personsWithoutLaptop.length} ${context.personsWithoutLaptop.length > 0 ? `(${context.personsWithoutLaptop.join('; ')})` : ''}
+
+TOP 5 PERSONAS POR EQUIPOS:
+${context.topPersons.map(p => `- ${p.name}: ${p.count} equipos ($${p.cost}) → ${p.equipments}`).join('\n')}
+
+SOFTWARE:
+- Costo Mensual: $${context.monthlySoftwareCost.toFixed(0)}
+- Costo Anual: $${context.totalSoftwareCost.toFixed(0)}
+- Principales: ${context.softwareExpenses}
+
+DEPARTAMENTOS:
+${context.departments.map(d => `- ${d.name}: ${d.personCount} personas, ${d.equipmentCount} equipos`).join('\n')}
+
+Genera 4 insights estratégicos en JSON. Máximo 20 palabras por insight:
 [
-  {"type":"summary","title":"Resumen General","content":"...","priority":"medium","icon":"📊"},
-  {"type":"alert","title":"Punto de Atención","content":"...","priority":"high","icon":"⚠️"},
+  {"type":"summary","title":"Resumen Ejecutivo","content":"...","priority":"medium","icon":"📊"},
+  {"type":"alert","title":"Alerta Crítica","content":"...","priority":"high","icon":"⚠️"},
   {"type":"recommendation","title":"Recomendación","content":"...","priority":"medium","icon":"💡"},
-  {"type":"optimization","title":"Ahorro","content":"...","priority":"low","icon":"💰"}
+  {"type":"optimization","title":"Oportunidad de Ahorro","content":"...","priority":"low","icon":"💰"}
 ]`;
 
             const completion = await callOpenAI([{ role: 'user', content: prompt }], 0.5);
             const rawContent = completion.choices?.[0]?.message?.content ?? '';
-            const cleaned    = cleanAIResponse(rawContent);
+            const cleaned = cleanAIResponse(rawContent);
 
             let insights;
             try {
@@ -121,7 +309,7 @@ Responde SOLO con JSON válido. Cada "content" máximo 20 palabras. Sin texto ex
                 insights = [{ type: 'alert', title: 'Error', content: 'No se pudo procesar. Intenta de nuevo.', priority: 'high', icon: '⚠️' }];
             }
 
-            return res.status(200).json({ insights, generatedAt: new Date() });
+            return res.status(200).json({ insights, generatedAt: new Date(), context });
 
         } catch (error: any) {
             console.error('❌ [AI Controller Error]:', error);
@@ -140,7 +328,7 @@ Serie: ${equipment.serialNumber}, Estado: ${equipment.status}.
 Responde directamente sin introducción.`;
 
             const completion = await callOpenAI([{ role: 'user', content: prompt }], 0.3);
-            const summary    = completion.choices?.[0]?.message?.content ?? 'No se pudo generar resumen.';
+            const summary = completion.choices?.[0]?.message?.content ?? 'No se pudo generar resumen.';
 
             return res.status(200).json({ summary });
 
@@ -155,26 +343,42 @@ Responde directamente sin introducción.`;
             const { companyId } = req.body;
             if (!companyId) return res.status(400).json({ error: 'Falta companyId.' });
 
-            const expenses = await prisma.annualSoftwareExpense.findMany({ orderBy: { annualCost: 'desc' } });
+            const expenses = await prisma.annualSoftwareExpense.findMany({ 
+                orderBy: { annualCost: 'desc' },
+                where: { id: { not: '' } }
+            });
 
             if (expenses.length === 0) {
                 return res.status(200).json({ analysis: 'No hay gastos de software registrados.' });
             }
 
-            const totalAnual  = expenses.reduce((sum, e) => sum + e.annualCost, 0);
+            const totalAnual = expenses.reduce((sum, e) => sum + e.annualCost, 0);
             const expenseList = expenses
                 .map(e => `- ${e.applicationName} (${e.category}): $${e.annualCost}/año, ${e.numberOfUsers} usuarios`)
                 .join('\n');
 
-            const prompt = `Analista financiero de TI. Analiza estos gastos:
+            const prompt = `Analista financiero de TI. Analiza estos gastos de software:
 ${expenseList}
 Total Anual: $${totalAnual.toFixed(0)}
-Da: 1) Resumen del gasto 2) Mejor/peor relación costo/usuario 3) 2 recomendaciones. Máximo 150 palabras.`;
+Promedio Mensual: $${(totalAnual / 12).toFixed(0)}
+
+Proporciona:
+1) Resumen ejecutivo del gasto
+2) Software con mejor/peor relación costo-usuario
+3) 2 recomendaciones de optimización
+4) Oportunidades de consolidación
+
+Máximo 200 palabras.`;
 
             const completion = await callOpenAI([{ role: 'user', content: prompt }], 0.4);
-            const analysis   = completion.choices?.[0]?.message?.content ?? 'No se pudo analizar.';
+            const analysis = completion.choices?.[0]?.message?.content ?? 'No se pudo analizar.';
 
-            return res.status(200).json({ analysis, totalAnual, totalSoftware: expenses.length });
+            return res.status(200).json({ 
+                analysis, 
+                totalAnual, 
+                monthlyAverage: totalAnual / 12,
+                totalSoftware: expenses.length 
+            });
 
         } catch (error: any) {
             console.error('❌ [AI Expenses Error]:', error);
@@ -182,19 +386,79 @@ Da: 1) Resumen del gasto 2) Mejor/peor relación costo/usuario 3) 2 recomendacio
         }
     }
 
+    // ✅ MEJORADO: Chat con contexto completo incluyendo equipos específicos
     async chat(req: Request, res: Response) {
         try {
-            const { messages, systemPrompt } = req.body;
+            const { messages, systemPrompt, companyId } = req.body;
             if (!messages || !Array.isArray(messages)) {
                 return res.status(400).json({ error: 'Messages son requeridos.' });
             }
 
+            let context = '';
+            let contextData = null;
+
+            if (companyId) {
+                contextData = await this.getDashboardContext(companyId);
+                if (contextData) {
+                    // ✅ Construir contexto detallado con equipos específicos por persona
+                    const personDetails = Array.from(contextData.personEquipmentDetails.entries())
+                        .map(([_, details]) => {
+                            const equipmentList = details.equipments.length > 0
+                                ? details.equipments.map(e => `${e.type} (${e.brand} ${e.model}, $${e.cost})`).join('; ')
+                                : 'Sin equipos asignados';
+                            return `${details.fullName} (${details.department}): ${equipmentList}`;
+                        })
+                        .join('\n');
+
+                    context = `
+
+CONTEXTO DEL SISTEMA (Información actual de la empresa):
+
+INVENTARIO DE EQUIPOS:
+- Total: ${contextData.totalEquipment} equipos
+- Activos: ${contextData.activeEquipment}
+- En Mantenimiento: ${contextData.inMaintenance}
+- Costo Total: $${contextData.totalEquipmentCost.toLocaleString()}
+- Tipos: ${contextData.equipmentTypes}
+- Estado: ${contextData.equipmentByStatus}
+
+PERSONAL Y ASIGNACIONES ESPECÍFICAS:
+- Total de Personas: ${contextData.totalPersons}
+- Con Equipos: ${contextData.personsWithEquipment}
+- Sin Equipos: ${contextData.personsWithoutEquipment} ${contextData.personsWithoutEquipmentList.length > 0 ? `(${contextData.personsWithoutEquipmentList.join(', ')})` : ''}
+
+DETALLES POR PERSONA:
+${personDetails}
+
+ALERTAS:
+${contextData.personsWithoutMonitor.length > 0 ? `- Sin Monitor: ${contextData.personsWithoutMonitor.join(', ')}\n` : ''}
+${contextData.personsWithoutLaptop.length > 0 ? `- Sin Laptop: ${contextData.personsWithoutLaptop.join(', ')}\n` : ''}
+
+GASTOS DE SOFTWARE:
+- Costo Mensual: $${contextData.monthlySoftwareCost.toFixed(0)}
+- Costo Anual: $${contextData.totalSoftwareCost.toFixed(0)}
+- Principales: ${contextData.softwareExpenses}
+
+DEPARTAMENTOS:
+${contextData.departments.map(d => `- ${d.name}: ${d.personCount} personas, ${d.equipmentCount} equipos`).join('\n')}
+`;
+                }
+            }
+
+            const enhancedSystemPrompt = `${systemPrompt}${context}
+
+Basándote en esta información específica de equipos asignados a cada persona, responde preguntas sobre asignaciones, personas, equipos y estrategia de TI.
+Sé específico y usa los datos proporcionados. Cuando alguien pregunte "¿Qué tiene Carlos?", consulta la lista de asignaciones específicas.`;
+
             const completion = await callOpenAI(
-                [{ role: 'system', content: systemPrompt }, ...messages],
+                [{ role: 'system', content: enhancedSystemPrompt }, ...messages],
                 0.4
             );
 
-            return res.status(200).json(completion);
+            return res.status(200).json({ 
+                ...completion,
+                contextIncluded: !!contextData
+            });
 
         } catch (error: any) {
             console.error('❌ [AI Chat Error]:', error);
