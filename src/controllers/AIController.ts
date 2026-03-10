@@ -68,8 +68,7 @@ const cleanAIResponse = (raw: string): string => {
 
 export class AIController {
 
-    // ✅ NUEVO: Obtener asignaciones detalladas de equipos por persona
-    private async getPersonEquipmentDetails(companyId: string) {
+    private async getPersonEquipmentDetails(companyId: string): Promise<any[]> {
         try {
             const persons = await prisma.person.findMany({
                 where: { companyId },
@@ -78,7 +77,7 @@ export class AIController {
                 },
             });
 
-            const personEquipmentMap = new Map<string, any>();
+            const personEquipmentList: any[] = [];
 
             for (const person of persons) {
                 const equipments = await prisma.equipment.findMany({
@@ -88,38 +87,41 @@ export class AIController {
                     },
                 });
 
-                personEquipmentMap.set(person.id, {
-                    fullName: person.fullName,
+                const hasLaptop = equipments.some((eq) => eq.type?.toLowerCase().includes('laptop'));
+                const hasMonitor = equipments.some((eq) => eq.type?.toLowerCase().includes('monitor'));
+                const hasMouse = equipments.some((eq) => eq.type?.toLowerCase().includes('mouse'));
+                const hasKeyboard = equipments.some((eq) => eq.type?.toLowerCase().includes('keyboard'));
+
+                personEquipmentList.push({
+                    id: person.id,
+                    fullName: person.fullName || 'Desconocido',
                     department: person.department?.name || 'Sin departamento',
-                    position: person.position || 'Sin posición',
-                    email: person.email || 'Sin email',
+                    position: person.position,
                     status: person.status,
-                    equipments: equipments.map(eq => ({
+                    equipments: equipments.map((eq) => ({
                         type: eq.type,
                         brand: eq.brand,
                         model: eq.model,
                         serialNumber: eq.serialNumber,
-                        plateNumber: eq.plateNumber,
                         cost: eq.cost,
                         status: eq.status,
                     })),
                     totalEquipmentCount: equipments.length,
                     totalEquipmentCost: equipments.reduce((sum, eq) => sum + (Number(eq.cost) || 0), 0),
-                    hasLaptop: equipments.some(eq => eq.type?.toLowerCase().includes('laptop')),
-                    hasMonitor: equipments.some(eq => eq.type?.toLowerCase().includes('monitor')),
-                    hasMouse: equipments.some(eq => eq.type?.toLowerCase().includes('mouse')),
-                    hasKeyboard: equipments.some(eq => eq.type?.toLowerCase().includes('keyboard')),
+                    hasLaptop,
+                    hasMonitor,
+                    hasMouse,
+                    hasKeyboard,
                 });
             }
 
-            return personEquipmentMap;
+            return personEquipmentList;
         } catch (error) {
             console.error('Error obteniendo detalles de equipos por persona:', error);
-            return new Map();
+            return [];
         }
     }
 
-    // ✅ MEJORADO: Obtener contexto completo del dashboard con detalles de equipos
     private async getDashboardContext(companyId: string) {
         try {
             const [
@@ -163,12 +165,10 @@ export class AIController {
                 }),
             ]);
 
-            // ✅ Obtener detalles de equipos por persona
             const personEquipmentDetails = await this.getPersonEquipmentDetails(companyId);
 
-            // Calcular estadísticas avanzadas
             const equipmentByPerson = new Map<string, any[]>();
-            allEquipment.forEach(eq => {
+            allEquipment.forEach((eq: any) => {
                 if (eq.assignedToPersonId) {
                     if (!equipmentByPerson.has(eq.assignedToPersonId)) {
                         equipmentByPerson.set(eq.assignedToPersonId, []);
@@ -180,42 +180,53 @@ export class AIController {
             const personsWithEquipment = equipmentByPerson.size;
             const personsWithoutEquipment = totalPersons - personsWithEquipment;
 
-            // ✅ NUEVO: Construir listado detallado de personas sin dispositivos específicos
-            const personsWithoutMonitor = Array.from(personEquipmentDetails.entries())
-                .filter(([_, details]) => details.equipments.length > 0 && !details.hasMonitor)
-                .map(([_, details]) => `${details.fullName} (${details.equipments.map(e => e.type).join(', ')})`);
+            const personsWithoutMonitor: string[] = [];
+            const personsWithoutLaptop: string[] = [];
+            const personsWithoutEquipmentList: string[] = [];
 
-            const personsWithoutLaptop = Array.from(personEquipmentDetails.entries())
-                .filter(([_, details]) => details.equipments.length > 0 && !details.hasLaptop)
-                .map(([_, details]) => `${details.fullName} (${details.equipments.map(e => e.type).join(', ')})`);
+            for (const detail of personEquipmentDetails) {
+                if (detail.equipments.length > 0 && !detail.hasMonitor) {
+                    personsWithoutMonitor.push(
+                        `${detail.fullName} (${detail.equipments.map((e: any) => e.type).join(', ')})`
+                    );
+                }
+                if (detail.equipments.length > 0 && !detail.hasLaptop) {
+                    personsWithoutLaptop.push(
+                        `${detail.fullName} (${detail.equipments.map((e: any) => e.type).join(', ')})`
+                    );
+                }
+                if (detail.equipments.length === 0) {
+                    personsWithoutEquipmentList.push(detail.fullName);
+                }
+            }
 
-            const personsWithoutEquipmentList = Array.from(personEquipmentDetails.entries())
-                .filter(([_, details]) => details.equipments.length === 0)
-                .map(([_, details]) => details.fullName);
+            const topPersonsArray: any[] = [];
+            for (const detail of personEquipmentDetails) {
+                topPersonsArray.push({
+                    name: detail.fullName,
+                    count: detail.totalEquipmentCount,
+                    cost: detail.totalEquipmentCost,
+                    equipments: detail.equipments
+                        .map((e: any) => `${e.type} (${e.brand} ${e.model})`)
+                        .join(', '),
+                });
+            }
 
-            // ✅ NUEVO: Top personas por equipos con detalles
-            const topPersons = Array.from(personEquipmentDetails.entries())
-                .map(([_, details]) => ({
-                    name: details.fullName,
-                    count: details.totalEquipmentCount,
-                    cost: details.totalEquipmentCost,
-                    equipments: details.equipments.map(e => `${e.type} (${e.brand} ${e.model})`).join(', '),
-                }))
+            const topPersons = topPersonsArray
                 .sort((a, b) => b.count - a.count)
                 .slice(0, 5);
 
             const totalCost = allEquipment.reduce((sum: number, eq: any) => sum + (Number(eq.cost) || 0), 0);
             const totalExpensesCost = expenses.reduce((sum, item) => sum + item.annualCost, 0);
 
-            // Estadísticas por departamento
-            const deptStats = departments.map(dept => ({
+            const deptStats = departments.map((dept: any) => ({
                 name: dept.name,
                 personCount: dept.persons.length,
-                equipmentCount: allEquipment.filter(eq => 
-                    allPersons.find(p => p.id === eq.assignedToPersonId)?.departmentId === dept.id
+                equipmentCount: allEquipment.filter((eq: any) => 
+                    allPersons.find((p: any) => p.id === eq.assignedToPersonId)?.departmentId === dept.id
                 ).length,
-                persons: dept.persons.map(p => {
-                    const details = personEquipmentDetails.get(p.id);
+                persons: dept.persons.map((p: any) => {
+                    const details = personEquipmentDetails.find((d: any) => d.id === p.id);
                     return {
                         name: p.fullName,
                         equipmentCount: details?.totalEquipmentCount || 0,
@@ -238,9 +249,9 @@ export class AIController {
                 totalEquipmentCost: totalCost,
                 totalSoftwareCost: totalExpensesCost,
                 monthlySoftwareCost: totalExpensesCost / 12,
-                equipmentTypes: equipmentGrouped.map(e => `${e.type}: ${e._count.type}`).join(', '),
-                equipmentByStatus: equipmentByStatus.map(e => `${e.status}: ${e._count.status}`).join(', '),
-                softwareExpenses: expenses.map(e => `${e.applicationName}: $${e.annualCost}`).join(', '),
+                equipmentTypes: equipmentGrouped.map((e: any) => `${e.type}: ${e._count.type}`).join(', '),
+                equipmentByStatus: equipmentByStatus.map((e: any) => `${e.status}: ${e._count.status}`).join(', '),
+                softwareExpenses: expenses.map((e: any) => `${e.applicationName}: $${e.annualCost}`).join(', '),
                 departments: deptStats,
                 personEquipmentDetails,
             };
@@ -279,7 +290,7 @@ PERSONAS Y ASIGNACIONES DETALLADAS:
 - Sin Laptop: ${context.personsWithoutLaptop.length} ${context.personsWithoutLaptop.length > 0 ? `(${context.personsWithoutLaptop.join('; ')})` : ''}
 
 TOP 5 PERSONAS POR EQUIPOS:
-${context.topPersons.map(p => `- ${p.name}: ${p.count} equipos ($${p.cost}) → ${p.equipments}`).join('\n')}
+${context.topPersons.map((p: any) => `- ${p.name}: ${p.count} equipos ($${p.cost}) → ${p.equipments}`).join('\n')}
 
 SOFTWARE:
 - Costo Mensual: $${context.monthlySoftwareCost.toFixed(0)}
@@ -287,7 +298,7 @@ SOFTWARE:
 - Principales: ${context.softwareExpenses}
 
 DEPARTAMENTOS:
-${context.departments.map(d => `- ${d.name}: ${d.personCount} personas, ${d.equipmentCount} equipos`).join('\n')}
+${context.departments.map((d: any) => `- ${d.name}: ${d.personCount} personas, ${d.equipmentCount} equipos`).join('\n')}
 
 Genera 4 insights estratégicos en JSON. Máximo 20 palabras por insight:
 [
@@ -345,7 +356,6 @@ Responde directamente sin introducción.`;
 
             const expenses = await prisma.annualSoftwareExpense.findMany({ 
                 orderBy: { annualCost: 'desc' },
-                where: { id: { not: '' } }
             });
 
             if (expenses.length === 0) {
@@ -386,7 +396,6 @@ Máximo 200 palabras.`;
         }
     }
 
-    // ✅ MEJORADO: Chat con contexto completo incluyendo equipos específicos
     async chat(req: Request, res: Response) {
         try {
             const { messages, systemPrompt, companyId } = req.body;
@@ -395,20 +404,21 @@ Máximo 200 palabras.`;
             }
 
             let context = '';
-            let contextData = null;
+            let contextData: any = null;
 
             if (companyId) {
                 contextData = await this.getDashboardContext(companyId);
                 if (contextData) {
-                    // ✅ Construir contexto detallado con equipos específicos por persona
-                    const personDetails = Array.from(contextData.personEquipmentDetails.entries())
-                        .map(([_, details]) => {
-                            const equipmentList = details.equipments.length > 0
-                                ? details.equipments.map(e => `${e.type} (${e.brand} ${e.model}, $${e.cost})`).join('; ')
-                                : 'Sin equipos asignados';
-                            return `${details.fullName} (${details.department}): ${equipmentList}`;
-                        })
-                        .join('\n');
+                    const personDetailsList: string[] = [];
+                    for (const detail of contextData.personEquipmentDetails) {
+                        const equipmentList = detail.equipments.length > 0
+                            ? detail.equipments
+                                .map((e: any) => `${e.type} (${e.brand} ${e.model}, $${e.cost})`)
+                                .join('; ')
+                            : 'Sin equipos asignados';
+                        personDetailsList.push(`${detail.fullName} (${detail.department}): ${equipmentList}`);
+                    }
+                    const personDetails = personDetailsList.join('\n');
 
                     context = `
 
@@ -440,7 +450,7 @@ GASTOS DE SOFTWARE:
 - Principales: ${contextData.softwareExpenses}
 
 DEPARTAMENTOS:
-${contextData.departments.map(d => `- ${d.name}: ${d.personCount} personas, ${d.equipmentCount} equipos`).join('\n')}
+${contextData.departments.map((d: any) => `- ${d.name}: ${d.personCount} personas, ${d.equipmentCount} equipos`).join('\n')}
 `;
                 }
             }
