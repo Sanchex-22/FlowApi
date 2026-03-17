@@ -39,6 +39,27 @@ export class AuthController {
     });
   }
 
+  async forgotPassword(req: Request, res: Response) {
+    const { email } = req.body;
+    try {
+      await this.authService.forgotPassword(email);
+      return res.json({ message: 'If that email exists, a reset code has been sent.' });
+    } catch (error: any) {
+      console.error('forgotPassword error:', error.message);
+      return res.json({ message: 'If that email exists, a reset code has been sent.' });
+    }
+  }
+
+  async resetPassword(req: Request, res: Response) {
+    const { email, code, newPassword } = req.body;
+    try {
+      await this.authService.resetPassword(email, code, newPassword);
+      return res.json({ message: 'Password updated successfully.' });
+    } catch (error: any) {
+      return res.status(400).json({ error: error.message || 'Failed to reset password.' });
+    }
+  }
+
   async postRegister(req: Request, res: Response) {
     const { username, email, password, role, companyId } = req.body;
     try {

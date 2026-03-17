@@ -535,19 +535,21 @@ export class UserController {
         where: { id },
         include: {
           person: {
-            include: { department: true },
+            include: {
+              department: true,
+              assignedEquipments: {
+                select: {
+                  id: true,
+                  type: true,
+                  model: true,
+                  serialNumber: true,
+                  status: true,
+                },
+              },
+            },
           },
           companies: {
             include: { company: true },
-          },
-          assignedEquipments: {
-            select: {
-              id: true,
-              type: true,
-              model: true,
-              serialNumber: true,
-              status: true,
-            },
           },
           assignedMaintenances: {
             select: {
