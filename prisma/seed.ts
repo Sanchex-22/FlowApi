@@ -60,7 +60,7 @@ async function main() {
 
   const companies: Record<string, any> = {}
 
-  for (const name of ['Intermaritime', 'PMTS']) {
+  for (const name of ['Intermaritime']) {
     let company = await prisma.company.findUnique({ where: { name } })
 
     if (!company) {
@@ -87,7 +87,6 @@ async function main() {
 
   const departmentData = [
     { name: 'IT', company: 'Intermaritime' },
-    { name: 'Administración', company: 'PMTS' },
   ]
 
   for (const d of departmentData) {
@@ -181,13 +180,6 @@ async function main() {
       role: UserRole.ADMIN,
       company: 'Intermaritime',
       department: 'IT',
-    },
-    {
-      username: 'contador',
-      email: 'contador@pmts.com',
-      role: UserRole.MODERATOR,
-      company: 'PMTS',
-      department: 'Administración',
     },
   ]
 
