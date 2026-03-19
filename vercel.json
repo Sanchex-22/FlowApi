@@ -5,11 +5,11 @@
       "src": "src/server.ts",
       "use": "@vercel/node",
       "config": {
-      "includeFiles": [
-        "dist/**", 
-        "views/**", 
-        "generated/prisma/**" 
-      ]
+        "includeFiles": [
+          "dist/**",
+          "views/**",
+          "generated/prisma/**"
+        ]
       }
     }
   ],
@@ -20,5 +20,5 @@
     }
   ],
   "installCommand": "npm install",
-  "buildCommand": "npm run build"
+  "buildCommand": "npx prisma migrate deploy && if [ \"$VERCEL_ENV\" = \"production\" ]; then npx prisma db seed; fi && npm run build"
 }
