@@ -37,8 +37,8 @@ app.set('layout', 'layout');
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(corsMiddleware);
-// Responder a preflight OPTIONS en todas las rutas
-app.options('*', corsMiddleware);
+// Responder a preflight OPTIONS en todas las rutas (Express 5: no acepta '*')
+app.options(/.*/, corsMiddleware);
 
 // ⛔ NO PARSEAR JSON en importación CSV
 app.use((req, res, next) => {

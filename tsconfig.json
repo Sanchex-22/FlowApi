@@ -13,11 +13,11 @@
     "checkJs": true,
 
     "outDir": "./dist",
-    "ignoreDeprecations": "6.0",
+    "ignoreDeprecations": "5.0",
 
     "types": ["node"],
     "lib": ["ESNext"]
   },
   "include": ["src/**/*.ts", "prisma/**/*", "lib/**/*", "prisma/script/**/*", "test-db.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "test-db.ts", "test.ts"]
 }

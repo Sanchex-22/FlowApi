@@ -483,7 +483,6 @@ export class UserController {
           companies: {
             include: { company: true },
           },
-          assignedEquipments: true,
           assignedMaintenances: true,
           createdCompanies: true,
           assignedNetworks: true,

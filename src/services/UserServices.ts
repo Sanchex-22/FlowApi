@@ -29,7 +29,6 @@ export class UserServices {
             email,
             password: hashedPassword,
             role,
-            companyId,
             },
         });
     
