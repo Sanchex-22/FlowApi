@@ -2,7 +2,7 @@ import 'dotenv/config'
 import { hash } from 'bcryptjs'
 import prisma from '../lib/prisma.js'
 import { UserRole } from '../generated/prisma/index.js'
-import { AdminConfig } from '../src/config/adminConfig.js'
+import { AdminConfig, SeedConfig } from '../src/config/adminConfig.js'
 
 /* ============================
    HELPERS
@@ -50,79 +50,57 @@ async function main() {
 
   console.log('🌱 Iniciando actualización de base de datos (Modo Idempotente)...')
 
-  if (!AdminConfig?.Email || !AdminConfig?.Password) {
-    throw new Error('ADMIN_EMAIL y ADMIN_PASSWORD deben estar definidos en el entorno.')
-  }
-
-  const superAdminEmail = String(AdminConfig?.Email).toLowerCase()
-  const superAdminName = String(AdminConfig?.Name+' '+AdminConfig?.LastName).toLowerCase()
-  const passwordHash = await hash(String(AdminConfig?.Password), 10)
-
-  const companies: Record<string, any> = {}
-
-  for (const name of ['Intermaritime']) {
-    let company = await prisma.company.findUnique({ where: { name } })
-
-    if (!company) {
-      company = await prisma.company.create({
-        data: {
-          name,
-          code: await generateNextCompanyCode(),
-          isActive: true,
-        },
-      })
-      console.log(`✅ Compañía creada: ${name}`)
-    } else {
-      console.log(`ℹ️ Compañía existente: ${name}`)
-    }
-
-    companies[name] = company
-  }
+  // AdminConfig.requireEnv already throws if ADMIN_EMAIL or ADMIN_PASSWORD are missing
+  const superAdminEmail = AdminConfig.Email.toLowerCase()
+  const superAdminName  = `${AdminConfig.Name} ${AdminConfig.LastName}`.toLowerCase()
+  const passwordHash    = await hash(AdminConfig.Password, 12)
 
   /* ============================
-     DEPARTMENTS
+     COMPANY (opcional)
   ============================ */
 
-  const departments: Record<string, any> = {}
+  let company: { id: string } | null = null
+  let dept: { id: string } | null = null
 
-  const departmentData = [
-    { name: 'IT', company: 'Intermaritime' },
-  ]
+  if (SeedConfig.CompanyName) {
+    company = await prisma.company.findUnique({ where: { name: SeedConfig.CompanyName } })
 
-  for (const d of departmentData) {
-    let dept = await prisma.department.findFirst({
-      where: {
-        name: d.name,
-        companyId: companies[d.company].id,
-      },
+    if (!company) {
+      const code = SeedConfig.CompanyCode || await generateNextCompanyCode()
+      company = await prisma.company.create({
+        data: { name: SeedConfig.CompanyName, code, isActive: true },
+      })
+      console.log(`✅ Compañía creada: ${SeedConfig.CompanyName} (${code})`)
+    } else {
+      console.log(`ℹ️ Compañía existente: ${SeedConfig.CompanyName}`)
+    }
+
+    /* ============================
+       DEPARTMENT (solo si hay compañía)
+    ============================ */
+
+    dept = await prisma.department.findFirst({
+      where: { name: SeedConfig.DepartmentName, companyId: company.id },
     })
 
     if (!dept) {
       dept = await prisma.department.create({
-        data: {
-          name: d.name,
-          companyId: companies[d.company].id,
-        },
+        data: { name: SeedConfig.DepartmentName, companyId: company.id },
       })
-      console.log(`✅ Departamento creado: ${d.name} (${d.company})`)
+      console.log(`✅ Departamento creado: ${SeedConfig.DepartmentName}`)
     } else {
-      console.log(`ℹ️ Departamento existente: ${d.name} (${d.company})`)
+      console.log(`ℹ️ Departamento existente: ${SeedConfig.DepartmentName}`)
     }
-
-    departments[`${d.name}_${d.company}`] = dept
+  } else {
+    console.log('ℹ️ SEED_COMPANY_NAME no definido — se omite creación de compañía y departamento')
   }
 
   /* ============================
-     SUPER ADMIN
+     SUPER ADMIN (siempre requerido)
   ============================ */
 
   let superAdmin = await prisma.user.findFirst({
-    where: {
-      OR: [
-        { email: superAdminEmail },
-        { username: superAdminName }
-      ]
-    },
+    where: { OR: [{ email: superAdminEmail }, { username: superAdminName }] },
     include: { person: true },
   })
 
@@ -139,97 +117,37 @@ async function main() {
 
         person: {
           create: {
-            firstName: AdminConfig?.Name || 'Carlos',
-            lastName: AdminConfig?.LastName || 'Sanchez',
+            firstName: AdminConfig.Name,
+            lastName: AdminConfig.LastName,
             fullName: superAdminName,
             contactEmail: superAdminEmail,
             status: 'Activo',
             userCode,
-            departmentId: departments['IT_Intermaritime'].id,
+            // departmentId solo si se creó/encontró un departamento
+            ...(dept ? { departmentId: dept.id } : {}),
           },
         },
       },
       include: { person: true },
     })
 
-    // Asignar TODAS las compañías al SUPER_ADMIN
-    const allCompanies = await prisma.company.findMany({
-      select: { id: true },
-    })
+    // Asignar TODAS las compañías existentes al SUPER_ADMIN
+    const allCompanies = await prisma.company.findMany({ select: { id: true } })
 
-    await prisma.userCompany.createMany({
-      data: allCompanies.map(company => ({
-        userId: newSuperAdmin.id,
-        companyId: company.id,
-      })),
-    })
-
-    console.log('✅ SUPER_ADMIN creado y asignado a todas las compañías')
+    if (allCompanies.length > 0) {
+      await prisma.userCompany.createMany({
+        data: allCompanies.map(c => ({
+          userId: newSuperAdmin.id,
+          companyId: c.id,
+        })),
+        skipDuplicates: true,
+      })
+      console.log(`✅ SUPER_ADMIN creado y asignado a ${allCompanies.length} compañía(s)`)
+    } else {
+      console.log('✅ SUPER_ADMIN creado (sin compañías aún — asígnale una desde el panel)')
+    }
   } else {
     console.log('ℹ️ SUPER_ADMIN existente')
-  }
-
-  /* ============================
-     OTHER USERS
-  ============================ */
-
-  const users = [
-    {
-      username: 'alex',
-      email: 'alex@intermaritime.org',
-      role: UserRole.ADMIN,
-      company: 'Intermaritime',
-      department: 'IT',
-    },
-  ]
-
-  for (const u of users) {
-    let user = await prisma.user.findFirst({
-      where: {
-        OR: [
-          { email: u.email },
-          { username: u.username }
-        ]
-      },
-      include: { person: true },
-    })
-
-    if (!user) {
-      const userCode = await generateNextUserCode()
-
-      const newUser = await prisma.user.create({
-        data: {
-          username: u.username,
-          email: u.email,
-          password: passwordHash,
-          role: u.role,
-          isActive: true,
-
-          person: {
-            create: {
-              fullName: u.username,
-              contactEmail: u.email,
-              status: 'Activo',
-              userCode,
-              departmentId: departments[`${u.department}_${u.company}`]?.id,
-            },
-          },
-        },
-        include: { person: true },
-      })
-
-      // Asignar usuario a su compañía
-      await prisma.userCompany.create({
-        data: {
-          userId: newUser.id,
-          companyId: companies[u.company].id,
-        },
-      })
-
-      console.log(`✅ Usuario creado: ${u.email} y asignado a ${u.company}`)
-    } else {
-      console.log(`ℹ️ Usuario existente: ${u.email} (o username: ${u.username})`)
-    }
   }
 
   console.log('\n🎉 Seed completado correctamente')
