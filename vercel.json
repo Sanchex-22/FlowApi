@@ -20,5 +20,5 @@
     }
   ],
   "installCommand": "npm install",
-  "buildCommand": "npx prisma migrate deploy && if [ \"$VERCEL_ENV\" = \"production\" ]; then npx prisma db seed; fi && npm run build"
+  "buildCommand": "npm run vercel-build"
 }

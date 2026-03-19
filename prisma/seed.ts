@@ -48,7 +48,21 @@ export async function generateNextUserCode(): Promise<string> {
 
 async function main() {
 
-  console.log('🌱 Iniciando actualización de base de datos (Modo Idempotente)...')
+  console.log('🌱 Verificando si el seed ya fue ejecutado...')
+
+  // ── Bandera de seed ─────────────────────────────────────────────────────────
+  // Usamos SystemConfig para saber si este entorno ya fue inicializado.
+  // Si la key APP_SEEDED existe, salimos sin tocar nada.
+  const alreadySeeded = await prisma.systemConfig.findUnique({
+    where: { key: 'APP_SEEDED' },
+  })
+
+  if (alreadySeeded) {
+    console.log('✅ Este entorno ya fue inicializado. Seed omitido.')
+    return
+  }
+
+  console.log('🌱 Primera ejecución detectada — iniciando seed inicial...')
 
   // AdminConfig.requireEnv already throws if ADMIN_EMAIL or ADMIN_PASSWORD are missing
   const superAdminEmail = AdminConfig.Email.toLowerCase()
@@ -150,7 +164,16 @@ async function main() {
     console.log('ℹ️ SUPER_ADMIN existente')
   }
 
-  console.log('\n🎉 Seed completado correctamente')
+  // ── Marcar como inicializado ─────────────────────────────────────────────────
+  await prisma.systemConfig.create({
+    data: {
+      key:         'APP_SEEDED',
+      value:       new Date().toISOString(),
+      description: 'Indica que el seed inicial fue ejecutado en este entorno',
+    },
+  })
+
+  console.log('\n🎉 Seed completado correctamente — entorno marcado como inicializado')
 }
 
 /* ============================
