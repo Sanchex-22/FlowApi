@@ -158,6 +158,16 @@ export class CompanyController {
                 //     data: legalParametersData as any,
                 // });
 
+                // D. Asociar al creador con la compañía (UserCompany)
+                if (createdByUserId) {
+                    await tx.userCompany.create({
+                        data: {
+                            userId: createdByUserId,
+                            companyId: company.id,
+                        },
+                    });
+                }
+
                 return company;
             });
 
