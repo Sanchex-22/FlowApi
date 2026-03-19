@@ -46,21 +46,44 @@ export async function generateNextUserCode(): Promise<string> {
    SEED
 ============================ */
 
-async function main() {
+export async function main() {
 
   console.log('🌱 Verificando si el seed ya fue ejecutado...')
 
   // ── Bandera de seed ─────────────────────────────────────────────────────────
-  // Usamos SystemConfig para saber si este entorno ya fue inicializado.
-  // Si la key APP_SEEDED existe, salimos sin tocar nada.
-  const alreadySeeded = await prisma.systemConfig.findUnique({
-    where: { key: 'APP_SEEDED' },
-  })
+  // Estrategia dual:
+  //   1. Intentar leer SystemConfig (puede no existir en deploy inicial)
+  //   2. Si la tabla no existe, verificar si ya hay un SUPER_ADMIN (idempotencia real)
+  let alreadySeeded = false
 
-  if (alreadySeeded) {
-    console.log('✅ Este entorno ya fue inicializado. Seed omitido.')
-    return
+  try {
+    const flag = await prisma.systemConfig.findUnique({ where: { key: 'APP_SEEDED' } })
+    if (flag) {
+      console.log('✅ Este entorno ya fue inicializado (SystemConfig flag). Seed omitido.')
+      return
+    }
+  } catch (e: any) {
+    // P2021 = tabla no existe todavía (primer deploy sin migración aplicada aún)
+    if (e?.code !== 'P2021') throw e
+    console.log('ℹ️  Tabla SystemConfig aún no disponible — usando fallback de verificación.')
   }
+
+  // Fallback: si ya existe un SUPER_ADMIN con el email configurado, no re-seedear
+  try {
+    const existing = await prisma.user.findFirst({
+      where: { role: UserRole.SUPER_ADMIN },
+      select: { id: true },
+    })
+    if (existing) {
+      alreadySeeded = true
+      console.log('✅ SUPER_ADMIN ya existe — seed omitido.')
+    }
+  } catch {
+    // Si tampoco se puede consultar User, el schema no está listo — abortar
+    throw new Error('❌ El schema de la DB no está listo. Asegúrate de que las migraciones se aplicaron.')
+  }
+
+  if (alreadySeeded) return
 
   console.log('🌱 Primera ejecución detectada — iniciando seed inicial...')
 
@@ -165,15 +188,24 @@ async function main() {
   }
 
   // ── Marcar como inicializado ─────────────────────────────────────────────────
-  await prisma.systemConfig.create({
-    data: {
-      key:         'APP_SEEDED',
-      value:       new Date().toISOString(),
-      description: 'Indica que el seed inicial fue ejecutado en este entorno',
-    },
-  })
+  try {
+    await prisma.systemConfig.upsert({
+      where:  { key: 'APP_SEEDED' },
+      update: { value: new Date().toISOString() },
+      create: {
+        key:         'APP_SEEDED',
+        value:       new Date().toISOString(),
+        description: 'Indica que el seed inicial fue ejecutado en este entorno',
+      },
+    })
+    console.log('🏷️  Entorno marcado como inicializado en SystemConfig.')
+  } catch (e: any) {
+    // Si la tabla no existe, el SUPER_ADMIN actúa como fallback de idempotencia
+    if (e?.code !== 'P2021') throw e
+    console.log('ℹ️  SystemConfig no disponible — el SUPER_ADMIN actúa como bandera de idempotencia.')
+  }
 
-  console.log('\n🎉 Seed completado correctamente — entorno marcado como inicializado')
+  console.log('\n🎉 Seed completado correctamente')
 }
 
 /* ============================

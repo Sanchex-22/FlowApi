@@ -96,7 +96,16 @@ app.use('/api/inventory', InventoryRouter);
 
 app.use(errorMiddleware);
 
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);
   console.log(`Página de inicio: http://localhost:${port}`);
+
+  // Ejecutar seed automático solo en la primera ejecución (idempotente)
+  try {
+    const { main: runSeed } = await import('../../prisma/seed.js' as any);
+    await runSeed();
+  } catch (e: any) {
+    // Si las vars de entorno del seed no están configuradas, no es un error crítico
+    console.warn('⚠️  Seed omitido:', e?.message ?? e);
+  }
 });
