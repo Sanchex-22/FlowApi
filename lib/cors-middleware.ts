@@ -1,17 +1,19 @@
 import Cors from 'cors';
 import initMiddleware from './init-middleware';
 
-// Aquí está tu configuración de CORS
+// Convertir la variable de entorno en array
+const allowedOrigins = process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(',').map(origin => origin.trim())
+  : [];
+
 export const CorsOrigin = initMiddleware(
   Cors({
-    methods: ["POST", "GET", "DELETE", "PUT","OPTIONS"],
+    methods: ["POST", "GET", "DELETE", "PUT", "OPTIONS"],
     origin: (origin, callback) => {
-      const allowedOrigins = [
-        "http://localhost:5173",
-        "https://pmts-quote.vercel.app",
-        "https://quote.panamamaritimetraining.com",
-      ];
-      if (!origin || allowedOrigins.includes(origin)) {
+      // Permitir requests sin origin (ej: Postman, SSR)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
         callback(new Error("No autorizado por CORS"));
@@ -19,5 +21,3 @@ export const CorsOrigin = initMiddleware(
     },
   })
 );
-
-// export default CorsOrigin;
