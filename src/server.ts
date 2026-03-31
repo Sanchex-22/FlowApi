@@ -1,7 +1,7 @@
 // src/server.ts
+import 'dotenv/config';
 import express from 'express';
 import session from 'express-session';
-import dotenv from 'dotenv';
 import path from 'path';
 import AuthRouter from './routes/AuthRoutes.js';
 import expressLayouts from 'express-ejs-layouts';
@@ -25,8 +25,8 @@ import ExpenseRoute from './routes/annualSoftwareExpenseRoutes.js';
 import DepartmentRouter from './routes/DepartmentRoutes.js';
 import PersonRouter from './routes/PersonRoutes.js';
 import AIrouter from './routes/AIRoutes.js';
+import AdminRouter from './routes/AdminRoutes.js';
 
-dotenv.config({ path: '.env' });
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -91,6 +91,7 @@ app.use('/api/reports',ReportsRouter);
 app.use('/api/annual-software-expense',ExpenseRoute);
 app.use('/api/companies/tickets',TicketRouter);
 app.use('/api/ai', AIrouter);
+app.use('/api/admin', AdminRouter);
 // ✔ Aquí sí se permite formidable sin interferencia
 app.use('/api/inventory', InventoryRouter);
 

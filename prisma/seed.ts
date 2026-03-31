@@ -1,222 +1,101 @@
+/**
+ * seed.ts — Seed de arranque de plataforma
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Solo crea el GLOBAL_ADMIN.
+ *
+ * El flujo correcto del sistema es:
+ *   1. GLOBAL_ADMIN (este seed) — administrador de la plataforma
+ *   2. GLOBAL_ADMIN crea empresas desde el panel /admin/companies
+ *   3. GLOBAL_ADMIN crea un SUPER_ADMIN por empresa y lo vincula a ella
+ *   4. SUPER_ADMIN crea ADMIN / MODERATOR / USER dentro de su empresa
+ *
+ * Variables requeridas en .env:
+ *   GLOBAL_ADMIN_EMAIL
+ *   GLOBAL_ADMIN_PASSWORD
+ *   GLOBAL_ADMIN_NAME     (opcional, default "Admin")
+ *   GLOBAL_ADMIN_LASTNAME (opcional, default "Global")
+ */
+
 import 'dotenv/config'
-import { hash } from 'bcryptjs'
 import prisma from '../lib/prisma.js'
+import { hash } from 'bcryptjs'
 import { UserRole } from '../generated/prisma/index.js'
-import { AdminConfig, SeedConfig } from '../src/config/adminConfig.js'
 
-/* ============================
-   HELPERS
-============================ */
+async function main() {
+  const email    = process.env.GLOBAL_ADMIN_EMAIL
+  const password = process.env.GLOBAL_ADMIN_PASSWORD
+  const name     = process.env.GLOBAL_ADMIN_NAME     ?? 'Admin'
+  const lastName = process.env.GLOBAL_ADMIN_LASTNAME ?? 'Global'
 
-export async function generateNextCompanyCode(): Promise<string> {
-  const companies = await prisma.company.findMany({
-    select: { code: true },
-    orderBy: { code: 'desc' },
-  })
-
-  let max = 0
-  for (const c of companies) {
-    if (c.code?.startsWith('CO')) {
-      const n = parseInt(c.code.replace('CO', ''), 10)
-      if (!isNaN(n)) max = Math.max(max, n)
-    }
+  if (!email || !password) {
+    throw new Error(
+      '❌ Variables requeridas no definidas: GLOBAL_ADMIN_EMAIL, GLOBAL_ADMIN_PASSWORD\n' +
+      '   Agrégalas en .env y vuelve a ejecutar.'
+    )
   }
 
-  return `CO${String(max + 1).padStart(3, '0')}`
+  console.log('🌱 Iniciando seed de plataforma...\n')
+
+  const passwordHash = await hash(password, 10)
+
+  const globalAdmin = await prisma.user.upsert({
+    where:  { email: email.toLowerCase() },
+    update: { role: UserRole.GLOBAL_ADMIN, isActive: true },
+    create: {
+      email:    email.toLowerCase(),
+      username: 'global_admin',
+      password: passwordHash,
+      role:     UserRole.GLOBAL_ADMIN,
+      isActive: true,
+      // Sin companies[] — el GLOBAL_ADMIN no pertenece a ninguna empresa
+    },
+  })
+
+  // Perfil de persona (para que aparezca correctamente en el sistema)
+  const existing = await prisma.person.findUnique({ where: { userId: globalAdmin.id } })
+  const userCode = existing?.userCode ?? await generateGlobalAdminCode()
+
+  await prisma.person.upsert({
+    where:  { userId: globalAdmin.id },
+    update: {},
+    create: {
+      userId:       globalAdmin.id,
+      firstName:    name,
+      lastName:     lastName,
+      fullName:     `${name} ${lastName}`,
+      contactEmail: email.toLowerCase(),
+      userCode,
+      status:       'Activo',
+    },
+  })
+
+  console.log('✅ GLOBAL_ADMIN configurado:')
+  console.log(`   Email:   ${globalAdmin.email}`)
+  console.log(`   Rol:     ${globalAdmin.role}`)
+  console.log(`   Empresa: — (acceso global a todas las empresas)\n`)
+  console.log('🎉 Seed finalizado.')
+  console.log('')
+  console.log('Próximos pasos:')
+  console.log('  1. Inicia sesión con el GLOBAL_ADMIN en /login')
+  console.log('  2. Ve a /admin/companies → crea las empresas')
+  console.log('  3. Ve a /admin/users → crea un SUPER_ADMIN por empresa')
+  console.log('  4. El SUPER_ADMIN crea sus propios usuarios desde /users')
 }
 
-export async function generateNextUserCode(): Promise<string> {
-  const persons = await prisma.person.findMany({
-    select: { userCode: true },
+async function generateGlobalAdminCode(): Promise<string> {
+  const last = await prisma.person.findFirst({
+    where:   { userCode: { startsWith: 'GA' } },
     orderBy: { userCode: 'desc' },
   })
-
-  let max = 0
-  for (const p of persons) {
-    if (p.userCode?.startsWith('USR')) {
-      const n = parseInt(p.userCode.replace('USR', ''), 10)
-      if (!isNaN(n)) max = Math.max(max, n)
-    }
-  }
-
-  return `USR${String(max + 1).padStart(3, '0')}`
+  const max = last?.userCode?.startsWith('GA')
+    ? parseInt(last.userCode.replace('GA', ''), 10)
+    : 0
+  return `GA${String(max + 1).padStart(3, '0')}`
 }
-
-/* ============================
-   SEED
-============================ */
-
-export async function main() {
-
-  console.log('🌱 Verificando si el seed ya fue ejecutado...')
-
-  // ── Bandera de seed ─────────────────────────────────────────────────────────
-  // Estrategia dual:
-  //   1. Intentar leer SystemConfig (puede no existir en deploy inicial)
-  //   2. Si la tabla no existe, verificar si ya hay un SUPER_ADMIN (idempotencia real)
-  let alreadySeeded = false
-
-  try {
-    const flag = await prisma.systemConfig.findUnique({ where: { key: 'APP_SEEDED' } })
-    if (flag) {
-      console.log('✅ Este entorno ya fue inicializado (SystemConfig flag). Seed omitido.')
-      return
-    }
-  } catch (e: any) {
-    // P2021 = tabla no existe todavía (primer deploy sin migración aplicada aún)
-    if (e?.code !== 'P2021') throw e
-    console.log('ℹ️  Tabla SystemConfig aún no disponible — usando fallback de verificación.')
-  }
-
-  // Fallback: si ya existe un SUPER_ADMIN con el email configurado, no re-seedear
-  try {
-    const existing = await prisma.user.findFirst({
-      where: { role: UserRole.SUPER_ADMIN },
-      select: { id: true },
-    })
-    if (existing) {
-      alreadySeeded = true
-      console.log('✅ SUPER_ADMIN ya existe — seed omitido.')
-    }
-  } catch {
-    // Si tampoco se puede consultar User, el schema no está listo — abortar
-    throw new Error('❌ El schema de la DB no está listo. Asegúrate de que las migraciones se aplicaron.')
-  }
-
-  if (alreadySeeded) return
-
-  console.log('🌱 Primera ejecución detectada — iniciando seed inicial...')
-
-  // AdminConfig.requireEnv already throws if ADMIN_EMAIL or ADMIN_PASSWORD are missing
-  const superAdminEmail = AdminConfig.Email.toLowerCase()
-  const superAdminName  = `${AdminConfig.Name} ${AdminConfig.LastName}`.toLowerCase()
-  const passwordHash    = await hash(AdminConfig.Password, 12)
-
-  /* ============================
-     COMPANY (opcional)
-  ============================ */
-
-  let company: { id: string } | null = null
-  let dept: { id: string } | null = null
-
-  if (SeedConfig.CompanyName) {
-    company = await prisma.company.findUnique({ where: { name: SeedConfig.CompanyName } })
-
-    if (!company) {
-      const code = SeedConfig.CompanyCode || await generateNextCompanyCode()
-      company = await prisma.company.create({
-        data: { name: SeedConfig.CompanyName, code, isActive: true },
-      })
-      console.log(`✅ Compañía creada: ${SeedConfig.CompanyName} (${code})`)
-    } else {
-      console.log(`ℹ️ Compañía existente: ${SeedConfig.CompanyName}`)
-    }
-
-    /* ============================
-       DEPARTMENT (solo si hay compañía)
-    ============================ */
-
-    dept = await prisma.department.findFirst({
-      where: { name: SeedConfig.DepartmentName, companyId: company.id },
-    })
-
-    if (!dept) {
-      dept = await prisma.department.create({
-        data: { name: SeedConfig.DepartmentName, companyId: company.id },
-      })
-      console.log(`✅ Departamento creado: ${SeedConfig.DepartmentName}`)
-    } else {
-      console.log(`ℹ️ Departamento existente: ${SeedConfig.DepartmentName}`)
-    }
-  } else {
-    console.log('ℹ️ SEED_COMPANY_NAME no definido — se omite creación de compañía y departamento')
-  }
-
-  /* ============================
-     SUPER ADMIN (siempre requerido)
-  ============================ */
-
-  let superAdmin = await prisma.user.findFirst({
-    where: { OR: [{ email: superAdminEmail }, { username: superAdminName }] },
-    include: { person: true },
-  })
-
-  if (!superAdmin) {
-    const userCode = await generateNextUserCode()
-
-    const newSuperAdmin = await prisma.user.create({
-      data: {
-        username: superAdminName,
-        email: superAdminEmail,
-        password: passwordHash,
-        role: UserRole.SUPER_ADMIN,
-        isActive: true,
-
-        person: {
-          create: {
-            firstName: AdminConfig.Name,
-            lastName: AdminConfig.LastName,
-            fullName: superAdminName,
-            contactEmail: superAdminEmail,
-            status: 'Activo',
-            userCode,
-            // departmentId solo si se creó/encontró un departamento
-            ...(dept ? { departmentId: dept.id } : {}),
-          },
-        },
-      },
-      include: { person: true },
-    })
-
-    // Asignar TODAS las compañías existentes al SUPER_ADMIN
-    const allCompanies = await prisma.company.findMany({ select: { id: true } })
-
-    if (allCompanies.length > 0) {
-      await prisma.userCompany.createMany({
-        data: allCompanies.map(c => ({
-          userId: newSuperAdmin.id,
-          companyId: c.id,
-        })),
-        skipDuplicates: true,
-      })
-      console.log(`✅ SUPER_ADMIN creado y asignado a ${allCompanies.length} compañía(s)`)
-    } else {
-      console.log('✅ SUPER_ADMIN creado (sin compañías aún — asígnale una desde el panel)')
-    }
-  } else {
-    console.log('ℹ️ SUPER_ADMIN existente')
-  }
-
-  // ── Marcar como inicializado ─────────────────────────────────────────────────
-  try {
-    await prisma.systemConfig.upsert({
-      where:  { key: 'APP_SEEDED' },
-      update: { value: new Date().toISOString() },
-      create: {
-        key:         'APP_SEEDED',
-        value:       new Date().toISOString(),
-        description: 'Indica que el seed inicial fue ejecutado en este entorno',
-      },
-    })
-    console.log('🏷️  Entorno marcado como inicializado en SystemConfig.')
-  } catch (e: any) {
-    // Si la tabla no existe, el SUPER_ADMIN actúa como fallback de idempotencia
-    if (e?.code !== 'P2021') throw e
-    console.log('ℹ️  SystemConfig no disponible — el SUPER_ADMIN actúa como bandera de idempotencia.')
-  }
-
-  console.log('\n🎉 Seed completado correctamente')
-}
-
-/* ============================
-   RUN
-============================ */
 
 main()
-  .catch((e) => {
-    console.error('❌ Error en seed:', e)
+  .catch(err => {
+    console.error('❌ Error en seed:', err)
     process.exit(1)
   })
-  .finally(async () => {
-    await prisma.$disconnect()
-  })
+  .finally(() => prisma.$disconnect())

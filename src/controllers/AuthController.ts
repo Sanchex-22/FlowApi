@@ -13,23 +13,27 @@ export class AuthController {
     try {
       const user = await this.authService.login(email, password);
 
-      // Crear token JWT
+      // Leído dentro del método para que dotenv ya haya cargado
+      const secret = JWT_SECRET!;
+      // Primera empresa asociada al usuario (la usamos como contexto por defecto)
+      const primaryCompanyId = user.companies?.[0]?.companyId ?? null;
+
       const token = jwt.sign(
         {
           id: user.id,
           username: user.username,
           email: user.email,
-          roles: user?.role ?? 'user'
+          roles: user.role ?? 'USER',
+          companyId: primaryCompanyId,
         },
-        JWT_SECRET,
+        secret,
         { expiresIn: '30d' }
       );
       return res.json({ token });
 
-    } catch (error: any) {
-      return res.status(401).json({
-        message: error.message || 'Credenciales inválidas'
-      });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Credenciales inválidas';
+      return res.status(401).json({ message });
     }
   }
 

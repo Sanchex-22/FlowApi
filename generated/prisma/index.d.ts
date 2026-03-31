@@ -24,6 +24,11 @@ export type Ticket = $Result.DefaultSelection<Prisma.$TicketPayload>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model UserLicense
+ * 
+ */
+export type UserLicense = $Result.DefaultSelection<Prisma.$UserLicensePayload>
+/**
  * Model UserCompany
  * 
  */
@@ -88,11 +93,22 @@ export type AnnualSoftwareExpense = $Result.DefaultSelection<Prisma.$AnnualSoftw
  * Enums
  */
 export namespace $Enums {
-  export const UserRole: {
+  export const LicensePlan: {
+  TRIAL: 'TRIAL',
+  STARTER: 'STARTER',
+  PROFESSIONAL: 'PROFESSIONAL',
+  ENTERPRISE: 'ENTERPRISE'
+};
+
+export type LicensePlan = (typeof LicensePlan)[keyof typeof LicensePlan]
+
+
+export const UserRole: {
   USER: 'USER',
   ADMIN: 'ADMIN',
   MODERATOR: 'MODERATOR',
-  SUPER_ADMIN: 'SUPER_ADMIN'
+  SUPER_ADMIN: 'SUPER_ADMIN',
+  GLOBAL_ADMIN: 'GLOBAL_ADMIN'
 };
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
@@ -233,6 +249,10 @@ export const SoftwareCategory: {
 export type SoftwareCategory = (typeof SoftwareCategory)[keyof typeof SoftwareCategory]
 
 }
+
+export type LicensePlan = $Enums.LicensePlan
+
+export const LicensePlan: typeof $Enums.LicensePlan
 
 export type UserRole = $Enums.UserRole
 
@@ -423,6 +443,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userLicense`: Exposes CRUD operations for the **UserLicense** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserLicenses
+    * const userLicenses = await prisma.userLicense.findMany()
+    * ```
+    */
+  get userLicense(): Prisma.UserLicenseDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.userCompany`: Exposes CRUD operations for the **UserCompany** model.
@@ -986,6 +1016,7 @@ export namespace Prisma {
   export const ModelName: {
     Ticket: 'Ticket',
     User: 'User',
+    UserLicense: 'UserLicense',
     UserCompany: 'UserCompany',
     Person: 'Person',
     Company: 'Company',
@@ -1016,7 +1047,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "ticket" | "user" | "userCompany" | "person" | "company" | "department" | "equipment" | "maintenance" | "document" | "license" | "systemConfig" | "networkProvider" | "network" | "annualSoftwareExpense"
+      modelProps: "ticket" | "user" | "userLicense" | "userCompany" | "person" | "company" | "department" | "equipment" | "maintenance" | "document" | "license" | "systemConfig" | "networkProvider" | "network" | "annualSoftwareExpense"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1165,6 +1196,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      UserLicense: {
+        payload: Prisma.$UserLicensePayload<ExtArgs>
+        fields: Prisma.UserLicenseFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserLicenseFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserLicensePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserLicenseFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserLicensePayload>
+          }
+          findFirst: {
+            args: Prisma.UserLicenseFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserLicensePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserLicenseFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserLicensePayload>
+          }
+          findMany: {
+            args: Prisma.UserLicenseFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserLicensePayload>[]
+          }
+          create: {
+            args: Prisma.UserLicenseCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserLicensePayload>
+          }
+          createMany: {
+            args: Prisma.UserLicenseCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UserLicenseCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserLicensePayload>[]
+          }
+          delete: {
+            args: Prisma.UserLicenseDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserLicensePayload>
+          }
+          update: {
+            args: Prisma.UserLicenseUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserLicensePayload>
+          }
+          deleteMany: {
+            args: Prisma.UserLicenseDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserLicenseUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UserLicenseUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserLicensePayload>[]
+          }
+          upsert: {
+            args: Prisma.UserLicenseUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserLicensePayload>
+          }
+          aggregate: {
+            args: Prisma.UserLicenseAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserLicense>
+          }
+          groupBy: {
+            args: Prisma.UserLicenseGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserLicenseGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserLicenseCountArgs<ExtArgs>
+            result: $Utils.Optional<UserLicenseCountAggregateOutputType> | number
           }
         }
       }
@@ -2154,6 +2259,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     ticket?: TicketOmit
     user?: UserOmit
+    userLicense?: UserLicenseOmit
     userCompany?: UserCompanyOmit
     person?: PersonOmit
     company?: CompanyOmit
@@ -4170,6 +4276,7 @@ export namespace Prisma {
     person?: boolean | User$personArgs<ExtArgs>
     ticketsSentBy?: boolean | User$ticketsSentByArgs<ExtArgs>
     ticketsSentTo?: boolean | User$ticketsSentToArgs<ExtArgs>
+    userLicense?: boolean | User$userLicenseArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -4216,6 +4323,7 @@ export namespace Prisma {
     person?: boolean | User$personArgs<ExtArgs>
     ticketsSentBy?: boolean | User$ticketsSentByArgs<ExtArgs>
     ticketsSentTo?: boolean | User$ticketsSentToArgs<ExtArgs>
+    userLicense?: boolean | User$userLicenseArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4232,6 +4340,7 @@ export namespace Prisma {
       person: Prisma.$PersonPayload<ExtArgs> | null
       ticketsSentBy: Prisma.$TicketPayload<ExtArgs>[]
       ticketsSentTo: Prisma.$TicketPayload<ExtArgs>[]
+      userLicense: Prisma.$UserLicensePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4644,6 +4753,7 @@ export namespace Prisma {
     person<T extends User$personArgs<ExtArgs> = {}>(args?: Subset<T, User$personArgs<ExtArgs>>): Prisma__PersonClient<$Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     ticketsSentBy<T extends User$ticketsSentByArgs<ExtArgs> = {}>(args?: Subset<T, User$ticketsSentByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ticketsSentTo<T extends User$ticketsSentToArgs<ExtArgs> = {}>(args?: Subset<T, User$ticketsSentToArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    userLicense<T extends User$userLicenseArgs<ExtArgs> = {}>(args?: Subset<T, User$userLicenseArgs<ExtArgs>>): Prisma__UserLicenseClient<$Result.GetResult<Prisma.$UserLicensePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5256,6 +5366,25 @@ export namespace Prisma {
   }
 
   /**
+   * User.userLicense
+   */
+  export type User$userLicenseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLicense
+     */
+    select?: UserLicenseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserLicense
+     */
+    omit?: UserLicenseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLicenseInclude<ExtArgs> | null
+    where?: UserLicenseWhereInput
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5271,6 +5400,1197 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model UserLicense
+   */
+
+  export type AggregateUserLicense = {
+    _count: UserLicenseCountAggregateOutputType | null
+    _avg: UserLicenseAvgAggregateOutputType | null
+    _sum: UserLicenseSumAggregateOutputType | null
+    _min: UserLicenseMinAggregateOutputType | null
+    _max: UserLicenseMaxAggregateOutputType | null
+  }
+
+  export type UserLicenseAvgAggregateOutputType = {
+    maxCompanies: number | null
+    maxUsers: number | null
+    maxEmployees: number | null
+  }
+
+  export type UserLicenseSumAggregateOutputType = {
+    maxCompanies: number | null
+    maxUsers: number | null
+    maxEmployees: number | null
+  }
+
+  export type UserLicenseMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    plan: $Enums.LicensePlan | null
+    maxCompanies: number | null
+    maxUsers: number | null
+    maxEmployees: number | null
+    startsAt: Date | null
+    expiresAt: Date | null
+    isActive: boolean | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserLicenseMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    plan: $Enums.LicensePlan | null
+    maxCompanies: number | null
+    maxUsers: number | null
+    maxEmployees: number | null
+    startsAt: Date | null
+    expiresAt: Date | null
+    isActive: boolean | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserLicenseCountAggregateOutputType = {
+    id: number
+    userId: number
+    plan: number
+    maxCompanies: number
+    maxUsers: number
+    maxEmployees: number
+    startsAt: number
+    expiresAt: number
+    isActive: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type UserLicenseAvgAggregateInputType = {
+    maxCompanies?: true
+    maxUsers?: true
+    maxEmployees?: true
+  }
+
+  export type UserLicenseSumAggregateInputType = {
+    maxCompanies?: true
+    maxUsers?: true
+    maxEmployees?: true
+  }
+
+  export type UserLicenseMinAggregateInputType = {
+    id?: true
+    userId?: true
+    plan?: true
+    maxCompanies?: true
+    maxUsers?: true
+    maxEmployees?: true
+    startsAt?: true
+    expiresAt?: true
+    isActive?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserLicenseMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    plan?: true
+    maxCompanies?: true
+    maxUsers?: true
+    maxEmployees?: true
+    startsAt?: true
+    expiresAt?: true
+    isActive?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserLicenseCountAggregateInputType = {
+    id?: true
+    userId?: true
+    plan?: true
+    maxCompanies?: true
+    maxUsers?: true
+    maxEmployees?: true
+    startsAt?: true
+    expiresAt?: true
+    isActive?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type UserLicenseAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserLicense to aggregate.
+     */
+    where?: UserLicenseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserLicenses to fetch.
+     */
+    orderBy?: UserLicenseOrderByWithRelationInput | UserLicenseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserLicenseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserLicenses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserLicenses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserLicenses
+    **/
+    _count?: true | UserLicenseCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UserLicenseAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserLicenseSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserLicenseMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserLicenseMaxAggregateInputType
+  }
+
+  export type GetUserLicenseAggregateType<T extends UserLicenseAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserLicense]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserLicense[P]>
+      : GetScalarType<T[P], AggregateUserLicense[P]>
+  }
+
+
+
+
+  export type UserLicenseGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserLicenseWhereInput
+    orderBy?: UserLicenseOrderByWithAggregationInput | UserLicenseOrderByWithAggregationInput[]
+    by: UserLicenseScalarFieldEnum[] | UserLicenseScalarFieldEnum
+    having?: UserLicenseScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserLicenseCountAggregateInputType | true
+    _avg?: UserLicenseAvgAggregateInputType
+    _sum?: UserLicenseSumAggregateInputType
+    _min?: UserLicenseMinAggregateInputType
+    _max?: UserLicenseMaxAggregateInputType
+  }
+
+  export type UserLicenseGroupByOutputType = {
+    id: string
+    userId: string
+    plan: $Enums.LicensePlan
+    maxCompanies: number
+    maxUsers: number
+    maxEmployees: number
+    startsAt: Date
+    expiresAt: Date | null
+    isActive: boolean
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: UserLicenseCountAggregateOutputType | null
+    _avg: UserLicenseAvgAggregateOutputType | null
+    _sum: UserLicenseSumAggregateOutputType | null
+    _min: UserLicenseMinAggregateOutputType | null
+    _max: UserLicenseMaxAggregateOutputType | null
+  }
+
+  type GetUserLicenseGroupByPayload<T extends UserLicenseGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserLicenseGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserLicenseGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserLicenseGroupByOutputType[P]>
+            : GetScalarType<T[P], UserLicenseGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserLicenseSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    plan?: boolean
+    maxCompanies?: boolean
+    maxUsers?: boolean
+    maxEmployees?: boolean
+    startsAt?: boolean
+    expiresAt?: boolean
+    isActive?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userLicense"]>
+
+  export type UserLicenseSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    plan?: boolean
+    maxCompanies?: boolean
+    maxUsers?: boolean
+    maxEmployees?: boolean
+    startsAt?: boolean
+    expiresAt?: boolean
+    isActive?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userLicense"]>
+
+  export type UserLicenseSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    plan?: boolean
+    maxCompanies?: boolean
+    maxUsers?: boolean
+    maxEmployees?: boolean
+    startsAt?: boolean
+    expiresAt?: boolean
+    isActive?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userLicense"]>
+
+  export type UserLicenseSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    plan?: boolean
+    maxCompanies?: boolean
+    maxUsers?: boolean
+    maxEmployees?: boolean
+    startsAt?: boolean
+    expiresAt?: boolean
+    isActive?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type UserLicenseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "plan" | "maxCompanies" | "maxUsers" | "maxEmployees" | "startsAt" | "expiresAt" | "isActive" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["userLicense"]>
+  export type UserLicenseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UserLicenseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UserLicenseIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $UserLicensePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserLicense"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      plan: $Enums.LicensePlan
+      maxCompanies: number
+      maxUsers: number
+      maxEmployees: number
+      startsAt: Date
+      expiresAt: Date | null
+      isActive: boolean
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["userLicense"]>
+    composites: {}
+  }
+
+  type UserLicenseGetPayload<S extends boolean | null | undefined | UserLicenseDefaultArgs> = $Result.GetResult<Prisma.$UserLicensePayload, S>
+
+  type UserLicenseCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserLicenseFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserLicenseCountAggregateInputType | true
+    }
+
+  export interface UserLicenseDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserLicense'], meta: { name: 'UserLicense' } }
+    /**
+     * Find zero or one UserLicense that matches the filter.
+     * @param {UserLicenseFindUniqueArgs} args - Arguments to find a UserLicense
+     * @example
+     * // Get one UserLicense
+     * const userLicense = await prisma.userLicense.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserLicenseFindUniqueArgs>(args: SelectSubset<T, UserLicenseFindUniqueArgs<ExtArgs>>): Prisma__UserLicenseClient<$Result.GetResult<Prisma.$UserLicensePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserLicense that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserLicenseFindUniqueOrThrowArgs} args - Arguments to find a UserLicense
+     * @example
+     * // Get one UserLicense
+     * const userLicense = await prisma.userLicense.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserLicenseFindUniqueOrThrowArgs>(args: SelectSubset<T, UserLicenseFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserLicenseClient<$Result.GetResult<Prisma.$UserLicensePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserLicense that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserLicenseFindFirstArgs} args - Arguments to find a UserLicense
+     * @example
+     * // Get one UserLicense
+     * const userLicense = await prisma.userLicense.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserLicenseFindFirstArgs>(args?: SelectSubset<T, UserLicenseFindFirstArgs<ExtArgs>>): Prisma__UserLicenseClient<$Result.GetResult<Prisma.$UserLicensePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserLicense that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserLicenseFindFirstOrThrowArgs} args - Arguments to find a UserLicense
+     * @example
+     * // Get one UserLicense
+     * const userLicense = await prisma.userLicense.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserLicenseFindFirstOrThrowArgs>(args?: SelectSubset<T, UserLicenseFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserLicenseClient<$Result.GetResult<Prisma.$UserLicensePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserLicenses that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserLicenseFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserLicenses
+     * const userLicenses = await prisma.userLicense.findMany()
+     * 
+     * // Get first 10 UserLicenses
+     * const userLicenses = await prisma.userLicense.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userLicenseWithIdOnly = await prisma.userLicense.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserLicenseFindManyArgs>(args?: SelectSubset<T, UserLicenseFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserLicensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserLicense.
+     * @param {UserLicenseCreateArgs} args - Arguments to create a UserLicense.
+     * @example
+     * // Create one UserLicense
+     * const UserLicense = await prisma.userLicense.create({
+     *   data: {
+     *     // ... data to create a UserLicense
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserLicenseCreateArgs>(args: SelectSubset<T, UserLicenseCreateArgs<ExtArgs>>): Prisma__UserLicenseClient<$Result.GetResult<Prisma.$UserLicensePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserLicenses.
+     * @param {UserLicenseCreateManyArgs} args - Arguments to create many UserLicenses.
+     * @example
+     * // Create many UserLicenses
+     * const userLicense = await prisma.userLicense.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserLicenseCreateManyArgs>(args?: SelectSubset<T, UserLicenseCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UserLicenses and returns the data saved in the database.
+     * @param {UserLicenseCreateManyAndReturnArgs} args - Arguments to create many UserLicenses.
+     * @example
+     * // Create many UserLicenses
+     * const userLicense = await prisma.userLicense.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UserLicenses and only return the `id`
+     * const userLicenseWithIdOnly = await prisma.userLicense.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserLicenseCreateManyAndReturnArgs>(args?: SelectSubset<T, UserLicenseCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserLicensePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UserLicense.
+     * @param {UserLicenseDeleteArgs} args - Arguments to delete one UserLicense.
+     * @example
+     * // Delete one UserLicense
+     * const UserLicense = await prisma.userLicense.delete({
+     *   where: {
+     *     // ... filter to delete one UserLicense
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserLicenseDeleteArgs>(args: SelectSubset<T, UserLicenseDeleteArgs<ExtArgs>>): Prisma__UserLicenseClient<$Result.GetResult<Prisma.$UserLicensePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserLicense.
+     * @param {UserLicenseUpdateArgs} args - Arguments to update one UserLicense.
+     * @example
+     * // Update one UserLicense
+     * const userLicense = await prisma.userLicense.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserLicenseUpdateArgs>(args: SelectSubset<T, UserLicenseUpdateArgs<ExtArgs>>): Prisma__UserLicenseClient<$Result.GetResult<Prisma.$UserLicensePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserLicenses.
+     * @param {UserLicenseDeleteManyArgs} args - Arguments to filter UserLicenses to delete.
+     * @example
+     * // Delete a few UserLicenses
+     * const { count } = await prisma.userLicense.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserLicenseDeleteManyArgs>(args?: SelectSubset<T, UserLicenseDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserLicenses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserLicenseUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserLicenses
+     * const userLicense = await prisma.userLicense.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserLicenseUpdateManyArgs>(args: SelectSubset<T, UserLicenseUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserLicenses and returns the data updated in the database.
+     * @param {UserLicenseUpdateManyAndReturnArgs} args - Arguments to update many UserLicenses.
+     * @example
+     * // Update many UserLicenses
+     * const userLicense = await prisma.userLicense.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UserLicenses and only return the `id`
+     * const userLicenseWithIdOnly = await prisma.userLicense.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UserLicenseUpdateManyAndReturnArgs>(args: SelectSubset<T, UserLicenseUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserLicensePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UserLicense.
+     * @param {UserLicenseUpsertArgs} args - Arguments to update or create a UserLicense.
+     * @example
+     * // Update or create a UserLicense
+     * const userLicense = await prisma.userLicense.upsert({
+     *   create: {
+     *     // ... data to create a UserLicense
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserLicense we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserLicenseUpsertArgs>(args: SelectSubset<T, UserLicenseUpsertArgs<ExtArgs>>): Prisma__UserLicenseClient<$Result.GetResult<Prisma.$UserLicensePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UserLicenses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserLicenseCountArgs} args - Arguments to filter UserLicenses to count.
+     * @example
+     * // Count the number of UserLicenses
+     * const count = await prisma.userLicense.count({
+     *   where: {
+     *     // ... the filter for the UserLicenses we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserLicenseCountArgs>(
+      args?: Subset<T, UserLicenseCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserLicenseCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserLicense.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserLicenseAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserLicenseAggregateArgs>(args: Subset<T, UserLicenseAggregateArgs>): Prisma.PrismaPromise<GetUserLicenseAggregateType<T>>
+
+    /**
+     * Group by UserLicense.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserLicenseGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserLicenseGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserLicenseGroupByArgs['orderBy'] }
+        : { orderBy?: UserLicenseGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserLicenseGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserLicenseGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserLicense model
+   */
+  readonly fields: UserLicenseFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserLicense.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserLicenseClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserLicense model
+   */
+  interface UserLicenseFieldRefs {
+    readonly id: FieldRef<"UserLicense", 'String'>
+    readonly userId: FieldRef<"UserLicense", 'String'>
+    readonly plan: FieldRef<"UserLicense", 'LicensePlan'>
+    readonly maxCompanies: FieldRef<"UserLicense", 'Int'>
+    readonly maxUsers: FieldRef<"UserLicense", 'Int'>
+    readonly maxEmployees: FieldRef<"UserLicense", 'Int'>
+    readonly startsAt: FieldRef<"UserLicense", 'DateTime'>
+    readonly expiresAt: FieldRef<"UserLicense", 'DateTime'>
+    readonly isActive: FieldRef<"UserLicense", 'Boolean'>
+    readonly notes: FieldRef<"UserLicense", 'String'>
+    readonly createdAt: FieldRef<"UserLicense", 'DateTime'>
+    readonly updatedAt: FieldRef<"UserLicense", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserLicense findUnique
+   */
+  export type UserLicenseFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLicense
+     */
+    select?: UserLicenseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserLicense
+     */
+    omit?: UserLicenseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLicenseInclude<ExtArgs> | null
+    /**
+     * Filter, which UserLicense to fetch.
+     */
+    where: UserLicenseWhereUniqueInput
+  }
+
+  /**
+   * UserLicense findUniqueOrThrow
+   */
+  export type UserLicenseFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLicense
+     */
+    select?: UserLicenseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserLicense
+     */
+    omit?: UserLicenseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLicenseInclude<ExtArgs> | null
+    /**
+     * Filter, which UserLicense to fetch.
+     */
+    where: UserLicenseWhereUniqueInput
+  }
+
+  /**
+   * UserLicense findFirst
+   */
+  export type UserLicenseFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLicense
+     */
+    select?: UserLicenseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserLicense
+     */
+    omit?: UserLicenseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLicenseInclude<ExtArgs> | null
+    /**
+     * Filter, which UserLicense to fetch.
+     */
+    where?: UserLicenseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserLicenses to fetch.
+     */
+    orderBy?: UserLicenseOrderByWithRelationInput | UserLicenseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserLicenses.
+     */
+    cursor?: UserLicenseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserLicenses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserLicenses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserLicenses.
+     */
+    distinct?: UserLicenseScalarFieldEnum | UserLicenseScalarFieldEnum[]
+  }
+
+  /**
+   * UserLicense findFirstOrThrow
+   */
+  export type UserLicenseFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLicense
+     */
+    select?: UserLicenseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserLicense
+     */
+    omit?: UserLicenseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLicenseInclude<ExtArgs> | null
+    /**
+     * Filter, which UserLicense to fetch.
+     */
+    where?: UserLicenseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserLicenses to fetch.
+     */
+    orderBy?: UserLicenseOrderByWithRelationInput | UserLicenseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserLicenses.
+     */
+    cursor?: UserLicenseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserLicenses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserLicenses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserLicenses.
+     */
+    distinct?: UserLicenseScalarFieldEnum | UserLicenseScalarFieldEnum[]
+  }
+
+  /**
+   * UserLicense findMany
+   */
+  export type UserLicenseFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLicense
+     */
+    select?: UserLicenseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserLicense
+     */
+    omit?: UserLicenseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLicenseInclude<ExtArgs> | null
+    /**
+     * Filter, which UserLicenses to fetch.
+     */
+    where?: UserLicenseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserLicenses to fetch.
+     */
+    orderBy?: UserLicenseOrderByWithRelationInput | UserLicenseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserLicenses.
+     */
+    cursor?: UserLicenseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserLicenses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserLicenses.
+     */
+    skip?: number
+    distinct?: UserLicenseScalarFieldEnum | UserLicenseScalarFieldEnum[]
+  }
+
+  /**
+   * UserLicense create
+   */
+  export type UserLicenseCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLicense
+     */
+    select?: UserLicenseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserLicense
+     */
+    omit?: UserLicenseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLicenseInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserLicense.
+     */
+    data: XOR<UserLicenseCreateInput, UserLicenseUncheckedCreateInput>
+  }
+
+  /**
+   * UserLicense createMany
+   */
+  export type UserLicenseCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserLicenses.
+     */
+    data: UserLicenseCreateManyInput | UserLicenseCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UserLicense createManyAndReturn
+   */
+  export type UserLicenseCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLicense
+     */
+    select?: UserLicenseSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserLicense
+     */
+    omit?: UserLicenseOmit<ExtArgs> | null
+    /**
+     * The data used to create many UserLicenses.
+     */
+    data: UserLicenseCreateManyInput | UserLicenseCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLicenseIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserLicense update
+   */
+  export type UserLicenseUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLicense
+     */
+    select?: UserLicenseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserLicense
+     */
+    omit?: UserLicenseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLicenseInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserLicense.
+     */
+    data: XOR<UserLicenseUpdateInput, UserLicenseUncheckedUpdateInput>
+    /**
+     * Choose, which UserLicense to update.
+     */
+    where: UserLicenseWhereUniqueInput
+  }
+
+  /**
+   * UserLicense updateMany
+   */
+  export type UserLicenseUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserLicenses.
+     */
+    data: XOR<UserLicenseUpdateManyMutationInput, UserLicenseUncheckedUpdateManyInput>
+    /**
+     * Filter which UserLicenses to update
+     */
+    where?: UserLicenseWhereInput
+    /**
+     * Limit how many UserLicenses to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserLicense updateManyAndReturn
+   */
+  export type UserLicenseUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLicense
+     */
+    select?: UserLicenseSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserLicense
+     */
+    omit?: UserLicenseOmit<ExtArgs> | null
+    /**
+     * The data used to update UserLicenses.
+     */
+    data: XOR<UserLicenseUpdateManyMutationInput, UserLicenseUncheckedUpdateManyInput>
+    /**
+     * Filter which UserLicenses to update
+     */
+    where?: UserLicenseWhereInput
+    /**
+     * Limit how many UserLicenses to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLicenseIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserLicense upsert
+   */
+  export type UserLicenseUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLicense
+     */
+    select?: UserLicenseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserLicense
+     */
+    omit?: UserLicenseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLicenseInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserLicense to update in case it exists.
+     */
+    where: UserLicenseWhereUniqueInput
+    /**
+     * In case the UserLicense found by the `where` argument doesn't exist, create a new UserLicense with this data.
+     */
+    create: XOR<UserLicenseCreateInput, UserLicenseUncheckedCreateInput>
+    /**
+     * In case the UserLicense was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserLicenseUpdateInput, UserLicenseUncheckedUpdateInput>
+  }
+
+  /**
+   * UserLicense delete
+   */
+  export type UserLicenseDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLicense
+     */
+    select?: UserLicenseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserLicense
+     */
+    omit?: UserLicenseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLicenseInclude<ExtArgs> | null
+    /**
+     * Filter which UserLicense to delete.
+     */
+    where: UserLicenseWhereUniqueInput
+  }
+
+  /**
+   * UserLicense deleteMany
+   */
+  export type UserLicenseDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserLicenses to delete
+     */
+    where?: UserLicenseWhereInput
+    /**
+     * Limit how many UserLicenses to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserLicense without action
+   */
+  export type UserLicenseDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLicense
+     */
+    select?: UserLicenseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserLicense
+     */
+    omit?: UserLicenseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLicenseInclude<ExtArgs> | null
   }
 
 
@@ -19791,6 +21111,24 @@ export namespace Prisma {
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+  export const UserLicenseScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    plan: 'plan',
+    maxCompanies: 'maxCompanies',
+    maxUsers: 'maxUsers',
+    maxEmployees: 'maxEmployees',
+    startsAt: 'startsAt',
+    expiresAt: 'expiresAt',
+    isActive: 'isActive',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type UserLicenseScalarFieldEnum = (typeof UserLicenseScalarFieldEnum)[keyof typeof UserLicenseScalarFieldEnum]
+
+
   export const UserCompanyScalarFieldEnum: {
     userId: 'userId',
     companyId: 'companyId'
@@ -20135,6 +21473,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'LicensePlan'
+   */
+  export type EnumLicensePlanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LicensePlan'>
+    
+
+
+  /**
+   * Reference to a field of type 'LicensePlan[]'
+   */
+  export type ListEnumLicensePlanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LicensePlan[]'>
+    
+
+
+  /**
    * Reference to a field of type 'PersonStatus'
    */
   export type EnumPersonStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PersonStatus'>
@@ -20435,6 +21787,7 @@ export namespace Prisma {
     person?: XOR<PersonNullableScalarRelationFilter, PersonWhereInput> | null
     ticketsSentBy?: TicketListRelationFilter
     ticketsSentTo?: TicketListRelationFilter
+    userLicense?: XOR<UserLicenseNullableScalarRelationFilter, UserLicenseWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -20454,6 +21807,7 @@ export namespace Prisma {
     person?: PersonOrderByWithRelationInput
     ticketsSentBy?: TicketOrderByRelationAggregateInput
     ticketsSentTo?: TicketOrderByRelationAggregateInput
+    userLicense?: UserLicenseOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -20476,6 +21830,7 @@ export namespace Prisma {
     person?: XOR<PersonNullableScalarRelationFilter, PersonWhereInput> | null
     ticketsSentBy?: TicketListRelationFilter
     ticketsSentTo?: TicketListRelationFilter
+    userLicense?: XOR<UserLicenseNullableScalarRelationFilter, UserLicenseWhereInput> | null
   }, "id" | "username" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -20504,6 +21859,98 @@ export namespace Prisma {
     isActive?: BoolWithAggregatesFilter<"User"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+  }
+
+  export type UserLicenseWhereInput = {
+    AND?: UserLicenseWhereInput | UserLicenseWhereInput[]
+    OR?: UserLicenseWhereInput[]
+    NOT?: UserLicenseWhereInput | UserLicenseWhereInput[]
+    id?: StringFilter<"UserLicense"> | string
+    userId?: StringFilter<"UserLicense"> | string
+    plan?: EnumLicensePlanFilter<"UserLicense"> | $Enums.LicensePlan
+    maxCompanies?: IntFilter<"UserLicense"> | number
+    maxUsers?: IntFilter<"UserLicense"> | number
+    maxEmployees?: IntFilter<"UserLicense"> | number
+    startsAt?: DateTimeFilter<"UserLicense"> | Date | string
+    expiresAt?: DateTimeNullableFilter<"UserLicense"> | Date | string | null
+    isActive?: BoolFilter<"UserLicense"> | boolean
+    notes?: StringNullableFilter<"UserLicense"> | string | null
+    createdAt?: DateTimeFilter<"UserLicense"> | Date | string
+    updatedAt?: DateTimeFilter<"UserLicense"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type UserLicenseOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    plan?: SortOrder
+    maxCompanies?: SortOrder
+    maxUsers?: SortOrder
+    maxEmployees?: SortOrder
+    startsAt?: SortOrder
+    expiresAt?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type UserLicenseWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId?: string
+    AND?: UserLicenseWhereInput | UserLicenseWhereInput[]
+    OR?: UserLicenseWhereInput[]
+    NOT?: UserLicenseWhereInput | UserLicenseWhereInput[]
+    plan?: EnumLicensePlanFilter<"UserLicense"> | $Enums.LicensePlan
+    maxCompanies?: IntFilter<"UserLicense"> | number
+    maxUsers?: IntFilter<"UserLicense"> | number
+    maxEmployees?: IntFilter<"UserLicense"> | number
+    startsAt?: DateTimeFilter<"UserLicense"> | Date | string
+    expiresAt?: DateTimeNullableFilter<"UserLicense"> | Date | string | null
+    isActive?: BoolFilter<"UserLicense"> | boolean
+    notes?: StringNullableFilter<"UserLicense"> | string | null
+    createdAt?: DateTimeFilter<"UserLicense"> | Date | string
+    updatedAt?: DateTimeFilter<"UserLicense"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId">
+
+  export type UserLicenseOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    plan?: SortOrder
+    maxCompanies?: SortOrder
+    maxUsers?: SortOrder
+    maxEmployees?: SortOrder
+    startsAt?: SortOrder
+    expiresAt?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: UserLicenseCountOrderByAggregateInput
+    _avg?: UserLicenseAvgOrderByAggregateInput
+    _max?: UserLicenseMaxOrderByAggregateInput
+    _min?: UserLicenseMinOrderByAggregateInput
+    _sum?: UserLicenseSumOrderByAggregateInput
+  }
+
+  export type UserLicenseScalarWhereWithAggregatesInput = {
+    AND?: UserLicenseScalarWhereWithAggregatesInput | UserLicenseScalarWhereWithAggregatesInput[]
+    OR?: UserLicenseScalarWhereWithAggregatesInput[]
+    NOT?: UserLicenseScalarWhereWithAggregatesInput | UserLicenseScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UserLicense"> | string
+    userId?: StringWithAggregatesFilter<"UserLicense"> | string
+    plan?: EnumLicensePlanWithAggregatesFilter<"UserLicense"> | $Enums.LicensePlan
+    maxCompanies?: IntWithAggregatesFilter<"UserLicense"> | number
+    maxUsers?: IntWithAggregatesFilter<"UserLicense"> | number
+    maxEmployees?: IntWithAggregatesFilter<"UserLicense"> | number
+    startsAt?: DateTimeWithAggregatesFilter<"UserLicense"> | Date | string
+    expiresAt?: DateTimeNullableWithAggregatesFilter<"UserLicense"> | Date | string | null
+    isActive?: BoolWithAggregatesFilter<"UserLicense"> | boolean
+    notes?: StringNullableWithAggregatesFilter<"UserLicense"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"UserLicense"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"UserLicense"> | Date | string
   }
 
   export type UserCompanyWhereInput = {
@@ -21805,6 +23252,7 @@ export namespace Prisma {
     person?: PersonCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketCreateNestedManyWithoutSendToInput
+    userLicense?: UserLicenseCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -21824,6 +23272,7 @@ export namespace Prisma {
     person?: PersonUncheckedCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketUncheckedCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketUncheckedCreateNestedManyWithoutSendToInput
+    userLicense?: UserLicenseUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -21843,6 +23292,7 @@ export namespace Prisma {
     person?: PersonUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUpdateManyWithoutSendToNestedInput
+    userLicense?: UserLicenseUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -21862,6 +23312,7 @@ export namespace Prisma {
     person?: PersonUncheckedUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUncheckedUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUncheckedUpdateManyWithoutSendToNestedInput
+    userLicense?: UserLicenseUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -21893,6 +23344,110 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserLicenseCreateInput = {
+    id?: string
+    plan?: $Enums.LicensePlan
+    maxCompanies?: number
+    maxUsers?: number
+    maxEmployees?: number
+    startsAt?: Date | string
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutUserLicenseInput
+  }
+
+  export type UserLicenseUncheckedCreateInput = {
+    id?: string
+    userId: string
+    plan?: $Enums.LicensePlan
+    maxCompanies?: number
+    maxUsers?: number
+    maxEmployees?: number
+    startsAt?: Date | string
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserLicenseUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    plan?: EnumLicensePlanFieldUpdateOperationsInput | $Enums.LicensePlan
+    maxCompanies?: IntFieldUpdateOperationsInput | number
+    maxUsers?: IntFieldUpdateOperationsInput | number
+    maxEmployees?: IntFieldUpdateOperationsInput | number
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutUserLicenseNestedInput
+  }
+
+  export type UserLicenseUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    plan?: EnumLicensePlanFieldUpdateOperationsInput | $Enums.LicensePlan
+    maxCompanies?: IntFieldUpdateOperationsInput | number
+    maxUsers?: IntFieldUpdateOperationsInput | number
+    maxEmployees?: IntFieldUpdateOperationsInput | number
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserLicenseCreateManyInput = {
+    id?: string
+    userId: string
+    plan?: $Enums.LicensePlan
+    maxCompanies?: number
+    maxUsers?: number
+    maxEmployees?: number
+    startsAt?: Date | string
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserLicenseUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    plan?: EnumLicensePlanFieldUpdateOperationsInput | $Enums.LicensePlan
+    maxCompanies?: IntFieldUpdateOperationsInput | number
+    maxUsers?: IntFieldUpdateOperationsInput | number
+    maxEmployees?: IntFieldUpdateOperationsInput | number
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserLicenseUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    plan?: EnumLicensePlanFieldUpdateOperationsInput | $Enums.LicensePlan
+    maxCompanies?: IntFieldUpdateOperationsInput | number
+    maxUsers?: IntFieldUpdateOperationsInput | number
+    maxEmployees?: IntFieldUpdateOperationsInput | number
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23504,6 +25059,11 @@ export namespace Prisma {
     none?: TicketWhereInput
   }
 
+  export type UserLicenseNullableScalarRelationFilter = {
+    is?: UserLicenseWhereInput | null
+    isNot?: UserLicenseWhereInput | null
+  }
+
   export type UserCompanyOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -23575,9 +25135,110 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type EnumLicensePlanFilter<$PrismaModel = never> = {
+    equals?: $Enums.LicensePlan | EnumLicensePlanFieldRefInput<$PrismaModel>
+    in?: $Enums.LicensePlan[] | ListEnumLicensePlanFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LicensePlan[] | ListEnumLicensePlanFieldRefInput<$PrismaModel>
+    not?: NestedEnumLicensePlanFilter<$PrismaModel> | $Enums.LicensePlan
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
+  }
+
+  export type UserLicenseCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    plan?: SortOrder
+    maxCompanies?: SortOrder
+    maxUsers?: SortOrder
+    maxEmployees?: SortOrder
+    startsAt?: SortOrder
+    expiresAt?: SortOrder
+    isActive?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserLicenseAvgOrderByAggregateInput = {
+    maxCompanies?: SortOrder
+    maxUsers?: SortOrder
+    maxEmployees?: SortOrder
+  }
+
+  export type UserLicenseMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    plan?: SortOrder
+    maxCompanies?: SortOrder
+    maxUsers?: SortOrder
+    maxEmployees?: SortOrder
+    startsAt?: SortOrder
+    expiresAt?: SortOrder
+    isActive?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserLicenseMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    plan?: SortOrder
+    maxCompanies?: SortOrder
+    maxUsers?: SortOrder
+    maxEmployees?: SortOrder
+    startsAt?: SortOrder
+    expiresAt?: SortOrder
+    isActive?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserLicenseSumOrderByAggregateInput = {
+    maxCompanies?: SortOrder
+    maxUsers?: SortOrder
+    maxEmployees?: SortOrder
+  }
+
+  export type EnumLicensePlanWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LicensePlan | EnumLicensePlanFieldRefInput<$PrismaModel>
+    in?: $Enums.LicensePlan[] | ListEnumLicensePlanFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LicensePlan[] | ListEnumLicensePlanFieldRefInput<$PrismaModel>
+    not?: NestedEnumLicensePlanWithAggregatesFilter<$PrismaModel> | $Enums.LicensePlan
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLicensePlanFilter<$PrismaModel>
+    _max?: NestedEnumLicensePlanFilter<$PrismaModel>
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type CompanyScalarRelationFilter = {
@@ -24317,17 +25978,6 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
   export type EnumPaymentFrequencyFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentFrequency | EnumPaymentFrequencyFieldRefInput<$PrismaModel>
     in?: $Enums.PaymentFrequency[] | ListEnumPaymentFrequencyFieldRefInput<$PrismaModel>
@@ -24429,22 +26079,6 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type EnumPaymentFrequencyWithAggregatesFilter<$PrismaModel = never> = {
@@ -24600,6 +26234,12 @@ export namespace Prisma {
     connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
   }
 
+  export type UserLicenseCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserLicenseCreateWithoutUserInput, UserLicenseUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserLicenseCreateOrConnectWithoutUserInput
+    connect?: UserLicenseWhereUniqueInput
+  }
+
   export type UserCompanyUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<UserCompanyCreateWithoutUserInput, UserCompanyUncheckedCreateWithoutUserInput> | UserCompanyCreateWithoutUserInput[] | UserCompanyUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserCompanyCreateOrConnectWithoutUserInput | UserCompanyCreateOrConnectWithoutUserInput[]
@@ -24653,6 +26293,12 @@ export namespace Prisma {
     connectOrCreate?: TicketCreateOrConnectWithoutSendToInput | TicketCreateOrConnectWithoutSendToInput[]
     createMany?: TicketCreateManySendToInputEnvelope
     connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+  }
+
+  export type UserLicenseUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserLicenseCreateWithoutUserInput, UserLicenseUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserLicenseCreateOrConnectWithoutUserInput
+    connect?: UserLicenseWhereUniqueInput
   }
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
@@ -24771,6 +26417,16 @@ export namespace Prisma {
     deleteMany?: TicketScalarWhereInput | TicketScalarWhereInput[]
   }
 
+  export type UserLicenseUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserLicenseCreateWithoutUserInput, UserLicenseUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserLicenseCreateOrConnectWithoutUserInput
+    upsert?: UserLicenseUpsertWithoutUserInput
+    disconnect?: UserLicenseWhereInput | boolean
+    delete?: UserLicenseWhereInput | boolean
+    connect?: UserLicenseWhereUniqueInput
+    update?: XOR<XOR<UserLicenseUpdateToOneWithWhereWithoutUserInput, UserLicenseUpdateWithoutUserInput>, UserLicenseUncheckedUpdateWithoutUserInput>
+  }
+
   export type UserCompanyUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<UserCompanyCreateWithoutUserInput, UserCompanyUncheckedCreateWithoutUserInput> | UserCompanyCreateWithoutUserInput[] | UserCompanyUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserCompanyCreateOrConnectWithoutUserInput | UserCompanyCreateOrConnectWithoutUserInput[]
@@ -24877,6 +26533,42 @@ export namespace Prisma {
     update?: TicketUpdateWithWhereUniqueWithoutSendToInput | TicketUpdateWithWhereUniqueWithoutSendToInput[]
     updateMany?: TicketUpdateManyWithWhereWithoutSendToInput | TicketUpdateManyWithWhereWithoutSendToInput[]
     deleteMany?: TicketScalarWhereInput | TicketScalarWhereInput[]
+  }
+
+  export type UserLicenseUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserLicenseCreateWithoutUserInput, UserLicenseUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserLicenseCreateOrConnectWithoutUserInput
+    upsert?: UserLicenseUpsertWithoutUserInput
+    disconnect?: UserLicenseWhereInput | boolean
+    delete?: UserLicenseWhereInput | boolean
+    connect?: UserLicenseWhereUniqueInput
+    update?: XOR<XOR<UserLicenseUpdateToOneWithWhereWithoutUserInput, UserLicenseUpdateWithoutUserInput>, UserLicenseUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserCreateNestedOneWithoutUserLicenseInput = {
+    create?: XOR<UserCreateWithoutUserLicenseInput, UserUncheckedCreateWithoutUserLicenseInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUserLicenseInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumLicensePlanFieldUpdateOperationsInput = {
+    set?: $Enums.LicensePlan
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type UserUpdateOneRequiredWithoutUserLicenseNestedInput = {
+    create?: XOR<UserCreateWithoutUserLicenseInput, UserUncheckedCreateWithoutUserLicenseInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUserLicenseInput
+    upsert?: UserUpsertWithoutUserLicenseInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUserLicenseInput, UserUpdateWithoutUserLicenseInput>, UserUncheckedUpdateWithoutUserLicenseInput>
   }
 
   export type UserCreateNestedOneWithoutCompaniesInput = {
@@ -25845,14 +27537,6 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type EnumPaymentFrequencyFieldUpdateOperationsInput = {
     set?: $Enums.PaymentFrequency
   }
@@ -26138,6 +27822,50 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type NestedEnumLicensePlanFilter<$PrismaModel = never> = {
+    equals?: $Enums.LicensePlan | EnumLicensePlanFieldRefInput<$PrismaModel>
+    in?: $Enums.LicensePlan[] | ListEnumLicensePlanFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LicensePlan[] | ListEnumLicensePlanFieldRefInput<$PrismaModel>
+    not?: NestedEnumLicensePlanFilter<$PrismaModel> | $Enums.LicensePlan
+  }
+
+  export type NestedEnumLicensePlanWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LicensePlan | EnumLicensePlanFieldRefInput<$PrismaModel>
+    in?: $Enums.LicensePlan[] | ListEnumLicensePlanFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LicensePlan[] | ListEnumLicensePlanFieldRefInput<$PrismaModel>
+    not?: NestedEnumLicensePlanWithAggregatesFilter<$PrismaModel> | $Enums.LicensePlan
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLicensePlanFilter<$PrismaModel>
+    _max?: NestedEnumLicensePlanFilter<$PrismaModel>
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type NestedEnumPersonStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.PersonStatus | EnumPersonStatusFieldRefInput<$PrismaModel>
     in?: $Enums.PersonStatus[] | ListEnumPersonStatusFieldRefInput<$PrismaModel>
@@ -26264,17 +27992,6 @@ export namespace Prisma {
     not?: NestedEnumExpenseStatusFilter<$PrismaModel> | $Enums.ExpenseStatus
   }
 
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
   export type NestedEnumPaymentFrequencyFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentFrequency | EnumPaymentFrequencyFieldRefInput<$PrismaModel>
     in?: $Enums.PaymentFrequency[] | ListEnumPaymentFrequencyFieldRefInput<$PrismaModel>
@@ -26318,22 +28035,6 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
   export type NestedEnumPaymentFrequencyWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentFrequency | EnumPaymentFrequencyFieldRefInput<$PrismaModel>
     in?: $Enums.PaymentFrequency[] | ListEnumPaymentFrequencyFieldRefInput<$PrismaModel>
@@ -26360,6 +28061,7 @@ export namespace Prisma {
     createdNetworks?: NetworkCreateNestedManyWithoutCreatedByInput
     person?: PersonCreateNestedOneWithoutUserInput
     ticketsSentTo?: TicketCreateNestedManyWithoutSendToInput
+    userLicense?: UserLicenseCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTicketsSentByInput = {
@@ -26378,6 +28080,7 @@ export namespace Prisma {
     createdNetworks?: NetworkUncheckedCreateNestedManyWithoutCreatedByInput
     person?: PersonUncheckedCreateNestedOneWithoutUserInput
     ticketsSentTo?: TicketUncheckedCreateNestedManyWithoutSendToInput
+    userLicense?: UserLicenseUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTicketsSentByInput = {
@@ -26401,6 +28104,7 @@ export namespace Prisma {
     createdNetworks?: NetworkCreateNestedManyWithoutCreatedByInput
     person?: PersonCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketCreateNestedManyWithoutSendByInput
+    userLicense?: UserLicenseCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTicketsSentToInput = {
@@ -26419,6 +28123,7 @@ export namespace Prisma {
     createdNetworks?: NetworkUncheckedCreateNestedManyWithoutCreatedByInput
     person?: PersonUncheckedCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketUncheckedCreateNestedManyWithoutSendByInput
+    userLicense?: UserLicenseUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTicketsSentToInput = {
@@ -26504,6 +28209,7 @@ export namespace Prisma {
     createdNetworks?: NetworkUpdateManyWithoutCreatedByNestedInput
     person?: PersonUpdateOneWithoutUserNestedInput
     ticketsSentTo?: TicketUpdateManyWithoutSendToNestedInput
+    userLicense?: UserLicenseUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTicketsSentByInput = {
@@ -26522,6 +28228,7 @@ export namespace Prisma {
     createdNetworks?: NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
     person?: PersonUncheckedUpdateOneWithoutUserNestedInput
     ticketsSentTo?: TicketUncheckedUpdateManyWithoutSendToNestedInput
+    userLicense?: UserLicenseUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutTicketsSentToInput = {
@@ -26551,6 +28258,7 @@ export namespace Prisma {
     createdNetworks?: NetworkUpdateManyWithoutCreatedByNestedInput
     person?: PersonUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUpdateManyWithoutSendByNestedInput
+    userLicense?: UserLicenseUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTicketsSentToInput = {
@@ -26569,6 +28277,7 @@ export namespace Prisma {
     createdNetworks?: NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
     person?: PersonUncheckedUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUncheckedUpdateManyWithoutSendByNestedInput
+    userLicense?: UserLicenseUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CompanyUpsertWithoutTicketsInput = {
@@ -26995,6 +28704,39 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type UserLicenseCreateWithoutUserInput = {
+    id?: string
+    plan?: $Enums.LicensePlan
+    maxCompanies?: number
+    maxUsers?: number
+    maxEmployees?: number
+    startsAt?: Date | string
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserLicenseUncheckedCreateWithoutUserInput = {
+    id?: string
+    plan?: $Enums.LicensePlan
+    maxCompanies?: number
+    maxUsers?: number
+    maxEmployees?: number
+    startsAt?: Date | string
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserLicenseCreateOrConnectWithoutUserInput = {
+    where: UserLicenseWhereUniqueInput
+    create: XOR<UserLicenseCreateWithoutUserInput, UserLicenseUncheckedCreateWithoutUserInput>
+  }
+
   export type UserCompanyUpsertWithWhereUniqueWithoutUserInput = {
     where: UserCompanyWhereUniqueInput
     update: XOR<UserCompanyUpdateWithoutUserInput, UserCompanyUncheckedUpdateWithoutUserInput>
@@ -27250,6 +28992,137 @@ export namespace Prisma {
     data: XOR<TicketUpdateManyMutationInput, TicketUncheckedUpdateManyWithoutSendToInput>
   }
 
+  export type UserLicenseUpsertWithoutUserInput = {
+    update: XOR<UserLicenseUpdateWithoutUserInput, UserLicenseUncheckedUpdateWithoutUserInput>
+    create: XOR<UserLicenseCreateWithoutUserInput, UserLicenseUncheckedCreateWithoutUserInput>
+    where?: UserLicenseWhereInput
+  }
+
+  export type UserLicenseUpdateToOneWithWhereWithoutUserInput = {
+    where?: UserLicenseWhereInput
+    data: XOR<UserLicenseUpdateWithoutUserInput, UserLicenseUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserLicenseUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    plan?: EnumLicensePlanFieldUpdateOperationsInput | $Enums.LicensePlan
+    maxCompanies?: IntFieldUpdateOperationsInput | number
+    maxUsers?: IntFieldUpdateOperationsInput | number
+    maxEmployees?: IntFieldUpdateOperationsInput | number
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserLicenseUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    plan?: EnumLicensePlanFieldUpdateOperationsInput | $Enums.LicensePlan
+    maxCompanies?: IntFieldUpdateOperationsInput | number
+    maxUsers?: IntFieldUpdateOperationsInput | number
+    maxEmployees?: IntFieldUpdateOperationsInput | number
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserCreateWithoutUserLicenseInput = {
+    id?: string
+    username: string
+    email: string
+    password: string
+    role?: $Enums.UserRole
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    companies?: UserCompanyCreateNestedManyWithoutUserInput
+    createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
+    assignedMaintenances?: MaintenanceCreateNestedManyWithoutAssignedToUserInput
+    assignedNetworks?: NetworkCreateNestedManyWithoutAssignedToUserInput
+    createdNetworks?: NetworkCreateNestedManyWithoutCreatedByInput
+    person?: PersonCreateNestedOneWithoutUserInput
+    ticketsSentBy?: TicketCreateNestedManyWithoutSendByInput
+    ticketsSentTo?: TicketCreateNestedManyWithoutSendToInput
+  }
+
+  export type UserUncheckedCreateWithoutUserLicenseInput = {
+    id?: string
+    username: string
+    email: string
+    password: string
+    role?: $Enums.UserRole
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    companies?: UserCompanyUncheckedCreateNestedManyWithoutUserInput
+    createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedMaintenances?: MaintenanceUncheckedCreateNestedManyWithoutAssignedToUserInput
+    assignedNetworks?: NetworkUncheckedCreateNestedManyWithoutAssignedToUserInput
+    createdNetworks?: NetworkUncheckedCreateNestedManyWithoutCreatedByInput
+    person?: PersonUncheckedCreateNestedOneWithoutUserInput
+    ticketsSentBy?: TicketUncheckedCreateNestedManyWithoutSendByInput
+    ticketsSentTo?: TicketUncheckedCreateNestedManyWithoutSendToInput
+  }
+
+  export type UserCreateOrConnectWithoutUserLicenseInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutUserLicenseInput, UserUncheckedCreateWithoutUserLicenseInput>
+  }
+
+  export type UserUpsertWithoutUserLicenseInput = {
+    update: XOR<UserUpdateWithoutUserLicenseInput, UserUncheckedUpdateWithoutUserLicenseInput>
+    create: XOR<UserCreateWithoutUserLicenseInput, UserUncheckedCreateWithoutUserLicenseInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutUserLicenseInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutUserLicenseInput, UserUncheckedUpdateWithoutUserLicenseInput>
+  }
+
+  export type UserUpdateWithoutUserLicenseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companies?: UserCompanyUpdateManyWithoutUserNestedInput
+    createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
+    assignedMaintenances?: MaintenanceUpdateManyWithoutAssignedToUserNestedInput
+    assignedNetworks?: NetworkUpdateManyWithoutAssignedToUserNestedInput
+    createdNetworks?: NetworkUpdateManyWithoutCreatedByNestedInput
+    person?: PersonUpdateOneWithoutUserNestedInput
+    ticketsSentBy?: TicketUpdateManyWithoutSendByNestedInput
+    ticketsSentTo?: TicketUpdateManyWithoutSendToNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutUserLicenseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companies?: UserCompanyUncheckedUpdateManyWithoutUserNestedInput
+    createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedMaintenances?: MaintenanceUncheckedUpdateManyWithoutAssignedToUserNestedInput
+    assignedNetworks?: NetworkUncheckedUpdateManyWithoutAssignedToUserNestedInput
+    createdNetworks?: NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
+    person?: PersonUncheckedUpdateOneWithoutUserNestedInput
+    ticketsSentBy?: TicketUncheckedUpdateManyWithoutSendByNestedInput
+    ticketsSentTo?: TicketUncheckedUpdateManyWithoutSendToNestedInput
+  }
+
   export type UserCreateWithoutCompaniesInput = {
     id?: string
     username: string
@@ -27266,6 +29139,7 @@ export namespace Prisma {
     person?: PersonCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketCreateNestedManyWithoutSendToInput
+    userLicense?: UserLicenseCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCompaniesInput = {
@@ -27284,6 +29158,7 @@ export namespace Prisma {
     person?: PersonUncheckedCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketUncheckedCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketUncheckedCreateNestedManyWithoutSendToInput
+    userLicense?: UserLicenseUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCompaniesInput = {
@@ -27369,6 +29244,7 @@ export namespace Prisma {
     person?: PersonUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUpdateManyWithoutSendToNestedInput
+    userLicense?: UserLicenseUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCompaniesInput = {
@@ -27387,6 +29263,7 @@ export namespace Prisma {
     person?: PersonUncheckedUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUncheckedUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUncheckedUpdateManyWithoutSendToNestedInput
+    userLicense?: UserLicenseUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CompanyUpsertWithoutUsersInput = {
@@ -27487,6 +29364,7 @@ export namespace Prisma {
     createdNetworks?: NetworkCreateNestedManyWithoutCreatedByInput
     ticketsSentBy?: TicketCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketCreateNestedManyWithoutSendToInput
+    userLicense?: UserLicenseCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPersonInput = {
@@ -27505,6 +29383,7 @@ export namespace Prisma {
     createdNetworks?: NetworkUncheckedCreateNestedManyWithoutCreatedByInput
     ticketsSentBy?: TicketUncheckedCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketUncheckedCreateNestedManyWithoutSendToInput
+    userLicense?: UserLicenseUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPersonInput = {
@@ -27663,6 +29542,7 @@ export namespace Prisma {
     createdNetworks?: NetworkUpdateManyWithoutCreatedByNestedInput
     ticketsSentBy?: TicketUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUpdateManyWithoutSendToNestedInput
+    userLicense?: UserLicenseUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPersonInput = {
@@ -27681,6 +29561,7 @@ export namespace Prisma {
     createdNetworks?: NetworkUncheckedUpdateManyWithoutCreatedByNestedInput
     ticketsSentBy?: TicketUncheckedUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUncheckedUpdateManyWithoutSendToNestedInput
+    userLicense?: UserLicenseUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type AnnualSoftwareExpenseUpsertWithWhereUniqueWithoutAssignedPersonsInput = {
@@ -27775,6 +29656,7 @@ export namespace Prisma {
     person?: PersonCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketCreateNestedManyWithoutSendToInput
+    userLicense?: UserLicenseCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedCompaniesInput = {
@@ -27793,6 +29675,7 @@ export namespace Prisma {
     person?: PersonUncheckedCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketUncheckedCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketUncheckedCreateNestedManyWithoutSendToInput
+    userLicense?: UserLicenseUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedCompaniesInput = {
@@ -28185,6 +30068,7 @@ export namespace Prisma {
     person?: PersonUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUpdateManyWithoutSendToNestedInput
+    userLicense?: UserLicenseUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedCompaniesInput = {
@@ -28203,6 +30087,7 @@ export namespace Prisma {
     person?: PersonUncheckedUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUncheckedUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUncheckedUpdateManyWithoutSendToNestedInput
+    userLicense?: UserLicenseUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type DepartmentUpsertWithWhereUniqueWithoutCompanyInput = {
@@ -28920,6 +30805,7 @@ export namespace Prisma {
     person?: PersonCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketCreateNestedManyWithoutSendToInput
+    userLicense?: UserLicenseCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssignedMaintenancesInput = {
@@ -28938,6 +30824,7 @@ export namespace Prisma {
     person?: PersonUncheckedCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketUncheckedCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketUncheckedCreateNestedManyWithoutSendToInput
+    userLicense?: UserLicenseUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssignedMaintenancesInput = {
@@ -29074,6 +30961,7 @@ export namespace Prisma {
     person?: PersonUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUpdateManyWithoutSendToNestedInput
+    userLicense?: UserLicenseUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedMaintenancesInput = {
@@ -29092,6 +30980,7 @@ export namespace Prisma {
     person?: PersonUncheckedUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUncheckedUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUncheckedUpdateManyWithoutSendToNestedInput
+    userLicense?: UserLicenseUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CompanyUpsertWithoutMaintenancesInput = {
@@ -29724,6 +31613,7 @@ export namespace Prisma {
     person?: PersonCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketCreateNestedManyWithoutSendToInput
+    userLicense?: UserLicenseCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssignedNetworksInput = {
@@ -29742,6 +31632,7 @@ export namespace Prisma {
     person?: PersonUncheckedCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketUncheckedCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketUncheckedCreateNestedManyWithoutSendToInput
+    userLicense?: UserLicenseUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssignedNetworksInput = {
@@ -29765,6 +31656,7 @@ export namespace Prisma {
     person?: PersonCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketCreateNestedManyWithoutSendToInput
+    userLicense?: UserLicenseCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedNetworksInput = {
@@ -29783,6 +31675,7 @@ export namespace Prisma {
     person?: PersonUncheckedCreateNestedOneWithoutUserInput
     ticketsSentBy?: TicketUncheckedCreateNestedManyWithoutSendByInput
     ticketsSentTo?: TicketUncheckedCreateNestedManyWithoutSendToInput
+    userLicense?: UserLicenseUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedNetworksInput = {
@@ -29903,6 +31796,7 @@ export namespace Prisma {
     person?: PersonUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUpdateManyWithoutSendToNestedInput
+    userLicense?: UserLicenseUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedNetworksInput = {
@@ -29921,6 +31815,7 @@ export namespace Prisma {
     person?: PersonUncheckedUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUncheckedUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUncheckedUpdateManyWithoutSendToNestedInput
+    userLicense?: UserLicenseUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutCreatedNetworksInput = {
@@ -29950,6 +31845,7 @@ export namespace Prisma {
     person?: PersonUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUpdateManyWithoutSendToNestedInput
+    userLicense?: UserLicenseUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedNetworksInput = {
@@ -29968,6 +31864,7 @@ export namespace Prisma {
     person?: PersonUncheckedUpdateOneWithoutUserNestedInput
     ticketsSentBy?: TicketUncheckedUpdateManyWithoutSendByNestedInput
     ticketsSentTo?: TicketUncheckedUpdateManyWithoutSendToNestedInput
+    userLicense?: UserLicenseUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CompanyUpsertWithoutNetworksInput = {

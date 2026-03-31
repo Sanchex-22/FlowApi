@@ -155,6 +155,21 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.UserLicenseScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  plan: 'plan',
+  maxCompanies: 'maxCompanies',
+  maxUsers: 'maxUsers',
+  maxEmployees: 'maxEmployees',
+  startsAt: 'startsAt',
+  expiresAt: 'expiresAt',
+  isActive: 'isActive',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.UserCompanyScalarFieldEnum = {
   userId: 'userId',
   companyId: 'companyId'
@@ -368,7 +383,15 @@ exports.UserRole = exports.$Enums.UserRole = {
   USER: 'USER',
   ADMIN: 'ADMIN',
   MODERATOR: 'MODERATOR',
-  SUPER_ADMIN: 'SUPER_ADMIN'
+  SUPER_ADMIN: 'SUPER_ADMIN',
+  GLOBAL_ADMIN: 'GLOBAL_ADMIN'
+};
+
+exports.LicensePlan = exports.$Enums.LicensePlan = {
+  TRIAL: 'TRIAL',
+  STARTER: 'STARTER',
+  PROFESSIONAL: 'PROFESSIONAL',
+  ENTERPRISE: 'ENTERPRISE'
 };
 
 exports.PersonStatus = exports.$Enums.PersonStatus = {
@@ -439,6 +462,7 @@ exports.PaymentFrequency = exports.$Enums.PaymentFrequency = {
 exports.Prisma.ModelName = {
   Ticket: 'Ticket',
   User: 'User',
+  UserLicense: 'UserLicense',
   UserCompany: 'UserCompany',
   Person: 'Person',
   Company: 'Company',

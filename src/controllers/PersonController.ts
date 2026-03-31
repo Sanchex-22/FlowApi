@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { prisma } from '../../lib/prisma.js';
-import { generateNextUserCode } from '../../prisma/seed.js';
+import { generateNextUserCode } from './UsersController.js';
+
 
 export class PersonController {
 
