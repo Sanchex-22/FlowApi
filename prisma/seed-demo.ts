@@ -6,7 +6,7 @@
  *   • 1 SUPER_ADMIN por empresa
  *   • 1 ADMIN por empresa
  *   • 1 USER por empresa
- *   • Departamentos y parámetros legales base en cada empresa
+ *   • Departamentos base en cada empresa
  *
  * SOLO para entornos de desarrollo/staging.
  * Usa contraseñas débiles intencionalmente para facilitar pruebas.
@@ -18,9 +18,7 @@
 import 'dotenv/config';
 import prisma from '../lib/prisma.js';
 import { hash } from 'bcryptjs';
-import {
-  LegalParameterKey, ParameterCategory, ParameterType, UserRole,
-} from '../generated/prisma/index.js';
+import { UserRole } from '../generated/prisma/index.js';
 
 // ── Configuración de empresas demo ───────────────────────────────────────────
 const DEMO_COMPANIES = [
@@ -46,19 +44,6 @@ const DEMO_COMPANIES = [
       { username: 'user_b',    email: 'user@democorpb.com',   role: UserRole.USER,        password: 'UserB123!'  },
     ],
   },
-];
-
-// Parámetros legales base (mismos para todas las empresas demo)
-const LEGAL_PARAMS = [
-  { key: LegalParameterKey.ss_empleado,       name: 'SS Empleado',       type: 'employee', category: ParameterCategory.social_security,        percentage: 9.75  },
-  { key: LegalParameterKey.ss_patrono,        name: 'SS Patrono',        type: 'employer', category: ParameterCategory.social_security,        percentage: 12.25 },
-  { key: LegalParameterKey.ss_decimo,         name: 'SS Décimo',         type: 'employee', category: ParameterCategory.social_security,        percentage: 7.25  },
-  { key: LegalParameterKey.se_empleado,       name: 'SE Empleado',       type: 'employee', category: ParameterCategory.educational_insurance,  percentage: 1.25  },
-  { key: LegalParameterKey.se_patrono,        name: 'SE Patrono',        type: 'employer', category: ParameterCategory.educational_insurance,  percentage: 1.50  },
-  { key: LegalParameterKey.riesgo_profesional,name: 'Riesgos Prof.',     type: 'employer', category: ParameterCategory.other,                  percentage: 0.98  },
-  { key: LegalParameterKey.isr_r1,            name: 'ISR Tramo 1',       type: 'fixed',    category: ParameterCategory.isr, percentage: 0,  minRange: 0,     maxRange: 11000    },
-  { key: LegalParameterKey.isr_r2,            name: 'ISR Tramo 2 (15%)', type: 'fixed',    category: ParameterCategory.isr, percentage: 15, minRange: 11001, maxRange: 50000    },
-  { key: LegalParameterKey.isr_r3,            name: 'ISR Tramo 3 (25%)', type: 'fixed',    category: ParameterCategory.isr, percentage: 25, minRange: 50001, maxRange: 99999999 },
 ];
 
 // ── Counters para códigos únicos ──────────────────────────────────────────────
@@ -117,30 +102,6 @@ async function main() {
         isActive:  true,
       },
     });
-
-    // ── Parámetros legales ─────────────────────────────────────────────────
-    for (const p of LEGAL_PARAMS) {
-      const data = {
-        name:       p.name,
-        type:       p.type as ParameterType,
-        category:   p.category,
-        percentage: p.percentage,
-        minRange:   p.minRange  ?? null,
-        maxRange:   p.maxRange  ?? null,
-        status:     'active',
-        effectiveDate: new Date(),
-      };
-      await prisma.legalParameter.upsert({
-        where:  { companyId_key: { companyId: company.id, key: p.key } },
-        update: {},
-        create: { ...data, key: p.key, companyId: company.id },
-      });
-      await prisma.legalDecimoParameter.upsert({
-        where:  { companyId_key: { companyId: company.id, key: p.key } },
-        update: {},
-        create: { ...data, key: p.key, companyId: company.id },
-      });
-    }
 
     // ── Usuarios ──────────────────────────────────────────────────────────
     for (const u of cfg.users) {
