@@ -16,9 +16,9 @@
  */
 
 import 'dotenv/config';
-import prisma from '../lib/prisma.js';
 import { hash } from 'bcryptjs';
 import { UserRole } from '../generated/prisma/index.js';
+import prisma from '../lib/prisma.js';
 
 async function main() {
   const email    = process.env.GLOBAL_ADMIN_EMAIL;

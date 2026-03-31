@@ -16,9 +16,9 @@
  */
 
 import 'dotenv/config';
-import prisma from '../lib/prisma.js';
 import { hash } from 'bcryptjs';
 import { UserRole } from '../generated/prisma/index.js';
+import prisma from '../lib/prisma.js';
 
 // ── Configuración de empresas demo ───────────────────────────────────────────
 const DEMO_COMPANIES = [
